@@ -22,5 +22,24 @@ jobs:
       - name: Run build
         run: python3 scripts/build.py
 
-      - name: Confirm bootstrap output
-        run: test -f dist/index.html
+      - name: Validate generated output
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+
+          dist_dir = Path("dist")
+          index_path = dist_dir / "index.html"
+          manifest_path = dist_dir / "build-manifest.json"
+
+          if not index_path.is_file():
+              raise SystemExit("dist/index.html is missing")
+          if not manifest_path.is_file():
+              raise SystemExit("dist/build-manifest.json is missing")
+
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          if manifest.get("generated_page_count", 0) < 1:
+              raise SystemExit("build-manifest.json does not report a generated page")
+          if "/" not in manifest.get("generated_routes", []):
+              raise SystemExit("build-manifest.json does not include route /")
+          PY
