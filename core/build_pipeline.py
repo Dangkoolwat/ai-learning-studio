@@ -67,7 +67,10 @@ EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">'
 EXPECTED_SCRIPT_HREF_RE = re.compile(r'<script type="module" src="([^"]+)"></script>')
 NAVIGATION_LINK_RE = re.compile(
     r'<li class="navigation-item(?: is-current)?">\s*'
-    r'<a class="navigation-link" href="([^"]+)"(?: aria-current="page")?>([^<]+)</a>\s*'
+    r'<a class="navigation-link" href="([^"]+)"(?: aria-current="page")?>\s*'
+    r'<span class="nav-label">([^<]+)</span>\s*'
+    r'<span class="nav-description">([^<]+)</span>\s*'
+    r'</a>\s*'
     r'</li>',
     re.DOTALL,
 )
@@ -641,7 +644,7 @@ def validate_generated_page_html(
         expected_page = expected_pages_by_section.get(section.id)
         if expected_page is None:
             raise BuildError("Validate output", "navigation section page is missing", path=output_path, page_id=page.id, field="section")
-        href, label = navigation_entries[index]
+        href, label, description = navigation_entries[index]
         expected_href = route_href_for_output(output_path, expected_page.route, dist_root)
         if href != expected_href:
             raise BuildError(
@@ -658,6 +661,14 @@ def validate_generated_page_html(
                 path=output_path,
                 page_id=page.id,
                 field="label",
+            )
+        if description != section.description:
+            raise BuildError(
+                "Validate output",
+                f"navigation description is incorrect for section: {section.id}",
+                path=output_path,
+                page_id=page.id,
+                field="description",
             )
         resolved_href_path = (output_path.parent / href / "index.html").resolve(strict=False)
         resolved_dist = dist_root.resolve(strict=False)

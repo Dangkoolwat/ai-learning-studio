@@ -11,10 +11,30 @@ from core.errors import BuildError
 
 EXPECTED_VERSION = 1
 EXPECTED_SECTIONS = (
-    {"id": "ai-practice", "label": "AI 체험 실습", "order": 1},
-    {"id": "ready-to-use", "label": "바로 사용하기", "order": 2},
-    {"id": "ai-assistant", "label": "AI 도우미", "order": 3},
-    {"id": "image-ai", "label": "이미지 AI", "order": 4},
+    {
+        "id": "ai-practice",
+        "label": "프롬프트 단계별 체험하기",
+        "description": "같은 주제에 여러 프롬프트 방식을 적용하고 결과 차이 비교하기",
+        "order": 1,
+    },
+    {
+        "id": "ready-to-use",
+        "label": "바로 써보기",
+        "description": "필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기",
+        "order": 2,
+    },
+    {
+        "id": "ai-assistant",
+        "label": "나만의 AI 만들기",
+        "description": "Project·Gem 등에 사용할 맞춤형 역할과 지침 만들기",
+        "order": 3,
+    },
+    {
+        "id": "image-ai",
+        "label": "이미지 만들기",
+        "description": "이미지 생성·편집에 사용할 프롬프트 만들기와 실습",
+        "order": 4,
+    },
 )
 
 
@@ -24,10 +44,16 @@ class NavigationSection:
 
     id: str
     label: str
+    description: str
     order: int
 
     def to_public_dict(self) -> dict[str, object]:
-        return {"id": self.id, "label": self.label, "order": self.order}
+        return {
+            "id": self.id,
+            "label": self.label,
+            "description": self.description,
+            "order": self.order,
+        }
 
 
 @dataclass(slots=True)
@@ -110,7 +136,7 @@ def load_navigation(data_dir: Path) -> NavigationData:
                 data_file=navigation_path,
             )
 
-        allowed_keys = {"id", "label", "order"}
+        allowed_keys = {"id", "label", "description", "order"}
         unexpected_keys = set(section_data) - allowed_keys
         missing_keys = allowed_keys - set(section_data)
         if unexpected_keys or missing_keys:
@@ -143,6 +169,14 @@ def load_navigation(data_dir: Path) -> NavigationData:
                 data_file=navigation_path,
                 field="label",
             )
+        if section_data["description"] != expected["description"]:
+            raise BuildError(
+                "Load navigation data",
+                f"navigation section description must be {expected['description']}",
+                path=navigation_path,
+                data_file=navigation_path,
+                field="description",
+            )
         if section_data["order"] != expected["order"]:
             raise BuildError(
                 "Load navigation data",
@@ -156,6 +190,7 @@ def load_navigation(data_dir: Path) -> NavigationData:
             NavigationSection(
                 id=section_data["id"],
                 label=section_data["label"],
+                description=section_data["description"],
                 order=section_data["order"],
             )
         )

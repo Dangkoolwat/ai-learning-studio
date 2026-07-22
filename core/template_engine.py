@@ -152,12 +152,16 @@ def build_navigation_items_html(
         aria_current = ' aria-current="page"' if is_current else ""
         items.append(
             "  <li class=\"{list_item_class}\">\n"
-            "    <a class=\"navigation-link\" href=\"{href}\"{aria_current}>{label}</a>\n"
+            "    <a class=\"navigation-link\" href=\"{href}\"{aria_current}>\n"
+            "      <span class=\"nav-label\">{label}</span>\n"
+            "      <span class=\"nav-description\">{description}</span>\n"
+            "    </a>\n"
             "  </li>".format(
                 list_item_class=list_item_class,
                 href=escape_html(href),
                 aria_current=aria_current,
                 label=escape_html(section.label),
+                description=escape_html(section.description),
             )
         )
 

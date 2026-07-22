@@ -193,6 +193,21 @@ button:focus-visible {
   font-weight: var(--als-font-weight-semibold);
 }
 
+.nav-label {
+  display: block;
+  font-weight: var(--als-font-weight-medium);
+  color: inherit;
+}
+
+.nav-description {
+  display: block;
+  font-size: var(--als-font-size-xs);
+  color: var(--site-text-muted, var(--als-text-secondary, #666));
+  margin-top: var(--als-space-1);
+  line-height: var(--als-line-height-normal);
+  font-weight: var(--als-font-weight-regular);
+}
+
 .site-main {
   min-width: 0;
 }

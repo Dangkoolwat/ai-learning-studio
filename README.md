@@ -138,6 +138,12 @@ cd ai-learning-studio
 python3 scripts/build.py
 ```
 
+빌드 후 자동으로 웹 서버를 실행하고 브라우저를 엽니다.
+
+```bash
+python3 scripts/serve.py
+```
+
 검증만 실행합니다.
 
 ```bash
