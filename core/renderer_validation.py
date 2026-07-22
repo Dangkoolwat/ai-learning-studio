@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import re
 from pathlib import Path
 
+from core.component_registry import APPROVED_COMPONENT_IDS
 from core.errors import BuildError
 from core.renderer_models import (
     APPROVED_CONTROL_BLOCK_LABELS,
@@ -271,6 +272,31 @@ def validate_renderer_result(context: PageRendererContext, result: PageRendererR
             page_id=context.page_id,
             renderer_id=result.renderer_name,
         )
+    if len(result.component_results) < 2:
+        raise BuildError(
+            "Render page",
+            "renderer result must include at least page-intro and page-body component results",
+            path=context.source_path,
+            page_id=context.page_id,
+            renderer_id=result.renderer_name,
+        )
+    if result.component_results[0].component_id != "page-intro" or result.component_results[1].component_id != "page-body":
+        raise BuildError(
+            "Render page",
+            "renderer result must begin with page-intro and page-body components",
+            path=context.source_path,
+            page_id=context.page_id,
+            renderer_id=result.renderer_name,
+        )
+    for component_result in result.component_results:
+        if component_result.component_id not in APPROVED_COMPONENT_IDS:
+            raise BuildError(
+                "Render page",
+                f"renderer result includes an unknown component: {component_result.component_id}",
+                path=context.source_path,
+                page_id=context.page_id,
+                renderer_id=result.renderer_name,
+            )
     _validate_main_html(context, result)
 
 
@@ -607,7 +633,7 @@ def _validate_main_html(context: PageRendererContext, result: PageRendererResult
         raise BuildError("Render page", "renderer output must contain one page intro", path=context.source_path, page_id=context.page_id, renderer_id=result.renderer_name)
     if main_html.count('<div class="page-body">') != 1:
         raise BuildError("Render page", "renderer output must contain one page body", path=context.source_path, page_id=context.page_id, renderer_id=result.renderer_name)
-    if main_html.count("<h1>") != 1:
+    if main_html.count('<h1 class="page-title">') != 1:
         raise BuildError("Render page", "renderer output must contain exactly one page-level H1", path=context.source_path, page_id=context.page_id, renderer_id=result.renderer_name)
     if re.search(r"<html\b", main_html, flags=re.IGNORECASE) or re.search(r"<head\b", main_html, flags=re.IGNORECASE) or re.search(r"<body\b", main_html, flags=re.IGNORECASE):
         raise BuildError("Render page", "renderer output must not include shared shell elements", path=context.source_path, page_id=context.page_id, renderer_id=result.renderer_name)

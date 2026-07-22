@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.component_models import ComponentRenderResult, LoadedComponentTemplates
+
 
 RENDERER_ENGINE_VERSION = 1
 APPROVED_RENDERER_IDS = ("landing", "static-prompt", "prompt-builder", "practice-timeline")
@@ -93,6 +95,7 @@ class PageRendererContext:
     source_heading_count: int
     active_theme_id: str
     control_blocks: tuple[RendererControlBlock, ...]
+    component_templates: LoadedComponentTemplates
 
 
 @dataclass(slots=True, frozen=True)
@@ -107,4 +110,5 @@ class PageRendererResult:
     main_html: str
     source_heading_count: int
     rendered_section_count: int
+    component_results: tuple[ComponentRenderResult, ...]
     warnings: tuple[str, ...]

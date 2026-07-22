@@ -242,7 +242,22 @@ def render_template(
     expected_placeholders = tuple(spec.placeholders for spec in APPROVED_TEMPLATE_SPECS if spec.logical_name == template_name)
     if not expected_placeholders:
         raise BuildError("Render template", f"unknown template name: {template_name}")
-    approved_placeholders = expected_placeholders[0]
+    return render_placeholder_template(
+        template_text,
+        template_name=template_name,
+        approved_placeholders=expected_placeholders[0],
+        replacements=replacements,
+    )
+
+
+def render_placeholder_template(
+    template_text: str,
+    *,
+    template_name: str,
+    approved_placeholders: tuple[str, ...],
+    replacements: dict[str, str],
+) -> str:
+    """Render a placeholder template with an approved placeholder set."""
 
     replacement_keys = set(replacements)
     approved_keys = set(approved_placeholders)
@@ -256,7 +271,7 @@ def render_template(
             details.append(f"unexpected replacements: {', '.join(extra)}")
         raise BuildError(
             "Render template",
-            "template replacements do not match the approved placeholder list"
+            f"{template_name} template replacements do not match the approved placeholder list"
             + (" (" + "; ".join(details) + ")" if details else ""),
         )
 

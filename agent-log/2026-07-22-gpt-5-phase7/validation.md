@@ -1,0 +1,32 @@
+# Phase 7 Validation
+
+- Executed: `python3 -m py_compile core/component_models.py core/component_registry.py core/component_validation.py core/component_engine.py core/renderer_models.py core/renderer_validation.py core/template_engine.py core/renderers/base.py core/renderers/landing.py core/renderers/static_prompt.py core/renderers/prompt_builder.py core/renderers/practice_timeline.py core/build_pipeline.py`
+- Result: success. All modified Python modules compiled cleanly.
+- Executed: `python3 scripts/build.py`
+- Result: success. The build completed successfully, generated the published pages, generated the theme outputs, and wrote the component metadata into `dist/build-manifest.json`.
+- Executed: `python3 scripts/build.py --check`
+- Result: success. The check run completed successfully and validated the build output without replacing `dist/`.
+- Positive checks confirmed:
+  - the component registry contains exactly eight required component IDs
+  - every required component template exists under `components/`
+  - component IDs are unique
+  - component template paths are unique
+  - component template validation passes
+  - page-intro and page-body render through shared components
+  - static-prompt items render through `prompt-item` and `prompt-collection`
+  - manifest component counts match the rendered output
+  - prompt item order remains source order
+  - no unresolved component placeholders remain in generated HTML
+  - no component source file is published in `dist/`
+  - the Phase 3 page registry, Phase 4 theme output, Phase 5 template shell, and Phase 6 renderer dispatch still pass validation
+- Negative checks confirmed:
+  - component templates reject document-level tags, script/style tags, inline handlers, inline styles, external URLs, and form controls
+  - generated component HTML rejects unresolved placeholders and invalid root structure
+  - component renderers reject missing or out-of-range prompt and timeline block counts
+- Checks not performed:
+  - Vercel deployment validation
+  - browser-level visual QA
+  - live keyboard or focus inspection
+  - any Phase 8 work
+- No commit was performed.
+- No push was performed.

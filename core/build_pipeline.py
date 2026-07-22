@@ -1,4 +1,4 @@
-"""Phase 5 template-aware build pipeline helpers for AI Learning Studio."""
+"""Phase 7 component-aware build pipeline helpers for AI Learning Studio."""
 
 from __future__ import annotations
 
@@ -15,6 +15,10 @@ from typing import Any, Callable
 from uuid import uuid4
 
 from core.errors import BuildError
+from core.component_engine import load_approved_component_templates
+from core.component_models import COMPONENT_ENGINE_VERSION, COMPONENT_VALIDATION_STATUS, ComponentRenderResult, LoadedComponentTemplates
+from core.component_registry import APPROVED_COMPONENT_IDS, APPROVED_COMPONENT_SPECS, OPTIONAL_COMPONENT_IDS
+from core.component_validation import validate_component_registry
 from core.navigation import NavigationData, load_navigation
 from core.page_registry import PageRegistry, PageRegistryEntry, load_page_registry
 from core.page_renderers import RENDERER_REGISTRY, render_page, validate_renderer_registry
@@ -50,9 +54,9 @@ from core.theme_models import ThemeDesign, ThemeGenerationResult
 
 
 PROJECT_NAME = "AI Learning Studio"
-BUILD_PHASE = "Phase 6 Page Renderers"
-GENERATOR_VERSION = "phase-6-page-renderers-pipeline-v1"
-TOTAL_STAGES = 15
+BUILD_PHASE = "Phase 7 Common Components"
+GENERATOR_VERSION = "phase-7-common-components-pipeline-v1"
+TOTAL_STAGES = 16
 ALLOWED_FRONT_MATTER_KEYS = {"registry_id"}
 EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
 NAVIGATION_LINK_RE = re.compile(
@@ -292,6 +296,7 @@ def build_page_renderer_contexts(
     parsed_renderer_sources_by_id: dict[str, ParsedRendererSource],
     *,
     active_theme_id: str,
+    component_templates: LoadedComponentTemplates,
 ) -> list[PageRendererContext]:
     page_contexts: list[PageRendererContext] = []
 
@@ -317,6 +322,7 @@ def build_page_renderer_contexts(
                 source_heading_count=parsed_renderer_source.source_heading_count,
                 active_theme_id=active_theme_id,
                 control_blocks=parsed_renderer_source.control_blocks,
+                component_templates=component_templates,
             )
         )
 
@@ -431,7 +437,7 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "HTML theme stylesheet link is incorrect", path=output_path, page_id=page.id, theme_id=expected_theme_id)
     if f'<a class="site-brand" href="{expected_home_href}">{escape_html(SITE_NAME)}</a>' not in html_text:
         raise BuildError("Validate output", "HTML home link is incorrect", path=output_path, page_id=page.id)
-    if f"<h1>{escape_html(page.title)}</h1>" not in html_text:
+    if f'<h1 class="page-title">{escape_html(page.title)}</h1>' not in html_text:
         raise BuildError("Validate output", "page intro heading is missing", path=output_path, page_id=page.id)
     if expected_main_html not in html_text:
         raise BuildError("Validate output", "renderer output is not preserved", path=output_path, page_id=page.id)
@@ -454,7 +460,7 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "external URLs are not allowed in generated HTML", path=output_path, page_id=page.id)
     if contains_absolute_filesystem_path(html_text):
         raise BuildError("Validate output", "generated HTML contains an absolute filesystem path", path=output_path, page_id=page.id)
-    if html_text.count("<h1>") != 1:
+    if html_text.count('<h1 class="page-title">') != 1:
         raise BuildError("Validate output", "HTML must contain exactly one page-level H1", path=output_path, page_id=page.id)
 
     navigation_entries = NAVIGATION_LINK_RE.findall(html_text)
@@ -504,6 +510,49 @@ def validate_generated_page_html(
                 path=output_path,
                 page_id=page.id,
             )
+
+
+def validate_renderer_component_usage(
+    output_path: Path,
+    *,
+    page: PageRegistryEntry,
+    page_context: PageRendererContext,
+    renderer_result: PageRendererResult,
+) -> None:
+    component_ids = [component_result.component_id for component_result in renderer_result.component_results]
+    if component_ids[:2] != ["page-intro", "page-body"]:
+        raise BuildError("Validate output", "page intro and body must be rendered through the approved components", path=output_path, page_id=page.id)
+
+    expected_component_ids = ["page-intro", "page-body"]
+    if page.type == "landing":
+        pass
+    elif page.type == "static-prompt":
+        prompt_count = sum(1 for block in page_context.control_blocks if block.label == "prompt")
+        expected_component_ids.extend(["prompt-item"] * prompt_count)
+        expected_component_ids.append("prompt-collection")
+    elif page.type == "prompt-builder":
+        field_count = sum(1 for block in page_context.control_blocks if block.label == "prompt-field")
+        expected_component_ids.extend(["prompt-field"] * field_count)
+        expected_component_ids.append("prompt-builder")
+    elif page.type == "practice-timeline":
+        step_count = sum(1 for block in page_context.control_blocks if block.label == "timeline-step")
+        expected_component_ids.extend(["timeline-step"] * step_count)
+        expected_component_ids.append("practice-timeline")
+    else:  # pragma: no cover - registry validation prevents this
+        raise BuildError("Validate output", f"unsupported page type: {page.type}", path=output_path, page_id=page.id)
+
+    if component_ids != expected_component_ids:
+        raise BuildError("Validate output", "component order or count does not match the source content", path=output_path, page_id=page.id)
+
+    normalized_main_html = _normalize_html_lines(renderer_result.main_html)
+    for component_result in renderer_result.component_results:
+        component_html = _normalize_html_lines(component_result.rendered_html)
+        if component_html not in normalized_main_html:
+            raise BuildError("Validate output", f"component output is missing from the renderer main HTML: {component_result.component_id}", path=output_path, page_id=page.id)
+
+
+def _normalize_html_lines(html_text: str) -> str:
+    return "\n".join(line.strip() for line in html_text.splitlines() if line.strip())
 
 
 def discover_approved_assets(assets_dir: Path) -> list[Path]:
@@ -599,11 +648,28 @@ def build_public_navigation_data(navigation: NavigationData) -> dict[str, object
     return navigation.to_public_dict()
 
 
+def build_component_render_summary(
+    renderer_results: list[PageRendererResult],
+) -> tuple[dict[str, int], int, int]:
+    render_count_by_component_id: dict[str, int] = {component_id: 0 for component_id in APPROVED_COMPONENT_IDS}
+    total_component_render_count = 0
+    component_warning_count = 0
+
+    for renderer_result in renderer_results:
+        for component_result in renderer_result.component_results:
+            render_count_by_component_id[component_result.component_id] += 1
+            total_component_render_count += 1
+            component_warning_count += len(component_result.warnings)
+
+    return render_count_by_component_id, total_component_render_count, component_warning_count
+
+
 def build_manifest(
     *,
     registry: PageRegistry,
     navigation: NavigationData,
     templates: LoadedTemplates,
+    component_templates: LoadedComponentTemplates,
     theme_generation: ThemeGenerationResult,
     renderer_results: list[PageRendererResult],
     renderer_contexts: list[PageRendererContext],
@@ -622,6 +688,7 @@ def build_manifest(
     total_prompt_count = 0
     total_prompt_field_count = 0
     total_timeline_step_count = 0
+    component_render_count_by_component_id, total_component_render_count, component_warning_count = build_component_render_summary(renderer_results)
 
     for result in renderer_results:
         page_count_by_renderer_id[result.renderer_name] += 1
@@ -654,6 +721,22 @@ def build_manifest(
         "total_prompt_field_count": total_prompt_field_count,
         "total_timeline_step_count": total_timeline_step_count,
         "renderer_warnings_count": renderer_warnings_count,
+        "component_engine_version": COMPONENT_ENGINE_VERSION,
+        "component_validation_status": COMPONENT_VALIDATION_STATUS,
+        "registered_component_ids": list(APPROVED_COMPONENT_IDS),
+        "component_count": len(APPROVED_COMPONENT_IDS),
+        "component_template_file_count": component_templates.file_count(),
+        "component_template_source_paths": list(component_templates.source_files),
+        "optional_component_ids_enabled": [
+            spec.component_id
+            for spec in component_templates.registry
+            if spec.component_id in OPTIONAL_COMPONENT_IDS
+        ],
+        "plain_text_placeholder_count": sum(len(spec.plain_text_placeholders) for spec in component_templates.registry),
+        "trusted_html_placeholder_count": sum(len(spec.trusted_html_placeholders) for spec in component_templates.registry),
+        "total_component_render_count": total_component_render_count,
+        "component_render_count_by_component_id": component_render_count_by_component_id,
+        "component_warning_count": component_warning_count,
         "registry_version": registry.version,
         "navigation_version": navigation.version,
         "theme_registry_version": theme_generation.registry.version,
@@ -775,6 +858,7 @@ def validate_generated_output(
     registry: PageRegistry,
     navigation: NavigationData,
     templates: LoadedTemplates,
+    component_templates: LoadedComponentTemplates,
     theme_designs: list[ThemeDesign],
     theme_generation: ThemeGenerationResult,
     public_registry: dict[str, Any],
@@ -903,6 +987,33 @@ def validate_generated_output(
     expected_renderer_warnings_count = sum(len(renderer_result.warnings) for renderer_result in renderer_results_by_id.values())
     if parsed_manifest.get("renderer_warnings_count") != expected_renderer_warnings_count:
         raise BuildError("Validate output", "manifest renderer warnings count is incorrect", path=manifest_path)
+    expected_component_render_count_by_component_id, expected_total_component_render_count, expected_component_warning_count = build_component_render_summary(
+        list(renderer_results_by_id.values())
+    )
+    if parsed_manifest.get("component_engine_version") != COMPONENT_ENGINE_VERSION:
+        raise BuildError("Validate output", "manifest component engine version is incorrect", path=manifest_path)
+    if parsed_manifest.get("component_validation_status") != COMPONENT_VALIDATION_STATUS:
+        raise BuildError("Validate output", "manifest component validation status is incorrect", path=manifest_path)
+    if parsed_manifest.get("registered_component_ids") != list(APPROVED_COMPONENT_IDS):
+        raise BuildError("Validate output", "manifest registered component ids are incorrect", path=manifest_path)
+    if parsed_manifest.get("component_count") != len(APPROVED_COMPONENT_IDS):
+        raise BuildError("Validate output", "manifest component count is incorrect", path=manifest_path)
+    if parsed_manifest.get("component_template_file_count") != component_templates.file_count():
+        raise BuildError("Validate output", "manifest component template file count is incorrect", path=manifest_path)
+    if parsed_manifest.get("component_template_source_paths") != list(component_templates.source_files):
+        raise BuildError("Validate output", "manifest component template source paths are incorrect", path=manifest_path)
+    if parsed_manifest.get("optional_component_ids_enabled") != [spec.component_id for spec in component_templates.registry if spec.component_id in OPTIONAL_COMPONENT_IDS]:
+        raise BuildError("Validate output", "manifest optional component ids are incorrect", path=manifest_path)
+    if parsed_manifest.get("plain_text_placeholder_count") != sum(len(spec.plain_text_placeholders) for spec in component_templates.registry):
+        raise BuildError("Validate output", "manifest plain-text placeholder count is incorrect", path=manifest_path)
+    if parsed_manifest.get("trusted_html_placeholder_count") != sum(len(spec.trusted_html_placeholders) for spec in component_templates.registry):
+        raise BuildError("Validate output", "manifest trusted-html placeholder count is incorrect", path=manifest_path)
+    if parsed_manifest.get("total_component_render_count") != expected_total_component_render_count:
+        raise BuildError("Validate output", "manifest total component render count is incorrect", path=manifest_path)
+    if parsed_manifest.get("component_render_count_by_component_id") != expected_component_render_count_by_component_id:
+        raise BuildError("Validate output", "manifest component render counts are incorrect", path=manifest_path)
+    if parsed_manifest.get("component_warning_count") != expected_component_warning_count:
+        raise BuildError("Validate output", "manifest component warning count is incorrect", path=manifest_path)
     if parsed_manifest.get("published_page_count") != len(published_pages):
         raise BuildError("Validate output", "manifest published page count is incorrect", path=manifest_path)
     if parsed_manifest.get("draft_page_count") != len(draft_pages):
@@ -1046,6 +1157,7 @@ def validate_generated_output(
                 )
 
     page_context_by_id = {context.page_id: context for context in template_contexts}
+    renderer_context_by_id = {context.page_id: context for context in renderer_contexts}
 
     for page in published_pages:
         output_path = route_to_output_path(page.route, staging_dir)
@@ -1053,6 +1165,9 @@ def validate_generated_output(
         page_context = page_context_by_id.get(page.id)
         if page_context is None:
             raise BuildError("Validate output", "page context is missing", path=output_path, page_id=page.id)
+        renderer_context = renderer_context_by_id.get(page.id)
+        if renderer_context is None:
+            raise BuildError("Validate output", "renderer context is missing", path=output_path, page_id=page.id)
         renderer_result = renderer_results_by_id.get(page.id)
         if renderer_result is None:
             raise BuildError("Validate output", "renderer result is missing", path=output_path, page_id=page.id)
@@ -1066,6 +1181,12 @@ def validate_generated_output(
             navigation=navigation,
             theme_generation=theme_generation,
             dist_root=staging_dir,
+        )
+        validate_renderer_component_usage(
+            output_path,
+            page=page,
+            page_context=renderer_context,
+            renderer_result=renderer_result,
         )
 
 
@@ -1116,7 +1237,7 @@ def build_site(
     data_dir = repo_root / "data"
     design_dir = repo_root / "design"
     dist_dir = repo_root / "dist"
-    temp_root = Path(tempfile.mkdtemp(prefix=".phase4-build-", dir=repo_root))
+    temp_root = Path(tempfile.mkdtemp(prefix=".phase7-build-", dir=repo_root))
 
     try:
         stage_logger(1, TOTAL_STAGES, "Validate environment")
@@ -1180,10 +1301,16 @@ def build_site(
         stage_logger(6, TOTAL_STAGES, "Load and validate templates")
         templates = load_approved_templates(repo_root)
 
-        stage_logger(7, TOTAL_STAGES, "Register and validate page renderers")
+        stage_logger(7, TOTAL_STAGES, "Load and validate component registry")
+        validate_component_registry({spec.component_id: spec for spec in APPROVED_COMPONENT_SPECS})
+
+        stage_logger(8, TOTAL_STAGES, "Load and validate component templates")
+        component_templates = load_approved_component_templates(repo_root)
+
+        stage_logger(9, TOTAL_STAGES, "Register and validate page renderers")
         validate_renderer_registry(RENDERER_REGISTRY)
 
-        stage_logger(8, TOTAL_STAGES, "Parse page sources")
+        stage_logger(10, TOTAL_STAGES, "Parse page sources")
         parsed_sources = [parse_page_source(page_path) for page_path in page_paths]
         parsed_sources_by_id = {source.registry_id: source for source in parsed_sources}
         if len(parsed_sources_by_id) != len(parsed_sources):
@@ -1215,7 +1342,7 @@ def build_site(
         generated_output_files: list[str] = []
         active_theme_id = theme_designs[0].id
 
-        stage_logger(9, TOTAL_STAGES, "Parse renderer-specific control blocks")
+        stage_logger(11, TOTAL_STAGES, "Parse renderer-specific control blocks")
         parsed_renderer_sources_by_id: dict[str, ParsedRendererSource] = {}
         for page in registry.pages:
             source = parsed_sources_by_id[page.id]
@@ -1306,15 +1433,16 @@ def build_site(
                 )
             parsed_renderer_sources_by_id[page.id] = parsed_renderer_source
 
-        stage_logger(10, TOTAL_STAGES, "Render Markdown content")
+        stage_logger(12, TOTAL_STAGES, "Render Markdown content")
         page_renderer_contexts = build_page_renderer_contexts(
             published_pages,
             parsed_sources_by_id,
             parsed_renderer_sources_by_id,
             active_theme_id=active_theme_id,
+            component_templates=component_templates,
         )
 
-        stage_logger(11, TOTAL_STAGES, "Render page main regions")
+        stage_logger(13, TOTAL_STAGES, "Render reusable components and page main regions")
         renderer_results: list[PageRendererResult] = []
         renderer_results_by_id: dict[str, PageRendererResult] = {}
         for page_context in page_renderer_contexts:
@@ -1322,7 +1450,7 @@ def build_site(
             renderer_results.append(renderer_result)
             renderer_results_by_id[renderer_result.page_id] = renderer_result
 
-        stage_logger(12, TOTAL_STAGES, "Render full pages through templates")
+        stage_logger(14, TOTAL_STAGES, "Render full pages through templates")
         page_contexts = build_page_template_contexts(
             published_pages,
             renderer_results_by_id,
@@ -1338,7 +1466,7 @@ def build_site(
             generated_routes.append(page.route)
             generated_output_files.append(f"dist/{output_path.relative_to(staging_dir).as_posix()}")
 
-        stage_logger(13, TOTAL_STAGES, "Generate theme assets and public metadata")
+        stage_logger(15, TOTAL_STAGES, "Generate theme assets and public metadata")
         theme_generation = generate_theme_assets(theme_designs, staging_dir)
         generated_output_files.extend(theme_generation.generated_theme_files)
         copied_asset_count, copied_asset_files = copy_approved_assets(assets_dir, staging_dir)
@@ -1355,6 +1483,7 @@ def build_site(
             registry=registry,
             navigation=navigation,
             templates=templates,
+            component_templates=component_templates,
             theme_generation=theme_generation,
             renderer_results=renderer_results,
             renderer_contexts=page_renderer_contexts,
@@ -1377,13 +1506,14 @@ def build_site(
         )
         write_json(staging_dir / "build-manifest.json", manifest)
 
-        stage_logger(14, TOTAL_STAGES, "Validate generated output")
+        stage_logger(16, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
         validate_generated_output(
             staging_dir,
             manifest,
             registry,
             navigation,
             templates,
+            component_templates,
             theme_designs,
             theme_generation,
             public_registry,
@@ -1393,7 +1523,6 @@ def build_site(
             renderer_results_by_id,
         )
 
-        stage_logger(15, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
         if not check_only:
             publish_output(staging_dir, dist_dir)
             output_dir = dist_dir

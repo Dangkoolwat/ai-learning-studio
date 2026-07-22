@@ -1,0 +1,123 @@
+# Phase 7 Changes
+
+- Created files:
+  - `core/component_models.py`
+  - `core/component_registry.py`
+  - `core/component_validation.py`
+  - `core/component_engine.py`
+  - `components/page-intro.html`
+  - `components/page-body.html`
+  - `components/prompt-collection.html`
+  - `components/prompt-item.html`
+  - `components/prompt-builder.html`
+  - `components/prompt-field.html`
+  - `components/practice-timeline.html`
+  - `components/timeline-step.html`
+  - `agent-log/2026-07-22-gpt-5-phase7/summary.md`
+  - `agent-log/2026-07-22-gpt-5-phase7/changes.md`
+  - `agent-log/2026-07-22-gpt-5-phase7/validation.md`
+- Modified files:
+  - `core/build_pipeline.py`
+  - `core/renderer_models.py`
+  - `core/renderer_validation.py`
+  - `core/renderers/base.py`
+  - `core/renderers/landing.py`
+  - `core/renderers/static_prompt.py`
+  - `core/renderers/prompt_builder.py`
+  - `core/renderers/practice_timeline.py`
+  - `core/template_engine.py`
+  - `.github/workflows/quality-check.yml`
+  - `scripts/build.py`
+  - `requirements.txt`
+- Repeated renderer markup removed:
+  - page intro markup moved out of the renderers and into `components/page-intro.html`
+  - page body wrapper moved out of the renderers and into `components/page-body.html`
+  - prompt item markup moved out of the static-prompt renderer and into `components/prompt-item.html`
+  - prompt collection markup moved into `components/prompt-collection.html`
+  - prompt field markup moved into `components/prompt-field.html`
+  - practice timeline markup moved into `components/practice-timeline.html`
+  - timeline step markup moved into `components/timeline-step.html`
+- Component registry structure:
+  - authoritative ordered registry in `core/component_registry.py`
+  - eight required component IDs only
+  - one optional ID reserved for later, `notice`, but intentionally not registered
+- Registered component IDs:
+  - `page-intro`
+  - `page-body`
+  - `prompt-collection`
+  - `prompt-item`
+  - `prompt-builder`
+  - `prompt-field`
+  - `practice-timeline`
+  - `timeline-step`
+- Component template paths:
+  - `components/page-intro.html`
+  - `components/page-body.html`
+  - `components/prompt-collection.html`
+  - `components/prompt-item.html`
+  - `components/prompt-builder.html`
+  - `components/prompt-field.html`
+  - `components/practice-timeline.html`
+  - `components/timeline-step.html`
+- Approved component placeholders and trust classes:
+  - `page-intro`: `page_title` and `page_description` as plain text
+  - `page-body`: `body_html` as trusted HTML
+  - `prompt-collection`: `prompt_items_html` as trusted HTML
+  - `prompt-item`: `prompt_title` and `prompt_body` as plain text, `prompt_description_html` as trusted HTML
+  - `prompt-builder`: `prompt_fields_html` as trusted HTML
+  - `prompt-field`: `field_id`, `field_label`, `field_description`, and `field_requirement` as plain text, `field_placeholder_html` as trusted HTML
+  - `practice-timeline`: `timeline_steps_html` as trusted HTML
+  - `timeline-step`: `step_id`, `step_number`, `step_title`, `step_description`, and `step_result` as plain text
+- Component models introduced:
+  - `PageIntroComponent`
+  - `PageBodyComponent`
+  - `PromptCollectionComponent`
+  - `PromptItemComponent`
+  - `PromptBuilderComponent`
+  - `PromptFieldComponent`
+  - `PracticeTimelineComponent`
+  - `TimelineStepComponent`
+  - `ComponentRenderResult`
+- Component rendering API:
+  - `load_approved_component_templates(repo_root)`
+  - `render_page_intro_component(...)`
+  - `render_page_body_component(...)`
+  - `render_prompt_collection_component(...)`
+  - `render_prompt_item_component(...)`
+  - `render_prompt_builder_component(...)`
+  - `render_prompt_field_component(...)`
+  - `render_practice_timeline_component(...)`
+  - `render_timeline_step_component(...)`
+  - `render_prompt_item_description_fragment(...)`
+  - `render_prompt_field_placeholder_fragment(...)`
+- Component validation rules:
+  - strict template validation for placeholder syntax, document-level tags, script/style, inline handlers, inline styles, external URLs, and form controls
+  - strict rendered-output validation for root tag, root class, unresolved placeholders, and nested structure
+  - source-order validation for prompt items, prompt fields, and timeline steps
+- Safe internal fragments:
+  - `prompt-item__description` fragment generated only when a description exists
+  - `prompt-field__placeholder` fragment generated only when a placeholder exists
+- Build pipeline integration:
+  - component registry validation added as its own stage
+  - component template loading added as its own stage
+  - renderer contexts now carry the loaded component templates
+  - rendered component results are aggregated into the build manifest and final output validation
+- Build manifest additions:
+  - component engine version
+  - registered component IDs
+  - component count
+  - component template file count
+  - component template source paths
+  - component validation status
+  - total component render count
+  - component render count by component ID
+  - optional component IDs enabled
+  - trusted HTML placeholder count
+  - plain-text placeholder count
+  - component warning count
+- Commands executed:
+  - reviewed the required project documents and repository tree
+  - inspected the existing core modules, templates, page sources, workflow, and manifest
+  - ran `python3 -m py_compile` on the modified Python modules
+  - ran `python3 scripts/build.py`
+  - ran `python3 scripts/build.py --check`

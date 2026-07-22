@@ -98,11 +98,9 @@ def build_main_html(*, page_type: str, intro_html: str, body_html: str, section_
     parts = [
         '<main class="site-main" id="main-content">',
         f'  <article class="page-content page-content--{page_type}">',
-        intro_html,
+        indent(intro_html, "    "),
         "",
-        "    <div class=\"page-body\">",
-        indent(body_html, "      "),
-        "    </div>",
+        indent(body_html, "    "),
     ]
     if section_html:
         parts.extend(["", indent(section_html, "    ")])
