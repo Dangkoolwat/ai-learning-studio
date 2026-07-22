@@ -16,6 +16,9 @@ class BuildError(RuntimeError):
         path: Path | str | None = None,
         data_file: Path | str | None = None,
         source_file: Path | str | None = None,
+        theme_id: str | None = None,
+        section: str | None = None,
+        token_name: str | None = None,
         page_id: str | None = None,
         field: str | None = None,
     ) -> None:
@@ -24,6 +27,9 @@ class BuildError(RuntimeError):
         self.path = self._coerce_path(path)
         self.data_file = self._coerce_path(data_file)
         self.source_file = self._coerce_path(source_file)
+        self.theme_id = theme_id
+        self.section = section
+        self.token_name = token_name
         self.page_id = page_id
         self.field = field
         super().__init__(message)
@@ -44,6 +50,12 @@ class BuildError(RuntimeError):
             parts.append(f"[data={self.data_file.as_posix()}]")
         if self.source_file is not None:
             parts.append(f"[source={self.source_file.as_posix()}]")
+        if self.theme_id is not None:
+            parts.append(f"[theme={self.theme_id}]")
+        if self.section is not None:
+            parts.append(f"[section={self.section}]")
+        if self.token_name is not None:
+            parts.append(f"[token={self.token_name}]")
         if self.page_id is not None:
             parts.append(f"[page={self.page_id}]")
         if self.field is not None:

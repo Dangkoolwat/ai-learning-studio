@@ -1,0 +1,29 @@
+# Phase 4 Validation
+
+- Executed: `python3 -m py_compile scripts/build.py core/errors.py core/navigation.py core/page_registry.py core/theme_models.py core/theme_validation.py core/theme_parser.py core/theme_generator.py core/build_pipeline.py`
+- Result: success. The updated build modules compiled cleanly.
+- Executed: `python3 scripts/build.py`
+- Result: success. The build completed all 12 stages, generated the published site, generated the theme assets under `dist/themes/`, and reported 5 pages, 0 assets, and 5 routes.
+- Executed: `python3 scripts/build.py --check`
+- Result: success. The check run rendered into a temporary staging directory and skipped publishing `dist/`.
+- Executed: focused theme validation checks with temporary `design/studio-default/design.md` sources
+- Result: success. Confirmed positive parsing for the default theme and confirmed negative failures for:
+  - unsupported token section
+  - invalid token value
+  - unknown token name
+  - unknown front matter field
+  - duplicate theme ID
+- Positive checks confirmed:
+  - `dist/themes/themes.json` exists and contains exactly one active theme.
+  - `dist/themes/studio-default/tokens.json`, `style.css`, and `manifest.json` exist.
+  - The published HTML files carry `data-theme="studio-default"` and exactly one stylesheet reference each.
+  - The build manifest records theme registry metadata, discovered theme count, active theme ID, generated theme IDs, generated theme files, total theme token count, and theme source files.
+  - The generated theme CSS contains only the expected generated stylesheet header and `:root` custom properties.
+  - The published output does not copy `design/studio-default/design.md` into `dist/`.
+- Negative checks confirmed:
+  - Theme parsing failures include path/source context and the requested theme metadata fields such as `theme_id`, `section`, `token_name`, and `field`.
+  - Invalid values stop the build through `BuildError` rather than producing partial output.
+- Not executed:
+  - GitHub Actions runtime confirmation.
+  - Vercel deployment validation.
+  - Browser-level visual QA.

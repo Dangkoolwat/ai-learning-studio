@@ -16,12 +16,15 @@ from uuid import uuid4
 from core.errors import BuildError
 from core.navigation import NavigationData, load_navigation
 from core.page_registry import PageRegistry, PageRegistryEntry, load_page_registry
+from core.theme_generator import generate_theme_assets, stylesheet_href_for_output
+from core.theme_parser import load_theme_designs
+from core.theme_models import ThemeDesign, ThemeGenerationResult
 
 
 PROJECT_NAME = "AI Learning Studio"
-BUILD_PHASE = "Phase 3 Page Registry and Content Data Structure"
-GENERATOR_VERSION = "phase-3-page-registry-v1"
-TOTAL_STAGES = 10
+BUILD_PHASE = "Phase 4 Theme Generator"
+GENERATOR_VERSION = "phase-4-registry-theme-pipeline-v1"
+TOTAL_STAGES = 12
 ALLOWED_FRONT_MATTER_KEYS = {"registry_id"}
 
 
@@ -243,63 +246,24 @@ def route_to_output_path(route: str, dist_dir: Path) -> Path:
     return output_path
 
 
-def render_html_document(page: PageRegistryEntry, rendered_markdown: str) -> str:
+def render_html_document(
+    page: PageRegistryEntry,
+    rendered_markdown: str,
+    *,
+    stylesheet_href: str,
+    theme_id: str,
+) -> str:
     canonical_path = page.route
     return f"""<!doctype html>
-<html lang="{escape_html(page.lang)}">
+<html lang="{escape_html(page.lang)}" data-theme="{escape_html(theme_id)}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="{escape_html(GENERATOR_VERSION)}">
   <meta name="description" content="{escape_html(page.description)}">
   <link rel="canonical" href="{escape_html(canonical_path)}">
+  <link rel="stylesheet" href="{escape_html(stylesheet_href)}">
   <title>{escape_html(page.title)}</title>
-  <style>
-    :root {{
-      color-scheme: light;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.6;
-    }}
-
-    body {{
-      margin: 0;
-      padding: 2rem 1rem;
-      background: #fafafa;
-      color: #1f2937;
-    }}
-
-    main {{
-      max-width: 64rem;
-      margin: 0 auto;
-      padding: 1.5rem;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 1rem;
-    }}
-
-    h1,
-    h2,
-    p,
-    ul,
-    pre {{
-      margin-top: 0;
-    }}
-
-    pre {{
-      overflow-x: auto;
-      padding: 1rem;
-      background: #f3f4f6;
-      border-radius: 0.75rem;
-    }}
-
-    code {{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }}
-
-    ul {{
-      padding-left: 1.5rem;
-    }}
-  </style>
 </head>
 <body>
   <main data-page-id="{escape_html(page.id)}" data-page-type="{escape_html(page.type)}">
@@ -363,7 +327,7 @@ def validate_page_sources_against_registry(
         if extra:
             details.append(f"unregistered sources: {', '.join(extra)}")
         raise BuildError(
-            "Validate registered sources",
+            "Validate registered page sources",
             "page source files do not match the page registry"
             + (" (" + "; ".join(details) + ")" if details else ""),
         )
@@ -373,21 +337,21 @@ def validate_page_sources_against_registry(
         source = sources_by_id.get(page.id)
         if source is None:
             raise BuildError(
-                "Validate registered sources",
+                "Validate registered page sources",
                 f"missing page source for registry entry {page.id}",
                 source_file=page.source,
                 page_id=page.id,
             )
         if source.source_path.relative_to(repo_root).as_posix() != page.source:
             raise BuildError(
-                "Validate registered sources",
+                "Validate registered page sources",
                 f"page source path must be {page.source}",
                 source_file=source.source_path,
                 page_id=page.id,
             )
         if source.registry_id != page.id:
             raise BuildError(
-                "Validate registered sources",
+                "Validate registered page sources",
                 "registry_id must match the page registry entry id",
                 source_file=source.source_path,
                 page_id=page.id,
@@ -407,6 +371,7 @@ def build_manifest(
     *,
     registry: PageRegistry,
     navigation: NavigationData,
+    theme_generation: ThemeGenerationResult,
     published_pages: list[PageRegistryEntry],
     draft_pages: list[PageRegistryEntry],
     generated_routes: list[str],
@@ -415,6 +380,7 @@ def build_manifest(
     source_page_files: list[str],
     public_registry_output_file: str,
     public_navigation_output_file: str,
+    public_theme_registry_output_file: str,
 ) -> dict[str, Any]:
     return {
         "project_name": PROJECT_NAME,
@@ -422,6 +388,13 @@ def build_manifest(
         "generator_version": GENERATOR_VERSION,
         "registry_version": registry.version,
         "navigation_version": navigation.version,
+        "theme_registry_version": theme_generation.registry.version,
+        "discovered_theme_count": theme_generation.discovered_theme_count,
+        "active_theme_id": theme_generation.active_theme_id,
+        "generated_theme_ids": list(theme_generation.generated_theme_ids),
+        "generated_theme_files": list(theme_generation.generated_theme_files),
+        "total_theme_token_count": theme_generation.total_theme_token_count,
+        "theme_source_files": list(theme_generation.theme_source_files),
         "registered_page_count": len(registry.pages),
         "published_page_count": len(published_pages),
         "draft_page_count": len(draft_pages),
@@ -433,6 +406,7 @@ def build_manifest(
         "source_page_files": source_page_files,
         "public_registry_output_file": public_registry_output_file,
         "public_navigation_output_file": public_navigation_output_file,
+        "public_theme_registry_output_file": public_theme_registry_output_file,
         "generated_output_files": generated_output_files,
         "build_timestamp_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
     }
@@ -457,23 +431,97 @@ def validate_json_file(path: Path) -> dict[str, Any]:
     return payload
 
 
+def expected_theme_stylesheet_href(page_output_path: Path, staging_dir: Path, theme_id: str) -> str:
+    stylesheet_path = staging_dir / "themes" / theme_id / "style.css"
+    return stylesheet_href_for_output(page_output_path, stylesheet_path)
+
+
+def validate_theme_stylesheet(
+    style_path: Path,
+    *,
+    theme_design: ThemeDesign,
+    source_relative_path: str,
+) -> None:
+    style_text = style_path.read_text(encoding="utf-8")
+    if "@import" in style_text:
+        raise BuildError("Validate output", "theme style.css must not contain @import", path=style_path, theme_id=theme_design.id)
+    if "@font-face" in style_text:
+        raise BuildError("Validate output", "theme style.css must not contain @font-face", path=style_path, theme_id=theme_design.id)
+    if "url(" in style_text.lower():
+        raise BuildError("Validate output", "theme style.css must not contain URL references", path=style_path, theme_id=theme_design.id)
+
+    expected_variable_lines = [f"  {token.css_variable}: {token.value};" for token in theme_design.tokens()]
+    expected_lines = [
+        "/*",
+        f"Generated from {source_relative_path}.",
+        "Do not edit this file directly.",
+        "*/",
+        "",
+        ":root {",
+        *expected_variable_lines,
+        "}",
+    ]
+    if style_text.splitlines() != expected_lines:
+        raise BuildError(
+            "Validate output",
+            "theme style.css content does not match the validated tokens",
+            path=style_path,
+            theme_id=theme_design.id,
+        )
+
+
+def validate_theme_tokens_json(
+    tokens_path: Path,
+    *,
+    theme_design: ThemeDesign,
+) -> None:
+    parsed_tokens = validate_json_file(tokens_path)
+    if parsed_tokens != theme_design.to_tokens_payload():
+        raise BuildError(
+            "Validate output",
+            "theme tokens.json content does not match the validated design",
+            path=tokens_path,
+            theme_id=theme_design.id,
+        )
+
+
+def validate_theme_manifest_json(
+    manifest_path: Path,
+    *,
+    theme_design: ThemeDesign,
+    source_relative_path: str,
+) -> None:
+    parsed_manifest = validate_json_file(manifest_path)
+    if parsed_manifest != theme_design.to_manifest_payload(source_relative_path):
+        raise BuildError(
+            "Validate output",
+            "theme manifest.json content does not match the validated design",
+            path=manifest_path,
+            theme_id=theme_design.id,
+        )
+
+
 def validate_generated_output(
     staging_dir: Path,
     manifest: dict[str, Any],
     registry: PageRegistry,
     navigation: NavigationData,
+    theme_designs: list[ThemeDesign],
+    theme_generation: ThemeGenerationResult,
     public_registry: dict[str, Any],
     public_navigation: dict[str, Any],
 ) -> None:
     manifest_path = staging_dir / "build-manifest.json"
     registry_path = staging_dir / "page-registry.json"
     navigation_path = staging_dir / "navigation.json"
+    themes_registry_path = staging_dir / "themes" / "themes.json"
 
     for required_path, label in (
         (staging_dir / "index.html", "dist/index.html"),
         (manifest_path, "dist/build-manifest.json"),
         (registry_path, "dist/page-registry.json"),
         (navigation_path, "dist/navigation.json"),
+        (themes_registry_path, "dist/themes/themes.json"),
     ):
         if not required_path.is_file():
             raise BuildError("Validate output", f"{label} is missing", path=required_path)
@@ -481,6 +529,7 @@ def validate_generated_output(
     parsed_manifest = validate_json_file(manifest_path)
     parsed_registry = validate_json_file(registry_path)
     parsed_navigation = validate_json_file(navigation_path)
+    parsed_themes_registry = validate_json_file(themes_registry_path)
 
     if parsed_manifest != manifest:
         raise BuildError("Validate output", "build manifest content changed unexpectedly", path=manifest_path)
@@ -488,11 +537,18 @@ def validate_generated_output(
         raise BuildError("Validate output", "public page registry content changed unexpectedly", path=registry_path)
     if parsed_navigation != public_navigation:
         raise BuildError("Validate output", "public navigation content changed unexpectedly", path=navigation_path)
+    if parsed_themes_registry != theme_generation.registry.to_public_dict():
+        raise BuildError("Validate output", "public themes registry content changed unexpectedly", path=themes_registry_path)
 
     published_pages = registry.published_pages()
     draft_pages = registry.draft_pages()
     expected_routes = [page.route for page in published_pages]
     expected_html_files = {route_to_output_path(page.route, staging_dir).relative_to(staging_dir).as_posix() for page in published_pages}
+    theme_design_by_id = {theme.id: theme for theme in theme_designs}
+    active_theme_design = theme_design_by_id.get(theme_generation.active_theme_id)
+    if active_theme_design is None:
+        raise BuildError("Validate output", "active theme is missing from the validated theme designs", path=staging_dir, theme_id=theme_generation.active_theme_id)
+
     actual_html_files = {
         path.relative_to(staging_dir).as_posix()
         for path in staging_dir.rglob("*.html")
@@ -518,6 +574,20 @@ def validate_generated_output(
         raise BuildError("Validate output", "manifest published page ids are incorrect", path=manifest_path)
     if [page.id for page in registry.pages] != parsed_manifest.get("registered_page_ids", []):
         raise BuildError("Validate output", "manifest registered page ids are incorrect", path=manifest_path)
+    if parsed_manifest.get("theme_registry_version") != theme_generation.registry.version:
+        raise BuildError("Validate output", "manifest theme registry version is incorrect", path=manifest_path)
+    if parsed_manifest.get("discovered_theme_count") != theme_generation.discovered_theme_count:
+        raise BuildError("Validate output", "manifest discovered theme count is incorrect", path=manifest_path)
+    if parsed_manifest.get("active_theme_id") != theme_generation.active_theme_id:
+        raise BuildError("Validate output", "manifest active theme id is incorrect", path=manifest_path)
+    if parsed_manifest.get("generated_theme_ids") != list(theme_generation.generated_theme_ids):
+        raise BuildError("Validate output", "manifest generated theme ids are incorrect", path=manifest_path)
+    if parsed_manifest.get("generated_theme_files") != list(theme_generation.generated_theme_files):
+        raise BuildError("Validate output", "manifest generated theme files are incorrect", path=manifest_path)
+    if parsed_manifest.get("total_theme_token_count") != theme_generation.total_theme_token_count:
+        raise BuildError("Validate output", "manifest total theme token count is incorrect", path=manifest_path)
+    if parsed_manifest.get("theme_source_files") != list(theme_generation.theme_source_files):
+        raise BuildError("Validate output", "manifest theme source files are incorrect", path=manifest_path)
     if parsed_manifest.get("published_page_count") != len(published_pages):
         raise BuildError("Validate output", "manifest published page count is incorrect", path=manifest_path)
     if parsed_manifest.get("draft_page_count") != len(draft_pages):
@@ -529,6 +599,8 @@ def validate_generated_output(
         raise BuildError("Validate output", "manifest public registry output file is incorrect", path=manifest_path)
     if parsed_manifest.get("public_navigation_output_file") != "dist/navigation.json":
         raise BuildError("Validate output", "manifest public navigation output file is incorrect", path=manifest_path)
+    if parsed_manifest.get("public_theme_registry_output_file") != "dist/themes/themes.json":
+        raise BuildError("Validate output", "manifest public theme registry output file is incorrect", path=manifest_path)
 
     public_registry_pages = parsed_registry.get("pages")
     if not isinstance(public_registry_pages, list):
@@ -556,10 +628,78 @@ def validate_generated_output(
     if navigation_page_ids != expected_navigation_ids:
         raise BuildError("Validate output", "navigation does not reference the published section pages", path=navigation_path)
 
+    public_theme_registry = parsed_themes_registry
+    if public_theme_registry.get("version") != theme_generation.registry.version:
+        raise BuildError("Validate output", "themes registry version is incorrect", path=themes_registry_path)
+    if public_theme_registry.get("active_theme") != theme_generation.active_theme_id:
+        raise BuildError("Validate output", "themes registry active theme is incorrect", path=themes_registry_path)
+    public_theme_entries = public_theme_registry.get("themes")
+    if not isinstance(public_theme_entries, list):
+        raise BuildError("Validate output", "themes registry themes must be an array", path=themes_registry_path)
+    if len(public_theme_entries) != len(theme_designs):
+        raise BuildError("Validate output", "themes registry theme count is incorrect", path=themes_registry_path)
+
+    for theme_design in theme_designs:
+        theme_dir = staging_dir / "themes" / theme_design.id
+        tokens_path = theme_dir / "tokens.json"
+        style_path = theme_dir / "style.css"
+        manifest_path = theme_dir / "manifest.json"
+        source_relative_path = theme_design.source_path.relative_to(staging_dir.parent).as_posix()
+        if not tokens_path.is_file() or not style_path.is_file() or not manifest_path.is_file():
+            raise BuildError(
+                "Validate output",
+                "generated theme file is missing",
+                path=theme_dir,
+                theme_id=theme_design.id,
+            )
+        validate_theme_tokens_json(tokens_path, theme_design=theme_design)
+        validate_theme_stylesheet(
+            style_path,
+            theme_design=theme_design,
+            source_relative_path=source_relative_path,
+        )
+        validate_theme_manifest_json(
+            manifest_path,
+            theme_design=theme_design,
+            source_relative_path=source_relative_path,
+        )
+
+    public_theme_by_id = {theme_data.get("id"): theme_data for theme_data in public_theme_entries if isinstance(theme_data, dict)}
+    if set(public_theme_by_id) != {theme.id for theme in theme_designs}:
+        raise BuildError("Validate output", "themes registry ids are incorrect", path=themes_registry_path)
+    for theme_design in theme_designs:
+        theme_data = public_theme_by_id[theme_design.id]
+        expected_theme_files = theme_design.to_manifest_payload(
+            theme_design.source_path.relative_to(staging_dir.parent).as_posix()
+        )["files"]
+        for field_name in ("manifest", "tokens", "style"):
+            if theme_data.get(field_name) != expected_theme_files[field_name]:
+                raise BuildError(
+                    "Validate output",
+                    f"themes registry {field_name} path is incorrect",
+                    path=themes_registry_path,
+                    theme_id=theme_design.id,
+                    field=field_name,
+                )
+            expected_file_path = staging_dir / Path(theme_data[field_name])
+            if not expected_file_path.is_file():
+                raise BuildError(
+                    "Validate output",
+                    f"themes registry file is missing: {theme_data[field_name]}",
+                    path=expected_file_path,
+                    theme_id=theme_design.id,
+                    field=field_name,
+                )
+        if theme_data.get("status") != "active" and theme_design.id == theme_generation.active_theme_id:
+            raise BuildError("Validate output", "active theme status is incorrect", path=themes_registry_path, theme_id=theme_design.id)
+        if theme_data.get("status") not in {"active", "inactive"}:
+            raise BuildError("Validate output", "themes registry contains an invalid theme status", path=themes_registry_path, theme_id=theme_design.id)
+
     for json_payload, label in (
         (parsed_manifest, "build-manifest.json"),
         (parsed_registry, "page-registry.json"),
         (parsed_navigation, "navigation.json"),
+        (parsed_themes_registry, "themes.json"),
     ):
         if contains_absolute_filesystem_path(json_payload):
             raise BuildError("Validate output", f"{label} contains an absolute filesystem path", path=staging_dir)
@@ -573,6 +713,11 @@ def validate_generated_output(
         if not output_path.exists():
             raise BuildError("Validate output", f"generated output is missing: {relative_path}", path=staging_dir)
 
+    if any(True for _ in staging_dir.rglob("design.md")):
+        raise BuildError("Validate output", "source design.md file was copied into dist/", path=staging_dir)
+    if (staging_dir / "design").exists():
+        raise BuildError("Validate output", "design/ output must not be published", path=staging_dir / "design")
+
     if draft_pages:
         for draft_page in draft_pages:
             draft_output_path = route_to_output_path(draft_page.route, staging_dir)
@@ -582,6 +727,21 @@ def validate_generated_output(
                     f"draft page unexpectedly generated HTML: {draft_page.route}",
                     path=draft_output_path,
                 )
+
+    for page in published_pages:
+        output_path = route_to_output_path(page.route, staging_dir)
+        html_text = output_path.read_text(encoding="utf-8")
+        expected_href = expected_theme_stylesheet_href(output_path, staging_dir, theme_generation.active_theme_id)
+        if html_text.count('rel="stylesheet"') != 1:
+            raise BuildError("Validate output", "HTML must include exactly one stylesheet reference", path=output_path, theme_id=theme_generation.active_theme_id)
+        if f'<link rel="stylesheet" href="{expected_href}">' not in html_text:
+            raise BuildError("Validate output", "HTML stylesheet reference is missing or incorrect", path=output_path, theme_id=theme_generation.active_theme_id)
+        if f'data-theme="{theme_generation.active_theme_id}"' not in html_text:
+            raise BuildError("Validate output", "HTML does not identify the active theme", path=output_path, theme_id=theme_generation.active_theme_id)
+        stylesheet_path = (output_path.parent / expected_href).resolve(strict=False)
+        resolved_dist = staging_dir.resolve(strict=False)
+        if resolved_dist != stylesheet_path and resolved_dist not in stylesheet_path.parents:
+            raise BuildError("Validate output", "stylesheet path escapes dist/", path=output_path, theme_id=theme_generation.active_theme_id)
 
 
 def contains_absolute_filesystem_path(payload: Any) -> bool:
@@ -629,8 +789,9 @@ def build_site(
     pages_dir = repo_root / "pages"
     assets_dir = repo_root / "assets"
     data_dir = repo_root / "data"
+    design_dir = repo_root / "design"
     dist_dir = repo_root / "dist"
-    temp_root = Path(tempfile.mkdtemp(prefix=".phase3-build-", dir=repo_root))
+    temp_root = Path(tempfile.mkdtemp(prefix=".phase4-build-", dir=repo_root))
 
     try:
         stage_logger(1, TOTAL_STAGES, "Validate environment")
@@ -645,6 +806,8 @@ def build_site(
             raise BuildError("Validate environment", "assets/ directory does not exist", path=assets_dir)
         if not data_dir.is_dir():
             raise BuildError("Validate environment", "data/ directory does not exist", path=data_dir)
+        if not design_dir.is_dir():
+            raise BuildError("Validate environment", "design/ directory does not exist", path=design_dir)
 
         stage_logger(2, TOTAL_STAGES, "Load navigation data")
         navigation = load_navigation(data_dir)
@@ -652,10 +815,10 @@ def build_site(
         stage_logger(3, TOTAL_STAGES, "Load page registry")
         registry = load_page_registry(data_dir)
 
-        stage_logger(4, TOTAL_STAGES, "Validate registered sources")
+        stage_logger(4, TOTAL_STAGES, "Validate registered page sources")
         page_paths = discover_page_sources(pages_dir)
         if not page_paths:
-            raise BuildError("Validate registered sources", "no page sources were found", path=pages_dir)
+            raise BuildError("Validate registered page sources", "no page sources were found", path=pages_dir)
         discovered_source_paths = {path.relative_to(repo_root).as_posix() for path in page_paths}
         expected_source_paths = set(registry.source_files())
         if discovered_source_paths != expected_source_paths:
@@ -667,13 +830,29 @@ def build_site(
             if extra:
                 details.append(f"unregistered sources: {', '.join(extra)}")
             raise BuildError(
-                "Validate registered sources",
+                "Validate registered page sources",
                 "page source files do not match the page registry"
                 + (" (" + "; ".join(details) + ")" if details else ""),
                 path=pages_dir,
             )
 
-        stage_logger(5, TOTAL_STAGES, "Parse page sources")
+        stage_logger(5, TOTAL_STAGES, "Discover and validate themes")
+        theme_designs = load_theme_designs(design_dir)
+        if len(theme_designs) != 1:
+            raise BuildError(
+                "Discover and validate themes",
+                "exactly one theme source must exist in this phase",
+                path=design_dir,
+            )
+        if theme_designs[0].id != "studio-default":
+            raise BuildError(
+                "Discover and validate themes",
+                "the initial theme must be studio-default",
+                path=theme_designs[0].source_path,
+                theme_id=theme_designs[0].id,
+            )
+
+        stage_logger(6, TOTAL_STAGES, "Parse page sources")
         parsed_sources = [parse_page_source(page_path) for page_path in page_paths]
         parsed_sources_by_id = {source.registry_id: source for source in parsed_sources}
         if len(parsed_sources_by_id) != len(parsed_sources):
@@ -703,22 +882,33 @@ def build_site(
         draft_pages = list(registry.draft_pages())
         generated_routes: list[str] = []
         generated_output_files: list[str] = []
+        active_theme_id = theme_designs[0].id
 
-        stage_logger(6, TOTAL_STAGES, "Render published pages")
+        stage_logger(7, TOTAL_STAGES, "Render published pages")
         for page in published_pages:
             source = parsed_sources_by_id[page.id]
             output_path = route_to_output_path(page.route, staging_dir)
             rendered_markdown = render_markdown(source.body_markdown, source_path=source.source_path)
-            html_document = render_html_document(page, rendered_markdown)
+            stylesheet_href = expected_theme_stylesheet_href(output_path, staging_dir, active_theme_id)
+            html_document = render_html_document(
+                page,
+                rendered_markdown,
+                stylesheet_href=stylesheet_href,
+                theme_id=active_theme_id,
+            )
             write_text(output_path, html_document)
             generated_routes.append(page.route)
             generated_output_files.append(f"dist/{output_path.relative_to(staging_dir).as_posix()}")
 
-        stage_logger(7, TOTAL_STAGES, "Copy approved assets")
+        stage_logger(8, TOTAL_STAGES, "Generate theme assets")
+        theme_generation = generate_theme_assets(theme_designs, staging_dir)
+        generated_output_files.extend(theme_generation.generated_theme_files)
+
+        stage_logger(9, TOTAL_STAGES, "Copy approved static assets")
         copied_asset_count, copied_asset_files = copy_approved_assets(assets_dir, staging_dir)
         generated_output_files.extend(copied_asset_files)
 
-        stage_logger(8, TOTAL_STAGES, "Write public data and manifest")
+        stage_logger(10, TOTAL_STAGES, "Write public data and build manifest")
         public_registry = build_public_registry_data(registry)
         public_navigation = build_public_navigation_data(navigation)
         public_registry_path = staging_dir / "page-registry.json"
@@ -730,6 +920,7 @@ def build_site(
         manifest = build_manifest(
             registry=registry,
             navigation=navigation,
+            theme_generation=theme_generation,
             published_pages=published_pages,
             draft_pages=draft_pages,
             generated_routes=generated_routes,
@@ -745,20 +936,23 @@ def build_site(
             source_page_files=source_page_files,
             public_registry_output_file="dist/page-registry.json",
             public_navigation_output_file="dist/navigation.json",
+            public_theme_registry_output_file=theme_generation.public_registry_output_file,
         )
         write_json(staging_dir / "build-manifest.json", manifest)
 
-        stage_logger(9, TOTAL_STAGES, "Validate generated output")
+        stage_logger(11, TOTAL_STAGES, "Validate generated output")
         validate_generated_output(
             staging_dir,
             manifest,
             registry,
             navigation,
+            theme_designs,
+            theme_generation,
             public_registry,
             public_navigation,
         )
 
-        stage_logger(10, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
+        stage_logger(12, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
         if not check_only:
             publish_output(staging_dir, dist_dir)
             output_dir = dist_dir

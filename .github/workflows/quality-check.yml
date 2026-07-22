@@ -29,11 +29,15 @@ jobs:
           import json
 
           repo_root = Path(".")
-          pages_dir = repo_root / "pages"
           dist_dir = repo_root / "dist"
           manifest_path = dist_dir / "build-manifest.json"
-          registry_path = dist_dir / "page-registry.json"
+          page_registry_path = dist_dir / "page-registry.json"
           navigation_path = dist_dir / "navigation.json"
+          theme_registry_path = dist_dir / "themes" / "themes.json"
+          theme_dir = dist_dir / "themes" / "studio-default"
+          theme_tokens_path = theme_dir / "tokens.json"
+          theme_style_path = theme_dir / "style.css"
+          theme_manifest_path = theme_dir / "manifest.json"
           html_paths = [
               dist_dir / "index.html",
               dist_dir / "ai-practice/index.html",
@@ -42,76 +46,116 @@ jobs:
               dist_dir / "image-ai/index.html",
           ]
 
-          for path in (manifest_path, registry_path, navigation_path, *html_paths):
+          for path in (
+              manifest_path,
+              page_registry_path,
+              navigation_path,
+              theme_registry_path,
+              theme_tokens_path,
+              theme_style_path,
+              theme_manifest_path,
+              *html_paths,
+          ):
               if not path.is_file():
                   raise SystemExit(f"missing generated file: {path}")
 
           manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-          public_registry = json.loads(registry_path.read_text(encoding="utf-8"))
-          public_navigation = json.loads(navigation_path.read_text(encoding="utf-8"))
-          source_registry = json.loads((repo_root / "data/page-registry.json").read_text(encoding="utf-8"))
-          source_navigation = json.loads((repo_root / "data/navigation.json").read_text(encoding="utf-8"))
+          page_registry = json.loads(page_registry_path.read_text(encoding="utf-8"))
+          navigation = json.loads(navigation_path.read_text(encoding="utf-8"))
+          theme_registry = json.loads(theme_registry_path.read_text(encoding="utf-8"))
+          theme_tokens = json.loads(theme_tokens_path.read_text(encoding="utf-8"))
+          theme_manifest = json.loads(theme_manifest_path.read_text(encoding="utf-8"))
 
-          if manifest.get("published_page_count") != 5:
-              raise SystemExit("manifest does not report exactly five published pages")
-          if manifest.get("draft_page_count") != 0:
-              raise SystemExit("manifest unexpectedly reports draft pages")
-          if manifest.get("registered_page_count") != 5:
-              raise SystemExit("manifest does not report exactly five registered pages")
-          if manifest.get("registry_version") != 1 or manifest.get("navigation_version") != 1:
-              raise SystemExit("manifest versions are incorrect")
+          if theme_registry.get("version") != 1:
+              raise SystemExit("theme registry version is incorrect")
+          if theme_registry.get("active_theme") != "studio-default":
+              raise SystemExit("theme registry active theme is incorrect")
+          themes = theme_registry.get("themes")
+          if not isinstance(themes, list) or len(themes) != 1:
+              raise SystemExit("theme registry must contain exactly one theme")
+          theme_entry = themes[0]
+          if theme_entry.get("id") != "studio-default":
+              raise SystemExit("theme registry id is incorrect")
+          if theme_entry.get("status") != "active":
+              raise SystemExit("theme registry status is incorrect")
+          if theme_entry.get("manifest") != "themes/studio-default/manifest.json":
+              raise SystemExit("theme registry manifest path is incorrect")
+          if theme_entry.get("tokens") != "themes/studio-default/tokens.json":
+              raise SystemExit("theme registry tokens path is incorrect")
+          if theme_entry.get("style") != "themes/studio-default/style.css":
+              raise SystemExit("theme registry style path is incorrect")
 
-          expected_routes = {"/", "/ai-practice/", "/ready-to-use/", "/ai-assistant/", "/image-ai/"}
-          if set(manifest.get("generated_routes", [])) != expected_routes:
-              raise SystemExit("manifest routes do not match the confirmed routes")
-
-          public_registry_pages = public_registry.get("pages")
-          if not isinstance(public_registry_pages, list) or len(public_registry_pages) != 5:
-              raise SystemExit("public registry must contain exactly five published pages")
-          if {page.get("type") for page in public_registry_pages} - {"landing", "static-prompt"}:
-              raise SystemExit("public registry contains an unexpected page type")
-          if public_registry_pages[0].get("route") != "/":
-              raise SystemExit("public registry does not include the root route first")
-          if [page.get("route") for page in public_registry_pages] != ["/", "/ai-practice/", "/ready-to-use/", "/ai-assistant/", "/image-ai/"]:
-              raise SystemExit("public registry routes are out of order")
-          if any(page.get("status") != "published" for page in public_registry_pages):
-              raise SystemExit("public registry contains a non-published page")
-
-          if public_navigation != source_navigation:
-              raise SystemExit("public navigation does not match the source navigation")
-
-          section_pages = {page["id"]: page["route"] for page in public_registry_pages if page.get("navigation")}
-          if section_pages != {
-              "ai-practice": "/ai-practice/",
-              "ready-to-use": "/ready-to-use/",
-              "ai-assistant": "/ai-assistant/",
-              "image-ai": "/image-ai/",
+          if theme_manifest.get("id") != "studio-default":
+              raise SystemExit("theme manifest id is incorrect")
+          if theme_manifest.get("source") != "design/studio-default/design.md":
+              raise SystemExit("theme manifest source path is incorrect")
+          if theme_manifest.get("status") != "active":
+              raise SystemExit("theme manifest status is incorrect")
+          if theme_manifest.get("token_count") != 47:
+              raise SystemExit("theme manifest token count is incorrect")
+          if theme_manifest.get("files") != {
+              "tokens": "themes/studio-default/tokens.json",
+              "style": "themes/studio-default/style.css",
+              "manifest": "themes/studio-default/manifest.json",
           }:
-              raise SystemExit("published navigation pages do not match the confirmed sections")
+              raise SystemExit("theme manifest files are incorrect")
 
-          source_markdown = sorted(
-              path.relative_to(repo_root).as_posix()
-              for path in pages_dir.rglob("*.md")
-              if not any(part.startswith(".") for part in path.relative_to(pages_dir).parts)
-          )
-          expected_markdown = sorted(page["source"] for page in source_registry["pages"])
-          if source_markdown != expected_markdown:
-              raise SystemExit("pages/ contains unregistered markdown files")
+          if theme_tokens.get("theme", {}).get("id") != "studio-default":
+              raise SystemExit("theme tokens id is incorrect")
 
-          if public_registry != {
-              "version": 1,
-              "pages": public_registry_pages,
-          }:
-              raise SystemExit("public registry schema changed unexpectedly")
+          expected_categories = ["colors", "typography", "spacing", "radius", "shadow", "layout"]
+          if list(theme_tokens.get("tokens", {}).keys()) != expected_categories:
+              raise SystemExit("theme tokens categories are out of order or missing")
+          if not all(
+              token_entry.get("css_variable", "").startswith("--")
+              for category in expected_categories
+              for token_entry in theme_tokens.get("tokens", {}).get(category, {}).values()
+          ):
+              raise SystemExit("theme tokens css variables are malformed")
 
-          if public_navigation != {
-              "version": 1,
-              "sections": source_navigation["sections"],
-          }:
-              raise SystemExit("public navigation schema changed unexpectedly")
+          if manifest.get("theme_registry_version") != 1:
+              raise SystemExit("manifest theme registry version is incorrect")
+          if manifest.get("discovered_theme_count") != 1:
+              raise SystemExit("manifest theme count is incorrect")
+          if manifest.get("active_theme_id") != "studio-default":
+              raise SystemExit("manifest active theme id is incorrect")
+          if manifest.get("generated_theme_ids") != ["studio-default"]:
+              raise SystemExit("manifest generated theme ids are incorrect")
+          if manifest.get("total_theme_token_count") != 47:
+              raise SystemExit("manifest total theme token count is incorrect")
+          if manifest.get("theme_source_files") != ["design/studio-default/design.md"]:
+              raise SystemExit("manifest theme source files are incorrect")
+          expected_generated_theme_files = [
+              "dist/themes/studio-default/manifest.json",
+              "dist/themes/studio-default/style.css",
+              "dist/themes/studio-default/tokens.json",
+              "dist/themes/themes.json",
+          ]
+          if manifest.get("generated_theme_files") != expected_generated_theme_files:
+              raise SystemExit("manifest generated theme files are missing")
 
-          generated_files = {f"dist/{path.relative_to(dist_dir).as_posix()}" for path in html_paths}
-          manifest_files = set(manifest.get("generated_output_files", []))
-          if not generated_files.issubset(manifest_files):
-              raise SystemExit("manifest is missing one or more generated html files")
+          if page_registry.get("version") != 1 or navigation.get("version") != 1:
+              raise SystemExit("page registry or navigation version is incorrect")
+
+          style_text = theme_style_path.read_text(encoding="utf-8")
+          if not style_text.startswith("/*\nGenerated from design/studio-default/design.md.\nDo not edit this file directly.\n*/\n\n:root {"):
+              raise SystemExit("theme stylesheet header is incorrect")
+          if "<style" in style_text or "@import" in style_text or "@font-face" in style_text or "url(" in style_text:
+              raise SystemExit("theme stylesheet contains disallowed CSS content")
+
+          for html_path in html_paths:
+              html_text = html_path.read_text(encoding="utf-8")
+              if 'data-theme="studio-default"' not in html_text:
+                  raise SystemExit(f"missing theme data attribute in {html_path}")
+              if html_text.count('<link rel="stylesheet"') != 1:
+                  raise SystemExit(f"expected exactly one stylesheet link in {html_path}")
+              if "themes/studio-default/style.css" not in html_text:
+                  raise SystemExit(f"missing theme stylesheet link in {html_path}")
+              if "<style" in html_text:
+                  raise SystemExit(f"inline styles still present in {html_path}")
+
+          if (dist_dir / "design").exists():
+              raise SystemExit("design sources were copied into dist")
+          if any(path.name == "design.md" for path in dist_dir.rglob("*")):
+              raise SystemExit("theme design sources were copied into dist")
           PY
