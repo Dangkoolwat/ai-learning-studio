@@ -1,0 +1,27 @@
+# Phase 5 Validation
+
+- Executed: `python3 -m py_compile scripts/build.py core/errors.py core/navigation.py core/page_registry.py core/template_models.py core/template_validation.py core/template_engine.py core/theme_models.py core/theme_validation.py core/theme_parser.py core/theme_generator.py core/build_pipeline.py`
+- Result: success. The updated Python modules compiled cleanly.
+- Executed: `python3 scripts/build.py`
+- Result: success. The build completed all 14 stages, rendered the published site through the reusable template engine, generated the theme assets, and reported 5 pages, 0 assets, and 5 routes.
+- Executed: `python3 scripts/build.py --check`
+- Result: success. The check run rendered into a temporary staging directory and skipped publishing `dist/`.
+- Executed: focused negative template checks
+- Result: success. Confirmed rejection of missing templates, unknown placeholders, missing placeholders, unresolved placeholders, malformed placeholder syntax, duplicate navigation items, missing navigation section pages, and incorrect navigation order.
+- Positive checks confirmed:
+  - the approved template files exist under `templates/`
+  - the shared shell is rendered into each published HTML page
+  - the build manifest records template engine version, source files, file count, rendered page template count, partial names, navigation item count, and validation status
+  - the active theme remains `studio-default`
+  - the generated HTML preserves the rendered Markdown content and the route-aware stylesheet and navigation links
+- Negative checks confirmed:
+  - unsupported or unknown template placeholders stop the build
+  - unresolved placeholders stop the build
+  - invalid navigation structure stops validation
+  - generated output does not copy template source files into `dist/`
+- Checks not performed:
+  - Vercel deployment validation
+  - browser-level visual QA
+  - any Phase 6 work
+- No commit was performed.
+- No push was performed.

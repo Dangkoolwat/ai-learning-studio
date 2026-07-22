@@ -1,4 +1,4 @@
-"""Phase 3 static site build pipeline helpers for AI Learning Studio."""
+"""Phase 5 template-aware build pipeline helpers for AI Learning Studio."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ from html import escape as escape_html
 import json
 from pathlib import Path
 from shutil import copy2, rmtree
+import re
 import sys
 import tempfile
 from typing import Any, Callable
@@ -16,16 +17,39 @@ from uuid import uuid4
 from core.errors import BuildError
 from core.navigation import NavigationData, load_navigation
 from core.page_registry import PageRegistry, PageRegistryEntry, load_page_registry
+from core.template_engine import (
+    build_body_class,
+    build_navigation_items_html,
+    load_approved_templates,
+    render_page_document,
+    route_href_for_output,
+)
+from core.template_models import (
+    LoadedTemplates,
+    PageTemplateContext,
+    SITE_NAME,
+    TEMPLATE_ENGINE_VERSION,
+    TEMPLATE_PARTIAL_NAMES,
+    TEMPLATE_VALIDATION_STATUS,
+)
 from core.theme_generator import generate_theme_assets, stylesheet_href_for_output
 from core.theme_parser import load_theme_designs
 from core.theme_models import ThemeDesign, ThemeGenerationResult
 
 
 PROJECT_NAME = "AI Learning Studio"
-BUILD_PHASE = "Phase 4 Theme Generator"
-GENERATOR_VERSION = "phase-4-registry-theme-pipeline-v1"
-TOTAL_STAGES = 12
+BUILD_PHASE = "Phase 5 Template Engine"
+GENERATOR_VERSION = "phase-5-template-engine-pipeline-v1"
+TOTAL_STAGES = 14
 ALLOWED_FRONT_MATTER_KEYS = {"registry_id"}
+EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
+NAVIGATION_LINK_RE = re.compile(
+    r'<li class="navigation-item(?: is-current)?">\s*'
+    r'<a class="navigation-link" href="([^"]+)"(?: aria-current="page")?>([^<]+)</a>\s*'
+    r'</li>',
+    re.DOTALL,
+)
+PLACEHOLDER_RE = re.compile(r"{{\s*[a-z0-9_]+\s*}}")
 
 
 @dataclass(slots=True)
@@ -246,32 +270,186 @@ def route_to_output_path(route: str, dist_dir: Path) -> Path:
     return output_path
 
 
-def render_html_document(
-    page: PageRegistryEntry,
-    rendered_markdown: str,
+def build_page_template_contexts(
+    published_pages: list[PageRegistryEntry],
+    parsed_sources_by_id: dict[str, PageSource],
+    registry: PageRegistry,
+    navigation: NavigationData,
+    staging_dir: Path,
     *,
-    stylesheet_href: str,
-    theme_id: str,
-) -> str:
-    canonical_path = page.route
-    return f"""<!doctype html>
-<html lang="{escape_html(page.lang)}" data-theme="{escape_html(theme_id)}">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="{escape_html(GENERATOR_VERSION)}">
-  <meta name="description" content="{escape_html(page.description)}">
-  <link rel="canonical" href="{escape_html(canonical_path)}">
-  <link rel="stylesheet" href="{escape_html(stylesheet_href)}">
-  <title>{escape_html(page.title)}</title>
-</head>
-<body>
-  <main data-page-id="{escape_html(page.id)}" data-page-type="{escape_html(page.type)}">
-{rendered_markdown}
-  </main>
-</body>
-</html>
-"""
+    active_theme_id: str,
+ ) -> tuple[list[PageTemplateContext], dict[str, str]]:
+    current_year = datetime.now().astimezone().year
+    page_contexts: list[PageTemplateContext] = []
+    rendered_markdown_by_id: dict[str, str] = {}
+
+    for page in published_pages:
+        source = parsed_sources_by_id[page.id]
+        output_path = route_to_output_path(page.route, staging_dir)
+        rendered_markdown = render_markdown(source.body_markdown, source_path=source.source_path)
+        rendered_markdown_by_id[page.id] = rendered_markdown
+        navigation_items_html = build_navigation_items_html(page, registry, navigation, output_path, staging_dir)
+
+        page_contexts.append(
+            PageTemplateContext(
+                page_id=page.id,
+                page_title=page.title,
+                page_description=page.description,
+                page_route=page.route,
+                page_type=page.type,
+                page_section=page.section or "",
+                page_lang=page.lang,
+                body_class=build_body_class(page.id, page.type, page.section),
+                site_name=SITE_NAME,
+                current_year=current_year,
+                active_theme_id=active_theme_id,
+                theme_stylesheet_url=stylesheet_href_for_output(
+                    output_path,
+                    staging_dir / "themes" / active_theme_id / "style.css",
+                ),
+                home_url=route_href_for_output(output_path, "/", staging_dir),
+                navigation_items_html=navigation_items_html,
+                rendered_markdown_html=rendered_markdown,
+                html_lang=page.lang,
+            )
+        )
+
+    return page_contexts, rendered_markdown_by_id
+
+
+def validate_generated_page_html(
+    output_path: Path,
+    html_text: str,
+    *,
+    page: PageRegistryEntry,
+    page_context: PageTemplateContext,
+    registry: PageRegistry,
+    navigation: NavigationData,
+    theme_generation: ThemeGenerationResult,
+    rendered_markdown_html: str,
+    dist_root: Path,
+) -> None:
+    expected_theme_id = theme_generation.active_theme_id
+    expected_theme_href = page_context.theme_stylesheet_url
+    expected_home_href = page_context.home_url
+    expected_body_open = (
+        f'<body class="{page_context.body_class}" '
+        f'data-page-id="{page.id}" '
+        f'data-page-type="{page.type}" '
+        f'data-page-section="{page_context.page_section}">'
+    )
+    expected_markdown_html = "\n".join(f"    {line}" for line in rendered_markdown_html.splitlines())
+
+    if not html_text.startswith("<!doctype html>\n"):
+        raise BuildError("Validate output", "HTML must start with a doctype", path=output_path, page_id=page.id)
+    if html_text.count("<html") != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one html element", path=output_path, page_id=page.id)
+    if html_text.count("<head>") != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one head element", path=output_path, page_id=page.id)
+    if html_text.count("<body ") != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one body element", path=output_path, page_id=page.id)
+    if html_text.count('<header class="site-header">') != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one site header", path=output_path, page_id=page.id)
+    if html_text.count('<nav class="site-navigation"') != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one site navigation", path=output_path, page_id=page.id)
+    if html_text.count('<main class="site-main" id="main-content">') != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one main region", path=output_path, page_id=page.id)
+    if html_text.count('<article class="page-content">') != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one article region", path=output_path, page_id=page.id)
+    if html_text.count('<footer class="site-footer">') != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one site footer", path=output_path, page_id=page.id)
+    if html_text.count('<link rel="stylesheet"') != 1:
+        raise BuildError("Validate output", "HTML must include exactly one stylesheet link", path=output_path, page_id=page.id)
+    if html_text.count('<a class="navigation-link"') != len(navigation.sections):
+        raise BuildError("Validate output", "HTML must include exactly four navigation links", path=output_path, page_id=page.id)
+    if page.route == "/" and 'aria-current="page"' in html_text:
+        raise BuildError("Validate output", "root page must not mark a navigation item current", path=output_path, page_id=page.id)
+    if page.route != "/" and html_text.count('aria-current="page"') != 1:
+        raise BuildError("Validate output", "section page must mark exactly one navigation item current", path=output_path, page_id=page.id)
+
+    if f'<html lang="{page.lang}" data-theme="{expected_theme_id}">' not in html_text:
+        raise BuildError("Validate output", "HTML root metadata is incorrect", path=output_path, page_id=page.id, theme_id=expected_theme_id)
+    if expected_body_open not in html_text:
+        raise BuildError("Validate output", "HTML body metadata is incorrect", path=output_path, page_id=page.id, theme_id=expected_theme_id)
+    if f'<meta name="page-id" content="{page.id}">' not in html_text:
+        raise BuildError("Validate output", "HTML page-id metadata is incorrect", path=output_path, page_id=page.id)
+    if f'<meta name="page-type" content="{page.type}">' not in html_text:
+        raise BuildError("Validate output", "HTML page-type metadata is incorrect", path=output_path, page_id=page.id)
+    if f'<meta name="page-route" content="{page.route}">' not in html_text:
+        raise BuildError("Validate output", "HTML page-route metadata is incorrect", path=output_path, page_id=page.id)
+    if f'<link rel="stylesheet" href="{expected_theme_href}">' not in html_text:
+        raise BuildError("Validate output", "HTML theme stylesheet link is incorrect", path=output_path, page_id=page.id, theme_id=expected_theme_id)
+    if f'<a class="site-brand" href="{expected_home_href}">{escape_html(SITE_NAME)}</a>' not in html_text:
+        raise BuildError("Validate output", "HTML home link is incorrect", path=output_path, page_id=page.id)
+    if f"<h1>{escape_html(page.title)}</h1>" not in html_text:
+        raise BuildError("Validate output", "rendered Markdown HTML is missing", path=output_path, page_id=page.id)
+    if expected_markdown_html not in html_text:
+        raise BuildError("Validate output", "rendered Markdown HTML is not preserved", path=output_path, page_id=page.id)
+    if "&lt;h1&gt;" in html_text or "&lt;ul&gt;" in html_text or "&lt;p&gt;" in html_text:
+        raise BuildError("Validate output", "rendered Markdown HTML was escaped", path=output_path, page_id=page.id)
+
+    if PLACEHOLDER_RE.search(html_text):
+        raise BuildError("Validate output", "unresolved template placeholder remains", path=output_path, page_id=page.id)
+    if "<script" in html_text.lower():
+        raise BuildError("Validate output", "script tags are not allowed in generated HTML", path=output_path, page_id=page.id)
+    if "<style" in html_text.lower():
+        raise BuildError("Validate output", "style tags are not allowed in generated HTML", path=output_path, page_id=page.id)
+    if re.search(r"\sstyle\s*=", html_text, flags=re.IGNORECASE):
+        raise BuildError("Validate output", "inline style attributes are not allowed in generated HTML", path=output_path, page_id=page.id)
+    if re.search(r"\son[a-z0-9_-]+\s*=", html_text, flags=re.IGNORECASE):
+        raise BuildError("Validate output", "inline event handlers are not allowed in generated HTML", path=output_path, page_id=page.id)
+    if "http://" in html_text.lower() or "https://" in html_text.lower() or "://" in html_text:
+        raise BuildError("Validate output", "external URLs are not allowed in generated HTML", path=output_path, page_id=page.id)
+    if contains_absolute_filesystem_path(html_text):
+        raise BuildError("Validate output", "generated HTML contains an absolute filesystem path", path=output_path, page_id=page.id)
+
+    navigation_entries = NAVIGATION_LINK_RE.findall(html_text)
+    if len(navigation_entries) != len(navigation.sections):
+        raise BuildError("Validate output", "navigation item count is incorrect", path=output_path, page_id=page.id)
+
+    expected_pages_by_section = {
+        page_data.section: page_data
+        for page_data in registry.published_pages()
+        if page_data.navigation and page_data.section is not None
+    }
+    for index, section in enumerate(navigation.sections):
+        expected_page = expected_pages_by_section.get(section.id)
+        if expected_page is None:
+            raise BuildError("Validate output", "navigation section page is missing", path=output_path, page_id=page.id, field="section")
+        href, label = navigation_entries[index]
+        expected_href = route_href_for_output(output_path, expected_page.route, dist_root)
+        if href != expected_href:
+            raise BuildError(
+                "Validate output",
+                f"navigation href is incorrect for section: {section.id}",
+                path=output_path,
+                page_id=page.id,
+                field="route",
+            )
+        if label != section.label:
+            raise BuildError(
+                "Validate output",
+                f"navigation label is incorrect for section: {section.id}",
+                path=output_path,
+                page_id=page.id,
+                field="label",
+            )
+        resolved_href_path = (output_path.parent / href / "index.html").resolve(strict=False)
+        resolved_dist = dist_root.resolve(strict=False)
+        if resolved_dist != resolved_href_path and resolved_dist not in resolved_href_path.parents:
+            raise BuildError(
+                "Validate output",
+                "internal link escapes the dist/ directory",
+                path=output_path,
+                page_id=page.id,
+            )
+        if not resolved_href_path.exists():
+            raise BuildError(
+                "Validate output",
+                f"internal link target is missing: {href}",
+                path=output_path,
+                page_id=page.id,
+            )
 
 
 def discover_approved_assets(assets_dir: Path) -> list[Path]:
@@ -371,6 +549,7 @@ def build_manifest(
     *,
     registry: PageRegistry,
     navigation: NavigationData,
+    templates: LoadedTemplates,
     theme_generation: ThemeGenerationResult,
     published_pages: list[PageRegistryEntry],
     draft_pages: list[PageRegistryEntry],
@@ -386,6 +565,13 @@ def build_manifest(
         "project_name": PROJECT_NAME,
         "build_phase": BUILD_PHASE,
         "generator_version": GENERATOR_VERSION,
+        "template_engine_version": TEMPLATE_ENGINE_VERSION,
+        "template_source_files": list(templates.source_files),
+        "template_file_count": templates.file_count(),
+        "rendered_page_template_count": len(published_pages),
+        "partial_template_names": list(TEMPLATE_PARTIAL_NAMES),
+        "navigation_item_count": len(navigation.sections),
+        "template_validation_status": TEMPLATE_VALIDATION_STATUS,
         "registry_version": registry.version,
         "navigation_version": navigation.version,
         "theme_registry_version": theme_generation.registry.version,
@@ -506,10 +692,13 @@ def validate_generated_output(
     manifest: dict[str, Any],
     registry: PageRegistry,
     navigation: NavigationData,
+    templates: LoadedTemplates,
     theme_designs: list[ThemeDesign],
     theme_generation: ThemeGenerationResult,
     public_registry: dict[str, Any],
     public_navigation: dict[str, Any],
+    page_contexts: list[PageTemplateContext],
+    rendered_markdown_by_id: dict[str, str],
 ) -> None:
     manifest_path = staging_dir / "build-manifest.json"
     registry_path = staging_dir / "page-registry.json"
@@ -588,6 +777,20 @@ def validate_generated_output(
         raise BuildError("Validate output", "manifest total theme token count is incorrect", path=manifest_path)
     if parsed_manifest.get("theme_source_files") != list(theme_generation.theme_source_files):
         raise BuildError("Validate output", "manifest theme source files are incorrect", path=manifest_path)
+    if parsed_manifest.get("template_engine_version") != TEMPLATE_ENGINE_VERSION:
+        raise BuildError("Validate output", "manifest template engine version is incorrect", path=manifest_path)
+    if parsed_manifest.get("template_source_files") != list(templates.source_files):
+        raise BuildError("Validate output", "manifest template source files are incorrect", path=manifest_path)
+    if parsed_manifest.get("template_file_count") != templates.file_count():
+        raise BuildError("Validate output", "manifest template file count is incorrect", path=manifest_path)
+    if parsed_manifest.get("rendered_page_template_count") != len(page_contexts):
+        raise BuildError("Validate output", "manifest rendered page template count is incorrect", path=manifest_path)
+    if parsed_manifest.get("partial_template_names") != list(TEMPLATE_PARTIAL_NAMES):
+        raise BuildError("Validate output", "manifest partial template names are incorrect", path=manifest_path)
+    if parsed_manifest.get("navigation_item_count") != len(navigation.sections):
+        raise BuildError("Validate output", "manifest navigation item count is incorrect", path=manifest_path)
+    if parsed_manifest.get("template_validation_status") != TEMPLATE_VALIDATION_STATUS:
+        raise BuildError("Validate output", "manifest template validation status is incorrect", path=manifest_path)
     if parsed_manifest.get("published_page_count") != len(published_pages):
         raise BuildError("Validate output", "manifest published page count is incorrect", path=manifest_path)
     if parsed_manifest.get("draft_page_count") != len(draft_pages):
@@ -717,6 +920,8 @@ def validate_generated_output(
         raise BuildError("Validate output", "source design.md file was copied into dist/", path=staging_dir)
     if (staging_dir / "design").exists():
         raise BuildError("Validate output", "design/ output must not be published", path=staging_dir / "design")
+    if (staging_dir / "templates").exists():
+        raise BuildError("Validate output", "templates/ output must not be published", path=staging_dir / "templates")
 
     if draft_pages:
         for draft_page in draft_pages:
@@ -728,20 +933,28 @@ def validate_generated_output(
                     path=draft_output_path,
                 )
 
+    page_context_by_id = {context.page_id: context for context in page_contexts}
+
     for page in published_pages:
         output_path = route_to_output_path(page.route, staging_dir)
         html_text = output_path.read_text(encoding="utf-8")
-        expected_href = expected_theme_stylesheet_href(output_path, staging_dir, theme_generation.active_theme_id)
-        if html_text.count('rel="stylesheet"') != 1:
-            raise BuildError("Validate output", "HTML must include exactly one stylesheet reference", path=output_path, theme_id=theme_generation.active_theme_id)
-        if f'<link rel="stylesheet" href="{expected_href}">' not in html_text:
-            raise BuildError("Validate output", "HTML stylesheet reference is missing or incorrect", path=output_path, theme_id=theme_generation.active_theme_id)
-        if f'data-theme="{theme_generation.active_theme_id}"' not in html_text:
-            raise BuildError("Validate output", "HTML does not identify the active theme", path=output_path, theme_id=theme_generation.active_theme_id)
-        stylesheet_path = (output_path.parent / expected_href).resolve(strict=False)
-        resolved_dist = staging_dir.resolve(strict=False)
-        if resolved_dist != stylesheet_path and resolved_dist not in stylesheet_path.parents:
-            raise BuildError("Validate output", "stylesheet path escapes dist/", path=output_path, theme_id=theme_generation.active_theme_id)
+        page_context = page_context_by_id.get(page.id)
+        if page_context is None:
+            raise BuildError("Validate output", "page context is missing", path=output_path, page_id=page.id)
+        rendered_markdown_html = rendered_markdown_by_id.get(page.id)
+        if rendered_markdown_html is None:
+            raise BuildError("Validate output", "rendered Markdown HTML is missing", path=output_path, page_id=page.id)
+        validate_generated_page_html(
+            output_path,
+            html_text,
+            page=page,
+            page_context=page_context,
+            registry=registry,
+            navigation=navigation,
+            theme_generation=theme_generation,
+            rendered_markdown_html=rendered_markdown_html,
+            dist_root=staging_dir,
+        )
 
 
 def contains_absolute_filesystem_path(payload: Any) -> bool:
@@ -852,7 +1065,10 @@ def build_site(
                 theme_id=theme_designs[0].id,
             )
 
-        stage_logger(6, TOTAL_STAGES, "Parse page sources")
+        stage_logger(6, TOTAL_STAGES, "Load and validate templates")
+        templates = load_approved_templates(repo_root)
+
+        stage_logger(7, TOTAL_STAGES, "Parse page sources")
         parsed_sources = [parse_page_source(page_path) for page_path in page_paths]
         parsed_sources_by_id = {source.registry_id: source for source in parsed_sources}
         if len(parsed_sources_by_id) != len(parsed_sources):
@@ -884,31 +1100,33 @@ def build_site(
         generated_output_files: list[str] = []
         active_theme_id = theme_designs[0].id
 
-        stage_logger(7, TOTAL_STAGES, "Render published pages")
-        for page in published_pages:
-            source = parsed_sources_by_id[page.id]
+        stage_logger(8, TOTAL_STAGES, "Build page template contexts")
+        page_contexts, rendered_markdown_by_id = build_page_template_contexts(
+            published_pages,
+            parsed_sources_by_id,
+            registry,
+            navigation,
+            staging_dir,
+            active_theme_id=active_theme_id,
+        )
+
+        stage_logger(9, TOTAL_STAGES, "Render pages through templates")
+        for page, page_context in zip(published_pages, page_contexts, strict=True):
             output_path = route_to_output_path(page.route, staging_dir)
-            rendered_markdown = render_markdown(source.body_markdown, source_path=source.source_path)
-            stylesheet_href = expected_theme_stylesheet_href(output_path, staging_dir, active_theme_id)
-            html_document = render_html_document(
-                page,
-                rendered_markdown,
-                stylesheet_href=stylesheet_href,
-                theme_id=active_theme_id,
-            )
+            html_document = render_page_document(templates, page_context)
             write_text(output_path, html_document)
             generated_routes.append(page.route)
             generated_output_files.append(f"dist/{output_path.relative_to(staging_dir).as_posix()}")
 
-        stage_logger(8, TOTAL_STAGES, "Generate theme assets")
+        stage_logger(10, TOTAL_STAGES, "Generate theme assets")
         theme_generation = generate_theme_assets(theme_designs, staging_dir)
         generated_output_files.extend(theme_generation.generated_theme_files)
 
-        stage_logger(9, TOTAL_STAGES, "Copy approved static assets")
+        stage_logger(11, TOTAL_STAGES, "Copy approved static assets")
         copied_asset_count, copied_asset_files = copy_approved_assets(assets_dir, staging_dir)
         generated_output_files.extend(copied_asset_files)
 
-        stage_logger(10, TOTAL_STAGES, "Write public data and build manifest")
+        stage_logger(12, TOTAL_STAGES, "Write public data and build manifest")
         public_registry = build_public_registry_data(registry)
         public_navigation = build_public_navigation_data(navigation)
         public_registry_path = staging_dir / "page-registry.json"
@@ -920,6 +1138,7 @@ def build_site(
         manifest = build_manifest(
             registry=registry,
             navigation=navigation,
+            templates=templates,
             theme_generation=theme_generation,
             published_pages=published_pages,
             draft_pages=draft_pages,
@@ -940,19 +1159,22 @@ def build_site(
         )
         write_json(staging_dir / "build-manifest.json", manifest)
 
-        stage_logger(11, TOTAL_STAGES, "Validate generated output")
+        stage_logger(13, TOTAL_STAGES, "Validate generated output")
         validate_generated_output(
             staging_dir,
             manifest,
             registry,
             navigation,
+            templates,
             theme_designs,
             theme_generation,
             public_registry,
             public_navigation,
+            page_contexts,
+            rendered_markdown_by_id,
         )
 
-        stage_logger(12, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
+        stage_logger(14, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
         if not check_only:
             publish_output(staging_dir, dist_dir)
             output_dir = dist_dir

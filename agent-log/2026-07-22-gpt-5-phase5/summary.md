@@ -1,0 +1,26 @@
+# Phase 5 Summary
+
+- Phase: Phase 5 Template Engine.
+- Created files: `templates/base.html`, `templates/partials/head.html`, `templates/partials/site-header.html`, `templates/partials/navigation.html`, `templates/partials/footer.html`, `core/template_models.py`, `core/template_validation.py`, `core/template_engine.py`, `agent-log/2026-07-22-gpt-5-phase5/summary.md`, `agent-log/2026-07-22-gpt-5-phase5/changes.md`, `agent-log/2026-07-22-gpt-5-phase5/validation.md`.
+- Modified files: `core/build_pipeline.py`, `.github/workflows/quality-check.yml`, `scripts/build.py`, `requirements.txt`.
+- Preserved files: `AGENTS.md`, `PROJECT.md`, `README.md`, `docs/deployment-guidelines.md`, `vercel.json`, `data/page-registry.json`, `data/navigation.json`, `design/studio-default/design.md`, and the earlier Phase 1, Phase 2, Phase 3, and Phase 4 log directories were left untouched.
+- Human-editable template source paths: `templates/base.html` and `templates/partials/head.html`, `templates/partials/site-header.html`, `templates/partials/navigation.html`, `templates/partials/footer.html`.
+- Generated template output paths: the published HTML pages under `dist/`, with the shared shell and partials rendered into each page.
+- Supported front matter fields: `registry_id` only.
+- Supported template placeholders: `head_html`, `site_header_html`, `navigation_html`, `main_html`, `footer_html`, `html_lang`, `theme_id`, `page_id`, `page_type`, `page_section`, `body_class`, `page_title`, `page_description`, `canonical_path`, `theme_stylesheet_url`, `home_url`, `site_name`, `navigation_items_html`, `current_year`.
+- Supported token sections: not changed in this phase; the Phase 4 theme token sections remain `colors`, `typography`, `spacing`, `radius`, `shadow`, and `layout`.
+- Required token names: not changed in this phase; the Phase 4 token names remain the confirmed set from the default theme source.
+- Validation rules implemented: approved template files only, strict placeholder syntax, unknown or missing placeholder rejection, repeated placeholder rejection, unresolved placeholder rejection, route-aware relative URLs, navigation link validation, shell structure validation, escaped metadata, preserved rendered Markdown HTML, and manifest metadata checks.
+- Active theme ID: `studio-default`.
+- Generated token count: 47.
+- Generated CSS variable count: 47.
+- Build pipeline integration: the build now loads templates before page rendering and uses the reusable template engine as the authoritative HTML wrapper.
+- HTML stylesheet integration: each page links one route-aware stylesheet URL for `studio-default`.
+- Commands executed: reviewed the required documents, inspected the repository tree, inspected the existing phase logs, reviewed the Phase 5 prompt text, checked the template files, ran `python3 -m py_compile scripts/build.py core/errors.py core/navigation.py core/page_registry.py core/template_models.py core/template_validation.py core/template_engine.py core/theme_models.py core/theme_validation.py core/theme_parser.py core/theme_generator.py core/build_pipeline.py`, ran `python3 scripts/build.py`, ran `python3 scripts/build.py --check`, and ran focused positive and negative validation checks.
+- Positive validation results: the build completed successfully, the `--check` path completed successfully, the generated pages include the shared shell and route-aware links, and the Phase 5 template metadata is present in the build manifest.
+- Negative validation results: bad template files, unknown placeholders, missing placeholders, unresolved placeholders, duplicate navigation items, and navigation mismatches were all rejected during focused checks.
+- Checks not performed: Vercel deployment validation, browser-level visual QA, and any Phase 6 work.
+- Known Phase 5 limitations: this phase does not implement final page-type-specific layouts, component libraries, prompt copy buttons, interactive forms, timeline interactions, mobile menu behavior, search, theme switching, dark mode, final production CSS, sitemap generation, robots generation, 404 generation, AI API integration, backend work, authentication, database work, analytics, service workers, React, Vue, Next.js, Angular, TypeScript, Node.js, npm, or external Python dependencies.
+- Remaining Phase 6 work: all later-phase items listed in the task prompt remain pending and were not started.
+- No commit was performed.
+- No push was performed.
