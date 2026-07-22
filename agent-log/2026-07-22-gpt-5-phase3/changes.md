@@ -1,0 +1,21 @@
+# Phase 3 Changes
+
+- Added authoritative page registry data in `data/page-registry.json` with 5 confirmed entries and version `1`.
+- Added authoritative top-level navigation data in `data/navigation.json` with 4 confirmed sections and version `1`.
+- Replaced the Phase 2 Markdown front matter contract with `registry_id` only.
+- Added verification page sources under `pages/sections/` for the four section routes.
+- Added shared build error handling in `core/errors.py`.
+- Added navigation contract validation and public navigation serialization in `core/navigation.py`.
+- Added page registry contract validation and public registry serialization in `core/page_registry.py`.
+- Reworked `core/build_pipeline.py` so the build now:
+  - loads navigation before page registry,
+  - validates the registered Markdown sources against the authoritative registry,
+  - parses page sources by `registry_id`,
+  - renders only published pages,
+  - writes `dist/page-registry.json` and `dist/navigation.json`,
+  - records registry/navigation metadata in `dist/build-manifest.json`,
+  - validates that no draft HTML is published and that generated paths stay inside `dist/`.
+- Updated `.github/workflows/quality-check.yml` to verify the generated HTML files, manifest, public registry, public navigation, page count, route set, allowed page types, and that `pages/` contains no unregistered Markdown files.
+- Updated `requirements.txt` comment to reflect the Phase 3 stdlib-only bootstrap.
+- Updated `scripts/build.py` docstring to match the current phase.
+- No pages, templates, components, themes, routing, SEO infrastructure, or external dependencies were introduced.

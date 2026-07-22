@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "id": "home",
+      "title": "AI Learning Studio",
+      "description": "AI Learning Studio 페이지 레지스트리 검증용 랜딩 페이지",
+      "route": "/",
+      "source": "pages/index.md",
+      "type": "landing",
+      "section": null,
+      "order": 0,
+      "navigation": false,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ai-practice",
+      "title": "AI 체험 실습",
+      "description": "AI 체험 실습 섹션 검증 페이지",
+      "route": "/ai-practice/",
+      "source": "pages/sections/ai-practice.md",
+      "type": "static-prompt",
+      "section": "ai-practice",
+      "order": 1,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ready-to-use",
+      "title": "바로 사용하기",
+      "description": "바로 사용하기 섹션 검증 페이지",
+      "route": "/ready-to-use/",
+      "source": "pages/sections/ready-to-use.md",
+      "type": "static-prompt",
+      "section": "ready-to-use",
+      "order": 2,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ai-assistant",
+      "title": "AI 도우미",
+      "description": "AI 도우미 섹션 검증 페이지",
+      "route": "/ai-assistant/",
+      "source": "pages/sections/ai-assistant.md",
+      "type": "static-prompt",
+      "section": "ai-assistant",
+      "order": 3,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "image-ai",
+      "title": "이미지 AI",
+      "description": "이미지 AI 섹션 검증 페이지",
+      "route": "/image-ai/",
+      "source": "pages/sections/image-ai.md",
+      "type": "static-prompt",
+      "section": "image-ai",
+      "order": 4,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    }
+  ]
+}

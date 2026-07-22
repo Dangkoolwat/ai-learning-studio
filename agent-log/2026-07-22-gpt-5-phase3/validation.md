@@ -1,0 +1,26 @@
+# Phase 3 Validation
+
+- Executed: `python3 -m py_compile scripts/build.py core/errors.py core/navigation.py core/page_registry.py core/build_pipeline.py`
+- Result: success. The new build modules compiled cleanly.
+- Executed: `python3 scripts/build.py`
+- Result: success. The build printed the full 10-stage log, generated `dist/index.html`, `dist/ai-practice/index.html`, `dist/ready-to-use/index.html`, `dist/ai-assistant/index.html`, `dist/image-ai/index.html`, `dist/build-manifest.json`, `dist/page-registry.json`, and `dist/navigation.json`, and reported 5 pages, 0 assets, and 5 routes.
+- Executed: `python3 scripts/build.py --check`
+- Result: success. The check run rendered into a temporary directory and skipped publishing `dist/`.
+- Executed: workflow-style validation script against `dist/`, `data/`, and `pages/`
+- Result: success. The script confirmed exactly five published pages, zero drafts, the confirmed route set, the confirmed navigation section set, matching source Markdown files, and the expected public registry and navigation payloads.
+- Positive checks confirmed:
+  - `dist/page-registry.json` exists and contains only published pages.
+  - `dist/navigation.json` exists and matches the source navigation contract.
+  - All generated HTML files match the published registry routes.
+  - `pages/` contains no unregistered Markdown sources.
+  - Public JSON output stays repository-relative and does not expose filesystem paths.
+- Negative checks confirmed:
+  - No draft HTML was generated.
+  - No additional page types were published.
+  - No output escaped the `dist/` directory.
+- Not yet executed: GitHub Actions runtime confirmation.
+- Not yet executed: Vercel deployment validation.
+- Known Phase 3 limitations:
+  - The build still uses a minimal static HTML shell for verification pages only.
+  - No real page-type renderers, navigation UI, CSS framework, SEO pipeline, sitemap, robots, or 404 output were added in this phase.
+  - The registry is intentionally fixed to the five confirmed bootstrap pages.

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "sections": [
+    {
+      "id": "ai-practice",
+      "label": "AI 체험 실습",
+      "order": 1
+    },
+    {
+      "id": "ready-to-use",
+      "label": "바로 사용하기",
+      "order": 2
+    },
+    {
+      "id": "ai-assistant",
+      "label": "AI 도우미",
+      "order": 3
+    },
+    {
+      "id": "image-ai",
+      "label": "이미지 AI",
+      "order": 4
+    }
+  ]
+}

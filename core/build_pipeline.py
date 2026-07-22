@@ -1,8 +1,4 @@
-"""Phase 2 static site build pipeline helpers for AI Learning Studio.
-
-This module intentionally implements only the limited Phase 2 pipeline.
-It does not aim to be a general Markdown or YAML implementation.
-"""
+"""Phase 3 static site build pipeline helpers for AI Learning Studio."""
 
 from __future__ import annotations
 
@@ -12,43 +8,29 @@ from html import escape as escape_html
 import json
 from pathlib import Path
 from shutil import copy2, rmtree
-import tempfile
 import sys
-from typing import Any
-from typing import Callable
+import tempfile
+from typing import Any, Callable
 from uuid import uuid4
+
+from core.errors import BuildError
+from core.navigation import NavigationData, load_navigation
+from core.page_registry import PageRegistry, PageRegistryEntry, load_page_registry
 
 
 PROJECT_NAME = "AI Learning Studio"
-BUILD_PHASE = "Phase 2 Static Site Build Pipeline"
-GENERATOR_VERSION = "phase-2-build-pipeline-v1"
-ALLOWED_FRONT_MATTER_KEYS = {"title", "description", "route", "lang", "status"}
-ALLOWED_LANGS = {"ko", "en"}
-TOTAL_STAGES = 8
-
-
-class BuildError(RuntimeError):
-    """Raised when the limited Phase 2 build pipeline fails."""
-
-    def __init__(self, stage: str, message: str, *, path: Path | None = None) -> None:
-        self.stage = stage
-        self.path = path
-        self.message = message
-        super().__init__(message)
-
-    def format_for_console(self) -> str:
-        location = f" [{self.path}]" if self.path else ""
-        return f"[{self.stage}]{location} {self.message}"
+BUILD_PHASE = "Phase 3 Page Registry and Content Data Structure"
+GENERATOR_VERSION = "phase-3-page-registry-v1"
+TOTAL_STAGES = 10
+ALLOWED_FRONT_MATTER_KEYS = {"registry_id"}
 
 
 @dataclass(slots=True)
 class PageSource:
+    """A parsed page source file."""
+
     source_path: Path
-    title: str
-    description: str
-    route: str
-    lang: str
-    status: str
+    registry_id: str
     body_markdown: str
 
 
@@ -69,11 +51,12 @@ def log_stage(index: int, total: int, label: str) -> None:
 
 def discover_page_sources(pages_dir: Path) -> list[Path]:
     if not pages_dir.is_dir():
-        raise BuildError("Discover source pages", "pages/ directory does not exist", path=pages_dir)
+        raise BuildError("Validate environment", "pages/ directory does not exist", path=pages_dir)
 
     page_sources: list[Path] = []
     for path in sorted(pages_dir.rglob("*.md")):
-        if any(part.startswith(".") for part in path.relative_to(pages_dir).parts):
+        relative = path.relative_to(pages_dir)
+        if any(part.startswith(".") for part in relative.parts):
             continue
         if path.name.startswith("."):
             continue
@@ -85,28 +68,55 @@ def discover_page_sources(pages_dir: Path) -> list[Path]:
 def parse_front_matter(page_path: Path, source_text: str) -> tuple[dict[str, str], str]:
     lines = source_text.splitlines()
     if not lines or lines[0].strip() != "---":
-        raise BuildError("Validate page sources", "front matter must start with ---", path=page_path)
+        raise BuildError("Parse page sources", "front matter must start with ---", path=page_path, source_file=page_path)
 
     closing_index = next((index for index, raw_line in enumerate(lines[1:], start=1) if raw_line.strip() == "---"), None)
     if closing_index is None:
-        raise BuildError("Validate page sources", "missing closing front matter delimiter", path=page_path)
+        raise BuildError(
+            "Parse page sources",
+            "missing closing front matter delimiter",
+            path=page_path,
+            source_file=page_path,
+        )
 
     metadata: dict[str, str] = {}
     for raw_line in lines[1:closing_index]:
         stripped = raw_line.strip()
         if not stripped:
-            raise BuildError("Validate page sources", "blank lines are not allowed inside front matter", path=page_path)
+            raise BuildError(
+                "Parse page sources",
+                "blank lines are not allowed inside front matter",
+                path=page_path,
+                source_file=page_path,
+            )
         if ":" not in raw_line:
-            raise BuildError("Validate page sources", "front matter lines must use key: value format", path=page_path)
+            raise BuildError(
+                "Parse page sources",
+                "front matter lines must use key: value format",
+                path=page_path,
+                source_file=page_path,
+            )
 
         key, _, value = raw_line.partition(":")
         key = key.strip()
         value = value.strip()
 
         if key not in ALLOWED_FRONT_MATTER_KEYS:
-            raise BuildError("Validate page sources", f"unknown front matter field: {key}", path=page_path)
+            raise BuildError(
+                "Parse page sources",
+                f"unknown front matter field: {key}",
+                path=page_path,
+                source_file=page_path,
+                field=key,
+            )
         if key in metadata:
-            raise BuildError("Validate page sources", f"duplicate front matter field: {key}", path=page_path)
+            raise BuildError(
+                "Parse page sources",
+                f"duplicate front matter field: {key}",
+                path=page_path,
+                source_file=page_path,
+                field=key,
+            )
         metadata[key] = value
 
     body = "\n".join(lines[closing_index + 1 :])
@@ -114,33 +124,23 @@ def parse_front_matter(page_path: Path, source_text: str) -> tuple[dict[str, str
 
 
 def validate_front_matter(page_path: Path, metadata: dict[str, str]) -> None:
-    required_fields = ("title", "description", "route", "lang", "status")
-    for field in required_fields:
-        value = metadata.get(field, "")
-        if not value:
-            raise BuildError("Validate page sources", f"missing required front matter field: {field}", path=page_path)
+    if set(metadata) != {"registry_id"}:
+        raise BuildError(
+            "Parse page sources",
+            "front matter must contain only registry_id",
+            path=page_path,
+            source_file=page_path,
+        )
 
-    title = metadata["title"]
-    description = metadata["description"]
-    route = metadata["route"]
-    lang = metadata["lang"]
-
-    if not title.strip():
-        raise BuildError("Validate page sources", "title must be a non-empty string", path=page_path)
-    if not description.strip():
-        raise BuildError("Validate page sources", "description must be a non-empty string", path=page_path)
-    validate_route(page_path, route)
-    if lang not in ALLOWED_LANGS:
-        raise BuildError("Validate page sources", "lang must be ko or en in Phase 2", path=page_path)
-
-
-def validate_route(page_path: Path, route: str) -> None:
-    if not route.startswith("/"):
-        raise BuildError("Validate page sources", "route must begin with /", path=page_path)
-    if route != "/" and not route.endswith("/"):
-        raise BuildError("Validate page sources", "route must end with / unless it is /", path=page_path)
-    if any(token in route for token in ("..", "\\", "?", "#", "//")):
-        raise BuildError("Validate page sources", "route contains a disallowed path fragment", path=page_path)
+    registry_id = metadata.get("registry_id", "").strip()
+    if not registry_id:
+        raise BuildError(
+            "Parse page sources",
+            "registry_id must be a non-empty string",
+            path=page_path,
+            source_file=page_path,
+            field="registry_id",
+        )
 
 
 def parse_page_source(page_path: Path) -> PageSource:
@@ -149,26 +149,13 @@ def parse_page_source(page_path: Path) -> PageSource:
     validate_front_matter(page_path, metadata)
     return PageSource(
         source_path=page_path,
-        title=metadata["title"],
-        description=metadata["description"],
-        route=metadata["route"],
-        lang=metadata["lang"],
-        status=metadata["status"],
+        registry_id=metadata["registry_id"].strip(),
         body_markdown=body,
     )
 
 
 def render_markdown(markdown_text: str, *, source_path: Path) -> str:
-    """Render the limited Phase 2 Markdown subset.
-
-    Supported syntax:
-    - level 1 headings
-    - level 2 headings
-    - paragraphs
-    - unordered lists
-    - fenced code blocks
-    - blank lines
-    """
+    """Render the limited Markdown subset used by the verification pages."""
 
     blocks: list[str] = []
     paragraph_lines: list[str] = []
@@ -256,16 +243,17 @@ def route_to_output_path(route: str, dist_dir: Path) -> Path:
     return output_path
 
 
-def render_html_document(page: PageSource, rendered_markdown: str) -> str:
+def render_html_document(page: PageRegistryEntry, rendered_markdown: str) -> str:
     canonical_path = page.route
     return f"""<!doctype html>
 <html lang="{escape_html(page.lang)}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{escape_html(page.title)}</title>
+  <meta name="generator" content="{escape_html(GENERATOR_VERSION)}">
   <meta name="description" content="{escape_html(page.description)}">
-  <meta name="canonical-path" content="{escape_html(canonical_path)}">
+  <link rel="canonical" href="{escape_html(canonical_path)}">
+  <title>{escape_html(page.title)}</title>
   <style>
     :root {{
       color-scheme: light;
@@ -289,7 +277,11 @@ def render_html_document(page: PageSource, rendered_markdown: str) -> str:
       border-radius: 1rem;
     }}
 
-    h1, h2, p, ul, pre {{
+    h1,
+    h2,
+    p,
+    ul,
+    pre {{
       margin-top: 0;
     }}
 
@@ -310,7 +302,7 @@ def render_html_document(page: PageSource, rendered_markdown: str) -> str:
   </style>
 </head>
 <body>
-  <main>
+  <main data-page-id="{escape_html(page.id)}" data-page-type="{escape_html(page.type)}">
 {rendered_markdown}
   </main>
 </body>
@@ -354,23 +346,94 @@ def copy_approved_assets(assets_dir: Path, dist_dir: Path) -> tuple[int, list[st
     return len(copied_files), copied_files
 
 
+def validate_page_sources_against_registry(
+    page_paths: list[Path],
+    page_sources: list[PageSource],
+    registry: PageRegistry,
+    repo_root: Path,
+) -> None:
+    discovered_sources = {path.relative_to(repo_root).as_posix() for path in page_paths}
+    expected_sources = set(registry.source_files())
+    if discovered_sources != expected_sources:
+        missing = sorted(expected_sources - discovered_sources)
+        extra = sorted(discovered_sources - expected_sources)
+        details = []
+        if missing:
+            details.append(f"missing sources: {', '.join(missing)}")
+        if extra:
+            details.append(f"unregistered sources: {', '.join(extra)}")
+        raise BuildError(
+            "Validate registered sources",
+            "page source files do not match the page registry"
+            + (" (" + "; ".join(details) + ")" if details else ""),
+        )
+
+    sources_by_id = {source.registry_id: source for source in page_sources}
+    for page in registry.pages:
+        source = sources_by_id.get(page.id)
+        if source is None:
+            raise BuildError(
+                "Validate registered sources",
+                f"missing page source for registry entry {page.id}",
+                source_file=page.source,
+                page_id=page.id,
+            )
+        if source.source_path.relative_to(repo_root).as_posix() != page.source:
+            raise BuildError(
+                "Validate registered sources",
+                f"page source path must be {page.source}",
+                source_file=source.source_path,
+                page_id=page.id,
+            )
+        if source.registry_id != page.id:
+            raise BuildError(
+                "Validate registered sources",
+                "registry_id must match the page registry entry id",
+                source_file=source.source_path,
+                page_id=page.id,
+                field="registry_id",
+            )
+
+
+def build_public_registry_data(registry: PageRegistry) -> dict[str, object]:
+    return registry.to_public_dict()
+
+
+def build_public_navigation_data(navigation: NavigationData) -> dict[str, object]:
+    return navigation.to_public_dict()
+
+
 def build_manifest(
     *,
-    page_sources: list[PageSource],
+    registry: PageRegistry,
+    navigation: NavigationData,
+    published_pages: list[PageRegistryEntry],
+    draft_pages: list[PageRegistryEntry],
     generated_routes: list[str],
     generated_output_files: list[str],
     copied_asset_count: int,
     source_page_files: list[str],
+    public_registry_output_file: str,
+    public_navigation_output_file: str,
 ) -> dict[str, Any]:
     return {
         "project_name": PROJECT_NAME,
         "build_phase": BUILD_PHASE,
         "generator_version": GENERATOR_VERSION,
-        "generated_page_count": len(page_sources),
+        "registry_version": registry.version,
+        "navigation_version": navigation.version,
+        "registered_page_count": len(registry.pages),
+        "published_page_count": len(published_pages),
+        "draft_page_count": len(draft_pages),
+        "generated_page_count": len(published_pages),
         "copied_asset_count": copied_asset_count,
+        "registered_page_ids": [page.id for page in registry.pages],
+        "published_page_ids": [page.id for page in published_pages],
         "generated_routes": generated_routes,
-        "generated_output_files": generated_output_files,
         "source_page_files": source_page_files,
+        "public_registry_output_file": public_registry_output_file,
+        "public_navigation_output_file": public_navigation_output_file,
+        "generated_output_files": generated_output_files,
         "build_timestamp_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
     }
 
@@ -380,45 +443,155 @@ def write_text(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
-def write_manifest(manifest_path: Path, manifest: dict[str, Any]) -> None:
-    write_text(manifest_path, json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+def write_json(path: Path, payload: dict[str, Any]) -> None:
+    write_text(path, json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
 
 
-def validate_generated_output(staging_dir: Path, manifest: dict[str, Any], page_sources: list[PageSource]) -> None:
-    index_path = staging_dir / "index.html"
+def validate_json_file(path: Path) -> dict[str, Any]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise BuildError("Validate output", f"{path.name} is not valid JSON: {exc.msg}", path=path) from exc
+    if not isinstance(payload, dict):
+        raise BuildError("Validate output", f"{path.name} must contain a JSON object", path=path)
+    return payload
+
+
+def validate_generated_output(
+    staging_dir: Path,
+    manifest: dict[str, Any],
+    registry: PageRegistry,
+    navigation: NavigationData,
+    public_registry: dict[str, Any],
+    public_navigation: dict[str, Any],
+) -> None:
     manifest_path = staging_dir / "build-manifest.json"
+    registry_path = staging_dir / "page-registry.json"
+    navigation_path = staging_dir / "navigation.json"
 
-    if not index_path.is_file():
-        raise BuildError("Validate output", "dist/index.html is missing", path=index_path)
-    if not manifest_path.is_file():
-        raise BuildError("Validate output", "dist/build-manifest.json is missing", path=manifest_path)
+    for required_path, label in (
+        (staging_dir / "index.html", "dist/index.html"),
+        (manifest_path, "dist/build-manifest.json"),
+        (registry_path, "dist/page-registry.json"),
+        (navigation_path, "dist/navigation.json"),
+    ):
+        if not required_path.is_file():
+            raise BuildError("Validate output", f"{label} is missing", path=required_path)
 
-    index_html = index_path.read_text(encoding="utf-8")
-    first_page = page_sources[0]
-    expected_title = f"<title>{escape_html(first_page.title)}</title>"
-    expected_description = f'<meta name="description" content="{escape_html(first_page.description)}">'
-    if f'lang="{escape_html(first_page.lang)}"' not in index_html:
-        raise BuildError("Validate output", "generated HTML does not contain the expected lang attribute", path=index_path)
-    if expected_title not in index_html:
-        raise BuildError("Validate output", "generated title does not match source front matter", path=index_path)
-    if expected_description not in index_html:
-        raise BuildError("Validate output", "generated meta description does not match source front matter", path=index_path)
-    if "<h1>AI Learning Studio</h1>" not in index_html:
-        raise BuildError("Validate output", "rendered Markdown heading is missing", path=index_path)
-    if "정적 사이트 생성 파이프라인이 정상적으로 작동하고 있습니다." not in index_html:
-        raise BuildError("Validate output", "rendered Markdown paragraph is missing", path=index_path)
+    parsed_manifest = validate_json_file(manifest_path)
+    parsed_registry = validate_json_file(registry_path)
+    parsed_navigation = validate_json_file(navigation_path)
 
-    parsed_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if parsed_manifest != manifest:
         raise BuildError("Validate output", "build manifest content changed unexpectedly", path=manifest_path)
-    if parsed_manifest.get("generated_page_count") != len(page_sources):
-        raise BuildError("Validate output", "manifest page count is incorrect", path=manifest_path)
-    if "/" not in parsed_manifest.get("generated_routes", []):
-        raise BuildError("Validate output", "manifest does not contain route /", path=manifest_path)
-    if parsed_manifest.get("copied_asset_count") != 0:
-        asset_dir = staging_dir / "assets"
-        if not asset_dir.exists():
-            raise BuildError("Validate output", "assets directory is missing despite copied assets", path=staging_dir)
+    if parsed_registry != public_registry:
+        raise BuildError("Validate output", "public page registry content changed unexpectedly", path=registry_path)
+    if parsed_navigation != public_navigation:
+        raise BuildError("Validate output", "public navigation content changed unexpectedly", path=navigation_path)
+
+    published_pages = registry.published_pages()
+    draft_pages = registry.draft_pages()
+    expected_routes = [page.route for page in published_pages]
+    expected_html_files = {route_to_output_path(page.route, staging_dir).relative_to(staging_dir).as_posix() for page in published_pages}
+    actual_html_files = {
+        path.relative_to(staging_dir).as_posix()
+        for path in staging_dir.rglob("*.html")
+    }
+    if actual_html_files != expected_html_files:
+        missing = sorted(expected_html_files - actual_html_files)
+        extra = sorted(actual_html_files - expected_html_files)
+        details = []
+        if missing:
+            details.append(f"missing html: {', '.join(missing)}")
+        if extra:
+            details.append(f"unexpected html: {', '.join(extra)}")
+        raise BuildError(
+            "Validate output",
+            "generated HTML files do not match the published page registry"
+            + (" (" + "; ".join(details) + ")" if details else ""),
+            path=staging_dir,
+        )
+
+    if [page.route for page in published_pages] != parsed_manifest.get("generated_routes", []):
+        raise BuildError("Validate output", "manifest routes do not match the published registry", path=manifest_path)
+    if [page.id for page in published_pages] != parsed_manifest.get("published_page_ids", []):
+        raise BuildError("Validate output", "manifest published page ids are incorrect", path=manifest_path)
+    if [page.id for page in registry.pages] != parsed_manifest.get("registered_page_ids", []):
+        raise BuildError("Validate output", "manifest registered page ids are incorrect", path=manifest_path)
+    if parsed_manifest.get("published_page_count") != len(published_pages):
+        raise BuildError("Validate output", "manifest published page count is incorrect", path=manifest_path)
+    if parsed_manifest.get("draft_page_count") != len(draft_pages):
+        raise BuildError("Validate output", "manifest draft page count is incorrect", path=manifest_path)
+    if parsed_manifest.get("registered_page_count") != len(registry.pages):
+        raise BuildError("Validate output", "manifest registered page count is incorrect", path=manifest_path)
+
+    if parsed_manifest.get("public_registry_output_file") != "dist/page-registry.json":
+        raise BuildError("Validate output", "manifest public registry output file is incorrect", path=manifest_path)
+    if parsed_manifest.get("public_navigation_output_file") != "dist/navigation.json":
+        raise BuildError("Validate output", "manifest public navigation output file is incorrect", path=manifest_path)
+
+    public_registry_pages = parsed_registry.get("pages")
+    if not isinstance(public_registry_pages, list):
+        raise BuildError("Validate output", "public registry pages must be an array", path=registry_path)
+    if len(public_registry_pages) != len(published_pages):
+        raise BuildError("Validate output", "public registry must only include published pages", path=registry_path)
+    if [page.id for page in published_pages] != [page_data.get("id") for page_data in public_registry_pages]:
+        raise BuildError("Validate output", "public registry page ids are incorrect", path=registry_path)
+    if any(page_data.get("status") != "published" for page_data in public_registry_pages):
+        raise BuildError("Validate output", "public registry contains a non-published page", path=registry_path)
+
+    if parsed_navigation != public_navigation:
+        raise BuildError("Validate output", "navigation output changed unexpectedly", path=navigation_path)
+    if parsed_navigation.get("version") != navigation.version:
+        raise BuildError("Validate output", "navigation version is incorrect", path=navigation_path)
+
+    navigation_sections = parsed_navigation.get("sections")
+    if not isinstance(navigation_sections, list):
+        raise BuildError("Validate output", "navigation sections must be an array", path=navigation_path)
+    if [section.id for section in navigation.sections] != [section_data.get("id") for section_data in navigation_sections]:
+        raise BuildError("Validate output", "navigation section ids are incorrect", path=navigation_path)
+
+    navigation_page_ids = {page.id for page in published_pages if page.navigation}
+    expected_navigation_ids = {section.id for section in navigation.sections}
+    if navigation_page_ids != expected_navigation_ids:
+        raise BuildError("Validate output", "navigation does not reference the published section pages", path=navigation_path)
+
+    for json_payload, label in (
+        (parsed_manifest, "build-manifest.json"),
+        (parsed_registry, "page-registry.json"),
+        (parsed_navigation, "navigation.json"),
+    ):
+        if contains_absolute_filesystem_path(json_payload):
+            raise BuildError("Validate output", f"{label} contains an absolute filesystem path", path=staging_dir)
+
+    for relative_path in parsed_manifest.get("generated_output_files", []):
+        output_path = staging_dir / Path(relative_path).relative_to("dist")
+        resolved_output = output_path.resolve(strict=False)
+        resolved_dist = staging_dir.resolve(strict=False)
+        if resolved_dist != resolved_output and resolved_dist not in resolved_output.parents:
+            raise BuildError("Validate output", f"generated output escapes dist/: {relative_path}", path=staging_dir)
+        if not output_path.exists():
+            raise BuildError("Validate output", f"generated output is missing: {relative_path}", path=staging_dir)
+
+    if draft_pages:
+        for draft_page in draft_pages:
+            draft_output_path = route_to_output_path(draft_page.route, staging_dir)
+            if draft_output_path.exists():
+                raise BuildError(
+                    "Validate output",
+                    f"draft page unexpectedly generated HTML: {draft_page.route}",
+                    path=draft_output_path,
+                )
+
+
+def contains_absolute_filesystem_path(payload: Any) -> bool:
+    if isinstance(payload, dict):
+        return any(contains_absolute_filesystem_path(value) for value in payload.values())
+    if isinstance(payload, list):
+        return any(contains_absolute_filesystem_path(item) for item in payload)
+    if isinstance(payload, str):
+        return payload.startswith("/Users/") or payload.startswith("/private/") or payload.startswith("/var/") or payload.startswith("/tmp/")
+    return False
 
 
 def publish_output(staging_dir: Path, dist_dir: Path) -> None:
@@ -455,8 +628,9 @@ def build_site(
 ) -> BuildSummary:
     pages_dir = repo_root / "pages"
     assets_dir = repo_root / "assets"
+    data_dir = repo_root / "data"
     dist_dir = repo_root / "dist"
-    temp_root = Path(tempfile.mkdtemp(prefix=".phase2-build-", dir=repo_root))
+    temp_root = Path(tempfile.mkdtemp(prefix=".phase3-build-", dir=repo_root))
 
     try:
         stage_logger(1, TOTAL_STAGES, "Validate environment")
@@ -469,47 +643,122 @@ def build_site(
             raise BuildError("Validate environment", "pages/ directory does not exist", path=pages_dir)
         if not assets_dir.is_dir():
             raise BuildError("Validate environment", "assets/ directory does not exist", path=assets_dir)
+        if not data_dir.is_dir():
+            raise BuildError("Validate environment", "data/ directory does not exist", path=data_dir)
 
-        stage_logger(2, TOTAL_STAGES, "Discover source pages")
+        stage_logger(2, TOTAL_STAGES, "Load navigation data")
+        navigation = load_navigation(data_dir)
+
+        stage_logger(3, TOTAL_STAGES, "Load page registry")
+        registry = load_page_registry(data_dir)
+
+        stage_logger(4, TOTAL_STAGES, "Validate registered sources")
         page_paths = discover_page_sources(pages_dir)
         if not page_paths:
-            raise BuildError("Discover source pages", "no page sources were found", path=pages_dir)
+            raise BuildError("Validate registered sources", "no page sources were found", path=pages_dir)
+        discovered_source_paths = {path.relative_to(repo_root).as_posix() for path in page_paths}
+        expected_source_paths = set(registry.source_files())
+        if discovered_source_paths != expected_source_paths:
+            missing = sorted(expected_source_paths - discovered_source_paths)
+            extra = sorted(discovered_source_paths - expected_source_paths)
+            details = []
+            if missing:
+                details.append(f"missing sources: {', '.join(missing)}")
+            if extra:
+                details.append(f"unregistered sources: {', '.join(extra)}")
+            raise BuildError(
+                "Validate registered sources",
+                "page source files do not match the page registry"
+                + (" (" + "; ".join(details) + ")" if details else ""),
+                path=pages_dir,
+            )
 
-        stage_logger(3, TOTAL_STAGES, "Validate page sources")
-        page_sources = [parse_page_source(page_path) for page_path in page_paths]
+        stage_logger(5, TOTAL_STAGES, "Parse page sources")
+        parsed_sources = [parse_page_source(page_path) for page_path in page_paths]
+        parsed_sources_by_id = {source.registry_id: source for source in parsed_sources}
+        if len(parsed_sources_by_id) != len(parsed_sources):
+            raise BuildError("Parse page sources", "duplicate registry_id values were found", path=pages_dir)
+
+        for page in registry.pages:
+            source = parsed_sources_by_id.get(page.id)
+            if source is None:
+                raise BuildError(
+                    "Parse page sources",
+                    f"missing page source for registry entry {page.id}",
+                    source_file=page.source,
+                    page_id=page.id,
+                )
+            if source.source_path.relative_to(repo_root).as_posix() != page.source:
+                raise BuildError(
+                    "Parse page sources",
+                    f"page source path must be {page.source}",
+                    source_file=source.source_path,
+                    page_id=page.id,
+                )
+
+        validate_page_sources_against_registry(page_paths, parsed_sources, registry, repo_root)
+
         staging_dir = temp_root
+        published_pages = list(registry.published_pages())
+        draft_pages = list(registry.draft_pages())
         generated_routes: list[str] = []
         generated_output_files: list[str] = []
 
-        stage_logger(4, TOTAL_STAGES, "Render HTML")
-        for page in page_sources:
+        stage_logger(6, TOTAL_STAGES, "Render published pages")
+        for page in published_pages:
+            source = parsed_sources_by_id[page.id]
             output_path = route_to_output_path(page.route, staging_dir)
-            rendered_markdown = render_markdown(page.body_markdown, source_path=page.source_path)
+            rendered_markdown = render_markdown(source.body_markdown, source_path=source.source_path)
             html_document = render_html_document(page, rendered_markdown)
             write_text(output_path, html_document)
             generated_routes.append(page.route)
             generated_output_files.append(f"dist/{output_path.relative_to(staging_dir).as_posix()}")
 
-        stage_logger(5, TOTAL_STAGES, "Copy assets")
+        stage_logger(7, TOTAL_STAGES, "Copy approved assets")
         copied_asset_count, copied_asset_files = copy_approved_assets(assets_dir, staging_dir)
-        if copied_asset_files:
-            generated_output_files.extend(copied_asset_files)
+        generated_output_files.extend(copied_asset_files)
 
-        stage_logger(6, TOTAL_STAGES, "Write build manifest")
-        source_page_files = [page.source_path.relative_to(repo_root).as_posix() for page in page_sources]
+        stage_logger(8, TOTAL_STAGES, "Write public data and manifest")
+        public_registry = build_public_registry_data(registry)
+        public_navigation = build_public_navigation_data(navigation)
+        public_registry_path = staging_dir / "page-registry.json"
+        public_navigation_path = staging_dir / "navigation.json"
+        write_json(public_registry_path, public_registry)
+        write_json(public_navigation_path, public_navigation)
+
+        source_page_files = [page.source for page in registry.pages]
         manifest = build_manifest(
-            page_sources=page_sources,
+            registry=registry,
+            navigation=navigation,
+            published_pages=published_pages,
+            draft_pages=draft_pages,
             generated_routes=generated_routes,
-            generated_output_files=sorted(generated_output_files + ["dist/build-manifest.json"]),
+            generated_output_files=sorted(
+                generated_output_files
+                + [
+                    "dist/build-manifest.json",
+                    "dist/page-registry.json",
+                    "dist/navigation.json",
+                ]
+            ),
             copied_asset_count=copied_asset_count,
             source_page_files=source_page_files,
+            public_registry_output_file="dist/page-registry.json",
+            public_navigation_output_file="dist/navigation.json",
         )
-        write_manifest(staging_dir / "build-manifest.json", manifest)
+        write_json(staging_dir / "build-manifest.json", manifest)
 
-        stage_logger(7, TOTAL_STAGES, "Validate output")
-        validate_generated_output(staging_dir, manifest, page_sources)
+        stage_logger(9, TOTAL_STAGES, "Validate generated output")
+        validate_generated_output(
+            staging_dir,
+            manifest,
+            registry,
+            navigation,
+            public_registry,
+            public_navigation,
+        )
 
-        stage_logger(8, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
+        stage_logger(10, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
         if not check_only:
             publish_output(staging_dir, dist_dir)
             output_dir = dist_dir
@@ -518,12 +767,12 @@ def build_site(
             output_dir = staging_dir
 
         return BuildSummary(
-            page_count=len(page_sources),
+            page_count=len(published_pages),
             asset_count=copied_asset_count,
             route_count=len(generated_routes),
             output_dir=output_dir,
             generated_routes=generated_routes,
-            generated_output_files=sorted(generated_output_files + ["dist/build-manifest.json"]),
+            generated_output_files=sorted(generated_output_files),
             source_page_files=source_page_files,
         )
     except Exception:

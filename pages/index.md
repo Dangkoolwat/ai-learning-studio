@@ -1,11 +1,12 @@
 ---
-title: AI Learning Studio
-description: AI Learning Studio 정적 사이트 생성 파이프라인 검증 페이지
-route: /
-lang: ko
-status: bootstrap
+registry_id: home
 ---
 
 # AI Learning Studio
 
-정적 사이트 생성 파이프라인이 정상적으로 작동하고 있습니다.
+페이지 레지스트리가 정상적으로 작동하고 있습니다.
+
+- AI 체험 실습
+- 바로 사용하기
+- AI 도우미
+- 이미지 AI

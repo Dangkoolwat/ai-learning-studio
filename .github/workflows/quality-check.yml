@@ -28,18 +28,90 @@ jobs:
           from pathlib import Path
           import json
 
-          dist_dir = Path("dist")
-          index_path = dist_dir / "index.html"
+          repo_root = Path(".")
+          pages_dir = repo_root / "pages"
+          dist_dir = repo_root / "dist"
           manifest_path = dist_dir / "build-manifest.json"
+          registry_path = dist_dir / "page-registry.json"
+          navigation_path = dist_dir / "navigation.json"
+          html_paths = [
+              dist_dir / "index.html",
+              dist_dir / "ai-practice/index.html",
+              dist_dir / "ready-to-use/index.html",
+              dist_dir / "ai-assistant/index.html",
+              dist_dir / "image-ai/index.html",
+          ]
 
-          if not index_path.is_file():
-              raise SystemExit("dist/index.html is missing")
-          if not manifest_path.is_file():
-              raise SystemExit("dist/build-manifest.json is missing")
+          for path in (manifest_path, registry_path, navigation_path, *html_paths):
+              if not path.is_file():
+                  raise SystemExit(f"missing generated file: {path}")
 
           manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-          if manifest.get("generated_page_count", 0) < 1:
-              raise SystemExit("build-manifest.json does not report a generated page")
-          if "/" not in manifest.get("generated_routes", []):
-              raise SystemExit("build-manifest.json does not include route /")
+          public_registry = json.loads(registry_path.read_text(encoding="utf-8"))
+          public_navigation = json.loads(navigation_path.read_text(encoding="utf-8"))
+          source_registry = json.loads((repo_root / "data/page-registry.json").read_text(encoding="utf-8"))
+          source_navigation = json.loads((repo_root / "data/navigation.json").read_text(encoding="utf-8"))
+
+          if manifest.get("published_page_count") != 5:
+              raise SystemExit("manifest does not report exactly five published pages")
+          if manifest.get("draft_page_count") != 0:
+              raise SystemExit("manifest unexpectedly reports draft pages")
+          if manifest.get("registered_page_count") != 5:
+              raise SystemExit("manifest does not report exactly five registered pages")
+          if manifest.get("registry_version") != 1 or manifest.get("navigation_version") != 1:
+              raise SystemExit("manifest versions are incorrect")
+
+          expected_routes = {"/", "/ai-practice/", "/ready-to-use/", "/ai-assistant/", "/image-ai/"}
+          if set(manifest.get("generated_routes", [])) != expected_routes:
+              raise SystemExit("manifest routes do not match the confirmed routes")
+
+          public_registry_pages = public_registry.get("pages")
+          if not isinstance(public_registry_pages, list) or len(public_registry_pages) != 5:
+              raise SystemExit("public registry must contain exactly five published pages")
+          if {page.get("type") for page in public_registry_pages} - {"landing", "static-prompt"}:
+              raise SystemExit("public registry contains an unexpected page type")
+          if public_registry_pages[0].get("route") != "/":
+              raise SystemExit("public registry does not include the root route first")
+          if [page.get("route") for page in public_registry_pages] != ["/", "/ai-practice/", "/ready-to-use/", "/ai-assistant/", "/image-ai/"]:
+              raise SystemExit("public registry routes are out of order")
+          if any(page.get("status") != "published" for page in public_registry_pages):
+              raise SystemExit("public registry contains a non-published page")
+
+          if public_navigation != source_navigation:
+              raise SystemExit("public navigation does not match the source navigation")
+
+          section_pages = {page["id"]: page["route"] for page in public_registry_pages if page.get("navigation")}
+          if section_pages != {
+              "ai-practice": "/ai-practice/",
+              "ready-to-use": "/ready-to-use/",
+              "ai-assistant": "/ai-assistant/",
+              "image-ai": "/image-ai/",
+          }:
+              raise SystemExit("published navigation pages do not match the confirmed sections")
+
+          source_markdown = sorted(
+              path.relative_to(repo_root).as_posix()
+              for path in pages_dir.rglob("*.md")
+              if not any(part.startswith(".") for part in path.relative_to(pages_dir).parts)
+          )
+          expected_markdown = sorted(page["source"] for page in source_registry["pages"])
+          if source_markdown != expected_markdown:
+              raise SystemExit("pages/ contains unregistered markdown files")
+
+          if public_registry != {
+              "version": 1,
+              "pages": public_registry_pages,
+          }:
+              raise SystemExit("public registry schema changed unexpectedly")
+
+          if public_navigation != {
+              "version": 1,
+              "sections": source_navigation["sections"],
+          }:
+              raise SystemExit("public navigation schema changed unexpectedly")
+
+          generated_files = {f"dist/{path.relative_to(dist_dir).as_posix()}" for path in html_paths}
+          manifest_files = set(manifest.get("generated_output_files", []))
+          if not generated_files.issubset(manifest_files):
+              raise SystemExit("manifest is missing one or more generated html files")
           PY
