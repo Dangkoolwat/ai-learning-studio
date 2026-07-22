@@ -171,10 +171,17 @@ def render_page_document(templates: LoadedTemplates, context: PageTemplateContex
         templates.head_html,
         template_name="head",
         replacements={
+            "site_name": escape_html(context.site_name),
             "page_title": escape_html(context.page_title),
             "page_description": escape_html(context.page_description),
+            "robots_content": escape_html(context.robots_content),
+            "theme_color": escape_html(context.theme_color),
             "canonical_path": escape_html(context.page_route),
+            "canonical_link_html": context.canonical_link_html,
+            "favicon_url": escape_html(context.favicon_url),
             "theme_stylesheet_url": escape_html(context.theme_stylesheet_url),
+            "site_stylesheet_url": escape_html(context.site_stylesheet_url),
+            "site_script_url": escape_html(context.site_script_url),
             "page_id": escape_html(context.page_id),
             "page_type": escape_html(context.page_type),
         },
@@ -278,11 +285,11 @@ def render_placeholder_template(
     rendered = template_text
     for placeholder_name in approved_placeholders:
         pattern = re.compile(r"{{\s*" + re.escape(placeholder_name) + r"\s*}}")
-        rendered, count = pattern.subn(replacements[placeholder_name], rendered, count=1)
-        if count != 1:
+        rendered, count = pattern.subn(replacements[placeholder_name], rendered)
+        if count == 0:
             raise BuildError(
                 "Render template",
-                f"placeholder was not rendered exactly once: {placeholder_name}",
+                f"placeholder was not rendered: {placeholder_name}",
                 field=placeholder_name,
             )
 

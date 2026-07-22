@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from html import escape as escape_html
 from pathlib import Path
+import re
 from textwrap import indent
 
 from core.errors import BuildError
+
+
+INLINE_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 
 
 def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
@@ -23,7 +27,7 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
             return
         text = " ".join(line.strip() for line in paragraph_lines if line.strip())
         if text:
-            blocks.append(f"<p>{escape_html(text)}</p>")
+            blocks.append(f"<p>{_render_inline_markup(text, source_path=source_path)}</p>")
         paragraph_lines.clear()
 
     def flush_list() -> None:
@@ -66,7 +70,7 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
 
         if stripped.startswith("- "):
             flush_paragraph()
-            list_items.append(escape_html(stripped[2:].strip()))
+            list_items.append(_render_inline_markup(stripped[2:].strip(), source_path=source_path))
             continue
 
         flush_list()
@@ -127,3 +131,28 @@ def _parse_heading(text: str) -> tuple[int | None, str]:
     if text.startswith("# "):
         return 1, text[2:].strip()
     return None, text
+
+
+def _render_inline_markup(text: str, *, source_path: Path) -> str:
+    """Render the small inline subset used by the project."""
+
+    rendered_parts: list[str] = []
+    last_index = 0
+
+    for match in INLINE_LINK_RE.finditer(text):
+        rendered_parts.append(escape_html(text[last_index:match.start()]))
+        label = escape_html(match.group(1))
+        href = match.group(2).strip()
+        if not _is_safe_internal_href(href):
+            raise BuildError("Render Markdown", "only internal links are allowed in markdown content", path=source_path)
+        rendered_parts.append(f'<a href="{escape_html(href, quote=True)}">{label}</a>')
+        last_index = match.end()
+
+    rendered_parts.append(escape_html(text[last_index:]))
+    return "".join(rendered_parts)
+
+
+def _is_safe_internal_href(href: str) -> bool:
+    if href.startswith(("/", "./", "../", "#")):
+        return not href.startswith("//")
+    return False

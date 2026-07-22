@@ -48,10 +48,17 @@ APPROVED_TEMPLATE_SPECS = (
         logical_name="head",
         relative_path=TEMPLATE_HEAD_PATH,
         placeholders=(
+            "site_name",
             "page_title",
             "page_description",
+            "robots_content",
+            "theme_color",
             "canonical_path",
+            "canonical_link_html",
+            "favicon_url",
             "theme_stylesheet_url",
+            "site_stylesheet_url",
+            "site_script_url",
             "page_id",
             "page_type",
         ),
@@ -112,7 +119,13 @@ class PageTemplateContext:
     site_name: str
     current_year: int
     active_theme_id: str
+    robots_content: str
+    theme_color: str
+    canonical_link_html: str
+    favicon_url: str
     theme_stylesheet_url: str
+    site_stylesheet_url: str
+    site_script_url: str
     home_url: str
     navigation_items_html: str
     main_html: str

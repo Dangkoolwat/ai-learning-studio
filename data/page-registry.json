@@ -4,7 +4,7 @@
     {
       "id": "home",
       "title": "AI Learning Studio",
-      "description": "AI Learning Studio 페이지 레지스트리 검증용 랜딩 페이지",
+      "description": "AI 입문자와 기초 활용자가 프롬프트 복사, 요청 정리, 이미지 AI 실습을 차근차근 배우는 한국어 학습 사이트",
       "route": "/",
       "source": "pages/index.md",
       "type": "landing",
@@ -17,7 +17,7 @@
     {
       "id": "ai-practice",
       "title": "AI 체험 실습",
-      "description": "AI 체험 실습 섹션 검증 페이지",
+      "description": "AI에게 부탁하는 말을 더 또렷하게 고쳐 보는 단계형 실습 페이지",
       "route": "/ai-practice/",
       "source": "pages/sections/ai-practice.md",
       "type": "static-prompt",
@@ -30,7 +30,7 @@
     {
       "id": "ready-to-use",
       "title": "바로 사용하기",
-      "description": "바로 사용하기 섹션 검증 페이지",
+      "description": "준비된 프롬프트를 자신의 상황에 맞게 바꿔 바로 써 보는 페이지",
       "route": "/ready-to-use/",
       "source": "pages/sections/ready-to-use.md",
       "type": "static-prompt",
@@ -43,7 +43,7 @@
     {
       "id": "ai-assistant",
       "title": "AI 도우미",
-      "description": "AI 도우미 섹션 검증 페이지",
+      "description": "사람과 AI의 역할을 나눠 초안을 정리하는 페이지",
       "route": "/ai-assistant/",
       "source": "pages/sections/ai-assistant.md",
       "type": "static-prompt",
@@ -56,7 +56,7 @@
     {
       "id": "image-ai",
       "title": "이미지 AI",
-      "description": "이미지 AI 섹션 검증 페이지",
+      "description": "이미지의 용도, 구성, 분위기, 제외 조건을 함께 적는 페이지",
       "route": "/image-ai/",
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",

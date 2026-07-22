@@ -2,7 +2,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ page_title }}</title>
 <meta name="description" content="{{ page_description }}">
+<meta name="robots" content="{{ robots_content }}">
+<meta name="theme-color" content="{{ theme_color }}">
+<link rel="icon" href="{{ favicon_url }}" type="image/svg+xml">
+<link rel="stylesheet" href="{{ theme_stylesheet_url }}">
+<link rel="stylesheet" href="{{ site_stylesheet_url }}">
+<script type="module" src="{{ site_script_url }}"></script>
+{{ canonical_link_html }}
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ page_description }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site_name }}">
 <meta name="page-id" content="{{ page_id }}">
 <meta name="page-type" content="{{ page_type }}">
 <meta name="page-route" content="{{ canonical_path }}">
-<link rel="stylesheet" href="{{ theme_stylesheet_url }}">

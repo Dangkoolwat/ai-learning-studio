@@ -28,7 +28,7 @@ def validate_template_source(template_path: Path, template_text: str, *, spec: T
         raise BuildError("Load templates", "template file must not be empty", path=template_path)
 
     lower_text = template_text.lower()
-    if "<script" in lower_text:
+    if "<script" in lower_text and spec.logical_name != "head":
         raise BuildError("Load templates", "template file must not contain script tags", path=template_path)
     if "<style" in lower_text:
         raise BuildError("Load templates", "template file must not contain style tags", path=template_path)
@@ -45,6 +45,7 @@ def validate_template_source(template_path: Path, template_text: str, *, spec: T
     placeholder_counts = Counter(placeholders)
     allowed_placeholders = tuple(spec.placeholders)
     allowed_placeholders_set = set(allowed_placeholders)
+    repeatable_placeholders = {"page_title", "page_description"} if spec.logical_name == "head" else set()
 
     unexpected_placeholders = sorted(name for name in placeholder_counts if name not in allowed_placeholders_set)
     if unexpected_placeholders:
@@ -64,7 +65,11 @@ def validate_template_source(template_path: Path, template_text: str, *, spec: T
             field=missing_placeholders[0],
         )
 
-    repeated_placeholders = [name for name in allowed_placeholders if placeholder_counts[name] != 1]
+    repeated_placeholders = [
+        name
+        for name in allowed_placeholders
+        if placeholder_counts[name] != (2 if name in repeatable_placeholders else 1)
+    ]
     if repeated_placeholders:
         raise BuildError(
             "Load templates",

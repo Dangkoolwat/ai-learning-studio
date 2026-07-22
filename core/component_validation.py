@@ -100,8 +100,10 @@ def validate_component_template_source(template_path: Path, template_text: str, 
         raise BuildError("Load components", "component template must not contain external URLs", path=template_path)
     if "{%" in template_text or "{#" in template_text or "{{{" in template_text or "}}}" in template_text:
         raise BuildError("Load components", "component template contains unsupported template syntax", path=template_path)
-    if "<form" in lower_text or "<input" in lower_text or "<textarea" in lower_text or "<select" in lower_text or "<button" in lower_text:
+    if "<form" in lower_text or "<input" in lower_text or "<textarea" in lower_text or "<select" in lower_text:
         raise BuildError("Load components", "component template must not contain form controls", path=template_path)
+    if "<button" in lower_text and spec.component_id != "prompt-item":
+        raise BuildError("Load components", "component template must not contain buttons", path=template_path)
 
     placeholders = extract_placeholders(template_text, template_path=template_path)
     placeholder_counts = Counter(placeholders)
@@ -234,18 +236,28 @@ def _validate_prompt_item_output(inspector: ComponentHTMLInspector, *, component
         raise BuildError("Render component", "prompt item must contain exactly one pre", path=template_path, field=component_id)
     if sum(tag == "code" for tag, _ in inspector.start_tags) != 1:
         raise BuildError("Render component", "prompt item must contain exactly one code", path=template_path, field=component_id)
+    if sum(tag == "footer" for tag, _ in inspector.start_tags) != 1:
+        raise BuildError("Render component", "prompt item must contain exactly one footer", path=template_path, field=component_id)
     if sum(tag == "p" for tag, _ in inspector.start_tags) not in {0, 1}:
         raise BuildError("Render component", "prompt item description is invalid", path=template_path, field=component_id)
-    if sum(tag == "button" for tag, _ in inspector.start_tags) != 0:
-        raise BuildError("Render component", "prompt item must not contain a button", path=template_path, field=component_id)
+    if sum(tag == "button" for tag, _ in inspector.start_tags) != 1:
+        raise BuildError("Render component", "prompt item must contain exactly one button", path=template_path, field=component_id)
+    if sum(tag == "span" for tag, _ in inspector.start_tags) != 1:
+        raise BuildError("Render component", "prompt item must contain exactly one status span", path=template_path, field=component_id)
     if not _has_tag_class(inspector, "h2", "prompt-item__title"):
         raise BuildError("Render component", "prompt item title class is missing", path=template_path, field=component_id)
     if not _has_tag_class(inspector, "article", "prompt-item"):
         raise BuildError("Render component", "prompt item article class is missing", path=template_path, field=component_id)
     if not _has_tag_class(inspector, "pre", "prompt-item__content"):
         raise BuildError("Render component", "prompt item content class is missing", path=template_path, field=component_id)
+    if not _has_tag_class(inspector, "footer", "prompt-item__actions"):
+        raise BuildError("Render component", "prompt item actions footer class is missing", path=template_path, field=component_id)
     if any(tag == "p" for tag, _ in inspector.start_tags) and not _has_tag_class(inspector, "p", "prompt-item__description"):
         raise BuildError("Render component", "prompt item description class is missing", path=template_path, field=component_id)
+    if not _has_tag_class(inspector, "button", "prompt-item__copy-button"):
+        raise BuildError("Render component", "prompt item copy button class is missing", path=template_path, field=component_id)
+    if not _has_tag_class(inspector, "span", "prompt-item__copy-status"):
+        raise BuildError("Render component", "prompt item copy status class is missing", path=template_path, field=component_id)
 
 
 def _validate_prompt_collection_output(inspector: ComponentHTMLInspector, *, component_id: str, template_path: Path) -> None:

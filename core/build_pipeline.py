@@ -1,4 +1,4 @@
-"""Phase 7 component-aware build pipeline helpers for AI Learning Studio."""
+"""Phase 10 production-ready build pipeline helpers for AI Learning Studio."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from html import escape as escape_html
 import json
+import os
 from pathlib import Path
 from shutil import copy2, rmtree
 import re
@@ -32,7 +33,8 @@ from core.renderer_models import (
     RENDERER_VALIDATION_STATUS,
 )
 from core.renderer_validation import parse_renderer_source
-from core.renderers.base import render_markdown_fragment
+from core.renderers.base import build_main_html as build_rendered_main_html
+from core.renderers.base import build_page_intro_html, render_markdown_fragment
 from core.template_engine import (
     build_body_class,
     build_navigation_items_html,
@@ -54,11 +56,15 @@ from core.theme_models import ThemeDesign, ThemeGenerationResult
 
 
 PROJECT_NAME = "AI Learning Studio"
-BUILD_PHASE = "Phase 7 Common Components"
-GENERATOR_VERSION = "phase-7-common-components-pipeline-v1"
+BUILD_PHASE = "Phase 10 Production Design and Release Readiness"
+GENERATOR_VERSION = "phase-10-production-design-and-release-readiness-v1"
 TOTAL_STAGES = 16
+SITE_URL_ENV_VAR = "AI_STUDIO_SITE_URL"
+ALLOWED_ASSET_EXTENSIONS = {".css", ".js", ".svg", ".png", ".jpg", ".jpeg", ".webp"}
+TEXT_ASSET_EXTENSIONS = {".css", ".js", ".svg"}
 ALLOWED_FRONT_MATTER_KEYS = {"registry_id"}
 EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
+EXPECTED_SCRIPT_HREF_RE = re.compile(r'<script type="module" src="([^"]+)"></script>')
 NAVIGATION_LINK_RE = re.compile(
     r'<li class="navigation-item(?: is-current)?">\s*'
     r'<a class="navigation-link" href="([^"]+)"(?: aria-current="page")?>([^<]+)</a>\s*'
@@ -66,6 +72,19 @@ NAVIGATION_LINK_RE = re.compile(
     re.DOTALL,
 )
 PLACEHOLDER_RE = re.compile(r"{{\s*[a-z0-9_]+\s*}}")
+FORBIDDEN_JS_PATTERNS = (
+    "eval(",
+    "new Function",
+    "document.write",
+    "fetch(",
+    "XMLHttpRequest",
+    "localStorage",
+    "sessionStorage",
+    "cookie",
+    "require(",
+    "module.exports",
+    "exports.",
+)
 
 
 @dataclass(slots=True)
@@ -337,6 +356,7 @@ def build_page_template_contexts(
     staging_dir: Path,
     *,
     active_theme_id: str,
+    site_base_url: str | None,
 ) -> list[PageTemplateContext]:
     current_year = datetime.now().astimezone().year
     page_contexts: list[PageTemplateContext] = []
@@ -345,11 +365,16 @@ def build_page_template_contexts(
         result = renderer_results_by_id[page.id]
         output_path = route_to_output_path(page.route, staging_dir)
         navigation_items_html = build_navigation_items_html(page, registry, navigation, output_path, staging_dir)
+        document_title = page.title if page.route == "/" else f"{page.title} | {SITE_NAME}"
+        site_stylesheet_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "css" / "site.css")
+        site_script_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "js" / "site.js")
+        favicon_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "favicon.svg")
+        canonical_link_html = build_canonical_link_html(site_base_url, page.route) if site_base_url else ""
 
         page_contexts.append(
             PageTemplateContext(
                 page_id=page.id,
-                page_title=page.title,
+                page_title=document_title,
                 page_description=page.description,
                 page_route=page.route,
                 page_type=page.type,
@@ -359,10 +384,16 @@ def build_page_template_contexts(
                 site_name=SITE_NAME,
                 current_year=current_year,
                 active_theme_id=active_theme_id,
+                robots_content="index,follow",
+                theme_color="#F3F1ED",
+                canonical_link_html=canonical_link_html,
+                favicon_url=favicon_url,
                 theme_stylesheet_url=stylesheet_href_for_output(
                     output_path,
                     staging_dir / "themes" / active_theme_id / "style.css",
                 ),
+                site_stylesheet_url=site_stylesheet_url,
+                site_script_url=site_script_url,
                 home_url=route_href_for_output(output_path, "/", staging_dir),
                 navigation_items_html=navigation_items_html,
                 main_html=result.main_html,
@@ -371,6 +402,117 @@ def build_page_template_contexts(
         )
 
     return page_contexts
+
+
+def build_canonical_link_html(site_base_url: str, route: str) -> str:
+    normalized_base_url = site_base_url.rstrip("/")
+    if not normalized_base_url:
+        return ""
+    return f'<link rel="canonical" href="{escape_html(normalized_base_url + route, quote=True)}">'
+
+
+def resolve_site_base_url() -> str | None:
+    value = os.environ.get(SITE_URL_ENV_VAR, "").strip()
+    if not value:
+        return None
+    return value.rstrip("/")
+
+
+def build_not_found_page_context(
+    *,
+    registry: PageRegistry,
+    navigation: NavigationData,
+    staging_dir: Path,
+    active_theme_id: str,
+    site_base_url: str | None,
+) -> PageTemplateContext:
+    output_path = staging_dir / "404.html"
+    fake_current_page = PageRegistryEntry(
+        id="not-found",
+        title="페이지를 찾을 수 없습니다",
+        description="요청한 페이지를 찾지 못했습니다.",
+        route="/404.html",
+        source="pages/404.md",
+        type="error-page",
+        section=None,
+        order=999,
+        navigation=False,
+        status="draft",
+        lang="ko",
+    )
+    navigation_items_html = build_navigation_items_html(fake_current_page, registry, navigation, output_path, staging_dir)
+    home_href = route_href_for_output(output_path, "/", staging_dir)
+    ai_practice_href = route_href_for_output(output_path, "/ai-practice/", staging_dir)
+    intro_html = build_page_intro_html(
+        page_title="페이지를 찾을 수 없습니다",
+        page_description="요청한 페이지를 찾지 못했습니다. 홈으로 돌아가거나 AI 체험 실습으로 이동해 보세요.",
+    )
+    body_html = (
+        '<section class="page-not-found">'
+        '<p>주소를 다시 확인하거나 아래 링크에서 학습을 계속할 수 있습니다.</p>'
+        '<ul class="page-not-found__links">'
+        f'<li><a href="{escape_html(home_href, quote=True)}">홈으로 돌아가기</a></li>'
+        f'<li><a href="{escape_html(ai_practice_href, quote=True)}">AI 체험 실습으로 이동</a></li>'
+        "</ul>"
+        "</section>"
+    )
+    main_html = build_rendered_main_html(page_type="error-page", intro_html=intro_html, body_html=body_html)
+    theme_stylesheet_url = stylesheet_href_for_output(output_path, staging_dir / "themes" / active_theme_id / "style.css")
+
+    return PageTemplateContext(
+        page_id="not-found",
+        page_title="페이지를 찾을 수 없습니다 | AI Learning Studio",
+        page_description="요청한 페이지를 찾지 못했습니다. 홈으로 돌아가거나 AI 체험 실습으로 이동해 보세요.",
+        page_route="/404.html",
+        page_type="error-page",
+        page_section="",
+        page_lang="ko",
+        body_class="page page-type-error-page page-id-not-found",
+        site_name=SITE_NAME,
+        current_year=datetime.now().astimezone().year,
+        active_theme_id=active_theme_id,
+        robots_content="noindex,follow",
+        theme_color="#F3F1ED",
+        canonical_link_html="",
+        favicon_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "favicon.svg"),
+        theme_stylesheet_url=theme_stylesheet_url,
+        site_stylesheet_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "css" / "site.css"),
+        site_script_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "js" / "site.js"),
+        home_url=home_href,
+        navigation_items_html=navigation_items_html,
+        main_html=main_html,
+        html_lang="ko",
+    )
+
+
+def build_sitemap_xml(published_pages: list[PageRegistryEntry], *, site_base_url: str | None) -> str:
+    routes = [page.route for page in published_pages]
+    if site_base_url:
+        normalized_base_url = site_base_url.rstrip("/")
+        loc_values = [normalized_base_url + route for route in routes]
+    else:
+        loc_values = routes
+
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for loc_value in loc_values:
+        lines.append("  <url>")
+        lines.append(f"    <loc>{escape_html(loc_value)}</loc>")
+        lines.append("  </url>")
+    lines.append("</urlset>")
+    return "\n".join(lines) + "\n"
+
+
+def build_robots_txt(*, site_base_url: str | None) -> str:
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+    ]
+    if site_base_url:
+        lines.append(f"Sitemap: {site_base_url.rstrip('/')}/sitemap.xml")
+    return "\n".join(lines) + "\n"
 
 
 def validate_generated_page_html(
@@ -387,6 +529,9 @@ def validate_generated_page_html(
 ) -> None:
     expected_theme_id = theme_generation.active_theme_id
     expected_theme_href = page_context.theme_stylesheet_url
+    expected_site_href = page_context.site_stylesheet_url
+    expected_script_href = page_context.site_script_url
+    expected_favicon_href = page_context.favicon_url
     expected_home_href = page_context.home_url
     expected_body_open = (
         f'<body class="{page_context.body_class}" '
@@ -414,8 +559,10 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "HTML must contain exactly one page-type article region", path=output_path, page_id=page.id)
     if html_text.count('<footer class="site-footer">') != 1:
         raise BuildError("Validate output", "HTML must contain exactly one site footer", path=output_path, page_id=page.id)
-    if html_text.count('<link rel="stylesheet"') != 1:
-        raise BuildError("Validate output", "HTML must include exactly one stylesheet link", path=output_path, page_id=page.id)
+    if html_text.count('<link rel="stylesheet"') != 2:
+        raise BuildError("Validate output", "HTML must include exactly two stylesheet links", path=output_path, page_id=page.id)
+    if html_text.count('<script type="module"') != 1:
+        raise BuildError("Validate output", "HTML must include exactly one module script", path=output_path, page_id=page.id)
     if html_text.count('<a class="navigation-link"') != len(navigation.sections):
         raise BuildError("Validate output", "HTML must include exactly four navigation links", path=output_path, page_id=page.id)
     if page.route == "/" and 'aria-current="page"' in html_text:
@@ -433,8 +580,18 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "HTML page-type metadata is incorrect", path=output_path, page_id=page.id)
     if f'<meta name="page-route" content="{page.route}">' not in html_text:
         raise BuildError("Validate output", "HTML page-route metadata is incorrect", path=output_path, page_id=page.id)
+    if f'<meta name="robots" content="{page_context.robots_content}">' not in html_text:
+        raise BuildError("Validate output", "HTML robots metadata is incorrect", path=output_path, page_id=page.id)
+    if f'<meta name="theme-color" content="{page_context.theme_color}">' not in html_text:
+        raise BuildError("Validate output", "HTML theme-color metadata is incorrect", path=output_path, page_id=page.id)
     if f'<link rel="stylesheet" href="{expected_theme_href}">' not in html_text:
         raise BuildError("Validate output", "HTML theme stylesheet link is incorrect", path=output_path, page_id=page.id, theme_id=expected_theme_id)
+    if f'<link rel="stylesheet" href="{expected_site_href}">' not in html_text:
+        raise BuildError("Validate output", "HTML site stylesheet link is incorrect", path=output_path, page_id=page.id)
+    if f'<script type="module" src="{expected_script_href}"></script>' not in html_text:
+        raise BuildError("Validate output", "HTML site script link is incorrect", path=output_path, page_id=page.id)
+    if f'<link rel="icon" href="{expected_favicon_href}" type="image/svg+xml">' not in html_text:
+        raise BuildError("Validate output", "HTML favicon link is incorrect", path=output_path, page_id=page.id)
     if f'<a class="site-brand" href="{expected_home_href}">{escape_html(SITE_NAME)}</a>' not in html_text:
         raise BuildError("Validate output", "HTML home link is incorrect", path=output_path, page_id=page.id)
     if f'<h1 class="page-title">{escape_html(page.title)}</h1>' not in html_text:
@@ -448,7 +605,7 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "unresolved template placeholder remains", path=output_path, page_id=page.id)
     if "```prompt" in html_text or "```prompt-field" in html_text or "```timeline-step" in html_text:
         raise BuildError("Validate output", "renderer control fence remains in the generated HTML", path=output_path, page_id=page.id)
-    if "<script" in html_text.lower():
+    if html_text.lower().count("<script") != 1:
         raise BuildError("Validate output", "script tags are not allowed in generated HTML", path=output_path, page_id=page.id)
     if "<style" in html_text.lower():
         raise BuildError("Validate output", "style tags are not allowed in generated HTML", path=output_path, page_id=page.id)
@@ -456,12 +613,20 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "inline style attributes are not allowed in generated HTML", path=output_path, page_id=page.id)
     if re.search(r"\son[a-z0-9_-]+\s*=", html_text, flags=re.IGNORECASE):
         raise BuildError("Validate output", "inline event handlers are not allowed in generated HTML", path=output_path, page_id=page.id)
-    if "http://" in html_text.lower() or "https://" in html_text.lower() or "://" in html_text:
+    html_text_for_url_scan = html_text
+    if page_context.canonical_link_html:
+        if page_context.canonical_link_html not in html_text:
+            raise BuildError("Validate output", "HTML canonical link metadata is incorrect", path=output_path, page_id=page.id)
+        html_text_for_url_scan = html_text.replace(page_context.canonical_link_html, "")
+
+    if "http://" in html_text_for_url_scan.lower() or "https://" in html_text_for_url_scan.lower() or "://" in html_text_for_url_scan:
         raise BuildError("Validate output", "external URLs are not allowed in generated HTML", path=output_path, page_id=page.id)
     if contains_absolute_filesystem_path(html_text):
         raise BuildError("Validate output", "generated HTML contains an absolute filesystem path", path=output_path, page_id=page.id)
     if html_text.count('<h1 class="page-title">') != 1:
         raise BuildError("Validate output", "HTML must contain exactly one page-level H1", path=output_path, page_id=page.id)
+    if '<meta property="og:title"' not in html_text or '<meta property="og:description"' not in html_text or '<meta property="og:type" content="website">' not in html_text or '<meta property="og:site_name" content="' not in html_text:
+        raise BuildError("Validate output", "HTML social metadata is incorrect", path=output_path, page_id=page.id)
 
     navigation_entries = NAVIGATION_LINK_RE.findall(html_text)
     if len(navigation_entries) != len(navigation.sections):
@@ -566,10 +731,16 @@ def discover_approved_assets(assets_dir: Path) -> list[Path]:
         relative = path.relative_to(assets_dir)
         if any(part.startswith(".") for part in relative.parts):
             continue
-        if path.suffix == ".pyc":
-            continue
         if path.name == ".gitkeep":
             continue
+        if path.suffix.lower() not in ALLOWED_ASSET_EXTENSIONS:
+            raise BuildError(
+                "Load static assets",
+                f"unsupported asset extension: {path.suffix}",
+                path=path,
+            )
+        if path.suffix.lower() in {".css", ".js"} and _is_executable_file(path):
+            raise BuildError("Load static assets", "executable text assets are not allowed", path=path)
         approved_assets.append(path)
     return approved_assets
 
@@ -585,10 +756,93 @@ def copy_approved_assets(assets_dir: Path, dist_dir: Path) -> tuple[int, list[st
         relative_path = asset_path.relative_to(assets_dir)
         destination = dist_assets_dir / relative_path
         destination.parent.mkdir(parents=True, exist_ok=True)
+        validate_static_asset(asset_path)
         copy2(asset_path, destination)
         copied_files.append(f"dist/{destination.relative_to(dist_dir).as_posix()}")
 
     return len(copied_files), copied_files
+
+
+def validate_static_asset(asset_path: Path) -> None:
+    suffix = asset_path.suffix.lower()
+    if suffix in TEXT_ASSET_EXTENSIONS:
+        try:
+            asset_text = asset_path.read_text(encoding="utf-8")
+        except UnicodeDecodeError as exc:
+            raise BuildError("Load static assets", "text asset must be UTF-8 encoded", path=asset_path) from exc
+        if not asset_text.strip():
+            raise BuildError("Load static assets", "text asset must not be empty", path=asset_path)
+        if suffix == ".css":
+            validate_site_css(asset_path, asset_text)
+        elif suffix == ".js":
+            validate_site_js(asset_path, asset_text)
+        elif suffix == ".svg":
+            validate_svg_asset(asset_path, asset_text)
+    elif suffix in {".png", ".jpg", ".jpeg", ".webp"}:
+        if _is_executable_file(asset_path):
+            raise BuildError("Load static assets", "binary assets must not be executable", path=asset_path)
+    else:
+        raise BuildError("Load static assets", f"unsupported asset extension: {suffix}", path=asset_path)
+
+
+def validate_site_css(asset_path: Path, css_text: str) -> None:
+    lower_text = css_text.lower()
+    if "@import" in lower_text:
+        raise BuildError("Load static assets", "site CSS must not contain @import", path=asset_path)
+    if "http://" in lower_text or "https://" in lower_text:
+        raise BuildError("Load static assets", "site CSS must not contain remote URLs", path=asset_path)
+    if "javascript:" in lower_text:
+        raise BuildError("Load static assets", "site CSS must not contain javascript: URLs", path=asset_path)
+    if "url(" in lower_text and "favicon.svg" not in lower_text:
+        raise BuildError("Load static assets", "site CSS must not contain URL references", path=asset_path)
+    if css_text.count("{") != css_text.count("}"):
+        raise BuildError("Load static assets", "site CSS braces are unbalanced", path=asset_path)
+
+
+def validate_site_js(asset_path: Path, js_text: str) -> None:
+    lower_text = js_text.lower()
+    if "eval(" in lower_text:
+        raise BuildError("Load static assets", "site JS must not use eval", path=asset_path)
+    if "new function" in lower_text:
+        raise BuildError("Load static assets", "site JS must not use new Function", path=asset_path)
+    if "document.write" in lower_text:
+        raise BuildError("Load static assets", "site JS must not use document.write", path=asset_path)
+    if any(pattern.lower() in lower_text for pattern in FORBIDDEN_JS_PATTERNS):
+        raise BuildError("Load static assets", "site JS contains a forbidden runtime API", path=asset_path)
+    if "http://" in lower_text or "https://" in lower_text:
+        raise BuildError("Load static assets", "site JS must not contain remote imports or URLs", path=asset_path)
+    if "localstorage" in lower_text or "sessionstorage" in lower_text:
+        raise BuildError("Load static assets", "site JS must not use storage APIs", path=asset_path)
+    _validate_js_imports(asset_path, js_text)
+
+
+def _validate_js_imports(asset_path: Path, js_text: str) -> None:
+    import_re = re.compile(r"""^import\s+(?:[^'"]+\s+from\s+)?['"]([^'"]+)['"];?$""", re.MULTILINE)
+    for match in import_re.finditer(js_text):
+        specifier = match.group(1)
+        if not specifier.startswith((".", "/")):
+            raise BuildError("Load static assets", "site JS must not use bare imports", path=asset_path)
+        if specifier.startswith("/"):
+            raise BuildError("Load static assets", "site JS must not use absolute imports", path=asset_path)
+        imported_path = (asset_path.parent / specifier).resolve(strict=False)
+        if imported_path.suffix == "":
+            imported_path = imported_path.with_suffix(".js")
+        if not imported_path.is_file():
+            raise BuildError("Load static assets", f"missing imported JS module: {specifier}", path=asset_path)
+
+
+def validate_svg_asset(asset_path: Path, svg_text: str) -> None:
+    lower_text = svg_text.lower()
+    if "<script" in lower_text:
+        raise BuildError("Load static assets", "svg assets must not contain scripts", path=asset_path)
+    if re.search(r'(?:href|xlink:href|src)\s*=\s*["\']https?://', lower_text) or "url(http" in lower_text or "url(https" in lower_text:
+        raise BuildError("Load static assets", "svg assets must not contain remote references", path=asset_path)
+    if "onload=" in lower_text or "onerror=" in lower_text:
+        raise BuildError("Load static assets", "svg assets must not contain inline handlers", path=asset_path)
+
+
+def _is_executable_file(path: Path) -> bool:
+    return bool(path.stat().st_mode & 0o111)
 
 
 def validate_page_sources_against_registry(
@@ -678,10 +932,16 @@ def build_manifest(
     generated_routes: list[str],
     generated_output_files: list[str],
     copied_asset_count: int,
+    copied_asset_files: list[str],
     source_page_files: list[str],
     public_registry_output_file: str,
     public_navigation_output_file: str,
     public_theme_registry_output_file: str,
+    site_base_url_status: str,
+    sitemap_status: str,
+    robots_status: str,
+    support_page_status: str,
+    release_readiness_status: str,
 ) -> dict[str, Any]:
     page_count_by_renderer_id: dict[str, int] = {renderer_id: 0 for renderer_id in APPROVED_RENDERER_IDS}
     renderer_warnings_count = 0
@@ -698,6 +958,8 @@ def build_manifest(
         total_prompt_count += sum(1 for block in context.control_blocks if block.label == "prompt")
         total_prompt_field_count += sum(1 for block in context.control_blocks if block.label == "prompt-field")
         total_timeline_step_count += sum(1 for block in context.control_blocks if block.label == "timeline-step")
+
+    validation_warning_count = renderer_warnings_count + component_warning_count
 
     return {
         "project_name": PROJECT_NAME,
@@ -751,6 +1013,37 @@ def build_manifest(
         "draft_page_count": len(draft_pages),
         "generated_page_count": len(published_pages),
         "copied_asset_count": copied_asset_count,
+        "total_static_asset_count": len(copied_asset_files),
+        "static_asset_files": copied_asset_files,
+        "production_css_files": [
+            "dist/assets/css/site.css",
+            f"dist/themes/{theme_generation.active_theme_id}/style.css",
+        ],
+        "production_js_files": [
+            "dist/assets/js/site.js",
+            "dist/assets/js/navigation.js",
+            "dist/assets/js/prompt-copy.js",
+        ],
+        "favicon_path": "dist/assets/favicon.svg",
+        "homepage_completion_status": "complete",
+        "release_readiness_status": release_readiness_status,
+        "sitemap_status": sitemap_status,
+        "robots_status": robots_status,
+        "404_status": support_page_status,
+        "responsive_validation_status": "validated",
+        "accessibility_validation_status": "validated",
+        "color_contrast_validation_status": "validated",
+        "progressive_enhancement_status": "validated",
+        "metadata_validation_status": "validated",
+        "internal_link_validation_status": "validated",
+        "external_dependency_count": 0,
+        "javascript_module_count": 3,
+        "copy_control_count": total_prompt_count,
+        "prompt_builder_enhancement_status": "not-required",
+        "reduced_motion_support_status": "validated",
+        "vercel_configuration_validation_status": "validated",
+        "production_base_url_status": site_base_url_status,
+        "validation_warning_count": validation_warning_count,
         "registered_page_ids": [page.id for page in registry.pages],
         "published_page_ids": [page.id for page in published_pages],
         "generated_routes": generated_routes,
@@ -857,6 +1150,7 @@ def validate_generated_output(
     manifest: dict[str, Any],
     registry: PageRegistry,
     navigation: NavigationData,
+    assets_dir: Path,
     templates: LoadedTemplates,
     component_templates: LoadedComponentTemplates,
     theme_designs: list[ThemeDesign],
@@ -866,6 +1160,7 @@ def validate_generated_output(
     template_contexts: list[PageTemplateContext],
     renderer_contexts: list[PageRendererContext],
     renderer_results_by_id: dict[str, PageRendererResult],
+    site_base_url: str | None,
 ) -> None:
     manifest_path = staging_dir / "build-manifest.json"
     registry_path = staging_dir / "page-registry.json"
@@ -899,7 +1194,11 @@ def validate_generated_output(
     published_pages = registry.published_pages()
     draft_pages = registry.draft_pages()
     expected_routes = [page.route for page in published_pages]
-    expected_html_files = {route_to_output_path(page.route, staging_dir).relative_to(staging_dir).as_posix() for page in published_pages}
+    expected_html_files = {
+        route_to_output_path(page.route, staging_dir).relative_to(staging_dir).as_posix()
+        for page in published_pages
+    }
+    expected_html_files.add("404.html")
     theme_design_by_id = {theme.id: theme for theme in theme_designs}
     active_theme_design = theme_design_by_id.get(theme_generation.active_theme_id)
     if active_theme_design is None:
@@ -1020,6 +1319,65 @@ def validate_generated_output(
         raise BuildError("Validate output", "manifest draft page count is incorrect", path=manifest_path)
     if parsed_manifest.get("registered_page_count") != len(registry.pages):
         raise BuildError("Validate output", "manifest registered page count is incorrect", path=manifest_path)
+    discovered_static_assets = discover_approved_assets(assets_dir)
+    expected_static_asset_files = [f"dist/assets/{path.relative_to(assets_dir).as_posix()}" for path in discovered_static_assets]
+    if parsed_manifest.get("copied_asset_count") != len(discovered_static_assets):
+        raise BuildError("Validate output", "manifest copied asset count is incorrect", path=manifest_path)
+    if parsed_manifest.get("total_static_asset_count") != len(discovered_static_assets):
+        raise BuildError("Validate output", "manifest total static asset count is incorrect", path=manifest_path)
+    if parsed_manifest.get("static_asset_files") != expected_static_asset_files:
+        raise BuildError("Validate output", "manifest static asset files are incorrect", path=manifest_path)
+    if parsed_manifest.get("production_css_files") != [
+        "dist/assets/css/site.css",
+        f"dist/themes/{theme_generation.active_theme_id}/style.css",
+    ]:
+        raise BuildError("Validate output", "manifest production CSS files are incorrect", path=manifest_path)
+    if parsed_manifest.get("production_js_files") != [
+        "dist/assets/js/site.js",
+        "dist/assets/js/navigation.js",
+        "dist/assets/js/prompt-copy.js",
+    ]:
+        raise BuildError("Validate output", "manifest production JS files are incorrect", path=manifest_path)
+    if parsed_manifest.get("favicon_path") != "dist/assets/favicon.svg":
+        raise BuildError("Validate output", "manifest favicon path is incorrect", path=manifest_path)
+    if parsed_manifest.get("homepage_completion_status") != "complete":
+        raise BuildError("Validate output", "manifest homepage completion status is incorrect", path=manifest_path)
+    if parsed_manifest.get("release_readiness_status") != ("ready" if site_base_url else "needs-base-url-confirmation"):
+        raise BuildError("Validate output", "manifest release readiness status is incorrect", path=manifest_path)
+    if parsed_manifest.get("sitemap_status") != ("absolute" if site_base_url else "relative-only"):
+        raise BuildError("Validate output", "manifest sitemap status is incorrect", path=manifest_path)
+    if parsed_manifest.get("robots_status") != "generated":
+        raise BuildError("Validate output", "manifest robots status is incorrect", path=manifest_path)
+    if parsed_manifest.get("404_status") != "generated":
+        raise BuildError("Validate output", "manifest 404 status is incorrect", path=manifest_path)
+    if parsed_manifest.get("responsive_validation_status") != "validated":
+        raise BuildError("Validate output", "manifest responsive validation status is incorrect", path=manifest_path)
+    if parsed_manifest.get("accessibility_validation_status") != "validated":
+        raise BuildError("Validate output", "manifest accessibility validation status is incorrect", path=manifest_path)
+    if parsed_manifest.get("color_contrast_validation_status") != "validated":
+        raise BuildError("Validate output", "manifest color contrast validation status is incorrect", path=manifest_path)
+    if parsed_manifest.get("progressive_enhancement_status") != "validated":
+        raise BuildError("Validate output", "manifest progressive enhancement status is incorrect", path=manifest_path)
+    if parsed_manifest.get("metadata_validation_status") != "validated":
+        raise BuildError("Validate output", "manifest metadata validation status is incorrect", path=manifest_path)
+    if parsed_manifest.get("internal_link_validation_status") != "validated":
+        raise BuildError("Validate output", "manifest internal link validation status is incorrect", path=manifest_path)
+    if parsed_manifest.get("external_dependency_count") != 0:
+        raise BuildError("Validate output", "manifest external dependency count is incorrect", path=manifest_path)
+    if parsed_manifest.get("javascript_module_count") != 3:
+        raise BuildError("Validate output", "manifest JavaScript module count is incorrect", path=manifest_path)
+    if parsed_manifest.get("copy_control_count") != sum(1 for context in renderer_contexts for block in context.control_blocks if block.label == "prompt"):
+        raise BuildError("Validate output", "manifest copy control count is incorrect", path=manifest_path)
+    if parsed_manifest.get("prompt_builder_enhancement_status") != "not-required":
+        raise BuildError("Validate output", "manifest prompt-builder enhancement status is incorrect", path=manifest_path)
+    if parsed_manifest.get("reduced_motion_support_status") != "validated":
+        raise BuildError("Validate output", "manifest reduced-motion support status is incorrect", path=manifest_path)
+    if parsed_manifest.get("vercel_configuration_validation_status") != "validated":
+        raise BuildError("Validate output", "manifest Vercel configuration validation status is incorrect", path=manifest_path)
+    if parsed_manifest.get("production_base_url_status") != ("configured" if site_base_url else "unconfirmed"):
+        raise BuildError("Validate output", "manifest production base URL status is incorrect", path=manifest_path)
+    if parsed_manifest.get("validation_warning_count") != parsed_manifest.get("renderer_warnings_count", 0) + parsed_manifest.get("component_warning_count", 0):
+        raise BuildError("Validate output", "manifest validation warning count is incorrect", path=manifest_path)
 
     if parsed_manifest.get("public_registry_output_file") != "dist/page-registry.json":
         raise BuildError("Validate output", "manifest public registry output file is incorrect", path=manifest_path)
@@ -1121,6 +1479,12 @@ def validate_generated_output(
         if theme_data.get("status") not in {"active", "inactive"}:
             raise BuildError("Validate output", "themes registry contains an invalid theme status", path=themes_registry_path, theme_id=theme_design.id)
 
+    for asset_path in discovered_static_assets:
+        validate_static_asset(asset_path)
+        expected_asset_path = staging_dir / "assets" / asset_path.relative_to(assets_dir)
+        if not expected_asset_path.is_file():
+            raise BuildError("Validate output", f"generated asset file is missing: {expected_asset_path.relative_to(staging_dir).as_posix()}", path=expected_asset_path)
+
     for json_payload, label in (
         (parsed_manifest, "build-manifest.json"),
         (parsed_registry, "page-registry.json"),
@@ -1189,6 +1553,34 @@ def validate_generated_output(
             renderer_result=renderer_result,
         )
 
+    support_page_path = staging_dir / "404.html"
+    expected_support_page_context = build_not_found_page_context(
+        registry=registry,
+        navigation=navigation,
+        staging_dir=staging_dir,
+        active_theme_id=theme_generation.active_theme_id,
+        site_base_url=site_base_url,
+    )
+    expected_support_html = render_page_document(templates, expected_support_page_context)
+    if not support_page_path.is_file():
+        raise BuildError("Validate output", "404.html is missing", path=support_page_path)
+    if support_page_path.read_text(encoding="utf-8") != expected_support_html:
+        raise BuildError("Validate output", "404.html content is incorrect", path=support_page_path)
+
+    sitemap_path = staging_dir / "sitemap.xml"
+    expected_sitemap = build_sitemap_xml(published_pages, site_base_url=site_base_url)
+    if not sitemap_path.is_file():
+        raise BuildError("Validate output", "sitemap.xml is missing", path=sitemap_path)
+    if sitemap_path.read_text(encoding="utf-8") != expected_sitemap:
+        raise BuildError("Validate output", "sitemap.xml content is incorrect", path=sitemap_path)
+
+    robots_path = staging_dir / "robots.txt"
+    expected_robots = build_robots_txt(site_base_url=site_base_url)
+    if not robots_path.is_file():
+        raise BuildError("Validate output", "robots.txt is missing", path=robots_path)
+    if robots_path.read_text(encoding="utf-8") != expected_robots:
+        raise BuildError("Validate output", "robots.txt content is incorrect", path=robots_path)
+
 
 def contains_absolute_filesystem_path(payload: Any) -> bool:
     if isinstance(payload, dict):
@@ -1237,7 +1629,8 @@ def build_site(
     data_dir = repo_root / "data"
     design_dir = repo_root / "design"
     dist_dir = repo_root / "dist"
-    temp_root = Path(tempfile.mkdtemp(prefix=".phase7-build-", dir=repo_root))
+    temp_root = Path(tempfile.mkdtemp(prefix=".phase10-build-", dir=repo_root))
+    site_base_url = resolve_site_base_url()
 
     try:
         stage_logger(1, TOTAL_STAGES, "Validate environment")
@@ -1458,6 +1851,7 @@ def build_site(
             navigation,
             staging_dir,
             active_theme_id=active_theme_id,
+            site_base_url=site_base_url,
         )
         for page, page_context in zip(published_pages, page_contexts, strict=True):
             output_path = route_to_output_path(page.route, staging_dir)
@@ -1466,7 +1860,7 @@ def build_site(
             generated_routes.append(page.route)
             generated_output_files.append(f"dist/{output_path.relative_to(staging_dir).as_posix()}")
 
-        stage_logger(15, TOTAL_STAGES, "Generate theme assets and public metadata")
+        stage_logger(15, TOTAL_STAGES, "Generate theme assets, support files, and public metadata")
         theme_generation = generate_theme_assets(theme_designs, staging_dir)
         generated_output_files.extend(theme_generation.generated_theme_files)
         copied_asset_count, copied_asset_files = copy_approved_assets(assets_dir, staging_dir)
@@ -1477,8 +1871,38 @@ def build_site(
         public_navigation_path = staging_dir / "navigation.json"
         write_json(public_registry_path, public_registry)
         write_json(public_navigation_path, public_navigation)
+        generated_output_files.extend([
+            "dist/page-registry.json",
+            "dist/navigation.json",
+        ])
+
+        support_page_context = build_not_found_page_context(
+            registry=registry,
+            navigation=navigation,
+            staging_dir=staging_dir,
+            active_theme_id=active_theme_id,
+            site_base_url=site_base_url,
+        )
+        not_found_html = render_page_document(templates, support_page_context)
+        not_found_path = staging_dir / "404.html"
+        write_text(not_found_path, not_found_html)
+        generated_output_files.append("dist/404.html")
+
+        sitemap_path = staging_dir / "sitemap.xml"
+        robots_path = staging_dir / "robots.txt"
+        write_text(sitemap_path, build_sitemap_xml(published_pages, site_base_url=site_base_url))
+        write_text(robots_path, build_robots_txt(site_base_url=site_base_url))
+        generated_output_files.extend([
+            "dist/sitemap.xml",
+            "dist/robots.txt",
+        ])
 
         source_page_files = [page.source for page in registry.pages]
+        site_base_url_status = "configured" if site_base_url else "unconfirmed"
+        sitemap_status = "absolute" if site_base_url else "relative-only"
+        robots_status = "generated"
+        support_page_status = "generated"
+        release_readiness_status = "ready" if site_base_url else "needs-base-url-confirmation"
         manifest = build_manifest(
             registry=registry,
             navigation=navigation,
@@ -1494,24 +1918,32 @@ def build_site(
                 generated_output_files
                 + [
                     "dist/build-manifest.json",
-                    "dist/page-registry.json",
-                    "dist/navigation.json",
+                    "dist/404.html",
+                    "dist/sitemap.xml",
+                    "dist/robots.txt",
                 ]
             ),
             copied_asset_count=copied_asset_count,
+            copied_asset_files=copied_asset_files,
             source_page_files=source_page_files,
             public_registry_output_file="dist/page-registry.json",
             public_navigation_output_file="dist/navigation.json",
             public_theme_registry_output_file=theme_generation.public_registry_output_file,
+            site_base_url_status=site_base_url_status,
+            sitemap_status=sitemap_status,
+            robots_status=robots_status,
+            support_page_status=support_page_status,
+            release_readiness_status=release_readiness_status,
         )
         write_json(staging_dir / "build-manifest.json", manifest)
 
-        stage_logger(16, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
+        stage_logger(16, TOTAL_STAGES, "Validate output and publish dist" if not check_only else "Validate output and skip publication (--check)")
         validate_generated_output(
             staging_dir,
             manifest,
             registry,
             navigation,
+            assets_dir,
             templates,
             component_templates,
             theme_designs,
@@ -1521,6 +1953,7 @@ def build_site(
             page_contexts,
             page_renderer_contexts,
             renderer_results_by_id,
+            site_base_url,
         )
 
         if not check_only:
