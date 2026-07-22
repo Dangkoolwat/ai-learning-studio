@@ -1,0 +1,41 @@
+# Phase 8 Changes
+
+- Modified file:
+  - `pages/sections/ai-practice.md`
+- What changed:
+  - replaced the placeholder validation copy with a complete first learning page in natural Korean
+  - added a short learning explanation, a realistic beginner situation, a vague request, a missing-details checklist, an improved request, a learner action section, an expected-result section, a review checklist, and a final human-verification reminder
+  - rewrote the approved `prompt` block so the page still renders through the registry-assigned `static-prompt` renderer
+- What was preserved:
+  - page ID `ai-practice`
+  - route `/ai-practice/`
+  - section `ai-practice`
+  - page type `static-prompt`
+  - navigation position in the existing registry
+  - all other page sources, registry data, navigation data, templates, components, renderers, and theme source files
+- Content retained from the previous page:
+  - the page still presents a single prompt-based practice experience
+  - the page still stays concise and does not introduce JavaScript or interactive controls
+- Renderer-specific blocks used:
+  - `prompt`
+- Component path used by the build:
+  - shared Phase 7 components through the existing `static-prompt` renderer
+- Compliant presentation changes:
+  - none beyond the markdown content rewrite
+- Build pipeline changes:
+  - none
+- Build manifest changes:
+  - none in source control; the generated manifest was refreshed by the build
+- Deliberately untouched:
+  - `data/page-registry.json`
+  - `data/navigation.json`
+  - `scripts/build.py`
+  - `core/`
+  - `templates/`
+  - `components/`
+  - `design/studio-default/design.md`
+  - `.github/workflows/quality-check.yml`
+  - `requirements.txt`
+  - `.gitignore`
+- No commit was performed.
+- No push was performed.

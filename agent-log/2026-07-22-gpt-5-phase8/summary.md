@@ -1,0 +1,70 @@
+# Phase 8 First Learning Page Summary
+
+- Phase: Phase 8 First Learning Page.
+- Target page ID: `ai-practice`.
+- Target route: `/ai-practice/`.
+- Target section: `AI 체험 실습`.
+- Target page type: `static-prompt`.
+- Target source path: `pages/sections/ai-practice.md`.
+- Purpose: turn the placeholder validation page into the first complete learning page for AI beginners.
+- Files created:
+  - `agent-log/2026-07-22-gpt-5-phase8/summary.md`
+  - `agent-log/2026-07-22-gpt-5-phase8/changes.md`
+  - `agent-log/2026-07-22-gpt-5-phase8/validation.md`
+- Files modified:
+  - `pages/sections/ai-practice.md`
+- Files deliberately preserved:
+  - `data/page-registry.json`
+  - `data/navigation.json`
+  - all other registered page sources
+  - templates, components, renderers, theme source, and build pipeline code
+- Existing content retained:
+  - the target page kept the registry ID, route, section, page type, and navigation position
+  - the approved `static-prompt` renderer path remained unchanged
+- Content added:
+  - a beginner-friendly explanation of how a clearer request helps AI
+  - a realistic short personal scheduling scenario
+  - an initial vague request
+  - a list of missing details
+  - an improved reusable request
+  - a short self-check checklist
+  - a final reminder that a person must verify the result
+- Content minimally changed:
+  - the previous placeholder validation text was replaced with the first learning-page flow
+  - the single approved prompt block was rewritten to match the new lesson
+- Learning objective:
+  - help the learner see how adding context and conditions improves an AI request without promising a perfect answer
+- Practice scenario:
+  - planning a short Saturday lunch meeting with friends
+- Initial request:
+  - `토요일 일정 좀 짜줘.`
+- Improvement structure:
+  - identify what is missing
+  - add place, time, duration, and purpose
+  - compare the vague request with the improved request
+  - use the improved request as a reusable starting point
+- Expected learner result:
+  - one improved AI request the learner can reuse
+  - one short checklist for reviewing the response
+- Review checklist:
+  - location and time are included
+  - the requested outcome is clear
+  - no important condition is missing
+  - a person rechecks the AI answer
+- Final human-verification message:
+  - `요청이 또렷해질수록 AI가 더 쓸 만한 답을 내기 쉽지만, 최종 판단은 언제나 사람 몫입니다.`
+- Renderer-specific blocks used:
+  - one approved `prompt` block
+- Components used:
+  - `page-intro`
+  - `page-body`
+  - `prompt-collection`
+  - `prompt-item`
+- Presentation changes:
+  - no intentional theme, template, or layout change
+- Build pipeline changes:
+  - none
+- Build manifest changes:
+  - build output was regenerated during validation; no source contract changes were made
+- No commit was performed.
+- No push was performed.

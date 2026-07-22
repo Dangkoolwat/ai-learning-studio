@@ -1,0 +1,42 @@
+# Phase 8 Validation
+
+- Commands executed:
+  - `python3 scripts/build.py`
+  - `python3 scripts/build.py --check`
+- Positive validation results:
+  - both commands exited successfully
+  - the build completed all 16 stages
+  - the `--check` run skipped publishing `dist/` and still validated the build output successfully
+  - `/ai-practice/` remained registered, published, and routed to `pages/sections/ai-practice.md`
+  - the target page still used the approved `static-prompt` renderer
+  - the page still rendered through the shared template shell and Phase 7 components
+  - the generated HTML remained available at `dist/ai-practice/index.html`
+  - the page contained one main region, one article, one page-level H1, one learning objective, one beginner scenario, one initial request, one improved request, one learner action, one expected result, one review checklist, and one human-verification reminder
+  - renderer-specific control blocks parsed correctly
+  - the prompt content was escaped correctly in the generated HTML
+  - no raw control metadata, unresolved placeholders, inline scripts, inline styles, or external URLs were introduced
+  - the theme stylesheet continued to link correctly
+  - the navigation remained correct and the current section stayed active
+  - the other registered pages still built successfully
+- Negative validation results:
+  - none
+- Checks not performed:
+  - Vercel deployment validation
+  - browser-level visual QA
+  - manual mobile/device inspection
+  - JavaScript behavior checks
+  - clipboard interaction checks
+- Known Phase 8 limitations:
+  - only the first learning page is completed
+  - the remaining section pages are not finalized
+  - no new renderer, page type, or interactive behavior was added
+  - no Vercel deployment was tested
+- Remaining Phase 9 work:
+  - later-phase pages and site-wide enhancements remain for future work
+- Files deliberately left untouched:
+  - `data/page-registry.json`
+  - `data/navigation.json`
+  - all other registered page sources
+  - templates, components, renderers, theme source, workflow, requirements, and ignore rules
+- No commit was performed.
+- No push was performed.
