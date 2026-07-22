@@ -1,0 +1,11 @@
+{
+  "folders": [
+    {
+      "name": "AI Learning Studio",
+      "path": ".",
+    },
+  ],
+  "settings": {
+    "mcp.currentWorkspace": "${workspaceFolder}"
+  }
+}
