@@ -23,14 +23,14 @@
 
 | 작업 영역 및 주요 키워드 | 필수 레이지 로딩 가이드라인 | 주요 내용 |
 | :--- | :--- | :--- |
-| **토큰 절약, 파일 읽기 범위, 도구 탐색 계층** | [`docs/agent-policy/tooling-efficiency.md`](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/docs/agent-policy/tooling-efficiency.md) | 수술적 독해, 500줄 독해 제한, 도구 계층 |
-| **코딩 스타일, JS/Python/CSS, 수정 원칙** | [`docs/agent-policy/coding-standards.md`](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/docs/agent-policy/coding-standards.md) | 수술적 수정 원칙, 생성 파일 직접 수정 금지 |
-| **레이아웃, 시각 토큰, UI 컴포넌트, 테마** | [`docs/design-guidelines.md`](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/docs/design-guidelines.md) | 정보구조, 테마 시스템, 공통 컴포넌트 |
-| **프롬프트 3개 유형 (`static`, `builder`, `timeline`)** | [`docs/prompt-page-guidelines.md`](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/docs/prompt-page-guidelines.md) | 3가지 정식 프롬프트 페이지 유형 및 규칙 |
-| **데이터 파일, JSON 규칙, Markdown 콘텐츠** | [`docs/content-guidelines.md`](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/docs/content-guidelines.md) | `data/` 및 `pages/` 구조, 경로 일관성 |
-| **메타태그, canonical, sitemap, JSON-LD** | [`docs/seo-guidelines.md`](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/docs/seo-guidelines.md) | 정적 HTML 본문 보존, SEO 계약 |
-| **키보드 접근성, ARIA, 포커스, 320px 모바일** | [`docs/accessibility-guidelines.md`](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/docs/accessibility-guidelines.md) | 웹 접근성 표준, 반응형/성능 규칙 |
-| **빌드, Vercel 정적 배포, GitHub Actions, dist/** | [`docs/deployment-guidelines.md`](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/docs/deployment-guidelines.md) | `python3 scripts/build.py`, 배포 규칙 |
+| **토큰 절약, 파일 읽기 범위, 도구 탐색 계층** | [`docs/agent-policy/tooling-efficiency.md`](docs/agent-policy/tooling-efficiency.md) | 수술적 독해, 500줄 독해 제한, 도구 계층 |
+| **코딩 스타일, JS/Python/CSS, 수정 원칙** | [`docs/agent-policy/coding-standards.md`](docs/agent-policy/coding-standards.md) | 수술적 수정 원칙, 생성 파일 직접 수정 금지 |
+| **레이아웃, 시각 토큰, UI 컴포넌트, 테마** | [`docs/design-guidelines.md`](docs/design-guidelines.md) | 정보구조, 테마 시스템, 공통 컴포넌트 |
+| **프롬프트 3개 유형 (`static`, `builder`, `timeline`)** | [`docs/prompt-page-guidelines.md`](docs/prompt-page-guidelines.md) | 3가지 정식 프롬프트 페이지 유형 및 규칙 |
+| **데이터 파일, JSON 규칙, Markdown 콘텐츠** | [`docs/content-guidelines.md`](docs/content-guidelines.md) | `data/` 및 `pages/` 구조, 경로 일관성 |
+| **메타태그, canonical, sitemap, JSON-LD** | [`docs/seo-guidelines.md`](docs/seo-guidelines.md) | 정적 HTML 본문 보존, SEO 계약 |
+| **키보드 접근성, ARIA, 포커스, 320px 모바일** | [`docs/accessibility-guidelines.md`](docs/accessibility-guidelines.md) | 웹 접근성 표준, 반응형/성능 규칙 |
+| **빌드, Vercel 정적 배포, GitHub Actions, dist/** | [`docs/deployment-guidelines.md`](docs/deployment-guidelines.md) | `python3 scripts/build.py`, 배포 규칙 |
 
 ---
 
