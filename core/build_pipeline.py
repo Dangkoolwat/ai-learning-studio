@@ -17,6 +17,18 @@ from uuid import uuid4
 from core.errors import BuildError
 from core.navigation import NavigationData, load_navigation
 from core.page_registry import PageRegistry, PageRegistryEntry, load_page_registry
+from core.page_renderers import RENDERER_REGISTRY, render_page, validate_renderer_registry
+from core.renderer_models import (
+    APPROVED_CONTROL_BLOCK_LABELS,
+    APPROVED_RENDERER_IDS,
+    PageRendererContext,
+    PageRendererResult,
+    ParsedRendererSource,
+    RENDERER_ENGINE_VERSION,
+    RENDERER_VALIDATION_STATUS,
+)
+from core.renderer_validation import parse_renderer_source
+from core.renderers.base import render_markdown_fragment
 from core.template_engine import (
     build_body_class,
     build_navigation_items_html,
@@ -38,9 +50,9 @@ from core.theme_models import ThemeDesign, ThemeGenerationResult
 
 
 PROJECT_NAME = "AI Learning Studio"
-BUILD_PHASE = "Phase 5 Template Engine"
-GENERATOR_VERSION = "phase-5-template-engine-pipeline-v1"
-TOTAL_STAGES = 14
+BUILD_PHASE = "Phase 6 Page Renderers"
+GENERATOR_VERSION = "phase-6-page-renderers-pipeline-v1"
+TOTAL_STAGES = 15
 ALLOWED_FRONT_MATTER_KEYS = {"registry_id"}
 EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
 NAVIGATION_LINK_RE = re.compile(
@@ -58,7 +70,9 @@ class PageSource:
 
     source_path: Path
     registry_id: str
-    body_markdown: str
+    front_matter: dict[str, str]
+    raw_source_text: str
+    markdown_body: str
 
 
 @dataclass(slots=True)
@@ -177,7 +191,9 @@ def parse_page_source(page_path: Path) -> PageSource:
     return PageSource(
         source_path=page_path,
         registry_id=metadata["registry_id"].strip(),
-        body_markdown=body,
+        front_matter=metadata,
+        raw_source_text=source_text,
+        markdown_body=body,
     )
 
 
@@ -270,24 +286,58 @@ def route_to_output_path(route: str, dist_dir: Path) -> Path:
     return output_path
 
 
-def build_page_template_contexts(
+def build_page_renderer_contexts(
     published_pages: list[PageRegistryEntry],
     parsed_sources_by_id: dict[str, PageSource],
+    parsed_renderer_sources_by_id: dict[str, ParsedRendererSource],
+    *,
+    active_theme_id: str,
+) -> list[PageRendererContext]:
+    page_contexts: list[PageRendererContext] = []
+
+    for page in published_pages:
+        source = parsed_sources_by_id[page.id]
+        parsed_renderer_source = parsed_renderer_sources_by_id[page.id]
+        rendered_markdown_html = render_markdown_fragment(parsed_renderer_source.markdown_body, source_path=source.source_path)
+        page_contexts.append(
+            PageRendererContext(
+                page_id=page.id,
+                page_type=page.type,
+                page_route=page.route,
+                page_section=page.section or "",
+                page_title=page.title,
+                page_description=page.description,
+                page_lang=page.lang,
+                source_path=source.source_path,
+                raw_markdown_source=source.raw_source_text,
+                parsed_front_matter=source.front_matter,
+                markdown_body=parsed_renderer_source.markdown_body,
+                rendered_markdown_html=rendered_markdown_html,
+                heading_structure=parsed_renderer_source.heading_structure,
+                source_heading_count=parsed_renderer_source.source_heading_count,
+                active_theme_id=active_theme_id,
+                control_blocks=parsed_renderer_source.control_blocks,
+            )
+        )
+
+    return page_contexts
+
+
+def build_page_template_contexts(
+    published_pages: list[PageRegistryEntry],
+    renderer_results_by_id: dict[str, PageRendererResult],
     registry: PageRegistry,
     navigation: NavigationData,
     staging_dir: Path,
     *,
     active_theme_id: str,
- ) -> tuple[list[PageTemplateContext], dict[str, str]]:
+) -> list[PageTemplateContext]:
     current_year = datetime.now().astimezone().year
     page_contexts: list[PageTemplateContext] = []
-    rendered_markdown_by_id: dict[str, str] = {}
 
     for page in published_pages:
-        source = parsed_sources_by_id[page.id]
+        result = renderer_results_by_id[page.id]
         output_path = route_to_output_path(page.route, staging_dir)
-        rendered_markdown = render_markdown(source.body_markdown, source_path=source.source_path)
-        rendered_markdown_by_id[page.id] = rendered_markdown
         navigation_items_html = build_navigation_items_html(page, registry, navigation, output_path, staging_dir)
 
         page_contexts.append(
@@ -309,12 +359,12 @@ def build_page_template_contexts(
                 ),
                 home_url=route_href_for_output(output_path, "/", staging_dir),
                 navigation_items_html=navigation_items_html,
-                rendered_markdown_html=rendered_markdown,
+                main_html=result.main_html,
                 html_lang=page.lang,
             )
         )
 
-    return page_contexts, rendered_markdown_by_id
+    return page_contexts
 
 
 def validate_generated_page_html(
@@ -323,10 +373,10 @@ def validate_generated_page_html(
     *,
     page: PageRegistryEntry,
     page_context: PageTemplateContext,
+    renderer_result: PageRendererResult,
     registry: PageRegistry,
     navigation: NavigationData,
     theme_generation: ThemeGenerationResult,
-    rendered_markdown_html: str,
     dist_root: Path,
 ) -> None:
     expected_theme_id = theme_generation.active_theme_id
@@ -338,7 +388,7 @@ def validate_generated_page_html(
         f'data-page-type="{page.type}" '
         f'data-page-section="{page_context.page_section}">'
     )
-    expected_markdown_html = "\n".join(f"    {line}" for line in rendered_markdown_html.splitlines())
+    expected_main_html = renderer_result.main_html
 
     if not html_text.startswith("<!doctype html>\n"):
         raise BuildError("Validate output", "HTML must start with a doctype", path=output_path, page_id=page.id)
@@ -354,8 +404,8 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "HTML must contain exactly one site navigation", path=output_path, page_id=page.id)
     if html_text.count('<main class="site-main" id="main-content">') != 1:
         raise BuildError("Validate output", "HTML must contain exactly one main region", path=output_path, page_id=page.id)
-    if html_text.count('<article class="page-content">') != 1:
-        raise BuildError("Validate output", "HTML must contain exactly one article region", path=output_path, page_id=page.id)
+    if html_text.count(f'<article class="page-content page-content--{page.type}">') != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one page-type article region", path=output_path, page_id=page.id)
     if html_text.count('<footer class="site-footer">') != 1:
         raise BuildError("Validate output", "HTML must contain exactly one site footer", path=output_path, page_id=page.id)
     if html_text.count('<link rel="stylesheet"') != 1:
@@ -382,14 +432,16 @@ def validate_generated_page_html(
     if f'<a class="site-brand" href="{expected_home_href}">{escape_html(SITE_NAME)}</a>' not in html_text:
         raise BuildError("Validate output", "HTML home link is incorrect", path=output_path, page_id=page.id)
     if f"<h1>{escape_html(page.title)}</h1>" not in html_text:
-        raise BuildError("Validate output", "rendered Markdown HTML is missing", path=output_path, page_id=page.id)
-    if expected_markdown_html not in html_text:
-        raise BuildError("Validate output", "rendered Markdown HTML is not preserved", path=output_path, page_id=page.id)
+        raise BuildError("Validate output", "page intro heading is missing", path=output_path, page_id=page.id)
+    if expected_main_html not in html_text:
+        raise BuildError("Validate output", "renderer output is not preserved", path=output_path, page_id=page.id)
     if "&lt;h1&gt;" in html_text or "&lt;ul&gt;" in html_text or "&lt;p&gt;" in html_text:
-        raise BuildError("Validate output", "rendered Markdown HTML was escaped", path=output_path, page_id=page.id)
+        raise BuildError("Validate output", "renderer HTML was escaped", path=output_path, page_id=page.id)
 
     if PLACEHOLDER_RE.search(html_text):
         raise BuildError("Validate output", "unresolved template placeholder remains", path=output_path, page_id=page.id)
+    if "```prompt" in html_text or "```prompt-field" in html_text or "```timeline-step" in html_text:
+        raise BuildError("Validate output", "renderer control fence remains in the generated HTML", path=output_path, page_id=page.id)
     if "<script" in html_text.lower():
         raise BuildError("Validate output", "script tags are not allowed in generated HTML", path=output_path, page_id=page.id)
     if "<style" in html_text.lower():
@@ -402,6 +454,8 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "external URLs are not allowed in generated HTML", path=output_path, page_id=page.id)
     if contains_absolute_filesystem_path(html_text):
         raise BuildError("Validate output", "generated HTML contains an absolute filesystem path", path=output_path, page_id=page.id)
+    if html_text.count("<h1>") != 1:
+        raise BuildError("Validate output", "HTML must contain exactly one page-level H1", path=output_path, page_id=page.id)
 
     navigation_entries = NAVIGATION_LINK_RE.findall(html_text)
     if len(navigation_entries) != len(navigation.sections):
@@ -551,6 +605,8 @@ def build_manifest(
     navigation: NavigationData,
     templates: LoadedTemplates,
     theme_generation: ThemeGenerationResult,
+    renderer_results: list[PageRendererResult],
+    renderer_contexts: list[PageRendererContext],
     published_pages: list[PageRegistryEntry],
     draft_pages: list[PageRegistryEntry],
     generated_routes: list[str],
@@ -561,6 +617,21 @@ def build_manifest(
     public_navigation_output_file: str,
     public_theme_registry_output_file: str,
 ) -> dict[str, Any]:
+    page_count_by_renderer_id: dict[str, int] = {renderer_id: 0 for renderer_id in APPROVED_RENDERER_IDS}
+    renderer_warnings_count = 0
+    total_prompt_count = 0
+    total_prompt_field_count = 0
+    total_timeline_step_count = 0
+
+    for result in renderer_results:
+        page_count_by_renderer_id[result.renderer_name] += 1
+        renderer_warnings_count += len(result.warnings)
+
+    for context in renderer_contexts:
+        total_prompt_count += sum(1 for block in context.control_blocks if block.label == "prompt")
+        total_prompt_field_count += sum(1 for block in context.control_blocks if block.label == "prompt-field")
+        total_timeline_step_count += sum(1 for block in context.control_blocks if block.label == "timeline-step")
+
     return {
         "project_name": PROJECT_NAME,
         "build_phase": BUILD_PHASE,
@@ -572,6 +643,17 @@ def build_manifest(
         "partial_template_names": list(TEMPLATE_PARTIAL_NAMES),
         "navigation_item_count": len(navigation.sections),
         "template_validation_status": TEMPLATE_VALIDATION_STATUS,
+        "renderer_engine_version": RENDERER_ENGINE_VERSION,
+        "approved_renderer_ids": list(APPROVED_RENDERER_IDS),
+        "renderer_count": len(APPROVED_RENDERER_IDS),
+        "rendered_page_count": len(renderer_results),
+        "page_count_by_renderer_id": page_count_by_renderer_id,
+        "renderer_validation_status": RENDERER_VALIDATION_STATUS,
+        "control_block_types": list(APPROVED_CONTROL_BLOCK_LABELS),
+        "total_prompt_count": total_prompt_count,
+        "total_prompt_field_count": total_prompt_field_count,
+        "total_timeline_step_count": total_timeline_step_count,
+        "renderer_warnings_count": renderer_warnings_count,
         "registry_version": registry.version,
         "navigation_version": navigation.version,
         "theme_registry_version": theme_generation.registry.version,
@@ -697,8 +779,9 @@ def validate_generated_output(
     theme_generation: ThemeGenerationResult,
     public_registry: dict[str, Any],
     public_navigation: dict[str, Any],
-    page_contexts: list[PageTemplateContext],
-    rendered_markdown_by_id: dict[str, str],
+    template_contexts: list[PageTemplateContext],
+    renderer_contexts: list[PageRendererContext],
+    renderer_results_by_id: dict[str, PageRendererResult],
 ) -> None:
     manifest_path = staging_dir / "build-manifest.json"
     registry_path = staging_dir / "page-registry.json"
@@ -783,7 +866,7 @@ def validate_generated_output(
         raise BuildError("Validate output", "manifest template source files are incorrect", path=manifest_path)
     if parsed_manifest.get("template_file_count") != templates.file_count():
         raise BuildError("Validate output", "manifest template file count is incorrect", path=manifest_path)
-    if parsed_manifest.get("rendered_page_template_count") != len(page_contexts):
+    if parsed_manifest.get("rendered_page_template_count") != len(template_contexts):
         raise BuildError("Validate output", "manifest rendered page template count is incorrect", path=manifest_path)
     if parsed_manifest.get("partial_template_names") != list(TEMPLATE_PARTIAL_NAMES):
         raise BuildError("Validate output", "manifest partial template names are incorrect", path=manifest_path)
@@ -791,6 +874,35 @@ def validate_generated_output(
         raise BuildError("Validate output", "manifest navigation item count is incorrect", path=manifest_path)
     if parsed_manifest.get("template_validation_status") != TEMPLATE_VALIDATION_STATUS:
         raise BuildError("Validate output", "manifest template validation status is incorrect", path=manifest_path)
+    if parsed_manifest.get("renderer_engine_version") != RENDERER_ENGINE_VERSION:
+        raise BuildError("Validate output", "manifest renderer engine version is incorrect", path=manifest_path)
+    if parsed_manifest.get("approved_renderer_ids") != list(APPROVED_RENDERER_IDS):
+        raise BuildError("Validate output", "manifest approved renderer ids are incorrect", path=manifest_path)
+    if parsed_manifest.get("renderer_count") != len(APPROVED_RENDERER_IDS):
+        raise BuildError("Validate output", "manifest renderer count is incorrect", path=manifest_path)
+    if parsed_manifest.get("rendered_page_count") != len(published_pages):
+        raise BuildError("Validate output", "manifest rendered page count is incorrect", path=manifest_path)
+    expected_page_count_by_renderer_id = {renderer_id: 0 for renderer_id in APPROVED_RENDERER_IDS}
+    for page in published_pages:
+        expected_page_count_by_renderer_id[page.type] += 1
+    if parsed_manifest.get("page_count_by_renderer_id") != expected_page_count_by_renderer_id:
+        raise BuildError("Validate output", "manifest page count by renderer id is incorrect", path=manifest_path)
+    if parsed_manifest.get("renderer_validation_status") != RENDERER_VALIDATION_STATUS:
+        raise BuildError("Validate output", "manifest renderer validation status is incorrect", path=manifest_path)
+    if parsed_manifest.get("control_block_types") != list(APPROVED_CONTROL_BLOCK_LABELS):
+        raise BuildError("Validate output", "manifest control block types are incorrect", path=manifest_path)
+    expected_prompt_count = sum(1 for context in renderer_contexts for block in context.control_blocks if block.label == "prompt")
+    expected_prompt_field_count = sum(1 for context in renderer_contexts for block in context.control_blocks if block.label == "prompt-field")
+    expected_timeline_step_count = sum(1 for context in renderer_contexts for block in context.control_blocks if block.label == "timeline-step")
+    if parsed_manifest.get("total_prompt_count") != expected_prompt_count:
+        raise BuildError("Validate output", "manifest prompt count is incorrect", path=manifest_path)
+    if parsed_manifest.get("total_prompt_field_count") != expected_prompt_field_count:
+        raise BuildError("Validate output", "manifest prompt-field count is incorrect", path=manifest_path)
+    if parsed_manifest.get("total_timeline_step_count") != expected_timeline_step_count:
+        raise BuildError("Validate output", "manifest timeline-step count is incorrect", path=manifest_path)
+    expected_renderer_warnings_count = sum(len(renderer_result.warnings) for renderer_result in renderer_results_by_id.values())
+    if parsed_manifest.get("renderer_warnings_count") != expected_renderer_warnings_count:
+        raise BuildError("Validate output", "manifest renderer warnings count is incorrect", path=manifest_path)
     if parsed_manifest.get("published_page_count") != len(published_pages):
         raise BuildError("Validate output", "manifest published page count is incorrect", path=manifest_path)
     if parsed_manifest.get("draft_page_count") != len(draft_pages):
@@ -933,7 +1045,7 @@ def validate_generated_output(
                     path=draft_output_path,
                 )
 
-    page_context_by_id = {context.page_id: context for context in page_contexts}
+    page_context_by_id = {context.page_id: context for context in template_contexts}
 
     for page in published_pages:
         output_path = route_to_output_path(page.route, staging_dir)
@@ -941,18 +1053,18 @@ def validate_generated_output(
         page_context = page_context_by_id.get(page.id)
         if page_context is None:
             raise BuildError("Validate output", "page context is missing", path=output_path, page_id=page.id)
-        rendered_markdown_html = rendered_markdown_by_id.get(page.id)
-        if rendered_markdown_html is None:
-            raise BuildError("Validate output", "rendered Markdown HTML is missing", path=output_path, page_id=page.id)
+        renderer_result = renderer_results_by_id.get(page.id)
+        if renderer_result is None:
+            raise BuildError("Validate output", "renderer result is missing", path=output_path, page_id=page.id)
         validate_generated_page_html(
             output_path,
             html_text,
             page=page,
             page_context=page_context,
+            renderer_result=renderer_result,
             registry=registry,
             navigation=navigation,
             theme_generation=theme_generation,
-            rendered_markdown_html=rendered_markdown_html,
             dist_root=staging_dir,
         )
 
@@ -963,7 +1075,7 @@ def contains_absolute_filesystem_path(payload: Any) -> bool:
     if isinstance(payload, list):
         return any(contains_absolute_filesystem_path(item) for item in payload)
     if isinstance(payload, str):
-        return payload.startswith("/Users/") or payload.startswith("/private/") or payload.startswith("/var/") or payload.startswith("/tmp/")
+        return any(token in payload for token in ("/Users/", "/private/", "/var/", "/tmp/"))
     return False
 
 
@@ -1068,7 +1180,10 @@ def build_site(
         stage_logger(6, TOTAL_STAGES, "Load and validate templates")
         templates = load_approved_templates(repo_root)
 
-        stage_logger(7, TOTAL_STAGES, "Parse page sources")
+        stage_logger(7, TOTAL_STAGES, "Register and validate page renderers")
+        validate_renderer_registry(RENDERER_REGISTRY)
+
+        stage_logger(8, TOTAL_STAGES, "Parse page sources")
         parsed_sources = [parse_page_source(page_path) for page_path in page_paths]
         parsed_sources_by_id = {source.registry_id: source for source in parsed_sources}
         if len(parsed_sources_by_id) != len(parsed_sources):
@@ -1100,17 +1215,122 @@ def build_site(
         generated_output_files: list[str] = []
         active_theme_id = theme_designs[0].id
 
-        stage_logger(8, TOTAL_STAGES, "Build page template contexts")
-        page_contexts, rendered_markdown_by_id = build_page_template_contexts(
+        stage_logger(9, TOTAL_STAGES, "Parse renderer-specific control blocks")
+        parsed_renderer_sources_by_id: dict[str, ParsedRendererSource] = {}
+        for page in registry.pages:
+            source = parsed_sources_by_id[page.id]
+            parsed_renderer_source = parse_renderer_source(source.markdown_body, source_path=source.source_path)
+            control_labels = [block.label for block in parsed_renderer_source.control_blocks]
+            if page.type == "landing":
+                if control_labels:
+                    raise BuildError(
+                        "Parse renderer-specific control blocks",
+                        "landing pages must not declare renderer control blocks",
+                        path=source.source_path,
+                        page_id=page.id,
+                        page_type=page.type,
+                        page_route=page.route,
+                        renderer_id=page.type,
+                    )
+            elif page.type == "static-prompt":
+                if control_labels.count("prompt") < 1:
+                    raise BuildError(
+                        "Parse renderer-specific control blocks",
+                        "static-prompt pages require at least one prompt block",
+                        path=source.source_path,
+                        page_id=page.id,
+                        page_type=page.type,
+                        page_route=page.route,
+                        renderer_id=page.type,
+                    )
+                if any(label != "prompt" for label in control_labels):
+                    raise BuildError(
+                        "Parse renderer-specific control blocks",
+                        "static-prompt pages may only use prompt blocks",
+                        path=source.source_path,
+                        page_id=page.id,
+                        page_type=page.type,
+                        page_route=page.route,
+                        renderer_id=page.type,
+                    )
+            elif page.type == "prompt-builder":
+                if control_labels.count("prompt-field") < 2:
+                    raise BuildError(
+                        "Parse renderer-specific control blocks",
+                        "prompt-builder pages require at least two prompt-field blocks",
+                        path=source.source_path,
+                        page_id=page.id,
+                        page_type=page.type,
+                        page_route=page.route,
+                        renderer_id=page.type,
+                    )
+                if any(label != "prompt-field" for label in control_labels):
+                    raise BuildError(
+                        "Parse renderer-specific control blocks",
+                        "prompt-builder pages may only use prompt-field blocks",
+                        path=source.source_path,
+                        page_id=page.id,
+                        page_type=page.type,
+                        page_route=page.route,
+                        renderer_id=page.type,
+                    )
+            elif page.type == "practice-timeline":
+                if control_labels.count("timeline-step") < 2:
+                    raise BuildError(
+                        "Parse renderer-specific control blocks",
+                        "practice-timeline pages require at least two timeline-step blocks",
+                        path=source.source_path,
+                        page_id=page.id,
+                        page_type=page.type,
+                        page_route=page.route,
+                        renderer_id=page.type,
+                    )
+                if any(label != "timeline-step" for label in control_labels):
+                    raise BuildError(
+                        "Parse renderer-specific control blocks",
+                        "practice-timeline pages may only use timeline-step blocks",
+                        path=source.source_path,
+                        page_id=page.id,
+                        page_type=page.type,
+                        page_route=page.route,
+                        renderer_id=page.type,
+                    )
+            else:
+                raise BuildError(
+                    "Parse renderer-specific control blocks",
+                    f"unsupported page type: {page.type}",
+                    path=source.source_path,
+                    page_id=page.id,
+                    page_type=page.type,
+                    page_route=page.route,
+                )
+            parsed_renderer_sources_by_id[page.id] = parsed_renderer_source
+
+        stage_logger(10, TOTAL_STAGES, "Render Markdown content")
+        page_renderer_contexts = build_page_renderer_contexts(
             published_pages,
             parsed_sources_by_id,
+            parsed_renderer_sources_by_id,
+            active_theme_id=active_theme_id,
+        )
+
+        stage_logger(11, TOTAL_STAGES, "Render page main regions")
+        renderer_results: list[PageRendererResult] = []
+        renderer_results_by_id: dict[str, PageRendererResult] = {}
+        for page_context in page_renderer_contexts:
+            renderer_result = render_page(page_context)
+            renderer_results.append(renderer_result)
+            renderer_results_by_id[renderer_result.page_id] = renderer_result
+
+        stage_logger(12, TOTAL_STAGES, "Render full pages through templates")
+        page_contexts = build_page_template_contexts(
+            published_pages,
+            renderer_results_by_id,
             registry,
             navigation,
             staging_dir,
             active_theme_id=active_theme_id,
         )
-
-        stage_logger(9, TOTAL_STAGES, "Render pages through templates")
         for page, page_context in zip(published_pages, page_contexts, strict=True):
             output_path = route_to_output_path(page.route, staging_dir)
             html_document = render_page_document(templates, page_context)
@@ -1118,15 +1338,11 @@ def build_site(
             generated_routes.append(page.route)
             generated_output_files.append(f"dist/{output_path.relative_to(staging_dir).as_posix()}")
 
-        stage_logger(10, TOTAL_STAGES, "Generate theme assets")
+        stage_logger(13, TOTAL_STAGES, "Generate theme assets and public metadata")
         theme_generation = generate_theme_assets(theme_designs, staging_dir)
         generated_output_files.extend(theme_generation.generated_theme_files)
-
-        stage_logger(11, TOTAL_STAGES, "Copy approved static assets")
         copied_asset_count, copied_asset_files = copy_approved_assets(assets_dir, staging_dir)
         generated_output_files.extend(copied_asset_files)
-
-        stage_logger(12, TOTAL_STAGES, "Write public data and build manifest")
         public_registry = build_public_registry_data(registry)
         public_navigation = build_public_navigation_data(navigation)
         public_registry_path = staging_dir / "page-registry.json"
@@ -1140,6 +1356,8 @@ def build_site(
             navigation=navigation,
             templates=templates,
             theme_generation=theme_generation,
+            renderer_results=renderer_results,
+            renderer_contexts=page_renderer_contexts,
             published_pages=published_pages,
             draft_pages=draft_pages,
             generated_routes=generated_routes,
@@ -1159,7 +1377,7 @@ def build_site(
         )
         write_json(staging_dir / "build-manifest.json", manifest)
 
-        stage_logger(13, TOTAL_STAGES, "Validate generated output")
+        stage_logger(14, TOTAL_STAGES, "Validate generated output")
         validate_generated_output(
             staging_dir,
             manifest,
@@ -1171,10 +1389,11 @@ def build_site(
             public_registry,
             public_navigation,
             page_contexts,
-            rendered_markdown_by_id,
+            page_renderer_contexts,
+            renderer_results_by_id,
         )
 
-        stage_logger(14, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
+        stage_logger(15, TOTAL_STAGES, "Publish dist" if not check_only else "Skip dist publication (--check)")
         if not check_only:
             publish_output(staging_dir, dist_dir)
             output_dir = dist_dir

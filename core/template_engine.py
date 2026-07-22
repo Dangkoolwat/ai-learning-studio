@@ -200,7 +200,6 @@ def render_page_document(templates: LoadedTemplates, context: PageTemplateContex
             "current_year": escape_html(str(context.current_year)),
         },
     )
-    main_html = build_main_html(context.rendered_markdown_html)
 
     return render_template(
         templates.base_html,
@@ -209,7 +208,7 @@ def render_page_document(templates: LoadedTemplates, context: PageTemplateContex
             "head_html": head_html,
             "site_header_html": site_header_html,
             "navigation_html": navigation_html,
-            "main_html": main_html,
+            "main_html": context.main_html,
             "footer_html": footer_html,
             "html_lang": escape_html(context.html_lang),
             "theme_id": escape_html(context.active_theme_id),

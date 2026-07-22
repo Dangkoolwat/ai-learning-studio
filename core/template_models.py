@@ -115,5 +115,5 @@ class PageTemplateContext:
     theme_stylesheet_url: str
     home_url: str
     navigation_items_html: str
-    rendered_markdown_html: str
+    main_html: str
     html_lang: str

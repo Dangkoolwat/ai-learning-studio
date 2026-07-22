@@ -46,6 +46,14 @@ jobs:
               dist_dir / "ai-assistant/index.html",
               dist_dir / "image-ai/index.html",
           ]
+          expected_renderer_ids = ["landing", "static-prompt", "prompt-builder", "practice-timeline"]
+          expected_control_block_types = ["prompt", "prompt-field", "timeline-step"]
+          expected_renderer_counts = {
+              "landing": 1,
+              "static-prompt": 4,
+              "prompt-builder": 0,
+              "practice-timeline": 0,
+          }
 
           for path in template_paths:
               if not path.is_file():
@@ -99,7 +107,28 @@ jobs:
               raise SystemExit("manifest navigation item count is incorrect")
           if manifest.get("template_validation_status") != "validated":
               raise SystemExit("manifest template validation status is incorrect")
-
+          if manifest.get("renderer_engine_version") != 1:
+              raise SystemExit("manifest renderer engine version is incorrect")
+          if manifest.get("approved_renderer_ids") != expected_renderer_ids:
+              raise SystemExit("manifest approved renderer ids are incorrect")
+          if manifest.get("renderer_count") != 4:
+              raise SystemExit("manifest renderer count is incorrect")
+          if manifest.get("rendered_page_count") != 5:
+              raise SystemExit("manifest rendered page count is incorrect")
+          if manifest.get("page_count_by_renderer_id") != expected_renderer_counts:
+              raise SystemExit("manifest page count by renderer id is incorrect")
+          if manifest.get("renderer_validation_status") != "validated":
+              raise SystemExit("manifest renderer validation status is incorrect")
+          if manifest.get("control_block_types") != expected_control_block_types:
+              raise SystemExit("manifest control block types are incorrect")
+          if manifest.get("total_prompt_count") != 4:
+              raise SystemExit("manifest prompt count is incorrect")
+          if manifest.get("total_prompt_field_count") != 0:
+              raise SystemExit("manifest prompt-field count is incorrect")
+          if manifest.get("total_timeline_step_count") != 0:
+              raise SystemExit("manifest timeline-step count is incorrect")
+          if manifest.get("renderer_warnings_count") != 5:
+              raise SystemExit("manifest renderer warnings count is incorrect")
           if manifest.get("published_page_count") != 5:
               raise SystemExit("manifest does not report exactly five published pages")
           if manifest.get("draft_page_count") != 0:
@@ -108,28 +137,30 @@ jobs:
               raise SystemExit("manifest does not report exactly five registered pages")
           if manifest.get("registry_version") != 1 or manifest.get("navigation_version") != 1:
               raise SystemExit("manifest versions are incorrect")
-
-          expected_routes = {"/", "/ai-practice/", "/ready-to-use/", "/ai-assistant/", "/image-ai/"}
-          if set(manifest.get("generated_routes", [])) != expected_routes:
+          if manifest.get("generated_routes") != ["/", "/ai-practice/", "/ready-to-use/", "/ai-assistant/", "/image-ai/"]:
               raise SystemExit("manifest routes do not match the confirmed routes")
+          if any(not path.startswith("dist/") for path in manifest.get("generated_output_files", [])):
+              raise SystemExit("manifest output files must stay inside dist/")
+          if any(path.startswith("dist/templates/") for path in manifest.get("generated_output_files", [])):
+              raise SystemExit("manifest output files must not include templates/")
+          if any(path.endswith("design.md") for path in manifest.get("generated_output_files", [])):
+              raise SystemExit("manifest output files must not include design.md")
 
           public_registry_pages = page_registry.get("pages")
           if not isinstance(public_registry_pages, list) or len(public_registry_pages) != 5:
               raise SystemExit("public registry must contain exactly five published pages")
-          if {page.get("type") for page in public_registry_pages} - {"landing", "static-prompt"}:
-              raise SystemExit("public registry contains an unexpected page type")
+          if page_registry != source_page_registry:
+              raise SystemExit("public registry schema changed unexpectedly")
+          if navigation != source_navigation:
+              raise SystemExit("public navigation schema changed unexpectedly")
           if public_registry_pages[0].get("route") != "/":
               raise SystemExit("public registry does not include the root route first")
           if [page.get("route") for page in public_registry_pages] != ["/", "/ai-practice/", "/ready-to-use/", "/ai-assistant/", "/image-ai/"]:
               raise SystemExit("public registry routes are out of order")
           if any(page.get("status") != "published" for page in public_registry_pages):
               raise SystemExit("public registry contains a non-published page")
-
-          if page_registry != source_page_registry:
-              raise SystemExit("public registry schema changed unexpectedly")
-
-          if navigation != source_navigation:
-              raise SystemExit("public navigation schema changed unexpectedly")
+          if {page.get("type") for page in public_registry_pages} != {"landing", "static-prompt"}:
+              raise SystemExit("public registry contains an unexpected page type")
 
           if theme_registry.get("version") != 1:
               raise SystemExit("theme registry version is incorrect")
@@ -209,8 +240,8 @@ jobs:
               re.DOTALL,
           )
 
-          for page in public_registry_pages:
-              current_output_path = route_to_output_path(page["route"])
+          def validate_page(page: dict[str, object]) -> None:
+              current_output_path = route_to_output_path(str(page["route"]))
               html_text = current_output_path.read_text(encoding="utf-8")
 
               if not html_text.startswith("<!doctype html>\n"):
@@ -223,14 +254,16 @@ jobs:
                   raise SystemExit(f"missing site navigation in {current_output_path}")
               if html_text.count('<main class="site-main" id="main-content">') != 1:
                   raise SystemExit(f"missing main region in {current_output_path}")
-              if html_text.count('<article class="page-content">') != 1:
-                  raise SystemExit(f"missing article region in {current_output_path}")
+              if html_text.count(f'<article class="page-content page-content--{page["type"]}">') != 1:
+                  raise SystemExit(f"missing page-type article region in {current_output_path}")
               if html_text.count('<footer class="site-footer">') != 1:
                   raise SystemExit(f"missing footer in {current_output_path}")
               if html_text.count('<link rel="stylesheet"') != 1:
                   raise SystemExit(f"stylesheet link count is incorrect in {current_output_path}")
               if html_text.count('<a class="navigation-link"') != 4:
                   raise SystemExit(f"navigation link count is incorrect in {current_output_path}")
+              if html_text.count("<h1>") != 1:
+                  raise SystemExit(f"page-level H1 count is incorrect in {current_output_path}")
               if 'data-theme="studio-default"' not in html_text:
                   raise SystemExit(f"missing theme data attribute in {current_output_path}")
               if f'<html lang="{page["lang"]}" data-theme="studio-default">' not in html_text:
@@ -252,50 +285,79 @@ jobs:
               expected_style_href = file_href(current_output_path, theme_style_path)
               if f'<link rel="stylesheet" href="{expected_style_href}">' not in html_text:
                   raise SystemExit(f"theme stylesheet link is incorrect in {current_output_path}")
-              if page["route"] == "/":
-                  if html_text.count('aria-current="page"') != 0:
-                      raise SystemExit(f"root page must not mark a section current in {current_output_path}")
-              else:
-                  if html_text.count('aria-current="page"') != 1:
-                      raise SystemExit(f"section page must mark exactly one current item in {current_output_path}")
+              if '```prompt' in html_text or '```prompt-field' in html_text or '```timeline-step' in html_text:
+                  raise SystemExit(f"renderer control fence remained in {current_output_path}")
+              if "{{" in html_text or "}}" in html_text:
+                  raise SystemExit(f"unresolved template placeholder remained in {current_output_path}")
+              if "<script" in html_text.lower() or "<style" in html_text.lower():
+                  raise SystemExit(f"script or style tag remained in {current_output_path}")
+              if re.search(r"\sstyle\s*=", html_text, flags=re.IGNORECASE):
+                  raise SystemExit(f"inline style attribute remained in {current_output_path}")
+              if re.search(r"\son[a-z0-9_-]+\s*=", html_text, flags=re.IGNORECASE):
+                  raise SystemExit(f"inline event handler remained in {current_output_path}")
+              if "http://" in html_text.lower() or "https://" in html_text.lower() or "://" in html_text:
+                  raise SystemExit(f"external URL remained in {current_output_path}")
 
-              nav_links = nav_link_re.findall(html_text)
-              if len(nav_links) != 4:
-                  raise SystemExit(f"navigation structure is incorrect in {current_output_path}")
+              navigation_entries = nav_link_re.findall(html_text)
+              if len(navigation_entries) != 4:
+                  raise SystemExit(f"navigation markup is incorrect in {current_output_path}")
               for index, section in enumerate(navigation_sections):
                   expected_page = expected_page_by_section.get(section["id"])
                   if expected_page is None:
-                      raise SystemExit(f"missing navigation page for section {section['id']}")
-                  expected_href = route_href(current_output_path, expected_page["route"])
-                  href, label = nav_links[index]
+                      raise SystemExit(f"navigation section page is missing for {section['id']} in {current_output_path}")
+                  href, label = navigation_entries[index]
+                  expected_href = route_href(current_output_path, str(expected_page["route"]))
                   if href != expected_href:
-                      raise SystemExit(f"navigation href is incorrect in {current_output_path}")
+                      raise SystemExit(f"navigation href is incorrect for {section['id']} in {current_output_path}")
                   if label != section["label"]:
-                      raise SystemExit(f"navigation label is incorrect in {current_output_path}")
+                      raise SystemExit(f"navigation label is incorrect for {section['id']} in {current_output_path}")
+              if page["route"] == "/":
+                  if html_text.count('aria-current="page"') != 0:
+                      raise SystemExit(f"root page must not mark a section current in {current_output_path}")
+                  if page["type"] != "landing":
+                      raise SystemExit(f"root page must use the landing renderer in {current_output_path}")
+              else:
+                  if html_text.count('aria-current="page"') != 1:
+                      raise SystemExit(f"section page must mark exactly one current item in {current_output_path}")
+                  if page["type"] != "static-prompt":
+                      raise SystemExit(f"non-root page must not use the landing renderer in {current_output_path}")
 
-              if "{{" in html_text or "}}" in html_text:
-                  raise SystemExit(f"unresolved placeholder remains in {current_output_path}")
-              if "<script" in html_text.lower():
-                  raise SystemExit(f"script tag is not allowed in {current_output_path}")
-              if "<style" in html_text.lower():
-                  raise SystemExit(f"style tag is not allowed in {current_output_path}")
-              if re.search(r"\sstyle\s*=", html_text, flags=re.IGNORECASE):
-                  raise SystemExit(f"inline style is not allowed in {current_output_path}")
-              if re.search(r"\son[a-z0-9_-]+\s*=", html_text, flags=re.IGNORECASE):
-                  raise SystemExit(f"inline event handlers are not allowed in {current_output_path}")
-              if "http://" in html_text.lower() or "https://" in html_text.lower() or "://" in html_text:
-                  raise SystemExit(f"external URL is not allowed in {current_output_path}")
-              if any(prefix in html_text for prefix in ("/Users/", "/private/", "/var/", "/tmp/")):
-                  raise SystemExit(f"absolute filesystem path is not allowed in {current_output_path}")
-              if f"<h1>{page['title']}</h1>" not in html_text:
-                  raise SystemExit(f"rendered Markdown is missing in {current_output_path}")
-              if "&lt;h1&gt;" in html_text or "&lt;ul&gt;" in html_text or "&lt;p&gt;" in html_text:
-                  raise SystemExit(f"rendered Markdown appears escaped in {current_output_path}")
+              if page["type"] == "static-prompt":
+                  if '<section class="prompt-collection" aria-label="프롬프트 모음">' not in html_text:
+                      raise SystemExit(f"static-prompt page is missing a prompt collection in {current_output_path}")
+                  prompt_items = re.findall(r'<article class="prompt-item">', html_text)
+                  if len(prompt_items) < 1:
+                      raise SystemExit(f"static-prompt page is missing prompt items in {current_output_path}")
+                  prompt_code_blocks = re.findall(
+                      r'<pre class="prompt-item__content"><code>(.*?)</code></pre>',
+                      html_text,
+                      flags=re.DOTALL,
+                  )
+                  if not prompt_code_blocks:
+                      raise SystemExit(f"static-prompt page is missing prompt code blocks in {current_output_path}")
+                  if any("<" in block for block in prompt_code_blocks):
+                      raise SystemExit(f"prompt body is not escaped in {current_output_path}")
+              elif page["type"] == "prompt-builder":
+                  if '<section class="prompt-builder" aria-label="프롬프트 작성 항목">' not in html_text:
+                      raise SystemExit(f"prompt-builder page is missing the worksheet section in {current_output_path}")
+                  if "<form" in html_text or "<input" in html_text or "<textarea" in html_text or "<select" in html_text or "<button" in html_text:
+                      raise SystemExit(f"prompt-builder page contains interactive form controls in {current_output_path}")
+              elif page["type"] == "practice-timeline":
+                  if '<section class="practice-timeline" aria-label="실습 단계">' not in html_text:
+                      raise SystemExit(f"practice-timeline page is missing the timeline section in {current_output_path}")
+                  if "<button" in html_text:
+                      raise SystemExit(f"practice-timeline page contains interactive controls in {current_output_path}")
 
-              if (dist_dir / "design").exists():
-                  raise SystemExit("design output should not be published")
-              if any(path.name == "design.md" for path in dist_dir.rglob("*")):
-                  raise SystemExit("design.md should not appear in dist")
-              if any(path.name == "templates" for path in dist_dir.rglob("*")):
-                  raise SystemExit("template sources should not appear in dist")
+              if html_text.count('<article class="page-content page-content--') != 1:
+                  raise SystemExit(f"article class is incorrect in {current_output_path}")
+
+          for page in public_registry_pages:
+              validate_page(page)
+
+          if any("templates/" in path for path in manifest.get("generated_output_files", [])):
+              raise SystemExit("generated output unexpectedly includes templates/")
+          if any(path.endswith("design.md") for path in manifest.get("generated_output_files", [])):
+              raise SystemExit("generated output unexpectedly includes design.md")
+          if any(path.endswith(".py") and "renderer" in path for path in manifest.get("generated_output_files", [])):
+              raise SystemExit("generated output unexpectedly includes a renderer source file")
           PY

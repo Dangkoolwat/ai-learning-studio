@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 5 build entry point for AI Learning Studio."""
+"""Phase 6 build entry point for AI Learning Studio."""
 
 from __future__ import annotations
 

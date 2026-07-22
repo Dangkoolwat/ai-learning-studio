@@ -21,6 +21,13 @@ class BuildError(RuntimeError):
         token_name: str | None = None,
         page_id: str | None = None,
         field: str | None = None,
+        renderer_id: str | None = None,
+        page_type: str | None = None,
+        page_route: str | None = None,
+        control_block_type: str | None = None,
+        control_block_index: int | None = None,
+        control_block_id: str | None = None,
+        invalid_key: str | None = None,
     ) -> None:
         self.stage = stage
         self.message = message
@@ -32,6 +39,13 @@ class BuildError(RuntimeError):
         self.token_name = token_name
         self.page_id = page_id
         self.field = field
+        self.renderer_id = renderer_id
+        self.page_type = page_type
+        self.page_route = page_route
+        self.control_block_type = control_block_type
+        self.control_block_index = control_block_index
+        self.control_block_id = control_block_id
+        self.invalid_key = invalid_key
         super().__init__(message)
 
     @staticmethod
@@ -60,5 +74,19 @@ class BuildError(RuntimeError):
             parts.append(f"[page={self.page_id}]")
         if self.field is not None:
             parts.append(f"[field={self.field}]")
+        if self.renderer_id is not None:
+            parts.append(f"[renderer={self.renderer_id}]")
+        if self.page_type is not None:
+            parts.append(f"[page_type={self.page_type}]")
+        if self.page_route is not None:
+            parts.append(f"[route={self.page_route}]")
+        if self.control_block_type is not None:
+            parts.append(f"[block={self.control_block_type}]")
+        if self.control_block_index is not None:
+            parts.append(f"[index={self.control_block_index}]")
+        if self.control_block_id is not None:
+            parts.append(f"[block_id={self.control_block_id}]")
+        if self.invalid_key is not None:
+            parts.append(f"[key={self.invalid_key}]")
         parts.append(self.message)
         return " ".join(parts)

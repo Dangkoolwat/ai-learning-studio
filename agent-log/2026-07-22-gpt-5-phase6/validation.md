@@ -1,0 +1,33 @@
+# Phase 6 Validation
+
+- Executed: `python3 -m py_compile scripts/build.py core/errors.py core/template_models.py core/template_engine.py core/build_pipeline.py core/renderer_models.py core/renderer_validation.py core/page_renderers.py core/renderers/__init__.py core/renderers/base.py core/renderers/landing.py core/renderers/static_prompt.py core/renderers/prompt_builder.py core/renderers/practice_timeline.py`
+- Result: success. The updated Python modules compiled cleanly.
+- Executed: `python3 scripts/build.py`
+- Result: success. The build completed successfully, produced the published pages for the confirmed routes, generated the theme outputs, and wrote the renderer metadata into the manifest.
+- Executed: `python3 scripts/build.py --check`
+- Result: success. The check run completed successfully and validated the build output without publishing a new `dist/` tree.
+- Positive checks confirmed:
+  - exactly four approved renderer IDs are registered
+  - exactly one landing page is routed through the landing renderer
+  - exactly four section pages are routed through the static-prompt renderer
+  - the renderer control blocks are parsed only from approved fenced labels
+  - the generated HTML preserves the page shell, theme link, and page-type article class
+  - the build manifest includes the renderer metadata fields
+  - the theme registry remains on `studio-default`
+  - the theme token sections remain unchanged
+- Negative checks confirmed:
+  - malformed renderer fences fail validation
+  - unsupported renderer fence labels fail validation
+  - unresolved placeholders fail validation
+  - absolute filesystem paths fail validation in generated public output
+  - script tags, style tags, inline handlers, inline styles, and external URLs fail validation
+  - incorrect page shell structure fails validation
+  - incorrect renderer output structure fails validation
+- Checks not performed:
+  - Vercel deployment validation
+  - browser-level visual QA
+  - any Phase 7 implementation work
+  - any new theme generation work
+  - any new page type implementation work
+- No commit was performed during the Phase 6 implementation steps.
+- No push was performed during the Phase 6 implementation steps.
