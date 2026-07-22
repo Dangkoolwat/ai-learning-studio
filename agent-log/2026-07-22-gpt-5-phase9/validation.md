@@ -1,0 +1,32 @@
+# Phase 9 Validation
+
+- Commands executed:
+  - `python3 scripts/build.py`
+  - `python3 scripts/build.py --check`
+- Positive validation results:
+  - both build commands exited successfully
+  - all 5 pages still built successfully
+  - `dist/ready-to-use/index.html`, `dist/ai-assistant/index.html`, and `dist/image-ai/index.html` were generated
+  - the three target pages each rendered one prompt collection with two prompt items
+  - the preserved `/ai-practice/` page still rendered one prompt collection with one prompt item
+  - the generated manifest reported `total_prompt_count = 7` and `total_component_render_count = 21`
+  - the page registry, navigation, and theme registry continued to validate
+  - the shared shell, page intro, page body, and prompt collection components remained in use
+  - no unresolved renderer fences, template placeholders, inline scripts, inline styles, or external URLs were introduced
+- Negative validation results:
+  - none
+- Checks not performed:
+  - Vercel deployment validation
+  - browser-level visual QA
+  - mobile-device manual inspection
+  - clipboard interaction checks
+- Notes:
+  - the GitHub Actions workflow was updated to match the new Phase 9 prompt counts
+  - the root homepage was rebuilt by the normal pipeline but its source was not intentionally changed
+- Deliberately untouched:
+  - `pages/sections/ai-practice.md`
+  - `data/page-registry.json`
+  - `data/navigation.json`
+  - templates, components, renderers, theme source, and build pipeline code
+- No commit was performed.
+- No push was performed.

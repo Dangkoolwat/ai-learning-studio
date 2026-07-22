@@ -1,0 +1,32 @@
+# Phase 9 Remaining Core Learning Pages Summary
+
+- Phase: Phase 9 Complete Core Learning Pages.
+- Target pages:
+  - `pages/sections/ready-to-use.md`
+  - `pages/sections/ai-assistant.md`
+  - `pages/sections/image-ai.md`
+- Target routes:
+  - `/ready-to-use/`
+  - `/ai-assistant/`
+  - `/image-ai/`
+- Target page type: `static-prompt`
+- Purpose: replace the placeholder section pages with distinct beginner-friendly learning pages while preserving the confirmed registry, route, section, and renderer contracts.
+- Files modified:
+  - `pages/sections/ready-to-use.md`
+  - `pages/sections/ai-assistant.md`
+  - `pages/sections/image-ai.md`
+  - `.github/workflows/quality-check.yml`
+- Files deliberately preserved:
+  - `pages/sections/ai-practice.md`
+  - `data/page-registry.json`
+  - `data/navigation.json`
+  - all templates, components, renderers, and theme source files
+- Content added:
+  - `/ready-to-use/`: adapting a ready-made prompt to a real announcement task
+  - `/ai-assistant/`: splitting responsibility between the person and AI for a practical work task
+  - `/image-ai/`: describing purpose, composition, style, and constraints for an educational image request
+- Validation scope:
+  - build output and workflow checks were updated to reflect the new prompt-block counts on the three target pages
+  - the completed `/ai-practice/` page remained unchanged
+- No commit was performed.
+- No push was performed.

@@ -1,0 +1,28 @@
+# Phase 9 Changes
+
+- Modified file:
+  - `pages/sections/ready-to-use.md`
+  - `pages/sections/ai-assistant.md`
+  - `pages/sections/image-ai.md`
+  - `.github/workflows/quality-check.yml`
+- What changed:
+  - replaced the three placeholder section pages with distinct learner-facing lessons in natural Korean
+  - kept each page on the registry-assigned `static-prompt` renderer and preserved the existing front matter
+  - added two prompt blocks per target page to satisfy the static-prompt learning contract
+  - updated the GitHub Actions validation script so it now expects the new prompt-item counts and the revised manifest totals
+- What was preserved:
+  - page IDs, routes, sections, and page type assignments
+  - the completed `/ai-practice/` page content and structure
+  - registry and navigation source data
+  - renderer, template, component, and theme code
+- Page-specific content:
+  - `/ready-to-use/`: reusable prompt adaptation with replacement guidance, a custom example, and a short review checklist
+  - `/ai-assistant/`: responsibility boundary between AI and person, with privacy reminders and follow-up editing
+  - `/image-ai/`: image purpose, composition, style, constraints, weak-vs-strong request comparison, and review guidance
+- Build and validation impact:
+  - total prompt block count increased from 4 to 7 across the published pages
+  - total component render count increased from 18 to 21 because the three target pages now render two prompt items each
+- Build pipeline changes:
+  - none
+- Build manifest changes:
+  - none in source control; the generated manifest was refreshed by the build and now reflects the new counts
