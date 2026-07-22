@@ -1,1 +1,1 @@
-# TODO: Add Python dependencies when the real build pipeline needs them.
+# Bootstrap uses only the Python standard library and has no external dependencies.

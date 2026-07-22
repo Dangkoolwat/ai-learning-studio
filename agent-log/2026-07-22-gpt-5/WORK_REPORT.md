@@ -1,38 +1,45 @@
-# Bootstrap Foundation
+# Project Bootstrap Work Report
 
 ## Summary
 
-- Purpose: create the initial project scaffold for AI Learning Studio.
-- Completed: added the required root directories, minimal build script, GitHub workflow, Vercel config, ignore rules, and placeholder dependency file.
-- Not completed: no pages, templates, routing, themes, content, or real build pipeline were implemented.
-- User confirmation needed: none for this bootstrap-only pass.
+- Phase: Project Bootstrap.
+- Completed work: created or updated the bootstrap files for the confirmed project structure, including the minimal build script, GitHub Actions workflow, Vercel config, ignore rules, dependency placeholder, empty-directory markers, and the work log directory.
+- Preserved files: `AGENTS.md`, `PROJECT.md`, `README.md`, and `docs/deployment-guidelines.md` were left unchanged in this pass.
+- Commands executed: reviewed the required project documents, inspected the repository tree, read the bootstrap files, applied the bootstrap patch, and ran `python3 scripts/build.py`.
 
 ## Changes
 
-- `.github/pull_request_template.md`
+- `scripts/build.py`
 - `.github/workflows/quality-check.yml`
 - `.gitignore`
 - `requirements.txt`
-- `scripts/build.py`
-- `vercel.json`
+- `assets/images/.gitkeep`
+- `assets/icons/.gitkeep`
+- `assets/fonts/.gitkeep`
+- `components/.gitkeep`
+- `core/.gitkeep`
+- `css/.gitkeep`
+- `data/.gitkeep`
+- `design/.gitkeep`
+- `pages/.gitkeep`
+- `templates/.gitkeep`
 
 ### Notes
 
-- Created the project root directory scaffold requested for bootstrap.
-- Kept all application features out of scope.
-- Added TODO markers where the project documents do not yet define content.
+- The build script now resolves the repository root from its own path, clears `dist/`, and writes a minimal UTF-8 `dist/index.html` for deployment verification.
+- The workflow now supports both push and manual runs and verifies that `dist/index.html` exists after the build.
+- Empty project directories are kept trackable with `.gitkeep` files only where needed.
 
 ## Validation
 
-- Ran `python3 scripts/build.py`
-- Verified the build prints stages, checks Python, and creates `dist/`
-- Verified the requested bootstrap directories and files exist on disk
+- Executed: `python3 scripts/build.py`
+- Result: success, with stage messages printed and `dist/index.html` generated
+- Not yet executed after this patch: GitHub Actions workflow run
+- Not yet executed after this patch: Vercel deployment
 
-### Not verified
+### Expected checks
 
-- No page generation
-- No routing
-- No templates
-- No components
-- No theme generation
-- No production deployment
+- The build should print clear stage messages.
+- The build should exit with status code `0` on success.
+- The build should create a clean `dist/` directory containing `index.html`.
+- The workflow should confirm that `dist/index.html` exists.

@@ -1,7 +1,8 @@
-**/__pycache__/
-*.pyc
-dist/
+__pycache__/
+*.py[cod]
 .env
+.env.*
 .DS_Store
 .vscode/
 .idea/
+dist/
