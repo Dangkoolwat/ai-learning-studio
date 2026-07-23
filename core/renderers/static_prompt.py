@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 from core.component_engine import (
     render_page_body_component,
     render_page_intro_component,
@@ -11,6 +13,7 @@ from core.component_engine import (
 )
 from core.component_models import PageBodyComponent, PageIntroComponent, PromptCollectionComponent, PromptItemComponent
 from core.errors import BuildError
+from html import escape as escape_html
 from core.renderer_models import PageRendererContext, PageRendererResult
 from core.renderer_validation import parse_prompt_block, validate_renderer_result
 from core.renderers.base import build_main_html
@@ -18,6 +21,54 @@ from core.renderers.base import build_main_html
 
 RENDERER_NAME = "static-prompt"
 RENDERER_VERSION = 1
+
+
+EXCLUDED_HEADER_TITLES = {"이메일 정보", "작성 지침", "참고 사항", "주의 사항", "기본 정보", "요청 사항"}
+
+
+def render_inline_prompt_body_html(prompt_body: str) -> str:
+    """Transform bracketed choices into inline <select> or <input> elements, while preserving section headers."""
+
+    combobox_counter = 0
+
+    def replace_bracket(match: re.Match[str]) -> str:
+        nonlocal combobox_counter
+        content = match.group(1).strip()
+
+        # Preserve section header brackets like [이메일 정보], [작성 지침]
+        if content in EXCLUDED_HEADER_TITLES:
+            return match.group(0)
+
+        # 1. Dropdown + free typing combo: [팀장님 / 클라이언트 담당자 / 협력사 담당자]
+        if "/" in content:
+            options = [opt.strip() for opt in content.split("/") if opt.strip()]
+            if options:
+                default_val = escape_html(options[0])
+                options_attr = escape_html("|".join(options))
+                return (
+                    f'<span class="itc" data-type="combo" '
+                    f'data-options="{options_attr}" '
+                    f'data-value="{default_val}" '
+                    f'tabindex="0" role="combobox" aria-expanded="false">'
+                    f'{default_val} <i class="itc-arrow">▾</i></span>'
+                )
+
+        # 2. Free text: [첫 번째 핵심 내용]
+        escaped_val = escape_html(content)
+        return (
+            f'<span class="itc" data-type="text" '
+            f'data-value="{escaped_val}" data-placeholder="{escaped_val}" '
+            f'tabindex="0" role="textbox">'
+            f'{escaped_val} <i class="itc-arrow">✎</i></span>'
+        )
+
+    lines = prompt_body.splitlines()
+    escaped_lines = [escape_html(line) for line in lines]
+    escaped_body = "\n".join(escaped_lines)
+
+    # Match any bracketed content [ ...]
+    pattern = re.compile(r"\[([^\]]+)\]")
+    return pattern.sub(replace_bracket, escaped_body)
 
 
 def render_static_prompt_page(context: PageRendererContext) -> PageRendererResult:
@@ -47,7 +98,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
             PromptItemComponent(
                 prompt_title=prompt_block.title,
                 prompt_description_html=render_prompt_item_description_fragment(prompt_block.description),
-                prompt_body=prompt_block.body,
+                prompt_body_html=render_inline_prompt_body_html(prompt_block.body),
             ),
             context.component_templates,
         )

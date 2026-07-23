@@ -161,7 +161,29 @@ def render_prompt_item_description_fragment(description: str | None) -> str:
 def render_prompt_field_placeholder_fragment(placeholder: str | None) -> str:
     if not placeholder:
         return ""
-    return f'<p class="prompt-field__placeholder">{escape_html(placeholder)}</p>'
+
+    cleaned = placeholder.strip()
+    if "/" in cleaned:
+        raw_options = cleaned.replace("예:", "").strip().split("/")
+        options_html = ['<option value="">-- 선택하세요 --</option>']
+        for opt in raw_options:
+            val = escape_html(opt.strip())
+            if val:
+                options_html.append(f'<option value="{val}">{val}</option>')
+        joined_options = "\n    ".join(options_html)
+        return (
+            f'<div class="prompt-field__control-wrapper">\n'
+            f'  <select class="prompt-field__select" data-field-control>\n'
+            f'    {joined_options}\n'
+            f'  </select>\n'
+            f'</div>'
+        )
+
+    return (
+        f'<div class="prompt-field__control-wrapper">\n'
+        f'  <input class="prompt-field__input" type="text" placeholder="{escape_html(placeholder)}" data-field-control />\n'
+        f'</div>'
+    )
 
 
 def _component_id_for_model(component: object) -> str:
@@ -185,7 +207,7 @@ def _component_replacements(component: object, spec) -> dict[str, str]:
         return {
             "prompt_title": escape_html(component.prompt_title),
             "prompt_description_html": component.prompt_description_html,
-            "prompt_body": escape_html(component.prompt_body),
+            "prompt_body_html": component.prompt_body_html,
         }
     if isinstance(component, PromptBuilderComponent):
         return {"prompt_fields_html": component.prompt_fields_html}

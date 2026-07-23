@@ -38,10 +38,10 @@ APPROVED_COMPONENT_SPECS = (
     ComponentSpec(
         component_id="prompt-item",
         template_path=Path("components/prompt-item.html"),
-        placeholders=("prompt_title", "prompt_description_html", "prompt_body"),
-        plain_text_placeholders=("prompt_title", "prompt_body"),
-        trusted_html_placeholders=("prompt_description_html",),
-        required_placeholders=("prompt_title", "prompt_description_html", "prompt_body"),
+        placeholders=("prompt_title", "prompt_description_html", "prompt_body_html"),
+        plain_text_placeholders=("prompt_title",),
+        trusted_html_placeholders=("prompt_description_html", "prompt_body_html"),
+        required_placeholders=("prompt_title", "prompt_description_html", "prompt_body_html"),
         version=1,
     ),
     ComponentSpec(

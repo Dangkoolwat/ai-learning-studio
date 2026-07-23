@@ -100,9 +100,9 @@ def validate_component_template_source(template_path: Path, template_text: str, 
         raise BuildError("Load components", "component template must not contain external URLs", path=template_path)
     if "{%" in template_text or "{#" in template_text or "{{{" in template_text or "}}}" in template_text:
         raise BuildError("Load components", "component template contains unsupported template syntax", path=template_path)
-    if "<form" in lower_text or "<input" in lower_text or "<textarea" in lower_text or "<select" in lower_text:
+    if ("<form" in lower_text or "<input" in lower_text or "<textarea" in lower_text or "<select" in lower_text) and spec.component_id not in {"prompt-item", "prompt-builder", "prompt-field"}:
         raise BuildError("Load components", "component template must not contain form controls", path=template_path)
-    if "<button" in lower_text and spec.component_id != "prompt-item":
+    if "<button" in lower_text and spec.component_id not in {"prompt-item", "prompt-builder"}:
         raise BuildError("Load components", "component template must not contain buttons", path=template_path)
 
     placeholders = extract_placeholders(template_text, template_path=template_path)
@@ -226,24 +226,24 @@ def _validate_page_body_output(inspector: ComponentHTMLInspector, *, component_i
 
 
 def _validate_prompt_item_output(inspector: ComponentHTMLInspector, *, component_id: str, template_path: Path) -> None:
-    if sum(tag == "article" for tag, _ in inspector.start_tags) != 1:
-        raise BuildError("Render component", "prompt item must contain exactly one article", path=template_path, field=component_id)
+    if sum(tag == "article" for tag, _ in inspector.start_tags) not in {1, 2}:
+        raise BuildError("Render component", "prompt item article count is invalid", path=template_path, field=component_id)
     if sum(tag == "header" for tag, _ in inspector.start_tags) != 1:
         raise BuildError("Render component", "prompt item must contain exactly one header", path=template_path, field=component_id)
     if sum(tag == "h2" for tag, _ in inspector.start_tags) != 1:
         raise BuildError("Render component", "prompt item must contain exactly one h2", path=template_path, field=component_id)
     if sum(tag == "pre" for tag, _ in inspector.start_tags) != 1:
         raise BuildError("Render component", "prompt item must contain exactly one pre", path=template_path, field=component_id)
-    if sum(tag == "code" for tag, _ in inspector.start_tags) != 1:
-        raise BuildError("Render component", "prompt item must contain exactly one code", path=template_path, field=component_id)
+    if sum(tag == "code" for tag, _ in inspector.start_tags) not in {1, 2}:
+        raise BuildError("Render component", "prompt item code count is invalid", path=template_path, field=component_id)
     if sum(tag == "footer" for tag, _ in inspector.start_tags) != 1:
         raise BuildError("Render component", "prompt item must contain exactly one footer", path=template_path, field=component_id)
     if sum(tag == "p" for tag, _ in inspector.start_tags) not in {0, 1}:
         raise BuildError("Render component", "prompt item description is invalid", path=template_path, field=component_id)
     if sum(tag == "button" for tag, _ in inspector.start_tags) != 1:
         raise BuildError("Render component", "prompt item must contain exactly one button", path=template_path, field=component_id)
-    if sum(tag == "span" for tag, _ in inspector.start_tags) != 1:
-        raise BuildError("Render component", "prompt item must contain exactly one status span", path=template_path, field=component_id)
+    if not _has_tag_class(inspector, "span", "prompt-item__copy-status"):
+        raise BuildError("Render component", "prompt item must contain copy status span", path=template_path, field=component_id)
     if not _has_tag_class(inspector, "h2", "prompt-item__title"):
         raise BuildError("Render component", "prompt item title class is missing", path=template_path, field=component_id)
     if not _has_tag_class(inspector, "article", "prompt-item"):

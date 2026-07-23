@@ -125,14 +125,15 @@ def build_navigation_items_html(
                 page_id=page.id,
                 field="route",
             )
-        if page.section in published_pages_by_section:
-            raise BuildError(
-                "Render pages through templates",
-                f"duplicate navigation item for section: {page.section}",
-                page_id=page.id,
-                field="section",
-            )
-        published_pages_by_section[page.section] = page
+        if page.id == page.section:
+            if page.section in published_pages_by_section:
+                raise BuildError(
+                    "Render pages through templates",
+                    f"duplicate navigation item for section: {page.section}",
+                    page_id=page.id,
+                    field="section",
+                )
+            published_pages_by_section[page.section] = page
 
     items: list[str] = []
     current_route = _normalize_route(current_page.route)
@@ -150,18 +151,41 @@ def build_navigation_items_html(
         is_current = current_page.id == page.id or current_route == _normalize_route(page.route)
         list_item_class = "navigation-item is-current" if is_current else "navigation-item"
         aria_current = ' aria-current="page"' if is_current else ""
+        sub_html = ""
+        if section.items:
+            sub_items_list = []
+            for sub in section.items:
+                sub_href = route_href_for_output(current_output_path, sub.route, dist_root)
+                sub_is_current = current_page.id == sub.id or current_route == _normalize_route(sub.route)
+                sub_item_class = "sub-navigation-item is-current" if sub_is_current else "sub-navigation-item"
+                sub_aria = ' aria-current="page"' if sub_is_current else ""
+                sub_items_list.append(
+                    "      <li class=\"{sub_item_class}\">\n"
+                    "        <a class=\"sub-navigation-link\" href=\"{sub_href}\"{sub_aria}>\n"
+                    "          <span class=\"sub-nav-label\">{sub_label}</span>\n"
+                    "        </a>\n"
+                    "      </li>".format(
+                        sub_item_class=sub_item_class,
+                        sub_href=escape_html(sub_href),
+                        sub_aria=sub_aria,
+                        sub_label=escape_html(sub.label),
+                    )
+                )
+            sub_html = "\n    <ul class=\"sub-navigation-list\">\n" + "\n".join(sub_items_list) + "\n    </ul>"
+
         items.append(
             "  <li class=\"{list_item_class}\">\n"
             "    <a class=\"navigation-link\" href=\"{href}\"{aria_current}>\n"
             "      <span class=\"nav-label\">{label}</span>\n"
             "      <span class=\"nav-description\">{description}</span>\n"
-            "    </a>\n"
+            "    </a>{sub_html}\n"
             "  </li>".format(
                 list_item_class=list_item_class,
                 href=escape_html(href),
                 aria_current=aria_current,
                 label=escape_html(section.label),
                 description=escape_html(section.description),
+                sub_html=sub_html,
             )
         )
 

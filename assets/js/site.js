@@ -1,7 +1,17 @@
 import { initNavigation } from "./navigation.js";
 import { initPromptCopy } from "./prompt-copy.js";
+import { initPromptBuilder } from "./prompt-builder.js";
 
 document.documentElement.classList.add("js");
 
-initNavigation();
-initPromptCopy();
+function runInitializers() {
+  initNavigation();
+  initPromptCopy();
+  initPromptBuilder();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", runInitializers);
+} else {
+  runInitializers();
+}

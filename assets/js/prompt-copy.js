@@ -1,88 +1,250 @@
 const COPY_FEEDBACK_TIMEOUT_MS = 1800;
 const feedbackTimers = new WeakMap();
 
-function getPromptText(button) {
-  const promptItem = button.closest(".prompt-item");
-  const code = promptItem?.querySelector(".prompt-item__content code");
-  return code?.textContent?.trim() ?? "";
+let activeDropdown = null;
+
+/* ===== Close active dropdown ===== */
+function closeDropdown() {
+  if (activeDropdown) {
+    activeDropdown.remove();
+    activeDropdown = null;
+  }
+  document.querySelectorAll(".itc[aria-expanded='true']").forEach((el) => {
+    el.setAttribute("aria-expanded", "false");
+  });
 }
 
+/* ===== Get assembled prompt text ===== */
+function getPromptText(promptItem) {
+  const code = promptItem?.querySelector(".prompt-item__content code");
+  if (!code) return "";
+
+  const clone = code.cloneNode(true);
+  clone.querySelectorAll(".itc").forEach((chip) => {
+    const val = chip.dataset.value || chip.textContent.replace(/[▾✎]/g, "").trim();
+    chip.replaceWith(document.createTextNode(val));
+  });
+
+  const rawText = clone.textContent ?? "";
+  const lines = rawText.split("\n");
+  let minIndent = Infinity;
+  for (const line of lines) {
+    if (line.trim().length > 0) {
+      const m = line.match(/^[\t ]*/);
+      if (m && m[0].length < minIndent) minIndent = m[0].length;
+    }
+  }
+  if (minIndent > 0 && minIndent !== Infinity) {
+    return lines.map((l) => (l.length >= minIndent ? l.slice(minIndent) : l)).join("\n").trim();
+  }
+  return rawText.trim();
+}
+
+/* ===== Update live preview ===== */
+function updatePreview(promptItem) {
+  const container = promptItem?.closest(".prompt-collection") || promptItem?.parentElement || document;
+  const optionsItem = container.querySelector(".prompt-item:not(.prompt-item--preview)") || promptItem;
+  const previewCode = container.querySelector(".prompt-item--preview .prompt-item__preview-code");
+  
+  if (optionsItem && previewCode) {
+    previewCode.textContent = getPromptText(optionsItem);
+  }
+}
+
+/* ===== Apply value to chip ===== */
+function applyValue(chip, newVal, promptItem) {
+  chip.dataset.value = newVal;
+  // Update visible text: keep the arrow icon
+  const arrow = chip.querySelector(".itc-arrow");
+  const arrowText = arrow ? arrow.outerHTML : "";
+  chip.innerHTML = `${newVal} ${arrowText}`;
+  closeDropdown();
+  updatePreview(promptItem);
+}
+
+/* ===== Open dropdown for a chip ===== */
+function openDropdown(chip, promptItem) {
+  closeDropdown();
+  chip.setAttribute("aria-expanded", "true");
+
+  const type = chip.dataset.type;
+  const currentVal = chip.dataset.value || "";
+  const rect = chip.getBoundingClientRect();
+
+  const panel = document.createElement("div");
+  panel.className = "itc-dropdown";
+
+  if (type === "combo") {
+    const options = (chip.dataset.options || "").split("|").filter(Boolean);
+
+    // Option buttons
+    options.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "itc-dropdown__option";
+      if (opt === currentVal) btn.classList.add("itc-dropdown__option--active");
+      btn.textContent = opt;
+      btn.onclick = () => applyValue(chip, opt, promptItem);
+      panel.appendChild(btn);
+    });
+
+    // Divider
+    const hr = document.createElement("div");
+    hr.className = "itc-dropdown__divider";
+    panel.appendChild(hr);
+
+    // Free text input
+    const wrap = document.createElement("div");
+    wrap.className = "itc-dropdown__input-wrap";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "itc-dropdown__input";
+    input.placeholder = "직접 입력...";
+    input.value = "";
+    input.onkeydown = (e) => {
+      if (e.key === "Enter" && input.value.trim()) {
+        e.preventDefault();
+        applyValue(chip, input.value.trim(), promptItem);
+      }
+    };
+    const hint = document.createElement("small");
+    hint.className = "itc-dropdown__input-hint";
+    hint.textContent = "Enter 키로 적용";
+    wrap.appendChild(input);
+    wrap.appendChild(hint);
+    panel.appendChild(wrap);
+  } else {
+    // Text type: 3x wide resizable textarea dropdown
+    panel.classList.add("itc-dropdown--text");
+    const wrap = document.createElement("div");
+    wrap.className = "itc-dropdown__input-wrap";
+    
+    const textarea = document.createElement("textarea");
+    textarea.className = "itc-dropdown__textarea";
+    textarea.rows = 4;
+    textarea.placeholder = chip.dataset.placeholder || "핵심 전달 내용을 작성하세요";
+    textarea.value = currentVal;
+
+    const actionDiv = document.createElement("div");
+    actionDiv.style.cssText = "display:flex; justify-content:space-between; align-items:center; margin-top:8px;";
+
+    const hint = document.createElement("small");
+    hint.className = "itc-dropdown__input-hint";
+    hint.textContent = "Ctrl+Enter로 빠르게 적용 (우하단 잡고 가로/세로 크기 조절)";
+
+    const applyBtn = document.createElement("button");
+    applyBtn.type = "button";
+    applyBtn.style.cssText = "padding:6px 14px; border:none; border-radius:4px; background:var(--site-accent, #2563eb); color:#fff; font-size:13px; font-weight:600; cursor:pointer;";
+    applyBtn.textContent = "적용";
+
+    function doApplyText() {
+      const txt = textarea.value.trim() || chip.dataset.placeholder || "";
+      applyValue(chip, txt, promptItem);
+    }
+
+    applyBtn.onclick = doApplyText;
+
+    textarea.onkeydown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        doApplyText();
+      }
+    };
+
+    actionDiv.appendChild(hint);
+    actionDiv.appendChild(applyBtn);
+
+    wrap.appendChild(textarea);
+    wrap.appendChild(actionDiv);
+    panel.appendChild(wrap);
+  }
+
+  document.body.appendChild(panel);
+  activeDropdown = panel;
+
+  // Position below the chip
+  const panelH = panel.offsetHeight;
+  const spaceBelow = window.innerHeight - rect.bottom - 8;
+  if (spaceBelow >= panelH) {
+    panel.style.top = `${rect.bottom + 4}px`;
+  } else {
+    panel.style.top = `${rect.top - panelH - 4}px`;
+  }
+  panel.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - panel.offsetWidth - 8))}px`;
+
+  // Focus first input
+  const focusable = panel.querySelector("input, textarea");
+  if (focusable) setTimeout(() => focusable.focus(), 30);
+}
+
+/* ===== Close on outside click ===== */
+document.addEventListener("mousedown", (e) => {
+  if (activeDropdown && !activeDropdown.contains(e.target) && !e.target.closest(".itc")) {
+    closeDropdown();
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeDropdown();
+});
+
+/* ===== Copy helpers ===== */
 function getPromptStatus(button) {
-  const promptItem = button.closest(".prompt-item");
-  return promptItem?.querySelector(".prompt-item__copy-status") ?? null;
+  return button.closest(".prompt-item")?.querySelector(".prompt-item__copy-status") ?? null;
 }
 
 async function copyText(text) {
-  if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+  if (navigator.clipboard?.writeText) {
     await navigator.clipboard.writeText(text);
     return;
   }
-
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.setAttribute("readonly", "true");
-  textarea.style.position = "fixed";
-  textarea.style.inset = "0";
-  textarea.style.opacity = "0";
-  document.body.append(textarea);
-  textarea.select();
-
-  const copied = document.execCommand("copy");
-  textarea.remove();
-
-  if (!copied) {
-    throw new Error("copy failed");
-  }
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "true");
+  ta.style.cssText = "position:fixed;inset:0;opacity:0";
+  document.body.append(ta);
+  ta.select();
+  const ok = document.execCommand("copy");
+  ta.remove();
+  if (!ok) throw new Error("copy failed");
 }
 
-function flashFeedback(button, status, message, defaultLabel) {
-  button.textContent = message;
-  button.setAttribute("aria-label", message);
-  if (status) {
-    status.textContent = message;
-  }
-
-  const existingTimer = feedbackTimers.get(button);
-  if (existingTimer) {
-    window.clearTimeout(existingTimer);
-  }
-
-  const nextTimer = window.setTimeout(() => {
+function flashFeedback(button, status, msg, defaultLabel) {
+  button.textContent = msg;
+  if (status) status.textContent = msg;
+  const prev = feedbackTimers.get(button);
+  if (prev) clearTimeout(prev);
+  const t = setTimeout(() => {
     button.textContent = defaultLabel;
-    button.setAttribute("aria-label", defaultLabel);
-    if (status) {
-      status.textContent = "";
-    }
+    if (status) status.textContent = "";
     feedbackTimers.delete(button);
   }, COPY_FEEDBACK_TIMEOUT_MS);
-
-  feedbackTimers.set(button, nextTimer);
+  feedbackTimers.set(button, t);
 }
 
+/* ===== Init ===== */
 export function initPromptCopy() {
-  const buttons = document.querySelectorAll("[data-prompt-copy]");
+  document.querySelectorAll(".prompt-item").forEach((item) => {
+    item.querySelectorAll(".itc").forEach((chip) => {
+      chip.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openDropdown(chip, item);
+      });
+    });
+    updatePreview(item);
+  });
 
-  buttons.forEach((button) => {
-    if (!(button instanceof HTMLButtonElement)) {
-      return;
-    }
-
+  document.querySelectorAll("[data-prompt-copy]").forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) return;
     const defaultLabel = button.textContent?.trim() || "프롬프트 복사";
     const status = getPromptStatus(button);
-
     button.addEventListener("click", async () => {
-      const promptText = getPromptText(button);
-      if (!promptText) {
-        flashFeedback(button, status, "복사하지 못했습니다", defaultLabel);
-        return;
-      }
-
+      const text = getPromptText(button.closest(".prompt-item"));
+      if (!text) { flashFeedback(button, status, "복사 실패", defaultLabel); return; }
       try {
-        await copyText(promptText);
-        flashFeedback(button, status, "복사됨", defaultLabel);
-      } catch {
-        flashFeedback(button, status, "복사하지 못했습니다", defaultLabel);
-      }
+        await copyText(text);
+        flashFeedback(button, status, "복사됨 ✓", defaultLabel);
+      } catch { flashFeedback(button, status, "복사 실패", defaultLabel); }
     });
   });
 }

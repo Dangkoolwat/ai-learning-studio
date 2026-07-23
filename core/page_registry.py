@@ -81,6 +81,19 @@ EXPECTED_PAGES = (
         "status": "published",
         "lang": "ko",
     },
+    {
+        "id": "ready-to-use-email",
+        "title": "업무 이메일 작성 프롬프트",
+        "description": "상황별 업무 이메일 초안을 빠르게 다듬는 프롬프트 예제",
+        "route": "/ready-to-use/email/",
+        "source": "pages/sections/ready-to-use/email.md",
+        "type": "static-prompt",
+        "section": "ready-to-use",
+        "order": 5,
+        "navigation": True,
+        "status": "published",
+        "lang": "ko",
+    },
 )
 EXPECTED_PAGE_IDS = tuple(page["id"] for page in EXPECTED_PAGES)
 EXPECTED_SOURCE_FILES = tuple(page["source"] for page in EXPECTED_PAGES)

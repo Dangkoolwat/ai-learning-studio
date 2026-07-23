@@ -16,26 +16,55 @@ EXPECTED_SECTIONS = (
         "label": "프롬프트 단계별 체험하기",
         "description": "같은 주제에 여러 프롬프트 방식을 적용하고 결과 차이 비교하기",
         "order": 1,
+        "items": [],
     },
     {
         "id": "ready-to-use",
         "label": "바로 써보기",
         "description": "필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기",
         "order": 2,
+        "items": [
+            {
+                "id": "ready-to-use-email",
+                "label": "업무 이메일 작성 프롬프트",
+                "description": "상황별 업무 이메일 초안을 빠르게 다듬는 프롬프트 예제",
+                "route": "/ready-to-use/email/",
+            }
+        ],
     },
     {
         "id": "ai-assistant",
         "label": "나만의 AI 만들기",
         "description": "Project·Gem 등에 사용할 맞춤형 역할과 지침 만들기",
         "order": 3,
+        "items": [],
     },
     {
         "id": "image-ai",
         "label": "이미지 만들기",
         "description": "이미지 생성·편집에 사용할 프롬프트 만들기와 실습",
         "order": 4,
+        "items": [],
     },
 )
+
+
+@dataclass(slots=True, frozen=True)
+class NavigationSubItem:
+    """A sub-item entry under a main navigation section."""
+
+    id: str
+    label: str
+    description: str
+    route: str
+
+    def to_public_dict(self) -> dict[str, object]:
+        return {
+            "id": self.id,
+            "label": self.label,
+            "description": self.description,
+            "route": self.route,
+        }
 
 
 @dataclass(slots=True, frozen=True)
@@ -46,6 +75,7 @@ class NavigationSection:
     label: str
     description: str
     order: int
+    items: tuple[NavigationSubItem, ...] = ()
 
     def to_public_dict(self) -> dict[str, object]:
         return {
@@ -53,6 +83,7 @@ class NavigationSection:
             "label": self.label,
             "description": self.description,
             "order": self.order,
+            "items": [item.to_public_dict() for item in self.items],
         }
 
 
@@ -136,7 +167,7 @@ def load_navigation(data_dir: Path) -> NavigationData:
                 data_file=navigation_path,
             )
 
-        allowed_keys = {"id", "label", "description", "order"}
+        allowed_keys = {"id", "label", "description", "order", "items"}
         unexpected_keys = set(section_data) - allowed_keys
         missing_keys = allowed_keys - set(section_data)
         if unexpected_keys or missing_keys:
@@ -186,12 +217,57 @@ def load_navigation(data_dir: Path) -> NavigationData:
                 field="order",
             )
 
+        raw_items = section_data.get("items", [])
+        expected_items = expected.get("items", [])
+        if not isinstance(raw_items, list):
+            raise BuildError(
+                "Load navigation data",
+                f"navigation section items must be a list for section: {section_data['id']}",
+                path=navigation_path,
+                data_file=navigation_path,
+                field="items",
+            )
+        if len(raw_items) != len(expected_items):
+            raise BuildError(
+                "Load navigation data",
+                f"navigation items count mismatch for section: {section_data['id']}",
+                path=navigation_path,
+                data_file=navigation_path,
+                field="items",
+            )
+
+        parsed_items: list[NavigationSubItem] = []
+        for exp_item, item_data in zip(expected_items, raw_items, strict=True):
+            if not isinstance(item_data, dict):
+                raise BuildError(
+                    "Load navigation data",
+                    "each navigation sub-item must be a JSON object",
+                    path=navigation_path,
+                    data_file=navigation_path,
+                )
+            if item_data.get("id") != exp_item["id"]:
+                raise BuildError(
+                    "Load navigation data",
+                    f"navigation sub-item id mismatch: {item_data.get('id')}",
+                    path=navigation_path,
+                    data_file=navigation_path,
+                )
+            parsed_items.append(
+                NavigationSubItem(
+                    id=item_data["id"],
+                    label=item_data["label"],
+                    description=item_data["description"],
+                    route=item_data["route"],
+                )
+            )
+
         parsed_sections.append(
             NavigationSection(
                 id=section_data["id"],
                 label=section_data["label"],
                 description=section_data["description"],
                 order=section_data["order"],
+                items=tuple(parsed_items),
             )
         )
 

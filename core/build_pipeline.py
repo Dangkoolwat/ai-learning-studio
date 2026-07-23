@@ -70,8 +70,7 @@ NAVIGATION_LINK_RE = re.compile(
     r'<a class="navigation-link" href="([^"]+)"(?: aria-current="page")?>\s*'
     r'<span class="nav-label">([^<]+)</span>\s*'
     r'<span class="nav-description">([^<]+)</span>\s*'
-    r'</a>\s*'
-    r'</li>',
+    r'</a>',
     re.DOTALL,
 )
 PLACEHOLDER_RE = re.compile(r"{{\s*[a-z0-9_]+\s*}}")
@@ -638,7 +637,7 @@ def validate_generated_page_html(
     expected_pages_by_section = {
         page_data.section: page_data
         for page_data in registry.published_pages()
-        if page_data.navigation and page_data.section is not None
+        if page_data.navigation and page_data.section is not None and page_data.id == page_data.section
     }
     for index, section in enumerate(navigation.sections):
         expected_page = expected_pages_by_section.get(section.id)
@@ -1419,7 +1418,11 @@ def validate_generated_output(
         raise BuildError("Validate output", "navigation section ids are incorrect", path=navigation_path)
 
     navigation_page_ids = {page.id for page in published_pages if page.navigation}
-    expected_navigation_ids = {section.id for section in navigation.sections}
+    expected_navigation_ids = {
+        section.id for section in navigation.sections
+    } | {
+        sub.id for section in navigation.sections for sub in section.items
+    }
     if navigation_page_ids != expected_navigation_ids:
         raise BuildError("Validate output", "navigation does not reference the published section pages", path=navigation_path)
 
@@ -1774,10 +1777,10 @@ def build_site(
                         page_route=page.route,
                         renderer_id=page.type,
                     )
-                if any(label != "prompt" for label in control_labels):
+                if any(label not in {"prompt", "prompt-field"} for label in control_labels):
                     raise BuildError(
                         "Parse renderer-specific control blocks",
-                        "static-prompt pages may only use prompt blocks",
+                        "static-prompt pages may only use prompt or prompt-field blocks",
                         path=source.source_path,
                         page_id=page.id,
                         page_type=page.type,
@@ -1795,10 +1798,10 @@ def build_site(
                         page_route=page.route,
                         renderer_id=page.type,
                     )
-                if any(label != "prompt-field" for label in control_labels):
+                if any(label not in {"prompt", "prompt-field"} for label in control_labels):
                     raise BuildError(
                         "Parse renderer-specific control blocks",
-                        "prompt-builder pages may only use prompt-field blocks",
+                        "prompt-builder pages may only use prompt or prompt-field blocks",
                         path=source.source_path,
                         page_id=page.id,
                         page_type=page.type,

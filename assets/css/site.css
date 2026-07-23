@@ -208,6 +208,37 @@ button:focus-visible {
   font-weight: var(--als-font-weight-regular);
 }
 
+.sub-navigation-list {
+  list-style: none;
+  margin: var(--als-space-2) 0 0 0;
+  padding-left: var(--als-space-3);
+  border-left: 2px solid var(--site-border, #e0e0e0);
+}
+
+.sub-navigation-item {
+  margin-top: var(--als-space-1);
+}
+
+.sub-navigation-link {
+  display: block;
+  padding: var(--als-space-1) var(--als-space-2);
+  font-size: var(--als-font-size-xs);
+  color: var(--site-text-secondary, #555);
+  text-decoration: none;
+  border-radius: var(--als-radius-sm);
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.sub-navigation-link:hover {
+  background: var(--site-surface-muted);
+  color: var(--site-accent);
+}
+
+.sub-navigation-item.is-current .sub-navigation-link {
+  color: var(--site-accent);
+  font-weight: var(--als-font-weight-semibold);
+}
+
 .site-main {
   min-width: 0;
 }
@@ -335,8 +366,8 @@ button:focus-visible {
 .prompt-item__content {
   margin: 0;
   padding: var(--als-space-4);
-  border-radius: var(--site-radius-sm);
-  background: var(--site-surface-muted);
+  border-radius: var(--site-radius-md);
+  background: var(--site-surface-muted); /* 은은한 프롬프트 구역 전용 톤 백그라운드 */
   color: var(--site-text);
   white-space: pre-wrap;
   overflow: auto;
@@ -346,6 +377,178 @@ button:focus-visible {
 .prompt-item__content code {
   display: block;
   white-space: inherit;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: var(--als-font-size-sm);
+  line-height: var(--als-line-height-relaxed);
+}
+
+/* ===== Inline Tag Chip (itc) - Native Site Theme Palette ===== */
+.itc {
+  display: inline;
+  margin: 0 1px;
+  padding: 2px 7px;
+  border-bottom: 2px solid var(--site-accent);
+  border-radius: 4px;
+  background: rgba(45, 64, 54, 0.08);
+  color: var(--site-text);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: all 120ms ease-in-out;
+}
+
+.itc:hover {
+  background: rgba(45, 64, 54, 0.16);
+  color: var(--site-accent-hover, var(--site-accent));
+}
+
+.itc-arrow {
+  font-style: normal;
+  font-size: 0.82em;
+  color: var(--site-accent);
+  opacity: 0.85;
+  margin-left: 2px;
+}
+
+/* ===== itc Dropdown Panel (appended to body) - Native Floating Card ===== */
+.itc-dropdown {
+  position: fixed;
+  z-index: 9999;
+  min-width: 240px;
+  max-width: 380px;
+  padding: 8px 0;
+  border: 1px solid var(--site-border, #d5d0c7);
+  border-radius: 10px;
+  background: var(--site-surface, #ffffff);
+  box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.16), 0 6px 12px -4px rgba(15, 23, 42, 0.06);
+  animation: itcFadeIn 130ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 3x Wide Resizable Text Area Dropdown */
+.itc-dropdown--text {
+  min-width: 480px;
+  max-width: 90vw;
+  width: fit-content;
+  padding: 14px;
+}
+
+@keyframes itcFadeIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.itc-dropdown__option {
+  display: block;
+  width: 100%;
+  padding: 9px 16px;
+  border: none;
+  background: transparent;
+  color: var(--site-text, #2d312e);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 100ms, color 100ms;
+}
+
+.itc-dropdown__option:hover,
+.itc-dropdown__option:focus {
+  background: rgba(45, 64, 54, 0.08);
+  color: var(--site-accent);
+  outline: none;
+}
+
+.itc-dropdown__option--active {
+  color: var(--site-accent);
+  font-weight: 700;
+  background: rgba(45, 64, 54, 0.08);
+}
+
+.itc-dropdown__divider {
+  height: 1px;
+  margin: 6px 12px;
+  background: var(--site-border, #e2e8f0);
+}
+
+.itc-dropdown__input-wrap {
+  padding: 6px 12px 4px;
+}
+
+.itc-dropdown__input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1.5px solid var(--site-border, #d5d0c7);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--site-text, #2d312e);
+  outline: none;
+  transition: border-color 120ms, box-shadow 120ms;
+}
+
+.itc-dropdown__input:focus {
+  border-color: var(--site-accent);
+  box-shadow: 0 0 0 3px rgba(45, 64, 54, 0.15);
+}
+
+/* Resizable 3x Wide Text Area - Parent container grows seamlessly */
+.itc-dropdown__textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 480px;
+  min-width: 340px;
+  max-width: 82vw;
+  min-height: 110px;
+  padding: 12px;
+  border: 1.5px solid var(--site-border, #d5d0c7);
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--site-text, #2d312e);
+  outline: none;
+  resize: both;
+  overflow: auto;
+  transition: border-color 120ms, box-shadow 120ms;
+}
+
+.itc-dropdown__textarea:focus {
+  border-color: var(--site-accent);
+  box-shadow: 0 0 0 3px rgba(45, 64, 54, 0.15);
+}
+
+.itc-dropdown__input-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--site-text-muted, #64748b);
+}
+
+/* ===== Preview: separated independent card below ===== */
+.prompt-item--preview {
+  margin-top: var(--als-space-6);
+  background: var(--site-surface);
+}
+
+.prompt-item__preview-title {
+  margin: 0 0 var(--als-space-3) 0;
+  padding-bottom: var(--als-space-2);
+  border-bottom: 1px solid #e2e8f0;
+  font-size: var(--als-font-size-base);
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.prompt-item__preview-box {
+  margin: 0;
+  padding: var(--als-space-4);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--site-radius-md);
+  background: #f8fafc; /* 완성본 미리보기 전용 소프트 백그라운드 */
+  color: #1e293b;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.prompt-item__preview-code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   font-size: var(--als-font-size-sm);
   line-height: var(--als-line-height-relaxed);
@@ -422,6 +625,66 @@ button:focus-visible {
 .timeline-step__result {
   margin: var(--als-space-3) 0 0;
   color: var(--site-text-muted);
+}
+
+.prompt-field__select,
+.prompt-field__input {
+  width: 100%;
+  margin-top: var(--als-space-3);
+  padding: var(--als-space-3) var(--als-space-4);
+  border: 1px solid var(--site-border);
+  border-radius: var(--site-radius-sm);
+  background: #ffffff;
+  color: var(--site-text);
+  font-size: var(--als-font-size-base);
+  line-height: var(--als-line-height-normal);
+}
+
+.prompt-builder__actions {
+  margin-top: var(--als-space-6);
+  text-align: center;
+}
+
+.prompt-builder__generate-btn {
+  min-height: 48px;
+  padding: var(--als-space-3) var(--als-space-6);
+  border: 1px solid var(--site-accent);
+  border-radius: var(--als-radius-pill);
+  background: var(--site-accent);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: var(--als-font-size-base);
+  cursor: pointer;
+  transition: background-color 140ms ease, transform 140ms ease;
+}
+
+.prompt-builder__generate-btn:hover {
+  background: var(--site-accent-hover);
+}
+
+.prompt-builder__result {
+  margin-top: var(--als-space-6);
+  padding: var(--als-space-6);
+  border: 1px solid var(--site-accent);
+  border-radius: var(--site-radius-md);
+  background: #ffffff;
+}
+
+.prompt-builder__result.is-hidden {
+  display: none;
+}
+
+.prompt-builder__result-title {
+  margin: 0 0 var(--als-space-3);
+  font-size: var(--als-font-size-xl);
+}
+
+.prompt-builder__result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--als-space-3);
+  align-items: center;
+  margin-top: var(--als-space-4);
 }
 
 .practice-timeline {

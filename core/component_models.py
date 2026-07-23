@@ -70,7 +70,7 @@ class PromptCollectionComponent:
 class PromptItemComponent:
     prompt_title: str
     prompt_description_html: str
-    prompt_body: str
+    prompt_body_html: str
     component_id: ClassVar[str] = "prompt-item"
 
 

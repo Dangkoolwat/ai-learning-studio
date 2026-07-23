@@ -96,18 +96,43 @@ def build_page_intro_html(*, page_title: str, page_description: str) -> str:
     )
 
 
+def indent_preserving_pre(html_text: str, prefix: str = "    ") -> str:
+    """Indent HTML text while preserving raw content inside <pre>...</pre> tags."""
+    lines = html_text.splitlines()
+    indented_lines: list[str] = []
+    in_pre = False
+
+    for line in lines:
+        if in_pre:
+            indented_lines.append(line)
+            if "</pre>" in line:
+                in_pre = False
+            continue
+
+        if "<pre" in line:
+            in_pre = True
+            indented_lines.append(prefix + line if line.strip() else line)
+            if "</pre>" in line:
+                in_pre = False
+            continue
+
+        indented_lines.append(prefix + line if line.strip() else line)
+
+    return "\n".join(indented_lines)
+
+
 def build_main_html(*, page_type: str, intro_html: str, body_html: str, section_html: str | None = None) -> str:
     """Build the renderer-owned main region."""
 
     parts = [
         '<main class="site-main" id="main-content">',
         f'  <article class="page-content page-content--{page_type}">',
-        indent(intro_html, "    "),
+        indent_preserving_pre(intro_html, "    "),
         "",
-        indent(body_html, "    "),
+        indent_preserving_pre(body_html, "    "),
     ]
     if section_html:
-        parts.extend(["", indent(section_html, "    ")])
+        parts.extend(["", indent_preserving_pre(section_html, "    ")])
     parts.extend([
         "  </article>",
         "</main>",
