@@ -54,3 +54,19 @@
 * **검증 결과**:
   * 16/16 단계 검증 완벽 통과
   * 6개 정적 페이지 (`/`, `/ai-practice/`, `/ready-to-use/`, `/ready-to-use/email/`, `/ai-assistant/`, `/image-ai/`) 및 서브 내비게이션 UI 정상 렌더링 완료 (`dist/` 생성 성공).
+
+---
+
+## 4. 완성된 프롬프트 UI 수정 (2026-07-23)
+
+### 요청 사항
+1. 완성된 프롬프트 제목 앞 ✨ 아이콘 삭제
+2. 완성된 프롬프트 제목 하단 구분선(라인) 삭제
+
+### 작업 내용
+- `core/renderers/static_prompt.py`: `<h3 class="prompt-item__preview-title">`에서 `✨ ` 아이콘 제거 (`완성된 프롬프트 (실시간 미리보기)`)
+- `assets/css/site.css`: `.prompt-item__preview-title`의 `border-bottom: 1px solid #e2e8f0;` 및 `padding-bottom` 제거
+
+### 검증
+- `python3 scripts/build.py` 빌드 정상 완료 (16/16 단계 통과)
+

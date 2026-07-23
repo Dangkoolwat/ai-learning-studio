@@ -536,8 +536,6 @@ button:focus-visible {
 
 .prompt-item__preview-title {
   margin: 0 0 var(--als-space-3) 0;
-  padding-bottom: var(--als-space-2);
-  border-bottom: 1px solid #e2e8f0;
   font-size: var(--als-font-size-base);
   font-weight: 700;
   color: #0f172a;

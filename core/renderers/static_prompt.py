@@ -102,7 +102,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
             actions_html = ""
             preview_html = (
                 '<article class="prompt-item prompt-item--preview">\n'
-                '  <h3 class="prompt-item__preview-title">✨ 완성된 프롬프트 (실시간 미리보기)</h3>\n'
+                '  <h3 class="prompt-item__preview-title">완성된 프롬프트 (실시간 미리보기)</h3>\n'
                 '  <div class="prompt-item__preview-box"><code class="prompt-item__preview-code"></code></div>\n'
                 '  <footer class="prompt-item__actions">\n'
                 '    <button type="button" class="prompt-item__copy-button" data-prompt-copy>프롬프트 복사</button>\n'
