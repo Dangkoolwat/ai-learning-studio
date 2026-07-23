@@ -280,10 +280,15 @@ button:focus-visible {
 }
 
 .page-body {
-  padding: var(--als-space-8);
+  padding: var(--als-space-6);
   margin-top: var(--als-space-6);
   background: rgba(255, 255, 255, 0.58);
   border: 1px solid rgba(215, 211, 204, 0.85);
+  border-radius: var(--site-radius-md);
+}
+
+.page-body > :first-child {
+  margin-top: 0 !important;
 }
 
 .page-body > * {
@@ -328,9 +333,10 @@ button:focus-visible {
 
 .prompt-collection {
   margin-top: var(--als-space-6);
-  padding: var(--als-space-8);
-  border: 1px solid var(--site-border);
-  background: rgba(255, 255, 255, 0.75);
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
 }
 
 .prompt-item + .prompt-item {
