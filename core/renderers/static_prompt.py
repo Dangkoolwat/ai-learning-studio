@@ -93,17 +93,44 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
         PageBodyComponent(body_html=context.rendered_markdown_html),
         context.component_templates,
     )
-    prompt_item_results = [
-        render_prompt_item_component(
-            PromptItemComponent(
-                prompt_title=prompt_block.title,
-                prompt_description_html=render_prompt_item_description_fragment(prompt_block.description),
-                prompt_body_html=render_inline_prompt_body_html(prompt_block.body),
-            ),
-            context.component_templates,
+    prompt_item_results = []
+    for prompt_block in prompt_blocks:
+        body_html = render_inline_prompt_body_html(prompt_block.body)
+        has_inline_controls = 'class="itc"' in body_html
+
+        if has_inline_controls:
+            actions_html = ""
+            preview_html = (
+                '<article class="prompt-item prompt-item--preview">\n'
+                '  <h3 class="prompt-item__preview-title">✨ 완성된 프롬프트 (실시간 미리보기)</h3>\n'
+                '  <div class="prompt-item__preview-box"><code class="prompt-item__preview-code"></code></div>\n'
+                '  <footer class="prompt-item__actions">\n'
+                '    <button type="button" class="prompt-item__copy-button" data-prompt-copy>프롬프트 복사</button>\n'
+                '    <span class="prompt-item__copy-status sr-only" aria-live="polite"></span>\n'
+                '  </footer>\n'
+                '</article>'
+            )
+        else:
+            actions_html = (
+                '<footer class="prompt-item__actions">\n'
+                '  <button type="button" class="prompt-item__copy-button" data-prompt-copy>프롬프트 복사</button>\n'
+                '  <span class="prompt-item__copy-status sr-only" aria-live="polite"></span>\n'
+                '</footer>'
+            )
+            preview_html = ""
+
+        prompt_item_results.append(
+            render_prompt_item_component(
+                PromptItemComponent(
+                    prompt_title=prompt_block.title,
+                    prompt_description_html=render_prompt_item_description_fragment(prompt_block.description),
+                    prompt_body_html=body_html,
+                    prompt_actions_html=actions_html,
+                    prompt_preview_html=preview_html,
+                ),
+                context.component_templates,
+            )
         )
-        for prompt_block in prompt_blocks
-    ]
     prompt_items_html = "\n".join(result.rendered_html for result in prompt_item_results)
     section_result = render_prompt_collection_component(
         PromptCollectionComponent(prompt_items_html=prompt_items_html),

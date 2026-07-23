@@ -71,6 +71,8 @@ class PromptItemComponent:
     prompt_title: str
     prompt_description_html: str
     prompt_body_html: str
+    prompt_actions_html: str = ""
+    prompt_preview_html: str = ""
     component_id: ClassVar[str] = "prompt-item"
 
 

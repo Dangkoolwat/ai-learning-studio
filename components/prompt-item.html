@@ -4,12 +4,6 @@
     {{ prompt_description_html }}
   </header>
   <pre class="prompt-item__content"><code>{{ prompt_body_html }}</code></pre>
+  {{ prompt_actions_html }}
 </article>
-<article class="prompt-item prompt-item--preview">
-  <h3 class="prompt-item__preview-title">✨ 완성된 프롬프트 (실시간 미리보기)</h3>
-  <div class="prompt-item__preview-box"><code class="prompt-item__preview-code"></code></div>
-  <footer class="prompt-item__actions">
-    <button type="button" class="prompt-item__copy-button" data-prompt-copy>프롬프트 복사</button>
-    <span class="prompt-item__copy-status sr-only" aria-live="polite"></span>
-  </footer>
-</article>
+{{ prompt_preview_html }}

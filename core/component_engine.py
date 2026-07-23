@@ -208,6 +208,8 @@ def _component_replacements(component: object, spec) -> dict[str, str]:
             "prompt_title": escape_html(component.prompt_title),
             "prompt_description_html": component.prompt_description_html,
             "prompt_body_html": component.prompt_body_html,
+            "prompt_actions_html": component.prompt_actions_html,
+            "prompt_preview_html": component.prompt_preview_html,
         }
     if isinstance(component, PromptBuilderComponent):
         return {"prompt_fields_html": component.prompt_fields_html}

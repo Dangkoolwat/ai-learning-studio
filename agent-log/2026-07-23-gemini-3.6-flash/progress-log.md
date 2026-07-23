@@ -40,9 +40,9 @@
 - `pages/sections/image-ai.md`: H1 제목을 `# 이미지 만들기`로 변경
 - `assets/css/site.css`: `.nav-label` 및 `.nav-description` CSS 클래스 스타일 정의 추가
 - `scripts/serve.py`: 원터치 자동 빌드 + HTTP 서버 실행 + 브라우저 자동 오픈 개발 스크립트 작성
-- `assets/css/site.css`: 사이트 디자인 시스템과 충돌하는 외부 블루 색상을 100% 전면 사멸시키고, 사이트 정통 테마 토큰 변수(`var(--site-accent)`, `var(--site-text)`, `var(--site-surface-muted)`)로 100% 완전 통합 수술 완료
-- `assets/js/prompt-copy.js`: 텍스트 전달 입력창 팝오버(`itc-dropdown--text`) 전용 클래스 연동 및 [적용] 버튼 / Ctrl+Enter 숏컷 연동 보강
-- `components/prompt-item.html`: 안쪽 이중 라운딩 박스 삭제 및 `✨ 완성된 프롬프트 (실시간 미리보기)` 카드의 독립적 하단 분리 배치
+- `core/renderers/static_prompt.py`: 인라인 조절 태그/빌더 옵션이 있는 프롬프트에만 하단 `✨ 완성된 프롬프트 (실시간 미리보기)` 독립 카드를 렌더링하고, 설정이 없는 일반 정적 프롬프트는 미리보기 상자 없이 본문 카드 하단에 [프롬프트 복사] 버튼을 직접 렌더링하도록 수술 완료
+- `components/prompt-item.html`: `prompt_actions_html` 및 `prompt_preview_html` 조건부 플레이스홀더 도입
+- `core/component_models.py` & `core/component_registry.py`: `PromptItemComponent` 및 승인 규격에 조건부 파라미터 반영
 - `pages/sections/ready-to-use/email.md`: A안 및 B안 완벽 체험 비교 구성
 - `README.md`: 원터치 개발 서버 실행 명령어 구문 추가
 
