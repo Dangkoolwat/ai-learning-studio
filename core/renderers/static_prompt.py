@@ -39,14 +39,17 @@ def render_inline_prompt_body_html(prompt_body: str) -> str:
         if content in EXCLUDED_HEADER_TITLES:
             return match.group(0)
 
-        # 1. Dropdown + free typing combo: [팀장님 / 클라이언트 담당자 / 협력사 담당자]
+        # 1. Dropdown + free typing combo: [팀장님 / 클라이언트 담당자 / 협력사 담당자] or [+ 사업자등록증 / 견적서 / 통장사본]
         if "/" in content:
-            options = [opt.strip() for opt in content.split("/") if opt.strip()]
+            is_multi = content.startswith("+")
+            raw_content = content[1:].strip() if is_multi else content
+            options = [opt.strip() for opt in raw_content.split("/") if opt.strip()]
             if options:
                 default_val = escape_html(options[0])
                 options_attr = escape_html("|".join(options))
+                data_type = "multi-combo" if is_multi else "combo"
                 return (
-                    f'<span class="itc" data-type="combo" '
+                    f'<span class="itc" data-type="{data_type}" '
                     f'data-options="{options_attr}" '
                     f'data-value="{default_val}" '
                     f'tabindex="0" role="combobox" aria-expanded="false">'

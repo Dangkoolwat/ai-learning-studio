@@ -70,3 +70,46 @@
 ### 검증
 - `python3 scripts/build.py` 빌드 정상 완료 (16/16 단계 통과)
 
+---
+
+## 5. 멀티셀렉션(다중 선택) 2가지 방안 적용 (2026-07-23)
+
+### 작업 내용
+1. **A안 인라인 다중 선택 태그 (`static-prompt`)**:
+   - `core/renderers/static_prompt.py`: `[+ 옵션1 / 옵션2 / 옵션3 ]` 마크다운 패턴을 `data-type="multi-combo"` 칩으로 파싱
+   - `assets/js/prompt-copy.js`: `multi-combo` 칩 클릭 시 체크박스 드롭다운 목록 렌더링 및 복수 선택 값을 쉼표(`, `)로 결합하여 실시간 본문/복사 미리보기 반영
+   - `assets/css/site.css`: `.itc-dropdown__checkbox-item` 체크박스 칩 전용 CSS 스타일링 추가
+2. **B안 폼 기반 다중 선택 (`prompt-builder`)**:
+   - `assets/js/prompt-builder.js`: 다중 선택 필드(`attachments` 등) 수집 및 템플릿 실시간 조립 연동
+3. **업무 이메일 페이지 반영**:
+   - `pages/sections/ready-to-use/email.md`: `필요 첨부 서류: [+ 사업자등록증 / 견적서 / 통장사본 / 대표자 신분증]` 다중 선택 테스트 케이스 적용
+
+### 검증
+- `python3 scripts/build.py` 빌드 16/16 단계 완벽 통과 및 `dist/` 렌더링 검증 완료
+
+---
+
+## 6. (선택 없음) 실시간 미리보기 텍스트 노출 버그 수정 (2026-07-23)
+
+### 수정 사항
+- 멀티셀렉션 및 인라인 칩에서 아무 항목도 선택하지 않아 칩에 `(선택 없음)` 상태일 때, 실시간 미리보기 카드 및 복사 텍스트에 `(선택 없음)` 텍스트가 노출되던 문제 정제 수술.
+- `assets/js/prompt-copy.js`: `getPromptText()` 파서에서 `(선택 없음)` 값을 빈 문자열(`""`)로 대치하고, 값 없이 남아있는 항목 라인(`- 필요 첨부 서류:`)을 정적 미리보기/복사본에서 자동으로 제거하도록 보완.
+- `assets/js/prompt-builder.js`: `(선택 없음)`일 때 `attachmentLine` 조립 생략 처리.
+
+### 검증
+- `python3 scripts/build.py` 실행 (16/16 단계 검증 통과)
+
+---
+
+## 7. (선택 없음) 결합 병목 버그 정제 (2026-07-23)
+
+### 수정 원인 및 내용
+- **원인**: `selectedSet` 초기화 및 체크박스 온체인지 시 기존 `(선택 없음)` 문자열 필터링 누락으로 인해 새 항목 선택 시 `(선택 없음), 사업자등록증`과 같이 텍스트가 중복 결합되는 현상 발생.
+- **수정**: `prompt-copy.js`의 `multi-combo` 집합 생성 및 `selectedSet` 갱신 로직에 `(선택 없음)` 자동 제거(`selectedSet.delete("(선택 없음)")`) 필터링 추가.
+
+### 검증
+- `python3 scripts/build.py` 실행 (16/16 단계 성공)
+
+
+
+

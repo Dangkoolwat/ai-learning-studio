@@ -470,6 +470,32 @@ button:focus-visible {
   background: rgba(45, 64, 54, 0.08);
 }
 
+.itc-dropdown__checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 16px;
+  color: var(--site-text, #2d312e);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  transition: background 100ms;
+}
+
+.itc-dropdown__checkbox-item:hover {
+  background: rgba(45, 64, 54, 0.08);
+  color: var(--site-accent);
+}
+
+.itc-dropdown__checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--site-accent);
+  cursor: pointer;
+}
+
 .itc-dropdown__divider {
   height: 1px;
   margin: 6px 12px;

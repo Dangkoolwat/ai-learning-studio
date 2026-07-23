@@ -21,23 +21,34 @@ function getPromptText(promptItem) {
 
   const clone = code.cloneNode(true);
   clone.querySelectorAll(".itc").forEach((chip) => {
-    const val = chip.dataset.value || chip.textContent.replace(/[▾✎]/g, "").trim();
+    let val = chip.dataset.value || chip.textContent.replace(/[▾✎]/g, "").trim();
+    if (val === "(선택 없음)") {
+      val = "";
+    }
     chip.replaceWith(document.createTextNode(val));
   });
 
   const rawText = clone.textContent ?? "";
-  const lines = rawText.split("\n");
+  const filteredLines = rawText.split("\n").filter((line) => {
+    const trimmed = line.trim();
+    // Drop lines like "- 필요 첨부 서류:" when value is empty
+    if (/^-\s*[^:]+:\s*$/.test(trimmed)) {
+      return false;
+    }
+    return true;
+  });
+
   let minIndent = Infinity;
-  for (const line of lines) {
+  for (const line of filteredLines) {
     if (line.trim().length > 0) {
       const m = line.match(/^[\t ]*/);
       if (m && m[0].length < minIndent) minIndent = m[0].length;
     }
   }
   if (minIndent > 0 && minIndent !== Infinity) {
-    return lines.map((l) => (l.length >= minIndent ? l.slice(minIndent) : l)).join("\n").trim();
+    return filteredLines.map((l) => (l.length >= minIndent ? l.slice(minIndent) : l)).join("\n").trim();
   }
-  return rawText.trim();
+  return filteredLines.join("\n").trim();
 }
 
 /* ===== Update live preview ===== */
@@ -110,6 +121,74 @@ function openDropdown(chip, promptItem) {
     const hint = document.createElement("small");
     hint.className = "itc-dropdown__input-hint";
     hint.textContent = "Enter 키로 적용";
+    wrap.appendChild(input);
+    wrap.appendChild(hint);
+    panel.appendChild(wrap);
+  } else if (type === "multi-combo") {
+    const options = (chip.dataset.options || "").split("|").filter(Boolean);
+    const selectedSet = new Set(
+      currentVal
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => Boolean(s) && s !== "(선택 없음)")
+    );
+
+    options.forEach((opt) => {
+      const label = document.createElement("label");
+      label.className = "itc-dropdown__checkbox-item";
+
+      const chk = document.createElement("input");
+      chk.type = "checkbox";
+      chk.value = opt;
+      chk.checked = selectedSet.has(opt);
+
+      const span = document.createElement("span");
+      span.textContent = opt;
+
+      chk.onchange = () => {
+        selectedSet.delete("(선택 없음)");
+        if (chk.checked) {
+          selectedSet.add(opt);
+        } else {
+          selectedSet.delete(opt);
+        }
+        const newArr = Array.from(selectedSet).filter((s) => s !== "(선택 없음)");
+        const newStr = newArr.length > 0 ? newArr.join(", ") : "(선택 없음)";
+        chip.dataset.value = newStr;
+        const arrowText = `<i class="itc-arrow">▾</i>`;
+        chip.innerHTML = `${newStr} ${arrowText}`;
+        updatePreview(promptItem);
+      };
+
+      label.appendChild(chk);
+      label.appendChild(span);
+      panel.appendChild(label);
+    });
+
+    const hr = document.createElement("div");
+    hr.className = "itc-dropdown__divider";
+    panel.appendChild(hr);
+
+    const wrap = document.createElement("div");
+    wrap.className = "itc-dropdown__input-wrap";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "itc-dropdown__input";
+    input.placeholder = "추가 항목 직접 입력...";
+    input.value = "";
+    input.onkeydown = (e) => {
+      if (e.key === "Enter" && input.value.trim()) {
+        e.preventDefault();
+        selectedSet.delete("(선택 없음)");
+        selectedSet.add(input.value.trim());
+        const newArr = Array.from(selectedSet).filter((s) => s !== "(선택 없음)");
+        const newStr = newArr.length > 0 ? newArr.join(", ") : "(선택 없음)";
+        applyValue(chip, newStr, promptItem);
+      }
+    };
+    const hint = document.createElement("small");
+    hint.className = "itc-dropdown__input-hint";
+    hint.textContent = "Enter 키로 커스텀 항목 추가";
     wrap.appendChild(input);
     wrap.appendChild(hint);
     panel.appendChild(wrap);
