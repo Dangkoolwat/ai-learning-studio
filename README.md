@@ -165,6 +165,8 @@ python3 scripts/build.py --check
 
 세부 규칙은 `AGENTS.md`와 `docs/`에서 관리합니다.
 
+PR 기준 검증과 배포 전 확인 절차는 `docs/deployment-guidelines.md`를 따릅니다.
+
 ---
 
 # 현재 구현 상태
@@ -181,6 +183,10 @@ python3 scripts/build.py --check
 | Phase 8 — First Learning Page | ✅ |
 | Phase 9 — Core Learning Pages | ✅ |
 | Phase 10 — Production Ready | ✅ |
+
+현재 저장소는 정적 빌드, 페이지 렌더링, 테마 생성, SEO 메타 출력, 기본 검증 흐름까지 동작합니다.
+
+다만 학습 콘텐츠의 양과 깊이는 계속 확장 중이며, 일부 상위 섹션은 아직 하위 페이지를 더 채워 넣을 여지가 있습니다.
 
 ---
 
@@ -208,6 +214,8 @@ AI Learning Studio는 정적 사이트로 배포됩니다.
 
 - Source Repository : GitHub
 - Hosting : Vercel
+- 검증: `python3 scripts/build.py`
+- 사전 확인: `python3 scripts/build.py --check`
 
 ---
 
