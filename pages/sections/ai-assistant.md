@@ -46,6 +46,10 @@ description: Project·Gem 등에 맞춤형 역할과 나만의 지침 만들기
 
 아래 첫 번째 프롬프트로 초안을 만들고, 두 번째 프롬프트로 다시 다듬어 보세요. AI가 맡는 일과 내가 맡는 일을 분리하면 완료입니다.
 
+- [할루시네이션 최소화 프롬프트](/ai-assistant/hallucination-minimizer/): 불확실한 부분을 숨기지 않게 하는 짧은 지침
+- [Project 전용 지침서](/ai-assistant/project-guide/): 프로젝트용 역할과 규칙을 한 번에 정리하는 템플릿
+- [GEM 전용 지침서](/ai-assistant/gem-guide/): GEM에 넣기 좋은 범용 지침서 템플릿
+
 ## 예상 결과
 
 사람이 확인할 경계가 분명한 요청 한 개와, 그 요청을 바탕으로 만든 초안 한 개를 얻습니다.

@@ -52,6 +52,12 @@ EXPECTED_SECTIONS = (
         "order": 3,
         "items": [
             {
+                "id": "ai-assistant-hallucination-minimizer",
+                "label": "할루시네이션 최소화 프롬프트",
+                "description": "불확실한 부분을 숨기지 않게 하는 짧은 지침",
+                "route": "/ai-assistant/hallucination-minimizer/",
+            },
+            {
                 "id": "ai-assistant-project-guide",
                 "label": "Project 전용 지침서",
                 "description": "프로젝트 목적과 역할, 규칙을 한 번에 정리하는 범용 지침서",
