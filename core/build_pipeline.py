@@ -62,7 +62,7 @@ TOTAL_STAGES = 16
 SITE_URL_ENV_VAR = "AI_STUDIO_SITE_URL"
 ALLOWED_ASSET_EXTENSIONS = {".css", ".js", ".svg", ".png", ".jpg", ".jpeg", ".webp"}
 TEXT_ASSET_EXTENSIONS = {".css", ".js", ".svg"}
-ALLOWED_FRONT_MATTER_KEYS = {"registry_id", "title", "description", "seo_title"}
+ALLOWED_FRONT_MATTER_KEYS = {"registry_id", "title", "description", "seo_title", "preview", "ai_target"}
 EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
 EXPECTED_SCRIPT_HREF_RE = re.compile(r'<script type="module" src="([^"]+)"></script>')
 NAVIGATION_LINK_RE = re.compile(
@@ -608,7 +608,7 @@ def validate_generated_page_html(
 
     if PLACEHOLDER_RE.search(html_text):
         raise BuildError("Validate output", "unresolved template placeholder remains", path=output_path, page_id=page.id)
-    if "```prompt" in html_text or "```prompt-field" in html_text or "```timeline-step" in html_text:
+    if "```prompt" in html_text or "```prompt-field" in html_text or "```timeline-step" in html_text or "```image-slider" in html_text:
         raise BuildError("Validate output", "renderer control fence remains in the generated HTML", path=output_path, page_id=page.id)
     if html_text.lower().count("<script") != 1:
         raise BuildError("Validate output", "script tags are not allowed in generated HTML", path=output_path, page_id=page.id)
@@ -706,6 +706,10 @@ def validate_renderer_component_usage(
         pass
     elif page.type == "static-prompt":
         prompt_count = sum(1 for block in page_context.control_blocks if block.label == "prompt")
+        slider_count = 1 if page_context.parsed_front_matter.get("preview", "").strip() else 0
+        if not slider_count:
+            slider_count = sum(1 for block in page_context.control_blocks if block.label == "image-slider")
+        expected_component_ids.extend(["image-slider"] * slider_count)
         expected_component_ids.extend(["prompt-item"] * prompt_count)
         expected_component_ids.append("prompt-collection")
     elif page.type == "prompt-builder":
@@ -1796,10 +1800,10 @@ def build_site(
                         page_route=page.route,
                         renderer_id=page.type,
                     )
-                if any(label not in {"prompt", "prompt-field"} for label in control_labels):
+                if any(label not in {"prompt", "prompt-field", "image-slider"} for label in control_labels):
                     raise BuildError(
                         "Parse renderer-specific control blocks",
-                        "static-prompt pages may only use prompt or prompt-field blocks",
+                        "static-prompt pages may only use prompt, prompt-field, or image-slider blocks",
                         path=source.source_path,
                         page_id=page.id,
                         page_type=page.type,

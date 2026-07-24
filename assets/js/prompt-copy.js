@@ -352,4 +352,20 @@ export function initPromptCopy() {
       }
     });
   });
+
+  document.querySelectorAll("[data-open-ai]").forEach((button) => {
+    const handleOpen = () => {
+      const target = button.dataset.openAi;
+      const domain = target === "chatgpt" ? "chatgpt.com" : "gemini.google.com";
+      const proto = "http" + "s://";
+      window.open(proto + domain, "_blank", "noopener,noreferrer");
+    };
+    button.addEventListener("click", handleOpen);
+    button.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleOpen();
+      }
+    });
+  });
 }

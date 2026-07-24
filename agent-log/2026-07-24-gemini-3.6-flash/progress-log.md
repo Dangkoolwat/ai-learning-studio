@@ -14,12 +14,15 @@
   - `.prompt-item__copy-button` 테두리 곡률을 알약 형태(`--als-radius-pill`)에서 카드 통일 곡률(`--site-radius-md`)로 수정.
 - `assets/js/image-slider.js`:
   - 순수 JS `translateX` 슬라이더 엔진으로 전면 재작성 (화살표, 점 네비게이션, 모바일 터치 제스처 터치/스위프 완벽 지원).
-- `core/renderers/static_prompt.py`:
-  - 미리보기 카드 타이틀에서 이모지 아이콘(`✨ `) 제거 (`완성된 프롬프트 (실시간 미리보기)`).
+- `pages/sections/ready-to-use/email.md` & `core/build_pipeline.py`:
+  - `ai_target: ChatGPT, Gemini` front matter 지원 추가.
+- `core/renderers/static_prompt.py`, `assets/css/site.css`, `assets/js/prompt-copy.js`:
+  - AI 모델별 전용 뱃지(`badge-ai--chatgpt`, `badge-ai--gemini`) 및 외부 AI 서비스 바로가기 액션 버튼(`data-open-ai`) 구현 완료.
 
 ## 3. 검증 결과
-- `python3 scripts/build.py` 정상 성공 (Pages: 12, Assets: 10)
-- `dist/ready-to-use/email/index.html` 내 미리보기 타이틀 이모지 제거 확인 완료
+- `python3 scripts/build.py` 정적 사이트 빌드 정상 완료 (Pages: 12, Assets: 10, Routes: 12)
+- `dist/ready-to-use/email/index.html` 내 ChatGPT/Gemini 전용 뱃지 및 바로가기 액션 렌더링 확인 완료
+
 
 
 

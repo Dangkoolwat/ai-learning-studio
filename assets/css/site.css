@@ -601,6 +601,7 @@ button:focus-visible {
 
 .prompt-item__actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--als-space-3);
   margin-top: var(--als-space-4);
@@ -628,6 +629,66 @@ button:focus-visible {
 
 .prompt-item__copy-status {
   color: var(--site-success);
+}
+
+.prompt-item__ai-badges {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--als-space-2);
+  margin-bottom: var(--als-space-3);
+}
+
+.badge-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--site-radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border: 1px solid transparent;
+}
+
+.badge-ai--chatgpt {
+  background: rgba(16, 163, 127, 0.1);
+  color: #0d8a6a;
+  border-color: rgba(16, 163, 127, 0.25);
+}
+
+.badge-ai--gemini {
+  background: rgba(26, 115, 232, 0.1);
+  color: #1557b0;
+  border-color: rgba(26, 115, 232, 0.25);
+}
+
+.badge-ai--universal {
+  background: rgba(71, 85, 105, 0.1);
+  color: #475569;
+  border-color: rgba(71, 85, 105, 0.25);
+}
+
+.prompt-item__external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  padding: var(--als-space-2) var(--als-space-3);
+  border: 1px solid var(--site-border);
+  border-radius: var(--site-radius-md);
+  background: #ffffff;
+  color: var(--site-text);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 140ms ease;
+}
+
+.prompt-item__external-link:hover {
+  border-color: var(--site-accent);
+  color: var(--site-accent);
+  background: #f8fafc;
 }
 
 .prompt-builder {
