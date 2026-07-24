@@ -1,5 +1,7 @@
 ---
 registry_id: ai-practice
+title: 프롬프트 단계별 체험하기
+description: 같은 주제에 여러 프롬프트 방식을 적용하고 결과 차이 비교하기
 ---
 
 # 프롬프트 단계별 체험하기

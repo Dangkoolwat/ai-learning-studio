@@ -1,5 +1,7 @@
 ---
 registry_id: ai-assistant
+title: 나만의 AI 만들기
+description: Project·Gem 등에 맞춤형 역할과 나만의 지침 만들기
 ---
 
 # 나만의 AI 만들기

@@ -1,5 +1,7 @@
 ---
 registry_id: home
+title: AI Learning Studio
+description: AI를 처음 배우는 사람과 기초 활용자가 바로 따라 하며 연습하는 한국어 학습 공간입니다.
 ---
 
 # AI Learning Studio

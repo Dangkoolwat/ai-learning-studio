@@ -28,6 +28,32 @@
       "lang": "ko"
     },
     {
+      "id": "ai-practice-zero-to-final",
+      "title": "제로샷에서 최종 프롬프트까지",
+      "description": "같은 주제를 두고 조건을 하나씩 더해 가며 최종 프롬프트가 완성되는 흐름을 체험합니다.",
+      "route": "/ai-practice/zero-to-final/",
+      "source": "pages/sections/ai-practice/zero-to-final.md",
+      "type": "static-prompt",
+      "section": "ai-practice",
+      "order": 2,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ai-practice-prompt-techniques",
+      "title": "프롬프트 기법 비교하기",
+      "description": "같은 주제에 다른 기법을 적용해 결과와 설명 방식의 차이를 비교합니다.",
+      "route": "/ai-practice/prompt-techniques/",
+      "source": "pages/sections/ai-practice/prompt-techniques.md",
+      "type": "static-prompt",
+      "section": "ai-practice",
+      "order": 3,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "ready-to-use",
       "title": "바로 써보기",
       "description": "필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기",
@@ -35,7 +61,7 @@
       "source": "pages/sections/ready-to-use.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 2,
+      "order": 4,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -48,7 +74,33 @@
       "source": "pages/sections/ai-assistant.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 3,
+      "order": 6,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ai-assistant-project-guide",
+      "title": "Project 전용 지침서",
+      "description": "Project용으로 바로 붙여 넣을 수 있는 지침서 프롬프트를 제공합니다.",
+      "route": "/ai-assistant/project-guide/",
+      "source": "pages/sections/ai-assistant/project-guide.md",
+      "type": "static-prompt",
+      "section": "ai-assistant",
+      "order": 7,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ai-assistant-gem-guide",
+      "title": "GEM 전용 지침서",
+      "description": "GEM에 넣기 좋은 범용 규칙과 역할 정의를 빠르게 구성하는 프롬프트입니다.",
+      "route": "/ai-assistant/gem-guide/",
+      "source": "pages/sections/ai-assistant/gem-guide.md",
+      "type": "static-prompt",
+      "section": "ai-assistant",
+      "order": 8,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -61,7 +113,7 @@
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 4,
+      "order": 9,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -75,6 +127,19 @@
       "type": "static-prompt",
       "section": "ready-to-use",
       "order": 5,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "image-ai-builder",
+      "title": "AI 이미지 프롬프트 빌더",
+      "description": "피사체, 스타일, 조명, 구도를 선택해 실시간으로 이미지 프롬프트 만들기",
+      "route": "/image-ai/builder/",
+      "source": "pages/sections/image-ai/builder.md",
+      "type": "prompt-builder",
+      "section": "image-ai",
+      "order": 10,
       "navigation": true,
       "status": "published",
       "lang": "ko"

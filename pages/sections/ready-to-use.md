@@ -1,5 +1,7 @@
 ---
 registry_id: ready-to-use
+title: 바로 써보기
+description: 필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기
 ---
 
 # 바로 써보기

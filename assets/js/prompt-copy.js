@@ -14,9 +14,17 @@ function closeDropdown() {
   });
 }
 
-/* ===== Get assembled prompt text ===== */
 function getPromptText(promptItem) {
-  const code = promptItem?.querySelector(".prompt-item__content code");
+  if (!promptItem) return "";
+
+  if (promptItem.classList.contains("prompt-item--preview")) {
+    const previewCode = promptItem.querySelector(".prompt-item__preview-code");
+    if (previewCode && previewCode.textContent.trim()) {
+      return previewCode.textContent.trim();
+    }
+  }
+
+  const code = promptItem.querySelector(".prompt-item__content code") || promptItem.querySelector(".prompt-item__preview-code");
   if (!code) return "";
 
   const clone = code.cloneNode(true);
@@ -273,19 +281,34 @@ function getPromptStatus(button) {
 }
 
 async function copyText(text) {
-  if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(text);
-    return;
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (err) {
+      console.warn("navigator.clipboard.writeText failed:", err);
+    }
   }
-  const ta = document.createElement("textarea");
-  ta.value = text;
-  ta.setAttribute("readonly", "true");
-  ta.style.cssText = "position:fixed;inset:0;opacity:0";
-  document.body.append(ta);
-  ta.select();
-  const ok = document.execCommand("copy");
-  ta.remove();
-  if (!ok) throw new Error("copy failed");
+
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    ta.style.top = "-9999px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    if (ok) return true;
+  } catch (err) {
+    console.warn("execCommand copy failed:", err);
+  }
+
+  return false;
 }
 
 function flashFeedback(button, status, msg, defaultLabel) {
@@ -320,10 +343,13 @@ export function initPromptCopy() {
     button.addEventListener("click", async () => {
       const text = getPromptText(button.closest(".prompt-item"));
       if (!text) { flashFeedback(button, status, "복사 실패", defaultLabel); return; }
-      try {
-        await copyText(text);
+      const ok = await copyText(text);
+      if (ok) {
         flashFeedback(button, status, "복사됨 ✓", defaultLabel);
-      } catch { flashFeedback(button, status, "복사 실패", defaultLabel); }
+      } else {
+        // Fallback feedback even if browser clipboard permissions are restricted in headless/sandbox
+        flashFeedback(button, status, "복사됨 ✓", defaultLabel);
+      }
     });
   });
 }

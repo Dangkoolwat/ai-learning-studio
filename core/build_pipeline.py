@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from html import escape as escape_html
 import json
@@ -62,7 +62,7 @@ TOTAL_STAGES = 16
 SITE_URL_ENV_VAR = "AI_STUDIO_SITE_URL"
 ALLOWED_ASSET_EXTENSIONS = {".css", ".js", ".svg", ".png", ".jpg", ".jpeg", ".webp"}
 TEXT_ASSET_EXTENSIONS = {".css", ".js", ".svg"}
-ALLOWED_FRONT_MATTER_KEYS = {"registry_id"}
+ALLOWED_FRONT_MATTER_KEYS = {"registry_id", "title", "description", "seo_title"}
 EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
 EXPECTED_SCRIPT_HREF_RE = re.compile(r'<script type="module" src="([^"]+)"></script>')
 NAVIGATION_LINK_RE = re.compile(
@@ -190,14 +190,6 @@ def parse_front_matter(page_path: Path, source_text: str) -> tuple[dict[str, str
 
 
 def validate_front_matter(page_path: Path, metadata: dict[str, str]) -> None:
-    if set(metadata) != {"registry_id"}:
-        raise BuildError(
-            "Parse page sources",
-            "front matter must contain only registry_id",
-            path=page_path,
-            source_file=page_path,
-        )
-
     registry_id = metadata.get("registry_id", "").strip()
     if not registry_id:
         raise BuildError(
@@ -206,6 +198,14 @@ def validate_front_matter(page_path: Path, metadata: dict[str, str]) -> None:
             path=page_path,
             source_file=page_path,
             field="registry_id",
+        )
+    unallowed = set(metadata) - ALLOWED_FRONT_MATTER_KEYS
+    if unallowed:
+        raise BuildError(
+            "Parse page sources",
+            f"unsupported front matter keys: {sorted(unallowed)}",
+            path=page_path,
+            source_file=page_path,
         )
 
 
@@ -594,7 +594,7 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "HTML site script link is incorrect", path=output_path, page_id=page.id)
     if f'<link rel="icon" href="{expected_favicon_href}" type="image/svg+xml">' not in html_text:
         raise BuildError("Validate output", "HTML favicon link is incorrect", path=output_path, page_id=page.id)
-    if f'<a class="site-brand" href="{expected_home_href}">{escape_html(SITE_NAME)}</a>' not in html_text:
+    if f'<a class="site-brand" href="{expected_home_href}"' not in html_text or f'<span class="site-brand__text">{escape_html(SITE_NAME)}</span>' not in html_text:
         raise BuildError("Validate output", "HTML home link is incorrect", path=output_path, page_id=page.id)
     if f'<h1 class="page-title">{escape_html(page.title)}</h1>' not in html_text:
         raise BuildError("Validate output", "page intro heading is missing", path=output_path, page_id=page.id)
@@ -800,10 +800,12 @@ def validate_site_css(asset_path: Path, css_text: str) -> None:
     if "@import" in lower_text:
         raise BuildError("Load static assets", "site CSS must not contain @import", path=asset_path)
     if "http://" in lower_text or "https://" in lower_text:
-        raise BuildError("Load static assets", "site CSS must not contain remote URLs", path=asset_path)
+        non_svg_remote = [line for line in lower_text.splitlines() if ("http://" in line or "https://" in line) and "data:image/svg+xml" not in line]
+        if non_svg_remote:
+            raise BuildError("Load static assets", "site CSS must not contain remote URLs", path=asset_path)
     if "javascript:" in lower_text:
         raise BuildError("Load static assets", "site CSS must not contain javascript: URLs", path=asset_path)
-    if "url(" in lower_text and "favicon.svg" not in lower_text:
+    if "url(" in lower_text and "favicon.svg" not in lower_text and "data:image/svg+xml" not in lower_text:
         raise BuildError("Load static assets", "site CSS must not contain URL references", path=asset_path)
     if css_text.count("{") != css_text.count("}"):
         raise BuildError("Load static assets", "site CSS braces are unbalanced", path=asset_path)
@@ -878,6 +880,7 @@ def validate_page_sources_against_registry(
         )
 
     sources_by_id = {source.registry_id: source for source in page_sources}
+    updated_pages: list[PageRegistryEntry] = []
     for page in registry.pages:
         source = sources_by_id.get(page.id)
         if source is None:
@@ -902,6 +905,19 @@ def validate_page_sources_against_registry(
                 page_id=page.id,
                 field="registry_id",
             )
+
+        title_override = source.front_matter.get("title")
+        desc_override = source.front_matter.get("description")
+        if title_override or desc_override:
+            kwargs = {}
+            if title_override:
+                kwargs["title"] = title_override
+            if desc_override:
+                kwargs["description"] = desc_override
+            page = replace(page, **kwargs)
+        updated_pages.append(page)
+
+    registry.pages = tuple(updated_pages)
 
 
 def build_public_registry_data(registry: PageRegistry) -> dict[str, object]:

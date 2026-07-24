@@ -6,7 +6,20 @@
       "label": "프롬프트 단계별 체험하기",
       "description": "같은 주제에 여러 프롬프트 방식을 적용하고 결과 차이 비교하기",
       "order": 1,
-      "items": []
+      "items": [
+        {
+          "id": "ai-practice-zero-to-final",
+          "label": "제로샷에서 최종 프롬프트까지",
+          "description": "제로샷 요청에서 시작해 조건을 더해 가며 최종 프롬프트를 완성하는 체험",
+          "route": "/ai-practice/zero-to-final/"
+        },
+        {
+          "id": "ai-practice-prompt-techniques",
+          "label": "프롬프트 기법 비교하기",
+          "description": "같은 주제에 다른 기법을 적용해 결과 차이를 살펴보는 비교 학습",
+          "route": "/ai-practice/prompt-techniques/"
+        }
+      ]
     },
     {
       "id": "ready-to-use",
@@ -27,14 +40,34 @@
       "label": "나만의 AI 만들기",
       "description": "Project·Gem 등에 사용할 맞춤형 역할과 지침 만들기",
       "order": 3,
-      "items": []
+      "items": [
+        {
+          "id": "ai-assistant-project-guide",
+          "label": "Project 전용 지침서",
+          "description": "프로젝트 목적과 역할, 규칙을 한 번에 정리하는 범용 지침서",
+          "route": "/ai-assistant/project-guide/"
+        },
+        {
+          "id": "ai-assistant-gem-guide",
+          "label": "GEM 전용 지침서",
+          "description": "GEM에 넣기 좋은 역할 정의와 사용 규칙을 구성하는 범용 지침서",
+          "route": "/ai-assistant/gem-guide/"
+        }
+      ]
     },
     {
       "id": "image-ai",
       "label": "이미지 만들기",
       "description": "이미지 생성·편집에 사용할 프롬프트 만들기와 실습",
       "order": 4,
-      "items": []
+      "items": [
+        {
+          "id": "image-ai-builder",
+          "label": "AI 이미지 프롬프트 빌더",
+          "description": "스타일, 조명, 구도를 고르고 친절한 설명과 함께 이미지 프롬프트 만들기",
+          "route": "/image-ai/builder/"
+        }
+      ]
     }
   ]
 }

@@ -1,5 +1,11 @@
 <header class="site-header__inner">
-  <a class="site-brand" href="{{ home_url }}">{{ site_name }}</a>
+  <a class="site-brand" href="{{ home_url }}" aria-label="홈으로 이동">
+    <svg class="site-brand__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+    </svg>
+    <span class="site-brand__text">{{ site_name }}</span>
+  </a>
   <button class="site-nav-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false">
     메뉴 열기
   </button>

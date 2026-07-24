@@ -1,5 +1,7 @@
 ---
 registry_id: image-ai
+title: 이미지 만들기
+description: 이미지 생성·편집에 사용할 프롬프트 만들기와 실습
 ---
 
 # 이미지 만들기

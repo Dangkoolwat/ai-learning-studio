@@ -339,14 +339,14 @@ def parse_prompt_field_block(block: RendererControlBlock) -> PromptFieldBlock:
     parsed = _split_key_value_block(
         block.body,
         block=block,
-        allowed_keys={"id", "label", "description", "placeholder", "required"},
-        required_keys={"id", "label", "description", "required"},
+        allowed_keys={"id", "label", "description", "placeholder", "required", "type", "options", "default", "help"},
+        required_keys={"id", "label", "description"},
     )
     field_id = parsed.metadata.get("id", "").strip()
     label = parsed.metadata.get("label", "").strip()
     description = parsed.metadata.get("description", "").strip()
-    placeholder = parsed.metadata.get("placeholder")
-    required_text = parsed.metadata.get("required", "").strip()
+    placeholder = parsed.metadata.get("placeholder") or parsed.metadata.get("options")
+    required_text = parsed.metadata.get("required", "false").strip().lower() or "false"
 
     if not field_id:
         raise BuildError(
