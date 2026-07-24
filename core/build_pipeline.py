@@ -62,7 +62,7 @@ TOTAL_STAGES = 16
 SITE_URL_ENV_VAR = "AI_STUDIO_SITE_URL"
 ALLOWED_ASSET_EXTENSIONS = {".css", ".js", ".svg", ".png", ".jpg", ".jpeg", ".webp"}
 TEXT_ASSET_EXTENSIONS = {".css", ".js", ".svg"}
-ALLOWED_FRONT_MATTER_KEYS = {"registry_id", "title", "description", "seo_title", "preview", "ai_target"}
+ALLOWED_FRONT_MATTER_KEYS = {"registry_id", "title", "description", "seo_title", "preview", "ai_target", "source"}
 EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
 EXPECTED_SCRIPT_HREF_RE = re.compile(r'<script type="module" src="([^"]+)"></script>')
 NAVIGATION_LINK_RE = re.compile(

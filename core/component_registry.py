@@ -38,9 +38,9 @@ APPROVED_COMPONENT_SPECS = (
     ComponentSpec(
         component_id="prompt-item",
         template_path=Path("components/prompt-item.html"),
-        placeholders=("prompt_title", "prompt_description_html", "prompt_body_html", "prompt_actions_html", "prompt_preview_html", "prompt_badges_html"),
+        placeholders=("prompt_title", "prompt_description_html", "prompt_body_html", "prompt_actions_html", "prompt_preview_html", "prompt_badges_html", "prompt_source_html"),
         plain_text_placeholders=("prompt_title",),
-        trusted_html_placeholders=("prompt_description_html", "prompt_body_html", "prompt_actions_html", "prompt_preview_html", "prompt_badges_html"),
+        trusted_html_placeholders=("prompt_description_html", "prompt_body_html", "prompt_actions_html", "prompt_preview_html", "prompt_badges_html", "prompt_source_html"),
         required_placeholders=("prompt_title", "prompt_description_html", "prompt_body_html"),
         version=1,
     ),

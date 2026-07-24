@@ -218,6 +218,7 @@ def _component_replacements(component: object, spec) -> dict[str, str]:
             "prompt_actions_html": component.prompt_actions_html,
             "prompt_preview_html": component.prompt_preview_html,
             "prompt_badges_html": component.prompt_badges_html,
+            "prompt_source_html": component.prompt_source_html,
         }
     if isinstance(component, PromptBuilderComponent):
         return {"prompt_fields_html": component.prompt_fields_html}

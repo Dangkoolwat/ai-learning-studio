@@ -4,6 +4,7 @@ title: 업무 이메일 작성 프롬프트
 description: 상황별 업무 이메일 초안을 빠르게 다듬는 프롬프트 예제
 preview: /assets/images/ready-to-use-email-slide-1.svg, /assets/images/ready-to-use-email-slide-2.svg, /assets/images/ready-to-use-email-slide-3.svg
 ai_target: Gemini
+source: @Thread 김백곰 제공
 ---
 
 # 업무 이메일 작성 프롬프트 (UX 체감 및 비교)
