@@ -16,12 +16,14 @@
   - 순수 JS `translateX` 슬라이더 엔진으로 전면 재작성 (화살표, 점 네비게이션, 모바일 터치 제스처 터치/스위프 완벽 지원).
 - `pages/sections/ready-to-use/email.md` & `core/build_pipeline.py`:
   - `ai_target: ChatGPT, Gemini` front matter 지원 추가.
-- `core/build_pipeline.py`, `core/component_models.py`, `core/component_registry.py`, `core/component_engine.py`, `components/prompt-item.html`, `core/renderers/static_prompt.py`, `assets/css/site.css`:
-  - `source` front matter 속성 지원 및 프롬프트 카드 맨 하단 소프트 라운딩 박스 기반의 출처 표시 컴포넌트(`prompt-item__source`) 구현 완료 (예: `Source : @Thread 김백곰 제공`).
+- `components/prompt-item.html` & `core/renderers/static_prompt.py`:
+  - 출처 배너(`prompt-item__source`)를 미리보기 카드가 아닌 맨 하단 바깥 독자적인 독립 라운딩 박스 위치로 이동.
+  - `source: 출처 : @Thread 김백곰 제공`과 같이 `출처 :`, `source:` 접두어가 포함되어 있어도 순수 출처 내용만 자동 파싱/추출하여 `Source : @Thread 김백곰 제공`으로 정제 출력하는 파서 규칙 반영.
 
 ## 3. 검증 결과
 - `python3 scripts/build.py` 정적 사이트 빌드 정상 완료 (Pages: 12, Assets: 10, Routes: 12)
-- `dist/ready-to-use/email/index.html` 출처 표기 라운딩 박스 렌더링 확인 완료
+- `dist/ready-to-use/email/index.html` 미리보기 카드 바깥 하단 독립 출처 표기 배너 및 `출처 :` 접두어 제거 정제 출력 검증 완료
+
 
 
 

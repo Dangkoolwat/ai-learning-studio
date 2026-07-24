@@ -126,10 +126,11 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
     ai_badges_block = f'<div class="prompt-item__ai-badges">{" ".join(badges_html)}</div>\n' if badges_html else ""
     ext_actions_block = " ".join(ext_links_html)
 
-    source_val = context.parsed_front_matter.get("source", "").strip()
+    raw_source = context.parsed_front_matter.get("source", "").strip()
+    cleaned_source = re.sub(r'^(?:출처|source)\s*[:：]\s*', '', raw_source, flags=re.IGNORECASE).strip()
     source_html = (
-        f'<div class="prompt-item__source"><span class="prompt-item__source-label">Source :</span> {escape_html(source_val)}</div>'
-        if source_val
+        f'<div class="prompt-item__source"><span class="prompt-item__source-label">Source :</span> {escape_html(cleaned_source)}</div>'
+        if cleaned_source
         else ""
     )
 
@@ -152,7 +153,6 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
                 f'    {ext_actions_block}\n'
                 '    <span class="prompt-item__copy-status sr-only" aria-live="polite"></span>\n'
                 '  </footer>\n'
-                f'  {source_html}\n'
                 '</article>'
             )
         else:
@@ -174,7 +174,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
                     prompt_actions_html=actions_html,
                     prompt_preview_html=preview_html,
                     prompt_badges_html=ai_badges_block,
-                    prompt_source_html=source_html if not has_inline_controls else "",
+                    prompt_source_html=source_html,
                 ),
                 context.component_templates,
             )

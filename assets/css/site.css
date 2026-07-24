@@ -712,7 +712,7 @@ button:focus-visible {
 }
 
 .prompt-item__source {
-  margin-top: var(--als-space-4);
+  margin-top: var(--als-space-5);
   padding: var(--als-space-3) var(--als-space-4);
   border-radius: var(--site-radius-md);
   background: #f8fafc;
