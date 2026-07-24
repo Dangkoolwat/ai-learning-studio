@@ -14,8 +14,11 @@
   - `.prompt-item__copy-button` 테두리 곡률을 알약 형태(`--als-radius-pill`)에서 카드 통일 곡률(`--site-radius-md`)로 수정.
 - `assets/js/image-slider.js`:
   - 순수 JS `translateX` 슬라이더 엔진으로 전면 재작성 (화살표, 점 네비게이션, 모바일 터치 제스처 터치/스위프 완벽 지원).
+- `assets/js/prompt-copy.js` & `assets/js/prompt-builder.js`:
+  - 복사 완료 피드백 문구를 무뚝뚝한 "복사됨"에서 정중한 "복사되었습니다! ✓"로 전면 변경.
 
 ## 3. 검증 결과
 - `python3 scripts/build.py` 정상 성공 (Pages: 12, Assets: 10)
+- `dist/assets/js/prompt-copy.js` 및 `dist/assets/js/prompt-builder.js` 반영 완료
 - `dist/ready-to-use/email/index.html` 슬라이더 모듈 생성 및 동적 트랙 전환 지원 검증 완료
 - `dist/assets/css/site.css` 반영 및 복사 버튼 라운딩 수정 완료
