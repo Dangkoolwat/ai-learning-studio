@@ -218,7 +218,7 @@ ${attachmentLine}- 주요 전달 항목:
             if (!ok) throw new Error("copy failed");
           }
 
-          copyBtn.textContent = "복사되었습니다! ✓";
+          copyBtn.textContent = "복사되었습니다!";
           setTimeout(() => {
             copyBtn.textContent = "프롬프트 복사";
           }, 1800);
