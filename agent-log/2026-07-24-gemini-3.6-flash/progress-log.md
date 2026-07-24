@@ -17,12 +17,13 @@
 - `pages/sections/ready-to-use/email.md` & `core/build_pipeline.py`:
   - `ai_target: ChatGPT, Gemini` front matter 지원 추가.
 - `assets/js/prompt-copy.js`:
-  - 보안 및 XSS/렌더링 깨짐 방지를 위한 클라이언트 입력 새니타이저(`sanitizeInput`) 도입.
-  - 드롭다운 커스텀 입력 및 텍스트 필드에서 HTML 태그(`<script>` 등) 및 위험 특수문자(`<>"'&\\`/`) 자동 제거 및 무해화 필터링 처리.
+  - 프롬프트 작성용 특수기호(`[]`, `{}`, `()`, `:`, `;`, `"`, `'`, `/`, `=`, `+`, `*`, `%`, `#`, `$`, `@`, `!`, `?` 등) 100% 자유 허용 개편.
+  - XSS 방지는 문자열 제거 방식이 아닌 `textContent` / `createTextNode` 안전 바인딩(Text Node Binding) 방식으로 전환하여 보안과 프롬프트 입력 자유도 동시 확보.
 
 ## 3. 검증 결과
 - `python3 scripts/build.py` 정적 사이트 빌드 정상 완료 (Pages: 12, Assets: 10, Routes: 12)
-- 텍스트 입력 보안 정제 기능 및 빌드 검증 완료
+- 특수기호 100% 허용 및 렌더링 검증 완료
+
 
 
 

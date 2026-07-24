@@ -6,10 +6,9 @@ let activeDropdown = null;
 /* ===== Input Sanitization Helper ===== */
 function sanitizeInput(text) {
   if (!text) return "";
-  return text
-    .replace(/<[^>]*>?/gm, "")
-    .replace(/[<>"'&\\`/]/g, "")
-    .trim();
+  // 프롬프트 특수기호([], {}, (), :, ;, ", ', /, =, +, *, %, #, $, @, !, ? 등) 100% 허용
+  // 제어문자만 제거하며, XSS 방지는 textContent/createTextNode 렌더링 바인딩으로 보장
+  return text.replace(/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
 }
 
 /* ===== Close active dropdown ===== */
