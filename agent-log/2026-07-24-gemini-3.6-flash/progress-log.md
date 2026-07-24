@@ -7,13 +7,16 @@
   - `assets/css/site.css`
 
 ## 2. 변경 내역
-- `assets/js/image-slider.js`:
-  - `querySelector`로 단일 추출하던 `data-slider-prev`, `data-slider-next` 요소를 `querySelectorAll`로 전체 추출하여 모든 슬라이드의 화살표 버튼에 이벤트 바인딩.
-  - `goTo()` 스크롤 위치 계산 방식을 `getBoundingClientRect()` 기반의 상대 위치 계산식(`viewport.scrollLeft + (slideRect.left - viewportRect.left)`)으로 보정.
+- `core/renderers/static_prompt.py`:
+  - `data-slider-track` 트랙 래퍼 추가로 100% 가로 슬라이더 구조 구현.
 - `assets/css/site.css`:
-  - `.image-slider__viewport`에 `position: relative` 속성 추가.
+  - `scroll-snap` 방식 제거 및 `overflow: hidden`, `will-change: transform` 기반 반응형 트랙 CSS 적용.
+- `assets/js/image-slider.js`:
+  - 순수 JS `translateX` 슬라이더 엔진으로 전면 재작성 (화살표, 점 네비게이션, 모바일 터치 제스처 터치/스위프 완벽 지원).
 
 ## 3. 검증 결과
-- `python3 scripts/build.py` 빌드 실행 정상 완료 (Pages: 12, Assets: 10, Routes: 12)
-- dist/ 하위 정적 빌드 산출물 생성 확인 완료
+- `python3 scripts/build.py` 정상 성공 (Pages: 12, Assets: 10)
+- `dist/ready-to-use/email/index.html` 슬라이더 모듈 생성 및 동적 트랙 전환 지원 검증 완료
+
+
 

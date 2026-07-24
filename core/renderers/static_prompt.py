@@ -3,19 +3,21 @@
 from __future__ import annotations
 
 import re
+from types import SimpleNamespace
 
 from core.component_engine import (
+    render_image_slider_component,
     render_page_body_component,
     render_page_intro_component,
     render_prompt_collection_component,
     render_prompt_item_component,
     render_prompt_item_description_fragment,
 )
-from core.component_models import PageBodyComponent, PageIntroComponent, PromptCollectionComponent, PromptItemComponent
+from core.component_models import ImageSliderComponent, PageBodyComponent, PageIntroComponent, PromptCollectionComponent, PromptItemComponent
 from core.errors import BuildError
 from html import escape as escape_html
 from core.renderer_models import PageRendererContext, PageRendererResult
-from core.renderer_validation import parse_prompt_block, validate_renderer_result
+from core.renderer_validation import parse_image_slider_block, parse_prompt_block, validate_renderer_result
 from core.renderers.base import build_main_html
 
 
@@ -78,6 +80,9 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
     """Render a static prompt page."""
 
     prompt_blocks = [parse_prompt_block(block) for block in context.control_blocks if block.label == "prompt"]
+    slider_blocks = _parse_preview_blocks(context) or [
+        parse_image_slider_block(block) for block in context.control_blocks if block.label == "image-slider"
+    ]
     if not prompt_blocks:
         raise BuildError(
             "Render page",
@@ -96,22 +101,21 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
         PageBodyComponent(body_html=context.rendered_markdown_html),
         context.component_templates,
     )
+    slider_results = [
+        render_image_slider_component(_build_image_slider_component(block), context.component_templates)
+        for block in slider_blocks
+    ]
     prompt_item_results = []
     for prompt_block in prompt_blocks:
         body_html = render_inline_prompt_body_html(prompt_block.body)
         has_inline_controls = 'class="itc"' in body_html
 
         if has_inline_controls:
-            actions_html = ""
-            preview_html = (
-                '<article class="prompt-item prompt-item--preview">\n'
-                '  <h3 class="prompt-item__preview-title">완성된 프롬프트 (실시간 미리보기)</h3>\n'
-                '  <div class="prompt-item__preview-box"><code class="prompt-item__preview-code"></code></div>\n'
-                '  <footer class="prompt-item__actions">\n'
-                '    <button type="button" class="prompt-item__copy-button" data-prompt-copy>프롬프트 복사</button>\n'
-                '    <span class="prompt-item__copy-status sr-only" aria-live="polite"></span>\n'
-                '  </footer>\n'
-                '</article>'
+            actions_html = (
+                '<footer class="prompt-item__actions">\n'
+                '  <button type="button" class="prompt-item__copy-button" data-prompt-copy>프롬프트 복사</button>\n'
+                '  <span class="prompt-item__copy-status sr-only" aria-live="polite"></span>\n'
+                '</footer>'
             )
         else:
             actions_html = (
@@ -120,7 +124,6 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
                 '  <span class="prompt-item__copy-status sr-only" aria-live="polite"></span>\n'
                 '</footer>'
             )
-            preview_html = ""
 
         prompt_item_results.append(
             render_prompt_item_component(
@@ -129,7 +132,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
                     prompt_description_html=render_prompt_item_description_fragment(prompt_block.description),
                     prompt_body_html=body_html,
                     prompt_actions_html=actions_html,
-                    prompt_preview_html=preview_html,
+                    prompt_preview_html="",
                 ),
                 context.component_templates,
             )
@@ -139,6 +142,8 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
         PromptCollectionComponent(prompt_items_html=prompt_items_html),
         context.component_templates,
     )
+    section_html = section_result.rendered_html
+    top_preview_html = "\n".join(result.rendered_html for result in slider_results)
     result = PageRendererResult(
         page_id=context.page_id,
         page_type=context.page_type,
@@ -148,12 +153,12 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
         main_html=build_main_html(
             page_type=context.page_type,
             intro_html=intro_result.rendered_html,
-            body_html=body_result.rendered_html,
-            section_html=section_result.rendered_html,
+            body_html="\n".join(part for part in (top_preview_html, body_result.rendered_html) if part),
+            section_html=section_html,
         ),
         source_heading_count=context.source_heading_count,
-        rendered_section_count=len(prompt_blocks),
-        component_results=(intro_result, body_result, *prompt_item_results, section_result),
+        rendered_section_count=len(prompt_blocks) + len(slider_blocks),
+        component_results=(intro_result, body_result, *slider_results, *prompt_item_results, section_result),
         warnings=_heading_warning(context),
     )
     validate_renderer_result(context, result)
@@ -164,3 +169,79 @@ def _heading_warning(context: PageRendererContext) -> tuple[str, ...]:
     if not context.heading_structure:
         return ()
     return ("Markdown headings were normalized below the page intro to keep one page-level H1.",)
+
+
+def _build_image_slider_component(block) -> ImageSliderComponent:
+    slide_count = len(block.slides)
+    slides_html: list[str] = []
+    nav_html: list[str] = []
+    for index, slide in enumerate(block.slides):
+        is_first = index == 0
+        slides_html.append(
+            (
+                '<article class="image-slider__slide{active_class}" id="{slide_id}" data-slider-slide>\n'
+                '  <div class="image-slider__frame">\n'
+                '    <img class="image-slider__image" src="{image_src}" alt="{image_alt}" />\n'
+                '  </div>\n'
+                '</article>'
+            ).format(
+                slide_id=slide.slide_id,
+                image_src=escape_html(slide.image_src, quote=True),
+                image_alt=escape_html(slide.image_alt),
+                active_class=" is-active" if is_first else "",
+            )
+        )
+        nav_html.append(
+            f'<li class="image-slider__nav-item"><button type="button" class="image-slider__nav-link{" is-active" if is_first else ""}" aria-label="슬라이드 {index + 1}로 이동" data-slider-dot>•</button></li>'
+        )
+    slider_html = (
+        '<div class="image-slider__wrapper">\n'
+        '  <button type="button" class="image-slider__arrow image-slider__arrow--prev" aria-label="이전 이미지" data-slider-prev>&lt;</button>\n'
+        '  <div class="image-slider__viewport">\n'
+        '    <div class="image-slider__track" data-slider-track>\n'
+        + "".join(slides_html)
+        + '\n    </div>\n'
+        '  </div>\n'
+        '  <button type="button" class="image-slider__arrow image-slider__arrow--next" aria-label="다음 이미지" data-slider-next>&gt;</button>\n'
+        '</div>\n'
+        + '<ol class="image-slider__nav">'
+        + "".join(nav_html)
+        + "</ol>"
+    )
+    return ImageSliderComponent(
+        slider_title=block.title,
+        slider_description=block.description or "",
+        slider_slides_html=slider_html,
+    )
+
+
+def _parse_preview_blocks(context: PageRendererContext):
+    preview_value = context.parsed_front_matter.get("preview", "").strip()
+    if not preview_value:
+        return ()
+
+    entries = [item.strip() for item in preview_value.split(",") if item.strip()]
+    if len(entries) < 2:
+        raise BuildError(
+            "Render page",
+            "preview front matter requires at least two image paths",
+            path=context.source_path,
+            page_id=context.page_id,
+            page_type=context.page_type,
+            page_route=context.page_route,
+            renderer_id=context.page_type,
+        )
+
+    slides = []
+    for index, image_src in enumerate(entries, start=1):
+        slides.append(
+            SimpleNamespace(
+                slide_id=f"slide-{index}",
+                image_src=image_src,
+                image_alt=f"preview image {index}",
+                title=f"미리보기 {index}",
+                caption="예시 이미지",
+            )
+        )
+
+    return (SimpleNamespace(title=context.page_title, description=context.page_description, slides=tuple(slides)),)
