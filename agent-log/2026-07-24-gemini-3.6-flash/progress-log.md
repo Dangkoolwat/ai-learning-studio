@@ -17,11 +17,13 @@
 - `pages/sections/ready-to-use/email.md` & `core/build_pipeline.py`:
   - `ai_target: ChatGPT, Gemini` front matter 지원 추가.
 - `core/renderers/static_prompt.py`:
-  - `ai_target`에 명시된 AI 서비스만 뱃지 및 바로가기 액션 버튼으로 선택적으로 유동 노출되도록 동적 필터링 렌더링 구현 완료. (예: `ai_target: Gemini` 명시 시 ChatGPT 관련 뱃지/버튼 완전 배제)
+  - `ai_target` 생략 시 기본값으로 2개 서비스(ChatGPT, Gemini) 이동 지원.
+  - `ai_target` 1개 서비스 명시 시 해당 서비스로만 1:1 이동 제한 규칙 완성.
 
 ## 3. 검증 결과
 - `python3 scripts/build.py` 정적 사이트 빌드 정상 완료 (Pages: 12, Assets: 10, Routes: 12)
-- `dist/ready-to-use/email/index.html` 내 `Gemini 전용` 및 `Gemini에서 사용 ↗` 단독 렌더링 확인 완료
+- `ai_target` 미지정 시 2개 서비스 기본 노출 및 지정 시 단독 렌더링 규칙 검증 완료
+
 
 
 
