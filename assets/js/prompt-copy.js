@@ -3,6 +3,15 @@ const feedbackTimers = new WeakMap();
 
 let activeDropdown = null;
 
+/* ===== Input Sanitization Helper ===== */
+function sanitizeInput(text) {
+  if (!text) return "";
+  return text
+    .replace(/<[^>]*>?/gm, "")
+    .replace(/[<>"'&\\`/]/g, "")
+    .trim();
+}
+
 /* ===== Close active dropdown ===== */
 function closeDropdown() {
   if (activeDropdown) {
@@ -187,11 +196,14 @@ function openDropdown(chip, promptItem) {
     input.onkeydown = (e) => {
       if (e.key === "Enter" && input.value.trim()) {
         e.preventDefault();
-        selectedSet.delete("(선택 없음)");
-        selectedSet.add(input.value.trim());
-        const newArr = Array.from(selectedSet).filter((s) => s !== "(선택 없음)");
-        const newStr = newArr.length > 0 ? newArr.join(", ") : "(선택 없음)";
-        applyValue(chip, newStr, promptItem);
+        const cleanVal = sanitizeInput(input.value);
+        if (cleanVal) {
+          selectedSet.delete("(선택 없음)");
+          selectedSet.add(cleanVal);
+          const newArr = Array.from(selectedSet).filter((s) => s !== "(선택 없음)");
+          const newStr = newArr.length > 0 ? newArr.join(", ") : "(선택 없음)";
+          applyValue(chip, newStr, promptItem);
+        }
       }
     };
     const hint = document.createElement("small");
@@ -225,7 +237,8 @@ function openDropdown(chip, promptItem) {
     applyBtn.textContent = "적용";
 
     function doApplyText() {
-      const txt = textarea.value.trim() || chip.dataset.placeholder || "";
+      const clean = sanitizeInput(textarea.value);
+      const txt = clean || chip.dataset.placeholder || "";
       applyValue(chip, txt, promptItem);
     }
 
