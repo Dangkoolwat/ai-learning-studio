@@ -16,12 +16,13 @@
   - 순수 JS `translateX` 슬라이더 엔진으로 전면 재작성 (화살표, 점 네비게이션, 모바일 터치 제스처 터치/스위프 완벽 지원).
 - `pages/sections/ready-to-use/email.md` & `core/build_pipeline.py`:
   - `ai_target: ChatGPT, Gemini` front matter 지원 추가.
-- `components/prompt-item.html`, `core/component_registry.py`, `core/component_models.py`, `core/component_engine.py`:
-  - `prompt_badges_html` 신규 슬롯 추가로 상단 프롬프트 설정 카드 헤더에도 AI 타겟 뱃지(`ChatGPT 전용`, `Gemini 전용`) 동일 노출 구현.
+- `core/renderers/static_prompt.py`:
+  - `ai_target`에 명시된 AI 서비스만 뱃지 및 바로가기 액션 버튼으로 선택적으로 유동 노출되도록 동적 필터링 렌더링 구현 완료. (예: `ai_target: Gemini` 명시 시 ChatGPT 관련 뱃지/버튼 완전 배제)
 
 ## 3. 검증 결과
 - `python3 scripts/build.py` 정적 사이트 빌드 정상 완료 (Pages: 12, Assets: 10, Routes: 12)
-- `dist/ready-to-use/email/index.html` 상단 및 하단 카드 양쪽 헤더 AI 뱃지 적용 검증 완료
+- `dist/ready-to-use/email/index.html` 내 `Gemini 전용` 및 `Gemini에서 사용 ↗` 단독 렌더링 확인 완료
+
 
 
 

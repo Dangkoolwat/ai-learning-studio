@@ -105,7 +105,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
         render_image_slider_component(_build_image_slider_component(block), context.component_templates)
         for block in slider_blocks
     ]
-    ai_target_str = context.parsed_front_matter.get("ai_target", "ChatGPT, Gemini")
+    ai_target_str = context.parsed_front_matter.get("ai_target", "").strip()
     ai_targets = [t.strip() for t in ai_target_str.split(",") if t.strip()]
     badges_html = []
     ext_links_html = []
