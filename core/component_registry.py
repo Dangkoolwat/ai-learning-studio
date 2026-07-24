@@ -38,9 +38,9 @@ APPROVED_COMPONENT_SPECS = (
     ComponentSpec(
         component_id="prompt-item",
         template_path=Path("components/prompt-item.html"),
-        placeholders=("prompt_title", "prompt_description_html", "prompt_body_html", "prompt_actions_html", "prompt_preview_html"),
+        placeholders=("prompt_title", "prompt_description_html", "prompt_body_html", "prompt_actions_html", "prompt_preview_html", "prompt_badges_html"),
         plain_text_placeholders=("prompt_title",),
-        trusted_html_placeholders=("prompt_description_html", "prompt_body_html", "prompt_actions_html", "prompt_preview_html"),
+        trusted_html_placeholders=("prompt_description_html", "prompt_body_html", "prompt_actions_html", "prompt_preview_html", "prompt_badges_html"),
         required_placeholders=("prompt_title", "prompt_description_html", "prompt_body_html"),
         version=1,
     ),
@@ -90,6 +90,15 @@ APPROVED_COMPONENT_SPECS = (
         plain_text_placeholders=("step_id", "step_number", "step_title", "step_description", "step_result"),
         trusted_html_placeholders=(),
         required_placeholders=("step_id", "step_number", "step_title", "step_description", "step_result"),
+        version=1,
+    ),
+    ComponentSpec(
+        component_id="image-slider",
+        template_path=Path("components/image-slider.html"),
+        placeholders=("slider_title", "slider_description", "slider_slides_html"),
+        plain_text_placeholders=("slider_title", "slider_description"),
+        trusted_html_placeholders=("slider_slides_html",),
+        required_placeholders=("slider_title", "slider_description", "slider_slides_html"),
         version=1,
     ),
 )

@@ -11,6 +11,7 @@ from core.component_models import (
     ComponentRenderResult,
     LoadedComponentTemplates,
     PageBodyComponent,
+    ImageSliderComponent,
     PageIntroComponent,
     PracticeTimelineComponent,
     PromptBuilderComponent,
@@ -32,6 +33,7 @@ _MODEL_COMPONENT_IDS = {
     PromptItemComponent: "prompt-item",
     PromptBuilderComponent: "prompt-builder",
     PromptFieldComponent: "prompt-field",
+    ImageSliderComponent: "image-slider",
     PracticeTimelineComponent: "practice-timeline",
     TimelineStepComponent: "timeline-step",
 }
@@ -43,6 +45,7 @@ _OUTPUT_ROOTS = {
     "prompt-item": ("article", "prompt-item"),
     "prompt-builder": ("section", "prompt-builder"),
     "prompt-field": ("li", "prompt-field"),
+    "image-slider": ("section", "image-slider"),
     "practice-timeline": ("section", "practice-timeline"),
     "timeline-step": ("li", "timeline-step"),
 }
@@ -152,6 +155,10 @@ def render_timeline_step_component(component: TimelineStepComponent, templates: 
     return render_component(component, templates)
 
 
+def render_image_slider_component(component: ImageSliderComponent, templates: LoadedComponentTemplates) -> ComponentRenderResult:
+    return render_component(component, templates)
+
+
 def render_prompt_item_description_fragment(description: str | None) -> str:
     if not description:
         return ""
@@ -210,6 +217,7 @@ def _component_replacements(component: object, spec) -> dict[str, str]:
             "prompt_body_html": component.prompt_body_html,
             "prompt_actions_html": component.prompt_actions_html,
             "prompt_preview_html": component.prompt_preview_html,
+            "prompt_badges_html": component.prompt_badges_html,
         }
     if isinstance(component, PromptBuilderComponent):
         return {"prompt_fields_html": component.prompt_fields_html}
@@ -220,6 +228,12 @@ def _component_replacements(component: object, spec) -> dict[str, str]:
             "field_description": escape_html(component.field_description),
             "field_placeholder_html": component.field_placeholder_html,
             "field_requirement": escape_html(component.field_requirement),
+        }
+    if isinstance(component, ImageSliderComponent):
+        return {
+            "slider_title": escape_html(component.slider_title),
+            "slider_description": escape_html(component.slider_description),
+            "slider_slides_html": component.slider_slides_html,
         }
     if isinstance(component, PracticeTimelineComponent):
         return {"timeline_steps_html": component.timeline_steps_html}
@@ -232,4 +246,3 @@ def _component_replacements(component: object, spec) -> dict[str, str]:
             "step_result": escape_html(component.step_result),
         }
     raise BuildError("Render component", f"unsupported component model: {type(component).__name__}")
-

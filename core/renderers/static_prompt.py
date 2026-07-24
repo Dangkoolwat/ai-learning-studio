@@ -162,6 +162,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
                     prompt_body_html=body_html,
                     prompt_actions_html=actions_html,
                     prompt_preview_html=preview_html,
+                    prompt_badges_html=ai_badges_block,
                 ),
                 context.component_templates,
             )

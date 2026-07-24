@@ -73,6 +73,7 @@ class PromptItemComponent:
     prompt_body_html: str
     prompt_actions_html: str = ""
     prompt_preview_html: str = ""
+    prompt_badges_html: str = ""
     component_id: ClassVar[str] = "prompt-item"
 
 
@@ -109,6 +110,14 @@ class TimelineStepComponent:
 
 
 @dataclass(slots=True, frozen=True)
+class ImageSliderComponent:
+    slider_title: str
+    slider_description: str
+    slider_slides_html: str
+    component_id: ClassVar[str] = "image-slider"
+
+
+@dataclass(slots=True, frozen=True)
 class ComponentRenderResult:
     """Rendered component HTML and its validation summary."""
 
@@ -119,4 +128,3 @@ class ComponentRenderResult:
     plain_text_field_count: int
     trusted_html_field_count: int
     warnings: tuple[str, ...] = field(default_factory=tuple)
-

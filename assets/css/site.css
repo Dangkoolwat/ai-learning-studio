@@ -367,7 +367,10 @@ button:focus-visible {
 }
 
 .prompt-item__header {
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--als-space-2);
   margin-bottom: var(--als-space-4);
 }
@@ -377,6 +380,10 @@ button:focus-visible {
   color: var(--site-text);
   font-size: var(--als-font-size-lg);
   line-height: var(--als-line-height-tight);
+}
+
+.prompt-item__header .prompt-item__description {
+  width: 100%;
 }
 
 .prompt-item__description {
