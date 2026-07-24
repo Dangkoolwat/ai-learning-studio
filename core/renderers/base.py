@@ -121,7 +121,13 @@ def indent_preserving_pre(html_text: str, prefix: str = "    ") -> str:
     return "\n".join(indented_lines)
 
 
-def build_main_html(*, page_type: str, intro_html: str, body_html: str, section_html: str | None = None) -> str:
+def build_main_html(
+    *,
+    page_type: str,
+    intro_html: str,
+    body_html: str,
+    section_html: str | None = None,
+) -> str:
     """Build the renderer-owned main region."""
 
     parts = [

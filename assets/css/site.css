@@ -193,7 +193,7 @@ button:focus-visible {
   border-radius: var(--als-radius-md);
   color: var(--site-text);
   text-decoration: none;
-  transition: background-color 140ms ease, color 140ms ease, transform 140ms ease;
+  transition: background-color 140ms ease, color 140ms ease;
 }
 
 .navigation-link:hover {
