@@ -610,7 +610,7 @@ button:focus-visible {
   min-height: 44px;
   padding: var(--als-space-2) var(--als-space-4);
   border: 1px solid var(--site-accent);
-  border-radius: var(--als-radius-pill);
+  border-radius: var(--site-radius-md);
   background: var(--site-accent);
   color: #ffffff;
   cursor: pointer;
