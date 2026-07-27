@@ -83,16 +83,6 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
     slider_blocks = _parse_preview_blocks(context) or [
         parse_image_slider_block(block) for block in context.control_blocks if block.label == "image-slider"
     ]
-    if not prompt_blocks:
-        raise BuildError(
-            "Render page",
-            "static-prompt pages require at least one prompt block",
-            path=context.source_path,
-            page_id=context.page_id,
-            page_type=context.page_type,
-            page_route=context.page_route,
-            renderer_id=context.page_type,
-        )
     intro_result = render_page_intro_component(
         PageIntroComponent(page_title=context.page_title, page_description=context.page_description),
         context.component_templates,
@@ -179,12 +169,18 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
                 context.component_templates,
             )
         )
-    prompt_items_html = "\n".join(result.rendered_html for result in prompt_item_results)
-    section_result = render_prompt_collection_component(
-        PromptCollectionComponent(prompt_items_html=prompt_items_html),
-        context.component_templates,
-    )
-    section_html = section_result.rendered_html
+    if prompt_blocks:
+        prompt_items_html = "\n".join(result.rendered_html for result in prompt_item_results)
+        section_result = render_prompt_collection_component(
+            PromptCollectionComponent(prompt_items_html=prompt_items_html),
+            context.component_templates,
+        )
+        section_html = section_result.rendered_html
+        component_results = (intro_result, body_result, *slider_results, *prompt_item_results, section_result)
+    else:
+        section_html = ""
+        component_results = (intro_result, body_result, *slider_results)
+
     top_preview_html = "\n".join(result.rendered_html for result in slider_results)
     result = PageRendererResult(
         page_id=context.page_id,
@@ -200,7 +196,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
         ),
         source_heading_count=context.source_heading_count,
         rendered_section_count=len(prompt_blocks) + len(slider_blocks),
-        component_results=(intro_result, body_result, *slider_results, *prompt_item_results, section_result),
+        component_results=component_results,
         warnings=_heading_warning(context),
     )
     validate_renderer_result(context, result)

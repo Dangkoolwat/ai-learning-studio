@@ -711,7 +711,8 @@ def validate_renderer_component_usage(
             slider_count = sum(1 for block in page_context.control_blocks if block.label == "image-slider")
         expected_component_ids.extend(["image-slider"] * slider_count)
         expected_component_ids.extend(["prompt-item"] * prompt_count)
-        expected_component_ids.append("prompt-collection")
+        if prompt_count > 0:
+            expected_component_ids.append("prompt-collection")
     elif page.type == "prompt-builder":
         field_count = sum(1 for block in page_context.control_blocks if block.label == "prompt-field")
         expected_component_ids.extend(["prompt-field"] * field_count)
@@ -1790,16 +1791,6 @@ def build_site(
                         renderer_id=page.type,
                     )
             elif page.type == "static-prompt":
-                if control_labels.count("prompt") < 1:
-                    raise BuildError(
-                        "Parse renderer-specific control blocks",
-                        "static-prompt pages require at least one prompt block",
-                        path=source.source_path,
-                        page_id=page.id,
-                        page_type=page.type,
-                        page_route=page.route,
-                        renderer_id=page.type,
-                    )
                 if any(label not in {"prompt", "prompt-field", "image-slider"} for label in control_labels):
                     raise BuildError(
                         "Parse renderer-specific control blocks",
