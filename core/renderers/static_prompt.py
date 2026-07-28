@@ -158,13 +158,13 @@ def _build_ai_badges_and_actions(ai_targets: list[str]) -> tuple[str, str]:
     for target in ai_targets:
         target_lower = target.lower()
         if "chatgpt" in target_lower:
-            badges_html.append('<span class="badge-ai badge-ai--chatgpt">ChatGPT 전용</span>')
+            badges_html.append('<span class="badge-ai badge-ai--chatgpt">ChatGPT</span>')
             ext_links_html.append('<span role="button" tabindex="0" class="prompt-item__external-link" data-open-ai="chatgpt">ChatGPT에서 사용 ↗</span>')
         elif "gemini" in target_lower:
-            badges_html.append('<span class="badge-ai badge-ai--gemini">Gemini 전용</span>')
+            badges_html.append('<span class="badge-ai badge-ai--gemini">Gemini</span>')
             ext_links_html.append('<span role="button" tabindex="0" class="prompt-item__external-link" data-open-ai="gemini">Gemini에서 사용 ↗</span>')
         elif "claude" in target_lower:
-            badges_html.append('<span class="badge-ai badge-ai--claude">Claude 전용</span>')
+            badges_html.append('<span class="badge-ai badge-ai--claude">Claude</span>')
             ext_links_html.append('<span role="button" tabindex="0" class="prompt-item__external-link" data-open-ai="claude">Claude에서 사용 ↗</span>')
         else:
             badges_html.append(f'<span class="badge-ai badge-ai--universal">{escape_html(target)}</span>')
