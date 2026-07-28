@@ -313,21 +313,31 @@ button:focus-visible {
   margin-top: var(--als-space-4);
 }
 
+.page-body h1,
 .page-body h2,
 .page-body h3 {
-  margin-top: var(--als-space-8);
   margin-bottom: 0;
   color: var(--site-text);
   line-height: var(--als-line-height-tight);
   letter-spacing: -0.02em;
 }
 
+.page-body h1 {
+  font-size: var(--als-font-size-2xl);
+  margin-top: var(--als-space-12);
+  margin-bottom: var(--als-space-4);
+}
+
 .page-body h2 {
   font-size: var(--als-font-size-xl);
+  margin-top: var(--als-space-10);
+  margin-bottom: var(--als-space-4);
 }
 
 .page-body h3 {
   font-size: var(--als-font-size-lg);
+  margin-top: var(--als-space-8);
+  margin-bottom: var(--als-space-3);
 }
 
 .page-body p,
@@ -1283,4 +1293,96 @@ html.js .site-nav-toggle {
   font-size: 14px;
   line-height: 1.6;
   color: #475569;
+}
+
+/* ===== Individual Step Rounded Box Cards (Full Width) & Flow Arrow ===== */
+.page-content--static-prompt .page-body {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.page-content--static-prompt .page-body > * {
+  max-width: none !important;
+}
+
+.practice-step-card {
+  display: block;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  background: var(--als-surface, #ffffff) !important;
+  border: 1px solid var(--als-border, #d7d3cc) !important;
+  border-radius: 16px !important;
+  padding: 2rem 2.25rem !important;
+  margin: 1rem 0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.practice-step-card:hover {
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+.practice-step-card h2 {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 0 !important;
+  padding-bottom: 0.75rem !important;
+  border-bottom: 2px solid var(--als-accent, #355c7d) !important;
+  font-size: 1.4rem !important;
+  color: var(--als-text-primary, #202124) !important;
+}
+
+.practice-step-card h2::before {
+  content: "" !important;
+  display: inline-block !important;
+  width: 4px !important;
+  height: 1.1em !important;
+  background: var(--als-accent, #355c7d) !important;
+  border-radius: 2px !important;
+}
+
+.practice-step-card > :first-child,
+.practice-step-card > h2:first-child,
+.practice-step-card > h3:first-child,
+.practice-step-card > h4:first-child {
+  margin-top: 0 !important;
+}
+
+.practice-step-card h3 {
+  color: var(--als-accent, #355c7d) !important;
+  font-size: 1.25rem !important;
+  margin-top: 2.75rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.practice-step-card h3 + h4 {
+  margin-top: 0.35rem !important;
+  margin-bottom: 1rem !important;
+  color: var(--als-text-primary, #202124) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+
+.step-flow-arrow {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  margin: 1.75rem auto !important;
+  border-radius: 50% !important;
+  background: #eff6ff !important;
+  border: 2px solid #bfdbfe !important;
+  color: #2563eb !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15) !important;
+  user-select: none !important;
 }
