@@ -11,6 +11,7 @@ from core.errors import BuildError
 
 
 INLINE_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+INLINE_BOLD_RE = re.compile(r"\*\*(.*?)\*\*")
 
 
 def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
@@ -21,6 +22,7 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
     list_items: list[str] = []
     code_lines: list[str] = []
     in_code_block = False
+    in_step_card = False
 
     def flush_paragraph() -> None:
         if not paragraph_lines:
@@ -36,6 +38,9 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
         items = "".join(f"<li>{item}</li>" for item in list_items)
         blocks.append(f"<ul>{items}</ul>")
         list_items.clear()
+
+    blocks.append('<div class="practice-step-card">')
+    in_step_card = True
 
     for raw_line in markdown_text.splitlines():
         stripped = raw_line.strip()
@@ -59,6 +64,20 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
             flush_paragraph()
             flush_list()
             continue
+        if stripped.startswith("<!-- RENDERER_CONTROL_BLOCK:"):
+            flush_paragraph()
+            flush_list()
+            blocks.append(stripped)
+            continue
+
+        if stripped in {"---", "***", "___"}:
+            flush_paragraph()
+            flush_list()
+            if in_step_card:
+                blocks.append('</div>')
+                blocks.append('<div class="step-flow-arrow" aria-hidden="true">↓</div>')
+                blocks.append('<div class="practice-step-card">')
+            continue
 
         heading_level, heading_text = _parse_heading(stripped)
         if heading_level is not None:
@@ -81,6 +100,9 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
 
     flush_paragraph()
     flush_list()
+    if in_step_card:
+        blocks.append('</div>')
+
     return "\n".join(blocks)
 
 
@@ -97,7 +119,7 @@ def build_page_intro_html(*, page_title: str, page_description: str) -> str:
 
 
 def indent_preserving_pre(html_text: str, prefix: str = "    ") -> str:
-    """Indent HTML text while preserving raw content inside <pre>...</pre> tags."""
+    """Indent HTML text while preserving raw content inside <pre>...</pre> and preview <code>...</code> tags."""
     lines = html_text.splitlines()
     indented_lines: list[str] = []
     in_pre = False
@@ -105,14 +127,14 @@ def indent_preserving_pre(html_text: str, prefix: str = "    ") -> str:
     for line in lines:
         if in_pre:
             indented_lines.append(line)
-            if "</pre>" in line:
+            if "</pre>" in line or "</code>" in line:
                 in_pre = False
             continue
 
-        if "<pre" in line:
+        if "<pre" in line or '<code class="prompt-item__preview-code"' in line:
             in_pre = True
             indented_lines.append(prefix + line if line.strip() else line)
-            if "</pre>" in line:
+            if "</pre>" in line or "</code>" in line:
                 in_pre = False
             continue
 
@@ -164,22 +186,37 @@ def _parse_heading(text: str) -> tuple[int | None, str]:
     return None, text
 
 
+def _render_bold_and_escape(text: str) -> str:
+    """Render inline bold tags (**text** -> <strong>text</strong>) and escape raw HTML."""
+    rendered_parts: list[str] = []
+    last_index = 0
+
+    for match in INLINE_BOLD_RE.finditer(text):
+        rendered_parts.append(escape_html(text[last_index:match.start()]))
+        bold_content = escape_html(match.group(1))
+        rendered_parts.append(f"<strong>{bold_content}</strong>")
+        last_index = match.end()
+
+    rendered_parts.append(escape_html(text[last_index:]))
+    return "".join(rendered_parts)
+
+
 def _render_inline_markup(text: str, *, source_path: Path) -> str:
-    """Render the small inline subset used by the project."""
+    """Render the small inline subset (links, bold) used by the project."""
 
     rendered_parts: list[str] = []
     last_index = 0
 
     for match in INLINE_LINK_RE.finditer(text):
-        rendered_parts.append(escape_html(text[last_index:match.start()]))
-        label = escape_html(match.group(1))
+        rendered_parts.append(_render_bold_and_escape(text[last_index:match.start()]))
+        label = _render_bold_and_escape(match.group(1))
         href = match.group(2).strip()
         if not _is_safe_internal_href(href):
             raise BuildError("Render Markdown", "only internal links are allowed in markdown content", path=source_path)
         rendered_parts.append(f'<a href="{escape_html(href, quote=True)}">{label}</a>')
         last_index = match.end()
 
-    rendered_parts.append(escape_html(text[last_index:]))
+    rendered_parts.append(_render_bold_and_escape(text[last_index:]))
     return "".join(rendered_parts)
 
 

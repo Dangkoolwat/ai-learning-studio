@@ -22,13 +22,36 @@ function closeDropdown() {
   });
 }
 
+/* ===== 1:1 Pair Matcher Helper ===== */
+function getPair(item) {
+  if (!item) return { optionsItem: null, previewItem: null };
+  const promptItem = item.closest(".prompt-item");
+  if (!promptItem) return { optionsItem: null, previewItem: null };
+
+  if (promptItem.classList.contains("prompt-item--preview")) {
+    let prev = promptItem.previousElementSibling;
+    while (prev && !prev.classList.contains("prompt-item")) {
+      prev = prev.previousElementSibling;
+    }
+    const optionsItem = (prev && !prev.classList.contains("prompt-item--preview")) ? prev : null;
+    return { optionsItem, previewItem: promptItem };
+  } else {
+    let next = promptItem.nextElementSibling;
+    while (next && !next.classList.contains("prompt-item")) {
+      next = next.nextElementSibling;
+    }
+    const previewItem = (next && next.classList.contains("prompt-item--preview")) ? next : null;
+    return { optionsItem: promptItem, previewItem };
+  }
+}
+
 function getPromptText(promptItem) {
   if (!promptItem) return "";
 
   if (promptItem.classList.contains("prompt-item--preview")) {
-    const previewCode = promptItem.querySelector(".prompt-item__preview-code");
-    if (previewCode && previewCode.textContent.trim()) {
-      return previewCode.textContent.trim();
+    const { optionsItem } = getPair(promptItem);
+    if (optionsItem) {
+      return getPromptText(optionsItem);
     }
   }
 
@@ -37,7 +60,7 @@ function getPromptText(promptItem) {
 
   const clone = code.cloneNode(true);
   clone.querySelectorAll(".itc").forEach((chip) => {
-    let val = chip.dataset.value || chip.textContent.replace(/[▾✎]/g, "").trim();
+    let val = chip.getAttribute("data-value") || chip.dataset.value || chip.textContent.replace(/[▾✎]/g, "").trim();
     if (val === "(선택 없음)") {
       val = "";
     }
@@ -47,7 +70,6 @@ function getPromptText(promptItem) {
   const rawText = clone.textContent ?? "";
   const filteredLines = rawText.split("\n").filter((line) => {
     const trimmed = line.trim();
-    // Drop lines like "- 필요 첨부 서류:" when value is empty
     if (/^-\s*[^:]+:\s*$/.test(trimmed)) {
       return false;
     }
@@ -69,24 +91,34 @@ function getPromptText(promptItem) {
 
 /* ===== Update live preview ===== */
 function updatePreview(promptItem) {
-  const container = promptItem?.closest(".prompt-collection") || promptItem?.parentElement || document;
-  const optionsItem = container.querySelector(".prompt-item:not(.prompt-item--preview)") || promptItem;
-  const previewCode = container.querySelector(".prompt-item--preview .prompt-item__preview-code");
-  
-  if (optionsItem && previewCode) {
-    previewCode.textContent = getPromptText(optionsItem);
+  const { optionsItem, previewItem } = getPair(promptItem);
+  if (optionsItem && previewItem) {
+    const previewCode = previewItem.querySelector(".prompt-item__preview-code");
+    if (previewCode) {
+      const newText = getPromptText(optionsItem);
+      previewCode.textContent = newText;
+    }
   }
 }
 
 /* ===== Apply value to chip ===== */
 function applyValue(chip, newVal, promptItem) {
+  if (!chip) return;
+
   chip.dataset.value = newVal;
-  // Update visible text: keep the arrow icon
-  const arrow = chip.querySelector(".itc-arrow");
-  const arrowText = arrow ? arrow.outerHTML : "";
-  chip.innerHTML = `${newVal} ${arrowText}`;
+  chip.setAttribute("data-value", newVal);
+
+  const isTextType = chip.dataset.type === "text";
+  const iconChar = isTextType ? "✎" : "▾";
+
+  chip.textContent = newVal + " ";
+  const arrow = document.createElement("i");
+  arrow.className = "itc-arrow";
+  arrow.textContent = iconChar;
+  chip.appendChild(arrow);
+
   closeDropdown();
-  updatePreview(promptItem);
+  updatePreview(promptItem || chip.closest(".prompt-item"));
 }
 
 /* ===== Open dropdown for a chip ===== */
@@ -95,7 +127,7 @@ function openDropdown(chip, promptItem) {
   chip.setAttribute("aria-expanded", "true");
 
   const type = chip.dataset.type;
-  const currentVal = chip.dataset.value || "";
+  const currentVal = chip.getAttribute("data-value") || chip.dataset.value || "";
   const rect = chip.getBoundingClientRect();
 
   const panel = document.createElement("div");
@@ -111,7 +143,10 @@ function openDropdown(chip, promptItem) {
       btn.className = "itc-dropdown__option";
       if (opt === currentVal) btn.classList.add("itc-dropdown__option--active");
       btn.textContent = opt;
-      btn.onclick = () => applyValue(chip, opt, promptItem);
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        applyValue(chip, opt, promptItem);
+      };
       panel.appendChild(btn);
     });
 
@@ -171,9 +206,14 @@ function openDropdown(chip, promptItem) {
         const newArr = Array.from(selectedSet).filter((s) => s !== "(선택 없음)");
         const newStr = newArr.length > 0 ? newArr.join(", ") : "(선택 없음)";
         chip.dataset.value = newStr;
-        const arrowText = `<i class="itc-arrow">▾</i>`;
-        chip.innerHTML = `${newStr} ${arrowText}`;
-        updatePreview(promptItem);
+
+        chip.textContent = newStr + " ";
+        const arrow = document.createElement("i");
+        arrow.className = "itc-arrow";
+        arrow.textContent = "▾";
+        chip.appendChild(arrow);
+
+        updatePreview(promptItem || chip.closest(".prompt-item"));
       };
 
       label.appendChild(chk);
@@ -338,13 +378,16 @@ function flashFeedback(button, status, msg, defaultLabel) {
 
 /* ===== Init ===== */
 export function initPromptCopy() {
-  document.querySelectorAll(".prompt-item").forEach((item) => {
-    item.querySelectorAll(".itc").forEach((chip) => {
-      chip.addEventListener("click", (e) => {
-        e.stopPropagation();
-        openDropdown(chip, item);
-      });
-    });
+  document.addEventListener("click", (e) => {
+    const chip = e.target.closest(".itc");
+    if (chip) {
+      e.stopPropagation();
+      const promptItem = chip.closest(".prompt-item");
+      openDropdown(chip, promptItem);
+    }
+  });
+
+  document.querySelectorAll(".prompt-item:not(.prompt-item--preview)").forEach((item) => {
     updatePreview(item);
   });
 

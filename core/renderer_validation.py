@@ -12,6 +12,8 @@ from core.errors import BuildError
 from core.renderer_models import (
     APPROVED_CONTROL_BLOCK_LABELS,
     APPROVED_RENDERER_IDS,
+    ImageSliderBlock,
+    ImageSliderSlide,
     ParsedRendererSource,
     PageRendererContext,
     PageRendererResult,
@@ -24,7 +26,8 @@ from core.renderer_models import (
 
 
 KABAB_CASE_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-CONTROL_FENCE_RE = re.compile(r"^```(prompt|prompt-field|timeline-step)$")
+CONTROL_FENCE_RE = re.compile(r"^```(prompt|prompt-field|timeline-step|image-slider)$")
+IMAGE_SLIDE_KEY_RE = re.compile(r"^slide-(\d+)$")
 UNRESOLVED_PLACEHOLDER_RE = re.compile(r"{{\s*[a-z0-9_]+\s*}}")
 
 
@@ -120,6 +123,7 @@ def parse_renderer_source(source_text: str, *, source_path: Path) -> ParsedRende
                 )
 
             control_blocks.append(RendererControlBlock(label=label, index=block_index, metadata={}, body=body))
+            markdown_lines.append(f"<!-- RENDERER_CONTROL_BLOCK:{label}:{block_index} -->")
             block_index += 1
             line_index += 1
             continue
@@ -480,6 +484,88 @@ def parse_timeline_step_block(block: RendererControlBlock) -> TimelineStepBlock:
     )
 
 
+def parse_image_slider_block(block: RendererControlBlock) -> ImageSliderBlock:
+    """Parse an image-slider control block."""
+
+    parsed = _split_key_value_block(
+        block.body,
+        block=block,
+        allowed_keys={"title", "description", "slide-1", "slide-2", "slide-3", "slide-4", "slide-5"},
+        required_keys={"title"},
+    )
+    title = parsed.metadata.get("title", "").strip()
+    description = parsed.metadata.get("description")
+    slide_entries: list[ImageSliderSlide] = []
+
+    if not title:
+        raise BuildError(
+            "Parse renderer source",
+            "image slider title must be non-empty",
+            control_block_type=block.label,
+            control_block_index=block.index,
+            invalid_key="title",
+        )
+
+    for key, value in sorted(parsed.metadata.items()):
+        match = IMAGE_SLIDE_KEY_RE.fullmatch(key)
+        if match is None:
+            continue
+        parts = [part.strip() for part in value.split("|")]
+        if len(parts) != 4:
+            raise BuildError(
+                "Parse renderer source",
+                "image slider slides must use src | alt | title | caption",
+                control_block_type=block.label,
+                control_block_index=block.index,
+                control_block_id=key,
+                invalid_key=key,
+            )
+        slide_id = f"slide-{match.group(1)}"
+        image_src, image_alt, slide_title, caption = parts
+        if not image_src or not image_alt or not slide_title or not caption:
+            raise BuildError(
+                "Parse renderer source",
+                "image slider slide values must be non-empty",
+                control_block_type=block.label,
+                control_block_index=block.index,
+                control_block_id=slide_id,
+                invalid_key=key,
+            )
+        if not image_src.startswith(("/", "./", "../")):
+            raise BuildError(
+                "Parse renderer source",
+                "image slider slide src must be an internal path",
+                control_block_type=block.label,
+                control_block_index=block.index,
+                control_block_id=slide_id,
+                invalid_key=key,
+            )
+        slide_entries.append(
+            ImageSliderSlide(
+                slide_id=slide_id,
+                image_src=image_src,
+                image_alt=image_alt,
+                title=slide_title,
+                caption=caption,
+            )
+        )
+
+    if len(slide_entries) < 2:
+        raise BuildError(
+            "Parse renderer source",
+            "image slider requires at least two slides",
+            control_block_type=block.label,
+            control_block_index=block.index,
+        )
+
+    return ImageSliderBlock(
+        title=title,
+        description=description.strip() if description is not None and description.strip() else None,
+        slides=tuple(slide_entries),
+        index=block.index,
+    )
+
+
 def _split_key_value_block(
     body: str,
     *,
@@ -608,7 +694,8 @@ def _validate_main_html(context: PageRendererContext, result: PageRendererResult
     expected_article_class = f'page-content page-content--{context.page_type}'
     expected_section_count = {
         "landing": 0,
-        "static-prompt": len([block for block in context.control_blocks if block.label == "prompt"]),
+        "static-prompt": len([block for block in context.control_blocks if block.label == "prompt"])
+        + (1 if context.parsed_front_matter.get("preview", "").strip() else len([block for block in context.control_blocks if block.label == "image-slider"])),
         "prompt-builder": len([block for block in context.control_blocks if block.label == "prompt-field"]),
         "practice-timeline": len([block for block in context.control_blocks if block.label == "timeline-step"]),
     }[context.page_type]
@@ -651,7 +738,7 @@ def _validate_main_html(context: PageRendererContext, result: PageRendererResult
         raise BuildError("Render page", "renderer output must not contain absolute filesystem paths", path=context.source_path, page_id=context.page_id, renderer_id=result.renderer_name)
     if UNRESOLVED_PLACEHOLDER_RE.search(main_html):
         raise BuildError("Render page", "renderer output must not contain unresolved template placeholders", path=context.source_path, page_id=context.page_id, renderer_id=result.renderer_name)
-    if "```prompt" in main_html or "```prompt-field" in main_html or "```timeline-step" in main_html:
+    if "```prompt" in main_html or "```prompt-field" in main_html or "```timeline-step" in main_html or "```image-slider" in main_html:
         raise BuildError("Render page", "renderer control fences must not remain in the output", path=context.source_path, page_id=context.page_id, renderer_id=result.renderer_name)
     if result.rendered_section_count != expected_section_count:
         raise BuildError(

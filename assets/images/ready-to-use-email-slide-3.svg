@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">업무 이메일 예시 3</title>
+  <desc id="desc">완성형 메시지와 미리보기 박스를 보여주는 예시 이미지</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#edf8f4"/>
+      <stop offset="100%" stop-color="#d6efe2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="760" rx="36" fill="url(#bg)"/>
+  <rect x="80" y="86" width="1040" height="588" rx="28" fill="#ffffff" fill-opacity="0.92"/>
+  <rect x="118" y="126" width="280" height="22" rx="11" fill="#cce7d9"/>
+  <rect x="118" y="182" width="500" height="18" rx="9" fill="#1f5f45" fill-opacity="0.78"/>
+  <rect x="118" y="226" width="642" height="14" rx="7" fill="#7c9b8e"/>
+  <rect x="118" y="260" width="610" height="14" rx="7" fill="#7c9b8e"/>
+  <rect x="118" y="294" width="570" height="14" rx="7" fill="#7c9b8e"/>
+  <rect x="118" y="352" width="390" height="214" rx="24" fill="#f3fbf7" stroke="#d7eadf"/>
+  <rect x="150" y="386" width="132" height="18" rx="9" fill="#1f5f45"/>
+  <rect x="150" y="426" width="310" height="14" rx="7" fill="#7c9b8e"/>
+  <rect x="150" y="454" width="290" height="14" rx="7" fill="#7c9b8e"/>
+  <rect x="150" y="482" width="250" height="14" rx="7" fill="#7c9b8e"/>
+  <rect x="150" y="520" width="170" height="38" rx="19" fill="#1f5f45"/>
+  <rect x="552" y="352" width="408" height="214" rx="24" fill="#f9fcfa" stroke="#d7eadf"/>
+  <rect x="584" y="386" width="128" height="18" rx="9" fill="#1f5f45"/>
+  <rect x="584" y="426" width="312" height="14" rx="7" fill="#7c9b8e"/>
+  <rect x="584" y="454" width="292" height="14" rx="7" fill="#7c9b8e"/>
+  <rect x="584" y="482" width="248" height="14" rx="7" fill="#7c9b8e"/>
+  <circle cx="886" cy="514" r="28" fill="#1f5f45"/>
+</svg>

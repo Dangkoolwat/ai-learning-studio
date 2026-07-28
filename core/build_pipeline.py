@@ -231,12 +231,24 @@ def render_markdown(markdown_text: str, *, source_path: Path) -> str:
     code_lines: list[str] = []
     in_code_block = False
 
+    def _render_bold_inline(text: str) -> str:
+        parts: list[str] = []
+        last_idx = 0
+        bold_pattern = re.compile(r"\*\*(.*?)\*\*")
+        for match in bold_pattern.finditer(text):
+            parts.append(escape_html(text[last_idx:match.start()]))
+            bold_content = escape_html(match.group(1))
+            parts.append(f"<strong>{bold_content}</strong>")
+            last_idx = match.end()
+        parts.append(escape_html(text[last_idx:]))
+        return "".join(parts)
+
     def flush_paragraph() -> None:
         if not paragraph_lines:
             return
         text = " ".join(line.strip() for line in paragraph_lines if line.strip())
         if text:
-            blocks.append(f"<p>{escape_html(text)}</p>")
+            blocks.append(f"<p>{_render_bold_inline(text)}</p>")
         paragraph_lines.clear()
 
     def flush_list() -> None:
@@ -283,7 +295,7 @@ def render_markdown(markdown_text: str, *, source_path: Path) -> str:
             continue
         if stripped.startswith("- "):
             flush_paragraph()
-            list_items.append(escape_html(stripped[2:].strip()))
+            list_items.append(_render_bold_inline(stripped[2:].strip()))
             continue
 
         flush_list()
@@ -711,7 +723,8 @@ def validate_renderer_component_usage(
             slider_count = sum(1 for block in page_context.control_blocks if block.label == "image-slider")
         expected_component_ids.extend(["image-slider"] * slider_count)
         expected_component_ids.extend(["prompt-item"] * prompt_count)
-        if prompt_count > 0:
+        has_placeholders = "<!-- RENDERER_CONTROL_BLOCK:" in page_context.rendered_markdown_html
+        if prompt_count > 0 and not has_placeholders:
             expected_component_ids.append("prompt-collection")
     elif page.type == "prompt-builder":
         field_count = sum(1 for block in page_context.control_blocks if block.label == "prompt-field")

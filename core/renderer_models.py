@@ -10,7 +10,7 @@ from core.component_models import ComponentRenderResult, LoadedComponentTemplate
 
 RENDERER_ENGINE_VERSION = 1
 APPROVED_RENDERER_IDS = ("landing", "static-prompt", "prompt-builder", "practice-timeline")
-APPROVED_CONTROL_BLOCK_LABELS = ("prompt", "prompt-field", "timeline-step")
+APPROVED_CONTROL_BLOCK_LABELS = ("prompt", "prompt-field", "timeline-step", "image-slider")
 RENDERER_VALIDATION_STATUS = "validated"
 
 
@@ -72,6 +72,27 @@ class TimelineStepBlock:
     title: str
     description: str
     result: str
+    index: int
+
+
+@dataclass(slots=True, frozen=True)
+class ImageSliderSlide:
+    """One slide entry for an image slider block."""
+
+    slide_id: str
+    image_src: str
+    image_alt: str
+    title: str
+    caption: str
+
+
+@dataclass(slots=True, frozen=True)
+class ImageSliderBlock:
+    """A validated image-slider control block."""
+
+    title: str
+    description: str | None
+    slides: tuple[ImageSliderSlide, ...]
     index: int
 
 

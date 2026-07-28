@@ -205,6 +205,8 @@ def validate_component_template_output(
         _validate_timeline_step_output(inspector, component_id=component_id, template_path=template_path)
     elif component_id == "practice-timeline":
         _validate_practice_timeline_output(inspector, component_id=component_id, template_path=template_path)
+    elif component_id == "image-slider":
+        _validate_image_slider_output(inspector, component_id=component_id, template_path=template_path)
 
 
 def _validate_page_intro_output(inspector: ComponentHTMLInspector, *, component_id: str, template_path: Path) -> None:
@@ -221,8 +223,8 @@ def _validate_page_intro_output(inspector: ComponentHTMLInspector, *, component_
 
 
 def _validate_page_body_output(inspector: ComponentHTMLInspector, *, component_id: str, template_path: Path) -> None:
-    if sum(tag == "div" for tag, _ in inspector.start_tags) != 1:
-        raise BuildError("Render component", "page body must contain exactly one wrapper", path=template_path, field=component_id)
+    if not _has_tag_class(inspector, "div", "page-body"):
+        raise BuildError("Render component", "page body wrapper div is missing", path=template_path, field=component_id)
 
 
 def _validate_prompt_item_output(inspector: ComponentHTMLInspector, *, component_id: str, template_path: Path) -> None:
@@ -324,6 +326,21 @@ def _validate_timeline_step_output(inspector: ComponentHTMLInspector, *, compone
     root_attrs = inspector.start_tags[0][1]
     if "data-step-id" not in root_attrs:
         raise BuildError("Render component", "timeline step data-step-id attribute is missing", path=template_path, field=component_id)
+
+
+def _validate_image_slider_output(inspector: ComponentHTMLInspector, *, component_id: str, template_path: Path) -> None:
+    if sum(tag == "section" for tag, _ in inspector.start_tags) != 1:
+        raise BuildError("Render component", "image slider must contain exactly one section", path=template_path, field=component_id)
+    if sum(tag == "article" for tag, _ in inspector.start_tags) < 2:
+        raise BuildError("Render component", "image slider must contain slide articles", path=template_path, field=component_id)
+    if not _has_tag_class(inspector, "section", "image-slider"):
+        raise BuildError("Render component", "image slider class is missing", path=template_path, field=component_id)
+    if not _has_tag_class(inspector, "ol", "image-slider__nav"):
+        raise BuildError("Render component", "image slider nav class is missing", path=template_path, field=component_id)
+    if not _has_tag_class(inspector, "div", "image-slider__viewport"):
+        raise BuildError("Render component", "image slider viewport class is missing", path=template_path, field=component_id)
+    if not _has_tag_class(inspector, "img", "image-slider__image"):
+        raise BuildError("Render component", "image slider image class is missing", path=template_path, field=component_id)
 
 
 def _validate_practice_timeline_output(inspector: ComponentHTMLInspector, *, component_id: str, template_path: Path) -> None:
