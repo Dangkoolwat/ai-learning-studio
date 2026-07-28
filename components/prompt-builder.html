@@ -2,14 +2,16 @@
   <ol class="prompt-builder__fields">
     {{ prompt_fields_html }}
   </ol>
-  <div class="prompt-builder__actions">
-    <button type="button" class="prompt-builder__generate-btn">프롬프트 생성하기</button>
-  </div>
   <div class="prompt-builder__result is-hidden">
-    <h3 class="prompt-builder__result-title">생성된 완성형 프롬프트</h3>
+    <div class="prompt-builder__result-header">
+      <h3 class="prompt-builder__result-title">완성된 프롬프트 (실시간 미리보기)</h3>
+      {{ ai_badges_html }}
+    </div>
     <pre class="prompt-item__content"><code class="prompt-builder__result-code"></code></pre>
     <div class="prompt-builder__result-actions">
       <button type="button" class="prompt-item__copy-button" data-builder-copy>프롬프트 복사</button>
+      {{ ai_actions_html }}
     </div>
   </div>
+  <template id="prompt-builder-template">{{ prompt_template_html }}</template>
 </section>

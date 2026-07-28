@@ -143,14 +143,14 @@ def indent_preserving_pre(html_text: str, prefix: str = "    ") -> str:
     for line in lines:
         if in_pre:
             indented_lines.append(line)
-            if "</pre>" in line or "</code>" in line:
+            if "</pre>" in line or "</code>" in line or "</template>" in line:
                 in_pre = False
             continue
 
-        if "<pre" in line or '<code class="prompt-item__preview-code"' in line:
+        if "<pre" in line or '<code class="prompt-item__preview-code"' in line or "<template" in line:
             in_pre = True
             indented_lines.append(prefix + line if line.strip() else line)
-            if "</pre>" in line or "</code>" in line:
+            if "</pre>" in line or "</code>" in line or "</template>" in line:
                 in_pre = False
             continue
 

@@ -693,6 +693,12 @@ button:focus-visible {
   border-color: rgba(26, 115, 232, 0.25);
 }
 
+.badge-ai--claude {
+  background: rgba(217, 119, 87, 0.1);
+  color: #c25330;
+  border-color: rgba(217, 119, 87, 0.25);
+}
+
 .badge-ai--universal {
   background: rgba(71, 85, 105, 0.1);
   color: #475569;
@@ -951,6 +957,15 @@ button:focus-visible {
   box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.15);
 }
 
+.prompt-field__custom-input-wrapper {
+  margin-top: var(--als-space-3);
+}
+
+.prompt-field__custom-input-wrapper.is-hidden {
+  display: none;
+}
+
+
 .prompt-field__input {
   width: 100%;
   margin-top: var(--als-space-3);
@@ -1004,8 +1019,20 @@ button:focus-visible {
   display: none;
 }
 
+.prompt-builder__result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--als-space-3);
+}
+
+.prompt-builder__result-header .prompt-item__ai-badges {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .prompt-builder__result-title {
-  margin: 0 0 var(--als-space-3);
+  margin: 0;
   font-size: var(--als-font-size-xl);
 }
 

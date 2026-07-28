@@ -19,6 +19,7 @@ from core.renderer_models import (
     PageRendererResult,
     PromptBlock,
     PromptFieldBlock,
+    PromptTemplateBlock,
     RendererControlBlock,
     RendererHeading,
     TimelineStepBlock,
@@ -26,9 +27,31 @@ from core.renderer_models import (
 
 
 KABAB_CASE_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-CONTROL_FENCE_RE = re.compile(r"^```(prompt|prompt-field|timeline-step|image-slider)$")
+CONTROL_FENCE_RE = re.compile(r"^```(prompt|prompt-field|timeline-step|image-slider|prompt-template)$")
 IMAGE_SLIDE_KEY_RE = re.compile(r"^slide-(\d+)$")
 UNRESOLVED_PLACEHOLDER_RE = re.compile(r"{{\s*[a-z0-9_]+\s*}}")
+
+
+@dataclass(slots=True, frozen=True)
+class _ParsedMetadata:
+    metadata: dict[str, str]
+    body: str | None
+
+
+def parse_prompt_template_block(block: RendererControlBlock) -> PromptTemplateBlock:
+    """Parse a prompt-template control block."""
+    if not block.body.strip():
+        raise BuildError(
+            "Parse renderer source",
+            "prompt-template body must be non-empty",
+            control_block_type=block.label,
+            control_block_index=block.index,
+            invalid_key="body",
+        )
+    return PromptTemplateBlock(
+        body=block.body,
+        index=block.index,
+    )
 
 
 @dataclass(slots=True, frozen=True)

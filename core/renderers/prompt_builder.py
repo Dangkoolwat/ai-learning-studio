@@ -12,8 +12,9 @@ from core.component_engine import (
 from core.component_models import PageBodyComponent, PageIntroComponent, PromptBuilderComponent, PromptFieldComponent
 from core.errors import BuildError
 from core.renderer_models import PageRendererContext, PageRendererResult
-from core.renderer_validation import parse_prompt_field_block, validate_renderer_result
+from core.renderer_validation import parse_prompt_field_block, parse_prompt_template_block, validate_renderer_result
 from core.renderers.base import build_main_html
+from core.renderers.static_prompt import _build_ai_badges_and_actions
 
 
 RENDERER_NAME = "prompt-builder"
@@ -59,15 +60,28 @@ def render_prompt_builder_page(context: PageRendererContext) -> PageRendererResu
                 field_label=field_block.label,
                 field_description=field_block.description,
                 field_placeholder_html=render_prompt_field_placeholder_fragment(field_block.placeholder),
-                field_requirement="필수 항목" if field_block.required else "선택 항목",
+                field_requirement="필수 항목" if field_block.required else "",
             ),
             context.component_templates,
         )
         for field_block in field_blocks
     ]
     fields_html = "\n".join(result.rendered_html for result in field_results)
+    
+    template_blocks = [parse_prompt_template_block(block) for block in context.control_blocks if block.label == "prompt-template"]
+    prompt_template_html = template_blocks[0].body if template_blocks else ""
+    
+    page_ai_target_str = context.parsed_front_matter.get("ai_target", "").strip()
+    block_targets = [t.strip() for t in page_ai_target_str.split(",") if t.strip()] if page_ai_target_str else []
+    ai_badges_block, ai_actions_block = _build_ai_badges_and_actions(block_targets)
+
     section_result = render_prompt_builder_component(
-        PromptBuilderComponent(prompt_fields_html=fields_html),
+        PromptBuilderComponent(
+            prompt_fields_html=fields_html,
+            prompt_template_html=prompt_template_html,
+            ai_badges_html=ai_badges_block,
+            ai_actions_html=ai_actions_block,
+        ),
         context.component_templates,
     )
     result = PageRendererResult(

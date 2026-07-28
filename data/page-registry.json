@@ -87,7 +87,7 @@
       "source": "pages/sections/ai-assistant.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 5,
+      "order": 6,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -100,7 +100,7 @@
       "source": "pages/sections/ai-assistant/hallucination-minimizer.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 6,
+      "order": 7,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -113,7 +113,7 @@
       "source": "pages/sections/ai-assistant/gemini-verifier.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 7,
+      "order": 8,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -126,7 +126,7 @@
       "source": "pages/sections/ai-assistant/vacation-planner-guide.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 8,
+      "order": 9,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -139,7 +139,7 @@
       "source": "pages/sections/ai-assistant/gemini-canvas-map.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 9,
+      "order": 10,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -152,7 +152,20 @@
       "source": "pages/sections/ai-assistant/korean-editor-guide.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 10,
+      "order": 11,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ai-assistant-language-tutor",
+      "title": "외국어 회화 코치 지침서",
+      "description": "번역을 최소화하고 흐름을 이어가며 맞춤형으로 회화를 훈련시키는 1:1 외국어 파트너 지침 프롬프트입니다.",
+      "route": "/ai-assistant/language-tutor-guide/",
+      "source": "pages/sections/ai-assistant/language-tutor-guide.md",
+      "type": "prompt-builder",
+      "section": "ai-assistant",
+      "order": 12,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -165,7 +178,7 @@
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 10,
+      "order": 13,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -178,7 +191,7 @@
       "source": "pages/sections/image-ai/builder.md",
       "type": "prompt-builder",
       "section": "image-ai",
-      "order": 11,
+      "order": 14,
       "navigation": true,
       "status": "published",
       "lang": "ko"

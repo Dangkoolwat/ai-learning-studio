@@ -10,7 +10,7 @@ from core.component_models import ComponentRenderResult, LoadedComponentTemplate
 
 RENDERER_ENGINE_VERSION = 1
 APPROVED_RENDERER_IDS = ("landing", "static-prompt", "prompt-builder", "practice-timeline")
-APPROVED_CONTROL_BLOCK_LABELS = ("prompt", "prompt-field", "timeline-step", "image-slider")
+APPROVED_CONTROL_BLOCK_LABELS = ("prompt", "prompt-field", "timeline-step", "image-slider", "prompt-template")
 RENDERER_VALIDATION_STATUS = "validated"
 
 
@@ -62,6 +62,14 @@ class PromptFieldBlock:
     description: str
     placeholder: str | None
     required: bool
+    index: int
+
+
+@dataclass(slots=True, frozen=True)
+class PromptTemplateBlock:
+    """A validated prompt-template block."""
+
+    body: str
     index: int
 
 

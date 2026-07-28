@@ -177,6 +177,7 @@ def render_prompt_field_placeholder_fragment(placeholder: str | None) -> str:
             val = escape_html(opt.strip())
             if val:
                 options_html.append(f'<option value="{val}">{val}</option>')
+        options_html.append('<option value="__custom__">기타 (직접 입력)</option>')
         joined_options = "\n    ".join(options_html)
         return (
             f'<div class="prompt-field__control-wrapper">\n'
@@ -221,7 +222,12 @@ def _component_replacements(component: object, spec) -> dict[str, str]:
             "prompt_source_html": component.prompt_source_html,
         }
     if isinstance(component, PromptBuilderComponent):
-        return {"prompt_fields_html": component.prompt_fields_html}
+        return {
+            "prompt_fields_html": component.prompt_fields_html,
+            "prompt_template_html": escape_html(component.prompt_template_html),
+            "ai_badges_html": component.ai_badges_html,
+            "ai_actions_html": component.ai_actions_html,
+        }
     if isinstance(component, PromptFieldComponent):
         return {
             "field_id": escape_html(component.field_id),

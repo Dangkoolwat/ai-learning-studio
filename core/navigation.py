@@ -81,6 +81,12 @@ EXPECTED_SECTIONS = (
                 "description": "실습용 자연스러운 한국어 전문 편집자 GEM·Project 전용 지침서",
                 "route": "/ai-assistant/korean-editor-guide/",
             },
+            {
+                "id": "ai-assistant-language-tutor",
+                "label": "외국어 회화 코치 지침서",
+                "description": "번역을 최소화하고 흐름을 이어가며 맞춤형으로 회화를 훈련시키는 파트너 지침서",
+                "route": "/ai-assistant/language-tutor-guide/",
+            },
         ],
     },
     {

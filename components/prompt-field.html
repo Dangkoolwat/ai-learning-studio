@@ -2,6 +2,9 @@
   <h2 class="prompt-field__label">{{ field_label }}</h2>
   <p class="prompt-field__description">{{ field_description }}</p>
   {{ field_placeholder_html }}
+  <div class="prompt-field__custom-input-wrapper is-hidden">
+    <input type="text" class="prompt-field__input" placeholder="직접 입력하세요..." data-custom-input />
+  </div>
   <p class="prompt-field__requirement">{{ field_requirement }}</p>
 </li>
 
