@@ -32,6 +32,12 @@
           "label": "맞춤형 한국어 교정 프롬프트",
           "description": "원하는 용도와 말투를 선택해 빠르고 자연스럽게 글 다듬기",
           "route": "/ready-to-use/korean-editor/"
+        },
+        {
+          "id": "ready-to-use-self-development",
+          "label": "자기 개발 학습 계획 프롬프트",
+          "description": "목표와 현재 수준, 사용 가능한 시간에 맞춰 현실적인 학습 계획을 짜주는 프롬프트 예제",
+          "route": "/ready-to-use/self-development/"
         }
       ]
     },

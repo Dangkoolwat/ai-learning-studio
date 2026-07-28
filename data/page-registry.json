@@ -80,6 +80,19 @@
       "lang": "ko"
     },
     {
+      "id": "ready-to-use-self-development",
+      "title": "자기 개발 학습 계획 프롬프트",
+      "description": "목표와 현재 수준, 사용 가능한 시간에 맞춰 현실적인 학습 계획을 짜주는 프롬프트 예제",
+      "route": "/ready-to-use/self-development/",
+      "source": "pages/sections/ready-to-use/self-development.md",
+      "type": "static-prompt",
+      "section": "ready-to-use",
+      "order": 6,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "ai-assistant",
       "title": "나만의 AI 만들기",
       "description": "Project·Gem 등에 사용할 맞춤형 역할과 지침 만들기",

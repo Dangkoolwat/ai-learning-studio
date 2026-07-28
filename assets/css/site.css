@@ -369,6 +369,7 @@ button:focus-visible {
 }
 
 .prompt-item {
+  margin-top: var(--als-space-8);
   padding: var(--als-space-6);
   border: 1px solid rgba(215, 211, 204, 0.9);
   border-radius: var(--site-radius-md);
