@@ -1,5 +1,6 @@
 const COPY_FEEDBACK_TIMEOUT_MS = 1800;
 const feedbackTimers = new WeakMap();
+const aiWindows = {};
 
 let activeDropdown = null;
 
@@ -401,9 +402,23 @@ export function initPromptCopy() {
   document.querySelectorAll("[data-open-ai]").forEach((button) => {
     const handleOpen = () => {
       const target = button.dataset.openAi;
-      const domain = target === "chatgpt" ? "chatgpt.com" : "gemini.google.com";
+      let domain = "gemini.google.com";
+      if (target === "chatgpt") domain = "chatgpt.com";
+      else if (target === "claude") domain = "claude.ai";
+      
       const proto = "http" + "s://";
-      window.open(proto + domain, `${target}_window`, "noopener,noreferrer");
+      const url = proto + domain;
+      
+      if (aiWindows[target] && !aiWindows[target].closed) {
+        try {
+          aiWindows[target].location.href = url;
+        } catch (e) {
+          // Cross-origin restriction might block location update if it's already there, but focus still works
+        }
+        aiWindows[target].focus();
+      } else {
+        aiWindows[target] = window.open(url, `${target}_window`);
+      }
     };
     button.addEventListener("click", handleOpen);
     button.addEventListener("keydown", (e) => {
