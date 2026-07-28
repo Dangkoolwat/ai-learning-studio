@@ -28,21 +28,11 @@ function getPair(item) {
   const promptItem = item.closest(".prompt-item");
   if (!promptItem) return { optionsItem: null, previewItem: null };
 
-  if (promptItem.classList.contains("prompt-item--preview")) {
-    let prev = promptItem.previousElementSibling;
-    while (prev && !prev.classList.contains("prompt-item")) {
-      prev = prev.previousElementSibling;
-    }
-    const optionsItem = (prev && !prev.classList.contains("prompt-item--preview")) ? prev : null;
-    return { optionsItem, previewItem: promptItem };
-  } else {
-    let next = promptItem.nextElementSibling;
-    while (next && !next.classList.contains("prompt-item")) {
-      next = next.nextElementSibling;
-    }
-    const previewItem = (next && next.classList.contains("prompt-item--preview")) ? next : null;
-    return { optionsItem: promptItem, previewItem };
-  }
+  const hasPreview = !!promptItem.querySelector(".prompt-item__preview-code");
+  return { 
+    optionsItem: promptItem, 
+    previewItem: hasPreview ? promptItem : null 
+  };
 }
 
 function getPromptText(promptItem) {
