@@ -43,6 +43,12 @@ EXPECTED_SECTIONS = (
                 "description": "원하는 용도와 말투를 선택해 빠르고 자연스럽게 글 다듬기",
                 "route": "/ready-to-use/korean-editor/",
             },
+            {
+                "id": "ready-to-use-self-development",
+                "label": "자기 개발 학습 계획 프롬프트",
+                "description": "목표와 현재 수준, 사용 가능한 시간에 맞춰 현실적인 학습 계획을 짜주는 프롬프트 예제",
+                "route": "/ready-to-use/self-development/",
+            },
         ],
     },
     {
@@ -86,6 +92,12 @@ EXPECTED_SECTIONS = (
                 "label": "외국어 회화 코치 지침서",
                 "description": "번역을 최소화하고 흐름을 이어가며 맞춤형으로 회화를 훈련시키는 파트너 지침서",
                 "route": "/ai-assistant/language-tutor-guide/",
+            },
+            {
+                "id": "ai-assistant-self-development-coach",
+                "label": "현실적인 자기계발 코치 지침서",
+                "description": "실천 가능한 작은 단위로 목표를 나누고 지속할 수 있도록 돕는 맞춤형 코치 지침서",
+                "route": "/ai-assistant/self-development-coach/",
             },
         ],
     },
