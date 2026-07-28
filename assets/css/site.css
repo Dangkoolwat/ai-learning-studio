@@ -1296,7 +1296,11 @@ html.js .site-nav-toggle {
 }
 
 /* ===== Individual Step Rounded Box Cards (Full Width) & Flow Arrow ===== */
-.page-content--static-prompt .page-body {
+.page-content--static-prompt .page-body,
+.page-content--landing .page-body,
+.page-content--collection .page-body,
+.page-content--practice-timeline .page-body,
+.page-content--prompt-builder .page-body {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -1305,7 +1309,11 @@ html.js .site-nav-toggle {
   max-width: none !important;
 }
 
-.page-content--static-prompt .page-body > * {
+.page-content--static-prompt .page-body > *,
+.page-content--landing .page-body > *,
+.page-content--collection .page-body > *,
+.page-content--practice-timeline .page-body > *,
+.page-content--prompt-builder .page-body > * {
   max-width: none !important;
 }
 
