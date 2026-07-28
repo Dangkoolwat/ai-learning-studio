@@ -403,7 +403,7 @@ export function initPromptCopy() {
       const target = button.dataset.openAi;
       const domain = target === "chatgpt" ? "chatgpt.com" : "gemini.google.com";
       const proto = "http" + "s://";
-      window.open(proto + domain, "_blank", "noopener,noreferrer");
+      window.open(proto + domain, `${target}_window`, "noopener,noreferrer");
     };
     button.addEventListener("click", handleOpen);
     button.addEventListener("keydown", (e) => {

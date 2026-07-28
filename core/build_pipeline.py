@@ -384,7 +384,7 @@ def build_page_template_contexts(
         navigation_items_html = build_navigation_items_html(page, registry, navigation, output_path, staging_dir)
         document_title = page.title if page.route == "/" else f"{page.title} | {SITE_NAME}"
         site_stylesheet_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "css" / "site.css")
-        site_script_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "js" / "site.js") + "?v=1.1"
+        site_script_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "js" / "site.js") + "?v=1.2"
         favicon_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "favicon.svg")
         canonical_link_html = build_canonical_link_html(site_base_url, page.route) if site_base_url else ""
 
@@ -494,7 +494,7 @@ def build_not_found_page_context(
         favicon_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "favicon.svg"),
         theme_stylesheet_url=theme_stylesheet_url,
         site_stylesheet_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "css" / "site.css"),
-        site_script_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "js" / "site.js") + "?v=1.1",
+        site_script_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "js" / "site.js") + "?v=1.2",
         home_url=home_href,
         navigation_items_html=navigation_items_html,
         main_html=main_html,
