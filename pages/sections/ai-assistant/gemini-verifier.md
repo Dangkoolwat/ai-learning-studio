@@ -19,19 +19,19 @@ ai_target: Gemini
 ## AI 서비스별 지침 추가 및 활용 방법
 
 ### 1. Gemini (GEMs) 추가 방법
-   - **Step 1. GEM 생성**: Gemini 접속 후 좌측 메뉴의 **[Gem 관리]** 또는 **[새 Gem 만들기]** 선택
-   - **Step 2. 이름 입력**: Gem 이름(예: `지식 검증 전문가`) 입력
-   - **Step 3. 지침 저장**: 아래 프롬프트 복사 후 **[시스템 지침(Instructions)]** 란에 붙여넣기 및 저장
+   - **GEM 생성**: Gemini 접속 후 좌측 메뉴의 **[Gem 관리]** 또는 **[새 Gem 만들기]** 선택
+   - **이름 입력**: Gem 이름(예: `지식 검증 전문가`) 입력
+   - **지침 저장**: 아래 프롬프트 복사 후 **[시스템 지침(Instructions)]** 란에 붙여넣기 및 저장
 
 ### 2. ChatGPT (Projects / Custom GPTs) 추가 방법
-   - **Step 1. 프로젝트 생성**: 좌측 메뉴에서 **[New Project]** 또는 **[Explore GPTs]** 선택
-   - **Step 2. 지침 등록**: **[Instructions (지침)]** 항목에 복사한 프롬프트 붙여넣기 및 **[Save (저장)]** 클릭
-   - **Step 3. 메모리 독립 관리**: 프로젝트 전용 메모리(*Project-only memory*)를 설정하면 다른 대화와 분리되어 독립적으로 관리됩니다.
+   - **프로젝트 생성**: 좌측 메뉴에서 **[New Project]** 또는 **[Explore GPTs]** 선택
+   - **지침 등록**: **[Instructions (지침)]** 항목에 복사한 프롬프트 붙여넣기 및 **[Save (저장)]** 클릭
+   - **메모리 독립 관리**: 프로젝트 전용 메모리(*Project-only memory*)를 설정하면 다른 대화와 분리되어 독립적으로 관리됩니다.
 
 ### 3. Claude (Projects) 추가 방법
-   - **Step 1. 프로젝트 생성**: **[Projects]** 메뉴에서 **[Create Project (프로젝트 만들기)]** 선택
-   - **Step 2. 지침 등록**: **[Project Instructions (프로젝트 지침)]** 항목을 열어 복사한 프롬프트 붙여넣기 및 **[Save (저장)]** 클릭
-   - **Step 3. 메모리 독립 관리**: Claude Projects는 대화와 지침이 프로젝트 내부에서 개별 관리되므로 독립된 지식 검증 환경을 유지합니다.
+   - **프로젝트 생성**: **[Projects]** 메뉴에서 **[Create Project (프로젝트 만들기)]** 선택
+   - **지침 등록**: **[Project Instructions (프로젝트 지침)]** 항목을 열어 복사한 프롬프트 붙여넣기 및 **[Save (저장)]** 클릭
+   - **메모리 독립 관리**: Claude Projects는 대화와 지침이 프로젝트 내부에서 개별 관리되므로 독립된 지식 검증 환경을 유지합니다.
 
 ---
 

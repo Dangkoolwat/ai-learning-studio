@@ -50,6 +50,7 @@ class PromptBlock:
     description: str | None
     body: str
     index: int
+    ai_target: str | None = None
 
 
 @dataclass(slots=True, frozen=True)

@@ -17,6 +17,12 @@
 
 ---
 
+## 1.5 작업 전 사전 보고 및 사용자 승인 필수 (Approval Gate)
+
+- **사전 계획 보고 및 승인 대기 필수**: 코드, 마크다운, CSS, 데이터 등 저장소 내 모든 파일 수정 및 구현 작업에 착수하기 전, 에이전트는 **반드시 문제 현상 파악 결과, 수정 범위, 작업 계획을 간략히 보고**하고 **사용자의 명시적 승인을 확인한 후**에만 파일 수정 작업을 실행합니다. 사용자 승인 없는 임의 수정 및 선시행을 엄격히 금지합니다.
+
+---
+
 ## 2. 필수 레이지 로딩 매핑 (Policy Triggers Table)
 
 작업 종류 및 대상 키워드에 맞춰 **반드시 해당 가이드라인 문서를 먼저 독해**한 후 계획을 수립하고 코드를 수정합니다.
@@ -25,7 +31,7 @@
 | :--- | :--- | :--- |
 | **토큰 절약, 파일 읽기 범위, 도구 탐색 계층** | [`docs/agent-policy/tooling-efficiency.md`](docs/agent-policy/tooling-efficiency.md) | 수술적 독해, 500줄 독해 제한, 도구 계층 |
 | **코딩 스타일, JS/Python/CSS, 수정 원칙** | [`docs/agent-policy/coding-standards.md`](docs/agent-policy/coding-standards.md) | 수술적 수정 원칙, 생성 파일 직접 수정 금지 |
-| **레이아웃, 시각 토큰, UI 컴포넌트, 테마** | [`docs/design-guidelines.md`](docs/design-guidelines.md) | 정보구조, 테마 시스템, 공통 컴포넌트 |
+| **레이아웃, 시각 토큰, UI 컴포넌트, 테마** | [`docs/design-guidelines.md`](docs/design-guidelines.md) | 정보구조, 테마 시스템, 공통 컴포넌트, 사이트 이펙트 검증 |
 | **프롬프트 3개 유형 (`static`, `builder`, `timeline`)** | [`docs/prompt-page-guidelines.md`](docs/prompt-page-guidelines.md) | 3가지 정식 유형, 그냥 프롬프트 vs 설정값 반영 프롬프트 분리 규칙 |
 | **데이터 파일, JSON 규칙, Markdown 콘텐츠** | [`docs/content-guidelines.md`](docs/content-guidelines.md) | `data/` 및 `pages/` 구조, 경로 일관성 |
 | **메타태그, canonical, sitemap, JSON-LD** | [`docs/seo-guidelines.md`](docs/seo-guidelines.md) | 정적 HTML 본문 보존, SEO 계약 |
@@ -69,10 +75,12 @@ JSON · Markdown · Templates
 - 페이지 핵심 본문을 클라이언트 JS가 뒤늦게 생성하는 구조 금지
 - 세 가지 프롬프트 페이지 유형외의 새 유형 임의 추가 금지
 - 생성된 테마 파일이나 `dist/` 결과물 직접 수정 금지
+- `site.css` 내의 `.prompt-item` 및 `prompt-item__preview-section` 관련 핵심 레이아웃/구조 CSS 임의 수정 절대 금지 (사용자 승인 필수)
 
 ---
 
 ## 6. 검증 및 작업 로그
 
 - 저장소 파일을 변경한 작업은 단일 로그 파일(`agent-log/YYYY-MM-DD-모델이름/progress-log.md`)에 진행 상황, 변경 내역, 빌드 검증 결과를 축적 기록합니다.
+- **레이아웃 및 UI 사이드 이펙트(Side Effect) 체크 필수**: CSS, 마진, 패딩, 컴포넌트 레이아웃 변경 시 단일 페이지만 보지 않고 공통 컴포넌트 및 연관 페이지 전체의 시각적 렌더링 부작용(여백 벌어짐, 찌그러짐 등)을 브라우저 스크린샷으로 사전에 반드시 교차 점검합니다.
 - 수정 후 반드시 `python3 scripts/build.py`를 실행하여 빌드 정상 여부를 검증합니다.

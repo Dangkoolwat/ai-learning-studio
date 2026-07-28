@@ -586,14 +586,24 @@ button:focus-visible {
   color: var(--site-text-muted, #64748b);
 }
 
-/* ===== Preview: separated independent card below ===== */
-.prompt-item--preview {
+/* ========================================= */
+/* [DO NOT MODIFY] Core Prompt Layout Structure */
+/* ========================================= */
+.prompt-item__preview-section {
   margin-top: var(--als-space-6);
-  background: var(--site-surface);
+  padding-top: var(--als-space-5);
+  border-top: 1px dashed var(--site-border);
 }
 
-.prompt-item__preview-title {
-  margin: 0 0 var(--als-space-3) 0;
+.prompt-item__preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--als-space-3);
+}
+
+.prompt-item__title--preview {
+  margin: 0;
   font-size: var(--als-font-size-base);
   font-weight: 700;
   color: #0f172a;
@@ -604,11 +614,14 @@ button:focus-visible {
   padding: var(--als-space-4);
   border: 1px solid #e2e8f0;
   border-radius: var(--site-radius-md);
-  background: #f8fafc; /* 완성본 미리보기 전용 소프트 백그라운드 */
+  background: #f8fafc;
   color: #1e293b;
   white-space: pre-wrap;
   word-break: break-word;
 }
+/* ========================================= */
+/* END [DO NOT MODIFY] Core Prompt Layout Structure */
+/* ========================================= */
 
 .prompt-item__preview-code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
@@ -646,19 +659,6 @@ button:focus-visible {
 
 .prompt-item__copy-status {
   color: var(--site-success);
-}
-
-.prompt-item__preview-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--als-space-2);
-  margin-bottom: var(--als-space-3);
-}
-
-.prompt-item__preview-header .prompt-item__preview-title {
-  margin: 0;
 }
 
 .prompt-item__ai-badges {
@@ -1323,6 +1323,8 @@ html.js .site-nav-toggle {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+
+
 .practice-step-card:hover {
   border-color: #cbd5e1 !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06) !important;
@@ -1346,6 +1348,7 @@ html.js .site-nav-toggle {
   height: 1.1em !important;
   background: var(--als-accent, #355c7d) !important;
   border-radius: 2px !important;
+  flex-shrink: 0 !important;
 }
 
 .practice-step-card > :first-child,

@@ -52,6 +52,12 @@
           "label": "여름휴가 여행 플래너 지침서",
           "description": "실습용 국내 여름휴가 여행 플래너 GEM·Project 전용 지침서",
           "route": "/ai-assistant/vacation-planner-guide/"
+        },
+        {
+          "id": "ai-assistant-gemini-canvas-map",
+          "label": "Gemini 캔버스 대화형 여행 지도",
+          "description": "Gemini Canvas를 활용한 단일 HTML Leaflet 대화형 여행 지도 생성 프롬프트",
+          "route": "/ai-assistant/gemini-canvas-map/"
         }
       ]
     },

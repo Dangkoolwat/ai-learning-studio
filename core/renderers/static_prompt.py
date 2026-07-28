@@ -152,11 +152,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
         render_image_slider_component(_build_image_slider_component(block), context.component_templates)
         for block in slider_blocks
     ]
-    ai_target_str = context.parsed_front_matter.get("ai_target", "").strip()
-    if not ai_target_str:
-        ai_targets = ["ChatGPT", "Gemini"]
-    else:
-        ai_targets = [t.strip() for t in ai_target_str.split(",") if t.strip()]
+def _build_ai_badges_and_actions(ai_targets: list[str]) -> tuple[str, str]:
     badges_html = []
     ext_links_html = []
     for target in ai_targets:
@@ -172,6 +168,33 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
 
     ai_badges_block = f'<div class="prompt-item__ai-badges">{" ".join(badges_html)}</div>\n' if badges_html else ""
     ext_actions_block = " ".join(ext_links_html)
+    return ai_badges_block, ext_actions_block
+
+
+def render_static_prompt_page(context: PageRendererContext) -> PageRendererResult:
+    """Render a static prompt page."""
+
+    prompt_blocks = [parse_prompt_block(block) for block in context.control_blocks if block.label == "prompt"]
+    slider_blocks = _parse_preview_blocks(context) or [
+        parse_image_slider_block(block) for block in context.control_blocks if block.label == "image-slider"
+    ]
+    intro_result = render_page_intro_component(
+        PageIntroComponent(page_title=context.page_title, page_description=context.page_description),
+        context.component_templates,
+    )
+    body_result = render_page_body_component(
+        PageBodyComponent(body_html=context.rendered_markdown_html),
+        context.component_templates,
+    )
+    slider_results = [
+        render_image_slider_component(_build_image_slider_component(block), context.component_templates)
+        for block in slider_blocks
+    ]
+    page_ai_target_str = context.parsed_front_matter.get("ai_target", "").strip()
+    if not page_ai_target_str:
+        default_ai_targets = ["ChatGPT", "Gemini"]
+    else:
+        default_ai_targets = [t.strip() for t in page_ai_target_str.split(",") if t.strip()]
 
     raw_source = context.parsed_front_matter.get("source", "").strip()
     cleaned_source = re.sub(r'^(?:출처|source)\s*[:：]\s*', '', raw_source, flags=re.IGNORECASE).strip()
@@ -184,26 +207,32 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
     prompt_item_results = []
     prompt_block_html_map = {}
     for prompt_block in prompt_blocks:
+        if prompt_block.ai_target:
+            block_targets = [t.strip() for t in prompt_block.ai_target.split(",") if t.strip()]
+        else:
+            block_targets = default_ai_targets
+
+        ai_badges_block, ext_actions_block = _build_ai_badges_and_actions(block_targets)
         body_html = render_inline_prompt_body_html(prompt_block.body)
         has_inline_controls = 'class="itc"' in body_html
 
         if has_inline_controls:
             initial_clean_text = _build_initial_clean_prompt_text(prompt_block.body)
             initial_clean_html = escape_html(initial_clean_text)
-            actions_html = ""
+            actions_html = (
+                '<footer class="prompt-item__actions">\n'
+                '  <button type="button" class="prompt-item__copy-button" data-prompt-copy>프롬프트 복사</button>\n'
+                f'  {ext_actions_block}\n'
+                '  <span class="prompt-item__copy-status sr-only" aria-live="polite"></span>\n'
+                '</footer>'
+            )
             preview_html = (
-                '<article class="prompt-item prompt-item--preview">\n'
+                '<div class="prompt-item__preview-section">\n'
                 '  <div class="prompt-item__preview-header">\n'
-                '    <h3 class="prompt-item__preview-title">완성된 프롬프트 (실시간 미리보기)</h3>\n'
-                f'    {ai_badges_block}'
+                '    <div class="prompt-item__title prompt-item__title--preview">완성된 프롬프트 (실시간 미리보기)</div>\n'
                 '  </div>\n'
                 f'  <div class="prompt-item__preview-box"><code class="prompt-item__preview-code">{initial_clean_html}</code></div>\n'
-                '  <footer class="prompt-item__actions">\n'
-                '    <button type="button" class="prompt-item__copy-button" data-prompt-copy>프롬프트 복사</button>\n'
-                f'    {ext_actions_block}\n'
-                '    <span class="prompt-item__copy-status sr-only" aria-live="polite"></span>\n'
-                '  </footer>\n'
-                '</article>'
+                '</div>'
             )
         else:
             actions_html = (

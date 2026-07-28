@@ -307,9 +307,10 @@ def validate_renderer_result(context: PageRendererContext, result: PageRendererR
 def parse_prompt_block(block: RendererControlBlock) -> PromptBlock:
     """Parse a prompt control block."""
 
-    parsed = _split_key_value_block(block.body, block=block, allowed_keys={"title", "description"}, required_keys={"title"})
+    parsed = _split_key_value_block(block.body, block=block, allowed_keys={"title", "description", "ai_target", "target"}, required_keys={"title"})
     title = parsed.metadata.get("title", "").strip()
     description = parsed.metadata.get("description")
+    ai_target = parsed.metadata.get("ai_target") or parsed.metadata.get("target")
     if not title:
         raise BuildError(
             "Parse renderer source",
@@ -334,6 +335,7 @@ def parse_prompt_block(block: RendererControlBlock) -> PromptBlock:
         description=description.strip() if description is not None and description.strip() else None,
         body=body,
         index=block.index,
+        ai_target=ai_target.strip() if ai_target is not None and ai_target.strip() else None,
     )
 
 

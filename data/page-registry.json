@@ -119,6 +119,19 @@
       "lang": "ko"
     },
     {
+      "id": "ai-assistant-gemini-canvas-map",
+      "title": "Gemini 캔버스 대화형 여행 지도",
+      "description": "Gemini Canvas를 활용해 웹 브라우저에서 바로 작동하는 단일 HTML Leaflet 대화형 여행 지도를 만드는 프롬프트입니다.",
+      "route": "/ai-assistant/gemini-canvas-map/",
+      "source": "pages/sections/ai-assistant/gemini-canvas-map.md",
+      "type": "static-prompt",
+      "section": "ai-assistant",
+      "order": 9,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "image-ai",
       "title": "이미지 만들기",
       "description": "이미지 생성·편집에 사용할 프롬프트 만들기와 실습",
@@ -126,7 +139,7 @@
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 9,
+      "order": 10,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -139,7 +152,7 @@
       "source": "pages/sections/image-ai/builder.md",
       "type": "prompt-builder",
       "section": "image-ai",
-      "order": 10,
+      "order": 11,
       "navigation": true,
       "status": "published",
       "lang": "ko"

@@ -20,6 +20,7 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
     blocks: list[str] = []
     paragraph_lines: list[str] = []
     list_items: list[str] = []
+    current_list_type: str | None = None
     code_lines: list[str] = []
     in_code_block = False
     in_step_card = False
@@ -33,11 +34,14 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
         paragraph_lines.clear()
 
     def flush_list() -> None:
+        nonlocal current_list_type
         if not list_items:
             return
+        tag = current_list_type or "ul"
         items = "".join(f"<li>{item}</li>" for item in list_items)
-        blocks.append(f"<ul>{items}</ul>")
+        blocks.append(f"<{tag}>{items}</{tag}>")
         list_items.clear()
+        current_list_type = None
 
     blocks.append('<div class="practice-step-card">')
     in_step_card = True
@@ -89,7 +93,19 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
 
         if stripped.startswith("- "):
             flush_paragraph()
+            if current_list_type and current_list_type != "ul":
+                flush_list()
+            current_list_type = "ul"
             list_items.append(_render_inline_markup(stripped[2:].strip(), source_path=source_path))
+            continue
+
+        ol_match = re.match(r"^\d+\.\s+(.*)$", stripped)
+        if ol_match:
+            flush_paragraph()
+            if current_list_type and current_list_type != "ol":
+                flush_list()
+            current_list_type = "ol"
+            list_items.append(_render_inline_markup(ol_match.group(1).strip(), source_path=source_path))
             continue
 
         flush_list()

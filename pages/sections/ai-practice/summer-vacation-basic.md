@@ -14,23 +14,14 @@ ai_target: ChatGPT, Gemini
 ## 실습 순서
 
 1. Zero-shot Prompting: 바로 요청
-
 2. Role Prompting: 역할 부여
-
 3. Context Prompting: 상황 추가
-
 4. Constraint Prompting: 조건 설정
-
 5. One-shot / Few-shot Prompting: 예시 제공
-
 6. Output Format Prompting: 형식 지정
-
 7. Step-by-step Prompting: 단계별 검토
-
 8. Ask-before-answer Prompting: 먼저 질문
-
 9. Self-Reflection / Critique Prompting: 답변 검토
-
 10. Prompt Chaining: 작업을 이어서 완성
 
 ---
