@@ -36,7 +36,13 @@ EXPECTED_SECTIONS = (
                 "label": "업무 이메일 작성 프롬프트",
                 "description": "상황별 업무 이메일 초안을 빠르게 다듬는 프롬프트 예제",
                 "route": "/ready-to-use/email/",
-            }
+            },
+            {
+                "id": "ready-to-use-korean-editor",
+                "label": "맞춤형 한국어 교정 프롬프트",
+                "description": "원하는 용도와 말투를 선택해 빠르고 자연스럽게 글 다듬기",
+                "route": "/ready-to-use/korean-editor/",
+            },
         ],
     },
     {
@@ -68,6 +74,12 @@ EXPECTED_SECTIONS = (
                 "label": "Gemini 캔버스 대화형 여행 지도",
                 "description": "Gemini Canvas를 활용한 단일 HTML Leaflet 대화형 여행 지도 생성 프롬프트",
                 "route": "/ai-assistant/gemini-canvas-map/",
+            },
+            {
+                "id": "ai-assistant-korean-editor",
+                "label": "한국어 다듬기 전문 편집자",
+                "description": "실습용 자연스러운 한국어 전문 편집자 GEM·Project 전용 지침서",
+                "route": "/ai-assistant/korean-editor-guide/",
             },
         ],
     },

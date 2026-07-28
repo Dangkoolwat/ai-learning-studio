@@ -67,6 +67,19 @@
       "lang": "ko"
     },
     {
+      "id": "ready-to-use-korean-editor",
+      "title": "맞춤형 한국어 교정 프롬프트",
+      "description": "원하는 용도와 말투를 선택해 빠르고 자연스럽게 글을 다듬어 보세요.",
+      "route": "/ready-to-use/korean-editor/",
+      "source": "pages/sections/ready-to-use/korean-editor.md",
+      "type": "static-prompt",
+      "section": "ready-to-use",
+      "order": 5,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "ai-assistant",
       "title": "나만의 AI 만들기",
       "description": "Project·Gem 등에 사용할 맞춤형 역할과 지침 만들기",
@@ -127,6 +140,19 @@
       "type": "static-prompt",
       "section": "ai-assistant",
       "order": 9,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ai-assistant-korean-editor",
+      "title": "자연스러운 한국어 다듬기 지침서",
+      "description": "실습에 바로 활용하는 자연스러운 한국어 전문 편집자 GEM·Project 전용 지침 프롬프트입니다.",
+      "route": "/ai-assistant/korean-editor-guide/",
+      "source": "pages/sections/ai-assistant/korean-editor-guide.md",
+      "type": "static-prompt",
+      "section": "ai-assistant",
+      "order": 10,
       "navigation": true,
       "status": "published",
       "lang": "ko"
