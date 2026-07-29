@@ -355,20 +355,21 @@ def _build_image_slider_component(block) -> ImageSliderComponent:
         nav_html.append(
             f'<li class="image-slider__nav-item"><button type="button" class="image-slider__nav-link{" is-active" if is_first else ""}" aria-label="슬라이드 {index + 1}로 이동" data-slider-dot>•</button></li>'
         )
-    slider_html = (
-        '<div class="image-slider__wrapper">\n'
-        '  <button type="button" class="image-slider__arrow image-slider__arrow--prev" aria-label="이전 이미지" data-slider-prev>&lt;</button>\n'
+    slider_html = '<div class="image-slider__wrapper">\n'
+    if slide_count > 1:
+        slider_html += '  <button type="button" class="image-slider__arrow image-slider__arrow--prev" aria-label="이전 이미지" data-slider-prev>&lt;</button>\n'
+    slider_html += (
         '  <div class="image-slider__viewport">\n'
         '    <div class="image-slider__track" data-slider-track>\n'
         + "".join(slides_html)
         + '\n    </div>\n'
         '  </div>\n'
-        '  <button type="button" class="image-slider__arrow image-slider__arrow--next" aria-label="다음 이미지" data-slider-next>&gt;</button>\n'
-        '</div>\n'
-        + '<ol class="image-slider__nav">'
-        + "".join(nav_html)
-        + "</ol>"
     )
+    if slide_count > 1:
+        slider_html += '  <button type="button" class="image-slider__arrow image-slider__arrow--next" aria-label="다음 이미지" data-slider-next>&gt;</button>\n'
+    slider_html += '</div>\n'
+    if slide_count > 1:
+        slider_html += '<ol class="image-slider__nav">' + "".join(nav_html) + "</ol>"
     return ImageSliderComponent(
         slider_title=block.title,
         slider_description=block.description or "",
@@ -382,16 +383,7 @@ def _parse_preview_blocks(context: PageRendererContext):
         return ()
 
     entries = [item.strip() for item in preview_value.split(",") if item.strip()]
-    if len(entries) < 2:
-        raise BuildError(
-            "Render page",
-            "preview front matter requires at least two image paths",
-            path=context.source_path,
-            page_id=context.page_id,
-            page_type=context.page_type,
-            page_route=context.page_route,
-            renderer_id=context.page_type,
-        )
+
 
     slides = []
     for index, image_src in enumerate(entries, start=1):

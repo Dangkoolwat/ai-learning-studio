@@ -803,7 +803,7 @@ button:focus-visible {
   min-height: clamp(16rem, 48vw, 28rem);
   overflow: hidden;
   border-radius: calc(var(--site-radius-md) - 4px);
-  background: #dce6f3;
+  background: transparent;
 }
 
 .image-slider__image {
@@ -813,6 +813,7 @@ button:focus-visible {
   max-height: clamp(16rem, 48vw, 28rem);
   height: auto;
   object-fit: contain;
+  border-radius: calc(var(--site-radius-md) - 4px);
 }
 
 .image-slider__arrow {

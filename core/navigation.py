@@ -112,6 +112,12 @@ EXPECTED_SECTIONS = (
                 "label": "AI 이미지 프롬프트 빌더",
                 "description": "스타일, 조명, 구도를 고르고 친절한 설명과 함께 이미지 프롬프트 만들기",
                 "route": "/image-ai/builder/",
+            },
+            {
+                "id": "image-ai-typography",
+                "label": "손글씨 타이포그래피 만들기",
+                "description": "원하는 문구를 입력해 마커로 그린 듯한 삐뚤빼뚤하고 귀여운 레터링 이미지를 만들어 보세요.",
+                "route": "/image-ai/typography/",
             }
         ],
     },

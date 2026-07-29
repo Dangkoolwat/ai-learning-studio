@@ -237,6 +237,19 @@ EXPECTED_PAGES = (
         "status": "published",
         "lang": "ko",
     },
+    {
+        "id": "image-ai-typography",
+        "title": "손글씨 타이포그래피 만들기",
+        "description": "원하는 문구를 입력해 마커로 그린 듯한 삐뚤빼뚤하고 귀여운 레터링 이미지를 만들어 보세요.",
+        "route": "/image-ai/typography/",
+        "source": "pages/sections/image-ai/typography.md",
+        "type": "static-prompt",
+        "section": "image-ai",
+        "order": 16,
+        "navigation": True,
+        "status": "published",
+        "lang": "ko",
+    },
 )
 EXPECTED_PAGE_IDS = tuple(page["id"] for page in EXPECTED_PAGES)
 EXPECTED_SOURCE_FILES = tuple(page["source"] for page in EXPECTED_PAGES)
