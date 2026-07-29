@@ -33,6 +33,12 @@
           "label": "자기 개발 학습 계획 프롬프트",
           "description": "목표와 현재 수준, 사용 가능한 시간에 맞춰 현실적인 학습 계획을 짜주는 프롬프트 예제",
           "route": "/ready-to-use/self-development/"
+        },
+        {
+          "id": "ready-to-use-universal-handoff",
+          "label": "Universal AI Handoff Prompt",
+          "description": "긴 대화를 작업 인계서로 변환하여 어느 AI에서든 이어서 작업할 수 있게 만드는 범용 프롬프트",
+          "route": "/ready-to-use/universal-handoff/"
         }
       ]
     },
