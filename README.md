@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.14-blue?logo=python&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel&logoColor=white)
-![License](https://img.shields.io/badge/License-Copyright-green)
+![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
 > AI를 설명하는 데서 끝나지 않고, 사용자가 직접 해보고 결과물을 만들도록 돕는 한국어 AI 학습 웹사이트
 
@@ -206,6 +206,7 @@ AI Learning Studio는 정적 사이트로 배포됩니다.
 
 # 라이선스
 
-이 프로젝트의 교육 콘텐츠와 자료를 사용할 경우 출처를 표기해 주세요.
+이 프로젝트는 **MIT 라이선스**를 따릅니다. 
+누구나 자유롭게 사용, 복제, 수정, 병합, 게시, 배포, 재라이선스 및 판매할 수 있습니다.
 
-Copyright © 2026 daangcool.net All rights reserved.
+Copyright (c) 2026 진상혁
