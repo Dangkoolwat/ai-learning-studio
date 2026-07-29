@@ -50,22 +50,28 @@ function getPromptText(promptItem) {
   if (!code) return "";
 
   const clone = code.cloneNode(true);
+  const emptyChipMarker = "\x00EMPTY_CHIP\x00";
   clone.querySelectorAll(".itc").forEach((chip) => {
     let val = chip.getAttribute("data-value") || chip.dataset.value || chip.textContent.replace(/[▾✎]/g, "").trim();
-    if (val === "(선택 없음)") {
-      val = "";
+    if (val === "(선택 없음)" || !val.trim()) {
+      chip.replaceWith(document.createTextNode(emptyChipMarker));
+    } else {
+      chip.replaceWith(document.createTextNode(val));
     }
-    chip.replaceWith(document.createTextNode(val));
   });
 
   const rawText = clone.textContent ?? "";
-  const filteredLines = rawText.split("\n").filter((line) => {
+  const lines = rawText.split("\n");
+  const filteredLines = lines.filter((line) => {
     const trimmed = line.trim();
-    if (/^-\s*[^:]+:\s*$/.test(trimmed)) {
-      return false;
+    if (trimmed.includes(emptyChipMarker)) {
+      const withoutMarker = trimmed.replaceAll(emptyChipMarker, "").trim();
+      if (/^-\s*[^:]*:\s*$/.test(withoutMarker) || !withoutMarker) {
+        return false;
+      }
     }
     return true;
-  });
+  }).map((line) => line.replaceAll(emptyChipMarker, ""));
 
   let minIndent = Infinity;
   for (const line of filteredLines) {

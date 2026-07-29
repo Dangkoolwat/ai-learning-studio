@@ -97,7 +97,7 @@ EXPECTED_PAGES = (
     },
     {
         "id": "ready-to-use-universal-handoff",
-        "title": "Universal AI Handoff Prompt",
+        "title": "AI 작업 이어가기",
         "description": "긴 대화를 작업 인계서로 변환하여 어느 AI에서든 끊김 없이 이어서 작업할 수 있게 만드는 범용 프롬프트",
         "route": "/ready-to-use/universal-handoff/",
         "source": "pages/sections/ready-to-use/universal-handoff.md",
