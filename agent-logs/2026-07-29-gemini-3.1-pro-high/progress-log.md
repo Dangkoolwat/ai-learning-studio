@@ -54,3 +54,6 @@
   - 수정: `static_prompt.py`의 이미지 슬라이더 파싱 및 렌더링 로직을 `prompt_builder.py`에 적용.
   - 빌드 파이프라인(`core/renderer_validation.py`, `core/build_pipeline.py`)에서 `prompt-builder` 유형일 때 미리보기(`image-slider`) 컴포넌트를 기대하도록 컴포넌트 검증 규칙 수정.
   - `python3 scripts/build.py` 실행 완료 및 사이트 빌드 정상 통과(총 19개 페이지 정상).
+
+- **롤백 완료**:
+  - 사용자의 "원복" 요청에 따라, CSS 스타일을 통합 박스 형태로 묶었던 이전 변경사항(`c26a129`)을 파기하고 `git reset --hard`를 이용해 작업 전 안전 상태(`b096bda`)로 즉각 롤백 및 재빌드 완료함.
