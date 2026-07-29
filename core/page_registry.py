@@ -250,6 +250,19 @@ EXPECTED_PAGES = (
         "status": "published",
         "lang": "ko",
     },
+    {
+        "id": "image-ai-recipe-infographic",
+        "title": "모던 레시피 인포그래픽 생성",
+        "description": "원하는 음식 이름을 입력해 감각적이고 모던한 세로형 레시피 인포그래픽 이미지를 만들어 보세요.",
+        "route": "/image-ai/recipe-infographic/",
+        "source": "pages/sections/image-ai/recipe-infographic.md",
+        "type": "prompt-builder",
+        "section": "image-ai",
+        "order": 17,
+        "navigation": True,
+        "status": "published",
+        "lang": "ko",
+    },
 )
 EXPECTED_PAGE_IDS = tuple(page["id"] for page in EXPECTED_PAGES)
 EXPECTED_SOURCE_FILES = tuple(page["source"] for page in EXPECTED_PAGES)

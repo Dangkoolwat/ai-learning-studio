@@ -36,3 +36,21 @@
 
 ## 대기 및 이관 사항 (Handoff)
 - 사용자가 첨부한 예제 이미지를 `assets/images/` 디렉토리에 `typography-example-1.png`, `typography-example-2.png` 이름으로 저장해야 UI 상에서 정상적으로 표시됨.
+
+- **모던 레시피 인포그래픽 프롬프트 페이지 추가**:
+  - `pages/sections/image-ai/recipe-infographic.md` 파일 생성 완료.
+  - `prompt-builder` 규칙을 준수하여, `food-name`과 `aspect-ratio` 2개의 `prompt-field`를 추가함 (빌드 에러 방지 및 화면 비율 사용자화 제공).
+  - `core/navigation.py` 및 `core/page_registry.py`의 `EXPECTED_SECTIONS` / `EXPECTED_PAGES` 계약(contract)에 `image-ai-recipe-infographic` 추가.
+  - `data/navigation.json` 및 `data/page-registry.json` 업데이트 완료.
+  - 빌드(python3 scripts/build.py) 성공 확인.
+  - `preview` 필드 이미지(`pasta-example.png`)는 사용자가 이미지를 올바른 경로에 배치하면 정상 표출됨.
+
+- **예제 이미지 등록**:
+  - 사용자가 첨부한 시스템 임시 파일(`media__1785324908996.png`)을 `assets/images/image-ai/recipe-infographic/pasta-example.png`로 이동 및 저장 완료.
+  - `python3 scripts/build.py` 실행하여 빌드 오류 없음 확인.
+
+- **`prompt-builder` 페이지 렌더러 미리보기 이미지 출력 버그 수정**:
+  - 원인: `core/renderers/prompt_builder.py`의 `render_prompt_builder_page` 내부에서 `preview` 메타데이터에 대한 슬라이더 렌더링 로직이 누락됨.
+  - 수정: `static_prompt.py`의 이미지 슬라이더 파싱 및 렌더링 로직을 `prompt_builder.py`에 적용.
+  - 빌드 파이프라인(`core/renderer_validation.py`, `core/build_pipeline.py`)에서 `prompt-builder` 유형일 때 미리보기(`image-slider`) 컴포넌트를 기대하도록 컴포넌트 검증 규칙 수정.
+  - `python3 scripts/build.py` 실행 완료 및 사이트 빌드 정상 통과(총 19개 페이지 정상).

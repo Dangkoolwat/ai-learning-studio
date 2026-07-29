@@ -728,6 +728,10 @@ def validate_renderer_component_usage(
             expected_component_ids.append("prompt-collection")
     elif page.type == "prompt-builder":
         field_count = sum(1 for block in page_context.control_blocks if block.label == "prompt-field")
+        slider_count = 1 if page_context.parsed_front_matter.get("preview", "").strip() else 0
+        if not slider_count:
+            slider_count = sum(1 for block in page_context.control_blocks if block.label == "image-slider")
+        expected_component_ids.extend(["image-slider"] * slider_count)
         expected_component_ids.extend(["prompt-field"] * field_count)
         expected_component_ids.append("prompt-builder")
     elif page.type == "practice-timeline":

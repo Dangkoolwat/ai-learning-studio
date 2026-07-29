@@ -108,6 +108,12 @@
           "label": "손글씨 타이포그래피 만들기",
           "description": "원하는 문구를 입력해 마커로 그린 듯한 삐뚤빼뚤하고 귀여운 레터링 이미지를 만들어 보세요.",
           "route": "/image-ai/typography/"
+        },
+        {
+          "id": "image-ai-recipe-infographic",
+          "label": "모던 레시피 인포그래픽 생성",
+          "description": "원하는 음식 이름을 입력해 감각적이고 모던한 세로형 레시피 인포그래픽 이미지를 만들어 보세요.",
+          "route": "/image-ai/recipe-infographic/"
         }
       ]
     }
