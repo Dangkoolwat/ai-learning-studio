@@ -84,6 +84,7 @@ class PromptBuilderComponent:
     prompt_template_html: str = ""
     ai_badges_html: str = ""
     ai_actions_html: str = ""
+    prompt_source_html: str = ""
     component_id: ClassVar[str] = "prompt-builder"
 
 

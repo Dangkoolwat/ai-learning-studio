@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import re
+from html import escape as escape_html
+
 from core.component_engine import (
     render_image_slider_component,
     render_page_body_component,
@@ -83,12 +86,21 @@ def render_prompt_builder_page(context: PageRendererContext) -> PageRendererResu
     block_targets = [t.strip() for t in page_ai_target_str.split(",") if t.strip()] if page_ai_target_str else []
     ai_badges_block, ai_actions_block = _build_ai_badges_and_actions(block_targets)
 
+    raw_source = context.parsed_front_matter.get("source", "").strip()
+    cleaned_source = re.sub(r'^(?:출처|source)\s*[:：]\s*', '', raw_source, flags=re.IGNORECASE).strip()
+    source_html = (
+        f'<div class="prompt-item__source"><span class="prompt-item__source-label">Source :</span> {escape_html(cleaned_source)}</div>'
+        if cleaned_source
+        else ""
+    )
+
     section_result = render_prompt_builder_component(
         PromptBuilderComponent(
             prompt_fields_html=fields_html,
             prompt_template_html=prompt_template_html,
             ai_badges_html=ai_badges_block,
             ai_actions_html=ai_actions_block,
+            prompt_source_html=source_html,
         ),
         context.component_templates,
     )

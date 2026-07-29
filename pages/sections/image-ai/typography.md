@@ -4,7 +4,7 @@ title: 손글씨 타이포그래피 만들기
 description: 원하는 문구를 입력해 마커로 그린 듯한 삐뚤빼뚤하고 귀여운 레터링 이미지를 만들어 보세요.
 preview: /assets/images/image-ai/typography/typography-example-1.png
 ai_target: chatGPT
-source: @Thread 디자인 방앗간(@designmill_official) 제공
+source: @Thread 디자인 방앗간(@designmill_official) 
 ---
 
 # 타이포그래피 이미지 프롬프트

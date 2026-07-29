@@ -47,9 +47,9 @@ APPROVED_COMPONENT_SPECS = (
     ComponentSpec(
         component_id="prompt-builder",
         template_path=Path("components/prompt-builder.html"),
-        placeholders=("prompt_fields_html", "prompt_template_html", "ai_badges_html", "ai_actions_html"),
+        placeholders=("prompt_fields_html", "prompt_template_html", "ai_badges_html", "ai_actions_html", "prompt_source_html"),
         plain_text_placeholders=("prompt_template_html",),
-        trusted_html_placeholders=("prompt_fields_html", "ai_badges_html", "ai_actions_html"),
+        trusted_html_placeholders=("prompt_fields_html", "ai_badges_html", "ai_actions_html", "prompt_source_html"),
         required_placeholders=("prompt_fields_html", "prompt_template_html"),
         version=1,
     ),

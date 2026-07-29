@@ -3,12 +3,13 @@ registry_id: image-ai-recipe-infographic
 title: 모던 레시피 인포그래픽 생성
 description: 원하는 음식 이름을 입력해 감각적이고 모던한 레시피 인포그래픽 이미지를 만들어 보세요.
 preview: /assets/images/image-ai/recipe-infographic/pasta-example.png
-ai_target: ChatGPT, Midjourney
+ai_target: ChatGPT
+source: @Thread  Ai_Smart365(@jh_aicafe)
 ---
 
 # 모던 레시피 인포그래픽 프롬프트 조립기
 
-음식 이름만 입력하면 실제 재료, 분량, 조리 과정이 포함된 세련된 9:16 세로형 모던 레시피 인포그래픽을 만들어 주는 프롬프트입니다.
+음식 이름만 입력하면 실제 재료, 분량, 조리 과정이 포함된 세련된 모던 레시피 인포그래픽을 만들어 주는 프롬프트입니다.
 
 
 ## 나만의 레시피 인포그래픽 프롬프트

@@ -227,6 +227,7 @@ def _component_replacements(component: object, spec) -> dict[str, str]:
             "prompt_template_html": escape_html(component.prompt_template_html),
             "ai_badges_html": component.ai_badges_html,
             "ai_actions_html": component.ai_actions_html,
+            "prompt_source_html": component.prompt_source_html,
         }
     if isinstance(component, PromptFieldComponent):
         return {
