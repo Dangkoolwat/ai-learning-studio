@@ -170,8 +170,8 @@ def render_prompt_field_placeholder_fragment(placeholder: str | None) -> str:
         return ""
 
     cleaned = placeholder.strip()
-    if "/" in cleaned:
-        raw_options = cleaned.replace("예:", "").strip().split("/")
+    if " / " in cleaned:
+        raw_options = cleaned.replace("예:", "").strip().split(" / ")
         options_html = ['<option value="">-- 선택하세요 --</option>']
         for opt in raw_options:
             val = escape_html(opt.strip())
