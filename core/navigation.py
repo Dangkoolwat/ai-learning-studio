@@ -31,12 +31,7 @@ EXPECTED_SECTIONS = (
         "description": "필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기",
         "order": 2,
         "items": [
-            {
-                "id": "ready-to-use-email",
-                "label": "업무 이메일 작성 프롬프트",
-                "description": "상황별 업무 이메일 초안을 빠르게 다듬는 프롬프트 예제",
-                "route": "/ready-to-use/email/",
-            },
+
             {
                 "id": "ready-to-use-korean-editor",
                 "label": "맞춤형 한국어 교정 프롬프트",
@@ -107,12 +102,7 @@ EXPECTED_SECTIONS = (
         "description": "이미지 생성·편집에 사용할 프롬프트 만들기와 실습",
         "order": 4,
         "items": [
-            {
-                "id": "image-ai-builder",
-                "label": "AI 이미지 프롬프트 빌더",
-                "description": "스타일, 조명, 구도를 고르고 친절한 설명과 함께 이미지 프롬프트 만들기",
-                "route": "/image-ai/builder/",
-            },
+
             {
                 "id": "image-ai-typography",
                 "label": "손글씨 타이포그래피 만들기",
