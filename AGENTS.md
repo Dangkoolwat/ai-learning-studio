@@ -83,6 +83,7 @@ JSON · Markdown · Templates
 ## 6. 검증 및 작업 로그
 
 - 저장소 파일을 변경한 작업은 단일 로그 파일(`agent-logs/YYYY-MM-DD-모델이름/progress-log.md`)에 진행 상황, 변경 내역, 빌드 검증 결과를 축적 기록합니다.
+- **사고 보고서 (Incident Reports)**: 문제 발생 또는 실패 사례에 대한 보고서는 `agent-logs/incident-reports/` 폴더에 별도로 보관합니다. (참고: [프롬프트 카드 상단 간격 문제 실패보고서](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/agent-logs/incident-reports/2026-07-28-failure-report.md))
 - **레이아웃 및 UI 사이드 이펙트(Side Effect) 체크 필수**: CSS, 마진, 패딩, 컴포넌트 레이아웃 변경 시 단일 페이지만 보지 않고 공통 컴포넌트 및 연관 페이지 전체의 시각적 렌더링 부작용(여백 벌어짐, 찌그러짐 등)을 브라우저 스크린샷으로 사전에 반드시 교차 점검합니다.
 - 수정 후 반드시 `python3 scripts/build.py`를 실행하여 빌드 정상 여부를 검증합니다.
 
