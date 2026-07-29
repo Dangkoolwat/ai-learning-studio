@@ -62,3 +62,8 @@
   - 현상: HTML 폼(`<select>`) 렌더링 시 사용되는 `core/component_engine.py`에서 무조건 슬래시(`/`) 단위로 옵션을 자르다 보니, 괄호 속의 슬래시까지 잘라버리는 문제 확인.
   - 조치: 마크다운 파일의 텍스트 원복 후, 파이썬 파서가 옵션을 자르는 기준 문자열을 `/`에서 양옆에 공백이 포함된 ` / `로 명확히 수정함.
   - 효과: 템플릿 마크다운 내에서 옵션 구분을 위해 띄어쓰기와 함께 작성한 ` / `만 정확하게 파싱되며, 괄호 등 기타 텍스트 내부의 붙여쓴 슬래시는 파싱 에러를 유발하지 않음.
+
+- **프롬프트 빌더 페이지 출처(`source`) 표시 아키텍처 확장 (Standard Planning 완료)**:
+  - 현상: `recipe-infographic` 등 `prompt-builder` 페이지 유형에서 `source` 프론트매터 값이 렌더링되지 않음.
+  - 조치: 파이썬 모델(`component_models.py`), 레지스트리(`component_registry.py`), 엔진(`component_engine.py`), 파서(`prompt_builder.py`), HTML 템플릿(`prompt-builder.html`)을 일괄 확장하여 `prompt_source_html` 속성 지원 추가.
+  - 검증: 빌드 정상 및 템플릿의 `</section>` 최하단 영역에 `Source : ...` 텍스트 렌더링 확인. 커밋 완료.
