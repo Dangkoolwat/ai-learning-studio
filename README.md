@@ -1,5 +1,9 @@
 # AI Learning Studio
 
+![Python](https://img.shields.io/badge/Python-3.14-blue?logo=python&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel&logoColor=white)
+![License](https://img.shields.io/badge/License-Copyright-green)
+
 > AI를 설명하는 데서 끝나지 않고, 사용자가 직접 해보고 결과물을 만들도록 돕는 한국어 AI 학습 웹사이트
 
 AI Learning Studio는 AI 입문자와 기초 활용자를 위한 교육형 웹 프로젝트입니다.
@@ -132,29 +136,26 @@ git clone https://github.com/Dangkoolwat/ai-learning-studio.git
 cd ai-learning-studio
 ```
 
-빌드를 실행합니다.
+정적 빌드 및 서버를 실행합니다.
 
 ```bash
+# 빌드만 실행
 python3 scripts/build.py
-```
 
-빌드 후 자동으로 웹 서버를 실행하고 브라우저를 엽니다.
+# 빌드 검증만 실행
+python3 scripts/build.py --check
 
-```bash
+# 빌드 후 로컬 웹 서버(미리보기) 실행
 python3 scripts/serve.py
 ```
 
-검증만 실행합니다.
-
-```bash
-python3 scripts/build.py --check
-```
+> ⚠️ 빌드는 항상 Python을 통해 수행하며, 생성된 `dist/` 폴더 내의 결과물은 절대 직접 수정하지 않습니다.
 
 ---
 
 # AI 코딩 에이전트
 
-이 저장소는 AI 코딩 에이전트(Codex, ChatGPT 등)와 협업할 수 있도록 설계되어 있습니다.
+이 저장소는 AI 코딩 에이전트(Gemini 등)와 협업할 수 있도록 최적화되어 설계되었습니다.
 
 작업 순서는 다음과 같습니다.
 
@@ -190,23 +191,7 @@ PR 기준 검증과 배포 전 확인 절차는 `docs/deployment-guidelines.md`�
 
 ---
 
-# 빌드 및 검증
 
-빌드
-
-```bash
-python3 scripts/build.py
-```
-
-검증
-
-```bash
-python3 scripts/build.py --check
-```
-
-빌드는 항상 Python을 통해 수행하며, 생성된 `dist/` 결과물은 직접 수정하지 않습니다.
-
----
 
 # 배포
 
@@ -223,4 +208,4 @@ AI Learning Studio는 정적 사이트로 배포됩니다.
 
 이 프로젝트의 교육 콘텐츠와 자료를 사용할 경우 출처를 표기해 주세요.
 
-Copyright © 2026 진상혁. All rights reserved.
+Copyright © 2026 daangcool.net All rights reserved.
