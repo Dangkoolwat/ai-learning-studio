@@ -209,4 +209,4 @@ AI Learning Studio는 정적 사이트로 배포됩니다.
 본 프로젝트의 교육 콘텐츠와 프롬프트 예제 등을 참고하거나 활용하실 경우, 가급적 **출처(AI Learning Studio)**를 표기해 주시면 감사하겠습니다. 
 *(단, 원본 콘텐츠의 상업적 판매 및 무단 재배포는 제한됩니다.)*
 
-Copyright (c) 2026 진상혁
+Copyright (c) 2026 daangcool.net
