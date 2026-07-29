@@ -18,7 +18,7 @@ ai_target: ChatGPT, Midjourney
 ```prompt-field
 id: food-name
 label: 음식명
-placeholder: 파스타 / 샌드위치 / 떡볶이 / 김치볶음밥 등
+placeholder: 파스타 / 샌드위치 / 떡볶이 / 김치볶음밥
 description: 인포그래픽으로 만들 음식 이름을 입력하세요. 전체 프롬프트에 일괄 적용됩니다.
 ```
 
