@@ -252,6 +252,32 @@ EXPECTED_PAGES = (
         "status": "published",
         "lang": "ko",
     },
+    {
+        "id": "image-ai-3d-career-character",
+        "title": "나만의 3D 직업 캐릭터 만들기",
+        "description": "내 사진과 직업을 바탕으로 다양한 모습의 3D 캐릭터 포스터 프롬프트를 만들어 보세요.",
+        "route": "/image-ai/3d-career-character/",
+        "source": "pages/sections/image-ai/3d-career-character.md",
+        "type": "static-prompt",
+        "section": "image-ai",
+        "order": 18,
+        "navigation": True,
+        "status": "published",
+        "lang": "ko",
+    },
+    {
+        "id": "image-ai-resume-profile",
+        "title": "AI 이력서·프로필 사진 생성",
+        "description": "내 사진을 기반으로 다양한 의상과 구도의 전문적인 프로필 사진을 제작해 보세요.",
+        "route": "/image-ai/resume-profile/",
+        "source": "pages/sections/image-ai/resume-profile.md",
+        "type": "static-prompt",
+        "section": "image-ai",
+        "order": 19,
+        "navigation": True,
+        "status": "published",
+        "lang": "ko",
+    },
 )
 EXPECTED_PAGE_IDS = tuple(page["id"] for page in EXPECTED_PAGES)
 EXPECTED_SOURCE_FILES = tuple(page["source"] for page in EXPECTED_PAGES)

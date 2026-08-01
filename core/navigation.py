@@ -120,6 +120,18 @@ EXPECTED_SECTIONS = (
                 "label": "모던 레시피 인포그래픽 생성",
                 "description": "원하는 음식 이름을 입력해 감각적이고 모던한 세로형 레시피 인포그래픽 이미지를 만들어 보세요.",
                 "route": "/image-ai/recipe-infographic/",
+            },
+            {
+                "id": "image-ai-3d-career-character",
+                "label": "나만의 3D 직업 캐릭터 만들기",
+                "description": "내 사진과 직업을 바탕으로 다양한 모습의 3D 캐릭터 포스터 프롬프트를 만들어 보세요.",
+                "route": "/image-ai/3d-career-character/",
+            },
+            {
+                "id": "image-ai-resume-profile",
+                "label": "AI 이력서·프로필 사진 생성",
+                "description": "내 사진을 기반으로 다양한 의상과 구도의 전문적인 프로필 사진을 제작해 보세요.",
+                "route": "/image-ai/resume-profile/",
             }
         ],
     },

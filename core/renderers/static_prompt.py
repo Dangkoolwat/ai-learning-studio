@@ -56,49 +56,51 @@ def render_inline_prompt_body_html(prompt_body: str) -> str:
     lines = prompt_body.splitlines()
     processed_lines = []
 
-    pattern = re.compile(r"\[([^\]]+)\]")
+    pattern = re.compile(r"(\[[^\]]+\])")
 
     for line in lines:
-        escaped_line = escape_html(line)
         line_stripped = line.strip()
+        chunks = pattern.split(line)
+        processed_chunks = []
 
-        def replace_bracket(match: re.Match[str]) -> str:
-            full_match = match.group(0)
-            content = match.group(1).strip()
+        for i, chunk in enumerate(chunks):
+            if i % 2 == 0:
+                processed_chunks.append(escape_html(chunk))
+            else:
+                full_match = chunk
+                content = chunk[1:-1].strip()
 
-            # Preserve section headers e.g. [역할 정의], [운영 원칙]
-            if _is_section_header(line_stripped, full_match, content):
-                return escape_html(full_match)
-
-            # 1. Dropdown combo supporting both '/' and '|': [팀장님 / 클라이언트] or [팀장님 | 클라이언트]
-            if "/" in content or "|" in content:
-                is_multi = content.startswith("+")
-                raw_content = content[1:].strip() if is_multi else content
-                delimiters = r"[/|]"
-                options = [opt.strip() for opt in re.split(delimiters, raw_content) if opt.strip()]
-                if options:
-                    default_val = escape_html(options[0])
-                    options_attr = escape_html("|".join(options))
-                    data_type = "multi-combo" if is_multi else "combo"
-                    return (
-                        f'<span class="itc" data-type="{data_type}" '
-                        f'data-options="{options_attr}" '
-                        f'data-value="{default_val}" '
-                        f'tabindex="0" role="combobox" aria-expanded="false">'
-                        f'{default_val} <i class="itc-arrow">▾</i></span>'
+                # Preserve section headers e.g. [역할 정의], [운영 원칙]
+                if _is_section_header(line_stripped, full_match, content):
+                    processed_chunks.append(escape_html(full_match))
+                elif "/" in content or "|" in content:
+                    is_multi = content.startswith("+")
+                    raw_content = content[1:].strip() if is_multi else content
+                    delimiters = r"[/|]"
+                    options = [opt.strip() for opt in re.split(delimiters, raw_content) if opt.strip()]
+                    if options:
+                        default_val = escape_html(options[0])
+                        options_attr = escape_html("|".join(options))
+                        data_type = "multi-combo" if is_multi else "combo"
+                        processed_chunks.append(
+                            f'<span class="itc" data-type="{data_type}" '
+                            f'data-options="{options_attr}" '
+                            f'data-value="{default_val}" '
+                            f'tabindex="0" role="combobox" aria-expanded="false">'
+                            f'{default_val} <i class="itc-arrow">▾</i></span>'
+                        )
+                    else:
+                        processed_chunks.append(escape_html(full_match))
+                else:
+                    escaped_val = escape_html(content)
+                    processed_chunks.append(
+                        f'<span class="itc" data-type="text" '
+                        f'data-value="{escaped_val}" data-placeholder="{escaped_val}" '
+                        f'tabindex="0" role="textbox">'
+                        f'{escaped_val} <i class="itc-arrow">✎</i></span>'
                     )
 
-            # 2. Free text field: [첫 번째 핵심 내용]
-            escaped_val = escape_html(content)
-            return (
-                f'<span class="itc" data-type="text" '
-                f'data-value="{escaped_val}" data-placeholder="{escaped_val}" '
-                f'tabindex="0" role="textbox">'
-                f'{escaped_val} <i class="itc-arrow">✎</i></span>'
-            )
-
-        processed_line = pattern.sub(replace_bracket, escaped_line)
-        processed_lines.append(processed_line)
+        processed_lines.append("".join(processed_chunks))
 
     return "\n".join(processed_lines)
 
