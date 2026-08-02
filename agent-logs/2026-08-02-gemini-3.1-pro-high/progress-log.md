@@ -20,5 +20,25 @@
 - `python3 scripts/build.py` 실행 완료: 성공 (20 Pages, 15 Assets).
 - 사이드 이펙트나 렌더링 에러 없음.
 
+---
+
+## [완료] 할루시네이션 최소화 프롬프트 개편
+
+### 현상 파악 및 목적
+- 사용자가 보다 강력한 명령조와 구체적인 제약 사항이 포함된 새로운 할루시네이션 방지 지침으로 교체를 요청함.
+- `pages/sections/ai-assistant/hallucination-minimizer.md`의 프롬프트를 업데이트 필요.
+
+### 수정 범위
+- `pages/sections/ai-assistant/hallucination-minimizer.md` 내 `prompt` 블록 교체.
+
+### 작업 내역
+1. 새 프롬프트 분석 및 검토 (강력한 지시어, 구체적인 제약 사항 등 효과 확인).
+2. 스마트 태그 칩 파서 규칙에 맞추어 `[여기에 입력]`을 `"[여기에 입력]"`으로 자동 변환하여 반영하기로 계획.
+3. 사용자 승인 후 프롬프트 교체 완료.
+
+### 검증 결과
+- `python3 scripts/build.py` 실행 완료: 성공 (20 Pages, 15 Assets).
+- 에러 없이 정상 생성 확인.
+
 ### 핸드오프(Handoff) 상태
 - 현재 대기 중인 후속 작업 없음.
