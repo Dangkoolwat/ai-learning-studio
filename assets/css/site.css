@@ -1326,6 +1326,7 @@ html.js .site-nav-toggle {
 
 /* ===== Individual Step Rounded Box Cards (Full Width) & Flow Arrow ===== */
 .page-content--static-prompt .page-body,
+.page-content--markdown-prompt .page-body,
 .page-content--landing .page-body,
 .page-content--collection .page-body,
 .page-content--practice-timeline .page-body,
@@ -1339,6 +1340,7 @@ html.js .site-nav-toggle {
 }
 
 .page-content--static-prompt .page-body > *,
+.page-content--markdown-prompt .page-body > *,
 .page-content--landing .page-body > *,
 .page-content--collection .page-body > *,
 .page-content--practice-timeline .page-body > *,

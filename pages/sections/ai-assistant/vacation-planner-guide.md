@@ -1,10 +1,10 @@
 ---
 registry_id: ai-assistant-vacation-planner
-title: 맞춤형 여행 플래너 지침서
+title: 맞춤형 여행 플래너
 description: 실습에 바로 활용하는 국내외 맞춤형 여행 플래너 GEM·Project 전용 지침 프롬프트입니다.
 ---
 
-# 맞춤형 여행 플래너 지침서
+# 맞춤형 여행 플래너
 
 이 지침서는 Gemini GEMs, ChatGPT Custom GPTs, Claude Projects 등 나만의 AI 서비스에 등록하여 **현실적이고 꼼꼼한 국내외 휴가/여행 여행 플래너 AI**를 만드는 시스템 프롬프트입니다.
 

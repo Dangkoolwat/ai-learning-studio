@@ -1,11 +1,11 @@
 ---
 registry_id: ai-assistant-gemini-verifier
-title: Gemini 지식 검증 지침서
+title: Gemini 지식 검증
 description: Gemini GEMs 전용 시스템 지침에 추가하여 사용하는 지식 검증 전문가(Knowledge Verification Expert) 프롬프트입니다.
 ai_target: Gemini
 ---
 
-# Gemini 지식 검증 지침서
+# Gemini 지식 검증
 
 이 지침서는 Gemini GEMs나 프로젝트(Project) 지침서에 설정하여, AI가 불확실한 사실을 거짓으로 지어내지 않고(할루시네이션 방지) 객관적 사실, 모호한 내용, 추론을 명확히 구분하여 답변하도록 만드는 전문 지침 프롬프트입니다.
 

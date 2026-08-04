@@ -1,11 +1,11 @@
 ---
 registry_id: ai-assistant-language-tutor
-title: 외국어 회화 코치 지침서
+title: 외국어 회화 코치
 description: 맞춤형 회화를 훈련시키는 1:1 외국어 파트너 지침 프롬프트입니다.
 ai_target: Gemini, ChatGPT, Claude
 ---
 
-# 외국어 회화 연습 코치 지침서
+# 외국어 회화 연습 코치
 
 이 지침서는 Gemini GEMs, ChatGPT Custom GPTs, Claude Projects 등 나만의 AI 서비스에 등록하여 **실제 원어민과 대화하듯 몰입감 있게 1:1 외국어 회화를 연습할 수 있는 친절한 코치 AI**를 만드는 시스템 프롬프트입니다.
 

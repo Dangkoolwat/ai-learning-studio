@@ -1,12 +1,12 @@
 ---
 registry_id: ready-to-use-korean-editor
-title: 1회용 맞춤형 한국어 교정 프롬프트
+title: 1회용 맞춤형 한국어 교정
 description: 원하는 용도와 말투를 선택해 빠르고 자연스럽게 글을 다듬어 보세요.
 ai_target: Gemini, ChatGPT, Claude
 type: static-prompt
 ---
 
-# 1회용 맞춤형 한국어 교정 프롬프트 (바로 써보기)
+# 1회용 맞춤형 한국어 교정 (바로 써보기)
 
 이 페이지는 시스템 설정에 등록할 필요 없이, **글을 다듬을 때마다 필요한 조건만 바로 골라서 복사해 사용하는 1회용 맞춤형 교정 프롬프트**입니다. 
 

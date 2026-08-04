@@ -1,12 +1,12 @@
 ---
 registry_id: ready-to-use-event-budget-calculator
-title: 상황에 맞는 경조사비 결정 프롬프트
+title: 상황에 맞는 경조사비 결정
 description: 경조사 종류와 관계, 참석 여부, 경제적 상황을 입력하면 최신 국내 조사와 공식 자료를 확인해 적절한 금액과 전달 방법을 추천합니다.
 ai_target: Gemini, ChatGPT, Claude
 type: static-prompt
 ---
 
-# 상황에 맞는 경조사비 결정 프롬프트 (바로 써보기)
+# 상황에 맞는 경조사비 결정 (바로 써보기)
 
 필요한 조건을 선택해 맞춤형 경조사비 결정 프롬프트를 만들어 보세요.
 

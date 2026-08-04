@@ -68,7 +68,7 @@
     },
     {
       "id": "ready-to-use-korean-editor",
-      "title": "맞춤형 한국어 교정 프롬프트",
+      "title": "맞춤형 한국어 교정",
       "description": "원하는 용도와 말투를 선택해 빠르고 자연스럽게 글을 다듬어 보세요.",
       "route": "/ready-to-use/korean-editor/",
       "source": "pages/sections/ready-to-use/korean-editor.md",
@@ -81,7 +81,7 @@
     },
     {
       "id": "ready-to-use-self-development",
-      "title": "자기 개발 학습 계획 프롬프트",
+      "title": "자기 개발 학습 계획",
       "description": "목표와 현재 수준, 사용 가능한 시간에 맞춰 현실적인 학습 계획을 짜주는 프롬프트 예제",
       "route": "/ready-to-use/self-development/",
       "source": "pages/sections/ready-to-use/self-development.md",
@@ -133,7 +133,7 @@
     },
     {
       "id": "ai-assistant-hallucination-minimizer",
-      "title": "할루시네이션 최소화 프롬프트",
+      "title": "할루시네이션 최소화",
       "description": "사실을 지어내지 않게 하고, 불확실하면 확인이 필요하다고 말하게 하는 짧은 지침 프롬프트입니다.",
       "route": "/ai-assistant/hallucination-minimizer/",
       "source": "pages/sections/ai-assistant/hallucination-minimizer.md",
@@ -146,7 +146,7 @@
     },
     {
       "id": "ai-assistant-gemini-verifier",
-      "title": "Gemini 지식 검증 지침서",
+      "title": "Gemini 지식 검증",
       "description": "Gemini GEMs 및 Projects 전용 지식 검증 전문가(Knowledge Verification Expert) 지침 프롬프트입니다.",
       "route": "/ai-assistant/gemini-verifier/",
       "source": "pages/sections/ai-assistant/gemini-verifier.md",
@@ -159,7 +159,7 @@
     },
     {
       "id": "ai-assistant-vacation-planner",
-      "title": "맞춤형 여행 플래너 지침서",
+      "title": "맞춤형 여행 플래너",
       "description": "실습에 바로 활용하는 국내외 맞춤형 여행 플래너 GEM·Project 전용 지침 프롬프트입니다.",
       "route": "/ai-assistant/vacation-planner-guide/",
       "source": "pages/sections/ai-assistant/vacation-planner-guide.md",
@@ -198,7 +198,7 @@
     },
     {
       "id": "ai-assistant-language-tutor",
-      "title": "외국어 회화 코치 지침서",
+      "title": "외국어 회화 코치",
       "description": "번역을 최소화하고 흐름을 이어가며 맞춤형으로 회화를 훈련시키는 1:1 외국어 파트너 지침 프롬프트입니다.",
       "route": "/ai-assistant/language-tutor-guide/",
       "source": "pages/sections/ai-assistant/language-tutor-guide.md",
@@ -211,7 +211,7 @@
     },
     {
       "id": "ai-assistant-self-development-coach",
-      "title": "현실적인 자기계발 코치 지침서",
+      "title": "현실적인 자기계발 코치",
       "description": "목표를 실천 가능한 작은 단위로 나누고, 무리하지 않게 지속할 수 있도록 돕는 1:1 맞춤형 코치 시스템 프롬프트입니다.",
       "route": "/ai-assistant/self-development-coach/",
       "source": "pages/sections/ai-assistant/self-development-coach.md",
@@ -328,13 +328,26 @@
     },
     {
       "id": "ready-to-use-event-budget-calculator",
-      "title": "상황에 맞는 경조사비 결정 프롬프트",
+      "title": "상황에 맞는 경조사비 결정",
       "description": "경조사 종류와 관계, 참석 여부, 경제적 상황을 입력하면 최신 국내 조사와 공식 자료를 확인해 적절한 금액과 전달 방법을 추천합니다.",
       "route": "/ready-to-use/event-budget-calculator/",
       "source": "pages/sections/ready-to-use/event-budget-calculator.md",
       "type": "static-prompt",
       "section": "ready-to-use",
       "order": 25,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ready-to-use-funeral-etiquette",
+      "title": "사회초년생을 위한 장례식장 예절",
+      "description": "장례식장에 처음 방문하는 사회초년생을 위해 복장부터 조문 순서, 예절, 피해야 할 행동까지 쉽고 정확하게 안내하는 프롬프트입니다.",
+      "route": "/ready-to-use/funeral-etiquette/",
+      "source": "pages/sections/ready-to-use/funeral-etiquette.md",
+      "type": "markdown-prompt",
+      "section": "ready-to-use",
+      "order": 26,
       "navigation": true,
       "status": "published",
       "lang": "ko"

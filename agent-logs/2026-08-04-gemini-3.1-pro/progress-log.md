@@ -69,3 +69,46 @@
 - **문제 현상:** 5차 수정 당시 추가했던 `[검색 1순위]` 텍스트가 또다시 파서에 의해 옵션 칩으로 오인식되어 렌더링됨.
 - **해결 방안:** 대괄호를 제거하고 `🚨 **검색 1순위:**`로 수정하여 옵션 칩 변환을 차단함.
 - **검증:** 정상 빌드 완료.
+
+### 12. 신규 페이지 추가 (사회초년생을 위한 장례식장 예절 프롬프트)
+- **요청 사항:** 제공된 장례식 예절 프롬프트를 템플릿화하여 새 페이지로 등록.
+- **수정 내역:** 
+  - `pages/sections/ready-to-use/funeral-etiquette.md` 파일 생성 및 프롬프트 내용 적용 (과장된 문학적 수식어 배제 및 건조한 매뉴얼 톤 강제).
+  - `data/page-registry.json`에 `ready-to-use-funeral-etiquette` 등록 (order: 26).
+  - `core/page_registry.py` 및 `data/navigation.json`에 해당 페이지 라우팅 설정 등록.
+- **검증:** 총 27개 페이지로 정상 빌드 완료.
+
+### 13. 프롬프트 본문 최적화 (분량 축소 버전 적용)
+- **요청 사항:** 기존 장례식 예절 프롬프트가 너무 방대하여, 핵심을 압축한 축약 버전으로 교체.
+- **수정 내역:** 
+  - `pages/sections/ready-to-use/funeral-etiquette.md` 프롬프트 본문 전체 교체 (3,000자 안팎의 최적화 버전).
+  - 기존 강제 지시(톤 매너 조절 등)가 축약 버전에도 녹아있음을 확인.
+- **검증:** 빌드 성공 (정상 파싱 확인).
+
+### 14. 페이지 타입(Type) 불일치 오류 수정
+- **요청 사항:** 사용자가 프론트매터의 `type`을 `markdown-prompt`로 수정한 후 발생한 빌드 오류 해결.
+- **수정 내역:** 
+  - `data/page-registry.json`의 `ready-to-use-funeral-etiquette` 항목 `type`을 `markdown-prompt`로 동기화.
+  - `core/page_registry.py`의 `EXPECTED_PAGES` 내 해당 항목 `type`을 `markdown-prompt`로 동기화.
+- **검증:** 빌드 시스템 에러 해결 및 정상 파싱 완료.
+
+### 15. markdown-prompt 레이아웃 버그 수정 (라운드 박스 중첩)
+- **요청 사항:** `markdown-prompt` 타입으로 변경 후, HTML 화면에서 바깥쪽 라운드 박스와 안쪽 프롬프트 박스가 중첩되어 이중으로 렌더링되는 시각적 버그 해결.
+- **원인:** `assets/css/site.css`에서 페이지 본문의 기본 박스 스타일(테두리, 배경)을 투명하게 리셋하는 예외 규칙 목록(`.page-content--static-prompt .page-body` 등)에 새롭게 추가된 `.page-content--markdown-prompt` 셀렉터가 누락되어 발생.
+- **수정 내역:** 
+  - `assets/css/site.css` (line 1328, 1341 근처)에 `.page-content--markdown-prompt .page-body` 및 `> *` 예외 처리 룰 추가.
+- **검증:** CSS 빌드 정상 처리 완료.
+
+### 16. '바로 써보기' 메뉴의 중복된 단어(프롬프트) 일괄 삭제
+- **요청 사항:** 왼쪽 '바로 써보기' 하위 메뉴들에 공통적으로 포함되어 반복되는 "프롬프트"라는 단어를 삭제하여 메뉴 이름 간소화.
+- **수정 내역:** 
+  - `data/navigation.json`, `data/page-registry.json`, `core/page_registry.py` 내부 메뉴 라벨 및 타이틀 변경.
+  - 해당 마크다운 파일(한국어 교정, 자기 개발 학습 계획, 경조사비 결정, 장례식장 예절)의 YAML `title` 및 최상단 `# ` 제목 일괄 수정.
+- **검증:** `scripts/build.py` 정상 빌드 확인.
+
+### 17. '나만의 AI 만들기' 메뉴의 중복 단어(프롬프트, 지침서) 일괄 삭제
+- **요청 사항:** '나만의 AI 만들기' 하위 메뉴들에 포함된 "프롬프트" 및 "지침서"라는 단어를 삭제하여 메뉴 이름 간소화.
+- **수정 내역:** 
+  - `data/navigation.json`, `data/page-registry.json`, `core/page_registry.py` 내부 라벨 및 타이틀 변경.
+  - 해당 마크다운 파일(할루시네이션 최소화, Gemini 지식 검증, 맞춤형 여행 플래너, 외국어 회화 연습 코치, 현실적인 자기계발 코치)의 YAML `title` 및 최상단 `# ` 제목 일괄 수정.
+- **검증:** `scripts/build.py` 정상 빌드 확인.

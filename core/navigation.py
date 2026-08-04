@@ -81,6 +81,12 @@ EXPECTED_SECTIONS = (
                 "description": "경조사 종류와 관계, 참석 여부, 경제적 상황을 입력하면 최신 국내 조사와 공식 자료를 확인해 적절한 금액과 전달 방법을 추천합니다.",
                 "route": "/ready-to-use/event-budget-calculator/",
             },
+            {
+                "id": "ready-to-use-funeral-etiquette",
+                "label": "사회초년생을 위한 장례식장 예절 프롬프트",
+                "description": "장례식장에 처음 방문하는 사회초년생을 위해 복장부터 조문 순서, 예절, 피해야 할 행동까지 쉽고 정확하게 안내하는 프롬프트입니다.",
+                "route": "/ready-to-use/funeral-etiquette/",
+            },
         ],
     },
     {
