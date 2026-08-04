@@ -121,3 +121,9 @@ Implement `markdown-prompt` page type to render markdown prompt content directly
 - **변경 사항**: 사용자가 제안한 [의정부 편한 길 찾기 프롬프트]를 신규 생성 및 레지스트리 등록
 - **경로**: `pages/sections/ready-to-use/uijeongbu-route-finder.md`
 - **검증**: `python3 scripts/build.py` 정상 통과 (총 24개 페이지 렌더링 확인)
+
+### 신규 페이지 추가: 마음을 가볍게 정리하는 힐링 대화
+- **변경 사항**: 사용자가 제안한 [마음을 가볍게 정리하는 힐링 대화 프롬프트]를 신규 생성 및 레지스트리 등록
+- **경로**: `pages/sections/ready-to-use/healing-chat.md`
+- **검증**: `python3 scripts/build.py` 정상 통과 (총 25개 페이지 렌더링 확인)
+- **버전 관리**: Git Commit 및 원격 레포지토리 Push 완료
