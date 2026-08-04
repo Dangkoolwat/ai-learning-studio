@@ -344,6 +344,19 @@ EXPECTED_PAGES = (
         "status": "published",
         "lang": "ko",
     },
+    {
+        "id": "ready-to-use-event-budget-calculator",
+        "title": "상황에 맞는 경조사비 결정 프롬프트",
+        "description": "경조사 종류와 관계, 참석 여부, 경제적 상황을 입력하면 최신 국내 조사와 공식 자료를 확인해 적절한 금액과 전달 방법을 추천합니다.",
+        "route": "/ready-to-use/event-budget-calculator/",
+        "source": "pages/sections/ready-to-use/event-budget-calculator.md",
+        "type": "static-prompt",
+        "section": "ready-to-use",
+        "order": 25,
+        "navigation": True,
+        "status": "published",
+        "lang": "ko",
+    },
 )
 EXPECTED_PAGE_IDS = tuple(page["id"] for page in EXPECTED_PAGES)
 EXPECTED_SOURCE_FILES = tuple(page["source"] for page in EXPECTED_PAGES)

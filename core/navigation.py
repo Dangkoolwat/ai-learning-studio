@@ -75,6 +75,12 @@ EXPECTED_SECTIONS = (
                 "description": "복잡한 마음을 털어놓고 싶을 때, 원하는 방식(위로, 정리, 해결책)에 맞춰 AI와 편안하게 대화할 수 있는 프롬프트입니다.",
                 "route": "/ready-to-use/healing-chat/",
             },
+            {
+                "id": "ready-to-use-event-budget-calculator",
+                "label": "상황에 맞는 경조사비 결정 프롬프트",
+                "description": "경조사 종류와 관계, 참석 여부, 경제적 상황을 입력하면 최신 국내 조사와 공식 자료를 확인해 적절한 금액과 전달 방법을 추천합니다.",
+                "route": "/ready-to-use/event-budget-calculator/",
+            },
         ],
     },
     {
