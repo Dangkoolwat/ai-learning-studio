@@ -12,6 +12,7 @@ from core.renderers import (
     render_practice_timeline_page,
     render_prompt_builder_page,
     render_static_prompt_page,
+    render_markdown_prompt_page,
 )
 
 
@@ -31,6 +32,7 @@ def register_renderer(renderer_id: str, renderer: RendererFunction) -> None:
 
 register_renderer("landing", render_landing_page)
 register_renderer("static-prompt", render_static_prompt_page)
+register_renderer("markdown-prompt", render_markdown_prompt_page)
 register_renderer("prompt-builder", render_prompt_builder_page)
 register_renderer("practice-timeline", render_practice_timeline_page)
 validate_renderer_registry(RENDERER_REGISTRY)

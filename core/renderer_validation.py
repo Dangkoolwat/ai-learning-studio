@@ -721,6 +721,8 @@ def _validate_main_html(context: PageRendererContext, result: PageRendererResult
         "landing": 0,
         "static-prompt": len([block for block in context.control_blocks if block.label == "prompt"])
         + (1 if context.parsed_front_matter.get("preview", "").strip() else len([block for block in context.control_blocks if block.label == "image-slider"])),
+        "markdown-prompt": len([block for block in context.control_blocks if block.label == "prompt"])
+        + (1 if context.parsed_front_matter.get("preview", "").strip() else len([block for block in context.control_blocks if block.label == "image-slider"])),
         "prompt-builder": len([block for block in context.control_blocks if block.label == "prompt-field"])
         + (1 if context.parsed_front_matter.get("preview", "").strip() else len([block for block in context.control_blocks if block.label == "image-slider"])),
         "practice-timeline": len([block for block in context.control_blocks if block.label == "timeline-step"]),

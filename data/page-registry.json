@@ -53,16 +53,15 @@
       "status": "published",
       "lang": "ko"
     },
-
     {
       "id": "ready-to-use-korean-editor",
       "title": "맞춤형 한국어 교정 프롬프트",
       "description": "원하는 용도와 말투를 선택해 빠르고 자연스럽게 글을 다듬어 보세요.",
       "route": "/ready-to-use/korean-editor/",
       "source": "pages/sections/ready-to-use/korean-editor.md",
-      "type": "static-prompt",
+      "type": "markdown-prompt",
       "section": "ready-to-use",
-      "order": 5,
+      "order": 4,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -75,7 +74,7 @@
       "source": "pages/sections/ready-to-use/self-development.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 6,
+      "order": 5,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -101,7 +100,7 @@
       "source": "pages/sections/ai-assistant.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 6,
+      "order": 7,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -114,7 +113,7 @@
       "source": "pages/sections/ai-assistant/hallucination-minimizer.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 7,
+      "order": 8,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -127,7 +126,7 @@
       "source": "pages/sections/ai-assistant/gemini-verifier.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 8,
+      "order": 9,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -140,7 +139,7 @@
       "source": "pages/sections/ai-assistant/vacation-planner-guide.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 9,
+      "order": 10,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -153,7 +152,7 @@
       "source": "pages/sections/ai-assistant/gemini-canvas-map.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 10,
+      "order": 11,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -166,7 +165,7 @@
       "source": "pages/sections/ai-assistant/korean-editor-guide.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 11,
+      "order": 12,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -179,7 +178,7 @@
       "source": "pages/sections/ai-assistant/language-tutor-guide.md",
       "type": "prompt-builder",
       "section": "ai-assistant",
-      "order": 12,
+      "order": 13,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -192,7 +191,20 @@
       "source": "pages/sections/ai-assistant/self-development-coach.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 13,
+      "order": 14,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ai-assistant-life-story-interviewer",
+      "title": "편안하게 대화하며 쓰는 나의 이야기",
+      "description": "글이나 음성으로 AI와 천천히 인터뷰하며, 삶의 한 장면을 나다운 글로 남기는 지침서입니다.",
+      "route": "/ai-assistant/life-story-interviewer/",
+      "source": "pages/sections/ai-assistant/life-story-interviewer.md",
+      "type": "markdown-prompt",
+      "section": "ai-assistant",
+      "order": 15,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -205,12 +217,11 @@
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 14,
+      "order": 16,
       "navigation": true,
       "status": "published",
       "lang": "ko"
     },
-
     {
       "id": "image-ai-typography",
       "title": "손글씨 타이포그래피 만들기",
@@ -219,7 +230,7 @@
       "source": "pages/sections/image-ai/typography.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 16,
+      "order": 17,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -232,7 +243,7 @@
       "source": "pages/sections/image-ai/recipe-infographic.md",
       "type": "prompt-builder",
       "section": "image-ai",
-      "order": 17,
+      "order": 18,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -245,7 +256,7 @@
       "source": "pages/sections/image-ai/3d-career-character.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 18,
+      "order": 19,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -258,7 +269,7 @@
       "source": "pages/sections/image-ai/resume-profile.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 19,
+      "order": 20,
       "navigation": true,
       "status": "published",
       "lang": "ko"

@@ -9,7 +9,7 @@ from core.component_models import ComponentRenderResult, LoadedComponentTemplate
 
 
 RENDERER_ENGINE_VERSION = 1
-APPROVED_RENDERER_IDS = ("landing", "static-prompt", "prompt-builder", "practice-timeline")
+APPROVED_RENDERER_IDS = ("landing", "static-prompt", "prompt-builder", "practice-timeline", "markdown-prompt")
 APPROVED_CONTROL_BLOCK_LABELS = ("prompt", "prompt-field", "timeline-step", "image-slider", "prompt-template")
 RENDERER_VALIDATION_STATUS = "validated"
 

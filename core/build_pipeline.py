@@ -62,7 +62,7 @@ TOTAL_STAGES = 16
 SITE_URL_ENV_VAR = "AI_STUDIO_SITE_URL"
 ALLOWED_ASSET_EXTENSIONS = {".css", ".js", ".svg", ".png", ".jpg", ".jpeg", ".webp"}
 TEXT_ASSET_EXTENSIONS = {".css", ".js", ".svg"}
-ALLOWED_FRONT_MATTER_KEYS = {"registry_id", "title", "description", "seo_title", "preview", "ai_target", "source"}
+ALLOWED_FRONT_MATTER_KEYS = {"registry_id", "title", "description", "seo_title", "preview", "ai_target", "source", "type"}
 EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
 EXPECTED_SCRIPT_HREF_RE = re.compile(r'<script type="module" src="([^"]+)"></script>')
 NAVIGATION_LINK_RE = re.compile(
@@ -726,6 +726,16 @@ def validate_renderer_component_usage(
         has_placeholders = "<!-- RENDERER_CONTROL_BLOCK:" in page_context.rendered_markdown_html
         if prompt_count > 0 and not has_placeholders:
             expected_component_ids.append("prompt-collection")
+    elif page.type == "markdown-prompt":
+        prompt_count = sum(1 for block in page_context.control_blocks if block.label == "prompt")
+        slider_count = 1 if page_context.parsed_front_matter.get("preview", "").strip() else 0
+        if not slider_count:
+            slider_count = sum(1 for block in page_context.control_blocks if block.label == "image-slider")
+        expected_component_ids.extend(["image-slider"] * slider_count)
+        expected_component_ids.extend(["prompt-item"] * prompt_count)
+        has_placeholders = "<!-- RENDERER_CONTROL_BLOCK:" in page_context.rendered_markdown_html
+        if prompt_count > 0 and not has_placeholders:
+            expected_component_ids.append("prompt-collection")
     elif page.type == "prompt-builder":
         field_count = sum(1 for block in page_context.control_blocks if block.label == "prompt-field")
         slider_count = 1 if page_context.parsed_front_matter.get("preview", "").strip() else 0
@@ -742,7 +752,7 @@ def validate_renderer_component_usage(
         raise BuildError("Validate output", f"unsupported page type: {page.type}", path=output_path, page_id=page.id)
 
     if component_ids != expected_component_ids:
-        raise BuildError("Validate output", "component order or count does not match the source content", path=output_path, page_id=page.id)
+        raise BuildError("Validate output", f"component order or count does not match the source content.\nExpected: {expected_component_ids}\nActual: {component_ids}", path=output_path, page_id=page.id)
 
     normalized_main_html = _normalize_html_lines(renderer_result.main_html)
     for component_result in renderer_result.component_results:
@@ -924,11 +934,19 @@ def validate_page_sources_against_registry(
             )
         if source.registry_id != page.id:
             raise BuildError(
-                "Validate registered page sources",
+                "Parse page sources",
                 "registry_id must match the page registry entry id",
-                source_file=source.source_path,
+                path=source.source_path,
                 page_id=page.id,
                 field="registry_id",
+            )
+        if "type" in source.front_matter and source.front_matter["type"] != page.type:
+            raise BuildError(
+                "Parse page sources",
+                f"front matter type ({source.front_matter['type']}) does not match registry type ({page.type})",
+                path=source.source_path,
+                page_id=page.id,
+                field="type",
             )
 
         title_override = source.front_matter.get("title")
@@ -1812,6 +1830,17 @@ def build_site(
                     raise BuildError(
                         "Parse renderer-specific control blocks",
                         "static-prompt pages may only use prompt, prompt-field, or image-slider blocks",
+                        path=source.source_path,
+                        page_id=page.id,
+                        page_type=page.type,
+                        page_route=page.route,
+                        renderer_id=page.type,
+                    )
+            elif page.type == "markdown-prompt":
+                if any(label not in {"prompt", "image-slider"} for label in control_labels):
+                    raise BuildError(
+                        "Parse renderer-specific control blocks",
+                        "markdown-prompt pages may only use prompt or image-slider blocks",
                         path=source.source_path,
                         page_id=page.id,
                         page_type=page.type,

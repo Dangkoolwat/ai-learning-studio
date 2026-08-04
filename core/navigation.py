@@ -100,6 +100,12 @@ EXPECTED_SECTIONS = (
                 "description": "실천 가능한 작은 단위로 목표를 나누고 지속할 수 있도록 돕는 맞춤형 코치 지침서",
                 "route": "/ai-assistant/self-development-coach/",
             },
+            {
+                "id": "ai-assistant-life-story-interviewer",
+                "label": "나의 인생 이야기 인터뷰어",
+                "description": "글이나 음성으로 AI와 천천히 인터뷰하며, 삶의 한 장면을 나다운 글로 남기는 지침서입니다.",
+                "route": "/ai-assistant/life-story-interviewer/",
+            },
         ],
     },
     {
