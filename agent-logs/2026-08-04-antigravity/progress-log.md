@@ -116,3 +116,8 @@ Implement `markdown-prompt` page type to render markdown prompt content directly
 - **기능 추가**: 해외여행 필수 점검 요소 (비자, 여권 만료일, 환전/환율, 시차, 로밍/유심 등) 확인 항목 추가 반영
 - **적용 파일**: `vacation-planner-guide.md`, `navigation.json`, `page-registry.json`, `navigation.py`, `page_registry.py`
 - **검증**: `python3 scripts/build.py` 정상 통과
+
+### 신규 페이지 추가: 의정부 편한 길 찾기
+- **변경 사항**: 사용자가 제안한 [의정부 편한 길 찾기 프롬프트]를 신규 생성 및 레지스트리 등록
+- **경로**: `pages/sections/ready-to-use/uijeongbu-route-finder.md`
+- **검증**: `python3 scripts/build.py` 정상 통과 (총 24개 페이지 렌더링 확인)

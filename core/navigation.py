@@ -62,6 +62,19 @@ EXPECTED_SECTIONS = (
                 "description": "공식 영양 기준을 참고하여 조건에 맞는 레시피와 칼로리 정보를 생성하는 프롬프트",
                 "route": "/ready-to-use/recipe-generator/",
             },
+            {
+                "id": "ready-to-use-uijeongbu-route-finder",
+                "label": "의정부 편한 길 찾기",
+                "description": "출발지와 목적지, 몸 상태와 짐의 정도를 입력하면 계단과 가파른 길을 피한 편한 이동 경로를 찾아줍니다.",
+                "route": "/ready-to-use/uijeongbu-route-finder/",
+            },
+
+            {
+                "id": "ready-to-use-healing-chat",
+                "label": "마음을 가볍게 정리하는 힐링 대화",
+                "description": "복잡한 마음을 털어놓고 싶을 때, 원하는 방식(위로, 정리, 해결책)에 맞춰 AI와 편안하게 대화할 수 있는 프롬프트입니다.",
+                "route": "/ready-to-use/healing-chat/",
+            },
         ],
     },
     {
