@@ -127,3 +127,8 @@ Implement `markdown-prompt` page type to render markdown prompt content directly
 - **경로**: `pages/sections/ready-to-use/healing-chat.md`
 - **검증**: `python3 scripts/build.py` 정상 통과 (총 25개 페이지 렌더링 확인)
 - **버전 관리**: Git Commit 및 원격 레포지토리 Push 완료
+
+### 힐링 대화 프롬프트 업데이트
+- **변경 사항**: [사용자 주도 원칙] 섹션 추가 (감정 확인, 동의 구하기 등 4가지 지침)
+- **경로**: `pages/sections/ready-to-use/healing-chat.md`
+- **버전 관리**: 빌드 테스트 정상 통과 및 Git Push 완료
