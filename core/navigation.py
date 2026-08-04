@@ -23,6 +23,12 @@ EXPECTED_SECTIONS = (
                 "description": "여름휴가 계획이라는 같은 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트 완성하기",
                 "route": "/ai-practice/summer-vacation-basic/",
             },
+            {
+                "id": "ai-practice-uijeongbu-oneday-tour",
+                "label": "의정부 숨은 명소 1일 코스 만들기 (기초편)",
+                "description": "의정부 숨은 명소 1일 코스라는 같은 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성하기",
+                "route": "/ai-practice/uijeongbu-oneday-tour/",
+            },
         ],
     },
     {

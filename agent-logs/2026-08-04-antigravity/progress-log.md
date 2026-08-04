@@ -42,3 +42,17 @@ Implement `markdown-prompt` page type to render markdown prompt content directly
 - 사용자의 피드백에 따라 감성적인 톤으로 페이지 타이틀 변경.
 - 변경된 파일: `data/navigation.json`, `data/page-registry.json`, `core/page_registry.py`, `pages/sections/ai-assistant/life-story-interviewer.md`.
 - 정상 빌드 확인 완료.
+
+## 4. '의정부 숨은 명소 1일 코스 만들기 (기초편)' 실습 페이지 추가
+-  섹션에 `ai-practice-uijeongbu-oneday-tour` 페이지 신규 추가.
+- 사용자가 작성한 구조화된 마크다운 프롬프트를 바탕으로 `type: static-prompt` 적용하여 렌더링 검증.
+- 영문 오탈자(`uijeingbu` -> `uijeongbu`) 수정 적용.
+- 레지스트리와 네비게이션을 업데이트하고 order를 자동 재조정하여 저장소에 성공적으로 통합.
+- 브라우저 스크린샷 캡처를 통해 인라인 옵션 칩(`[가능역]`, `[9시]` 등)이 올바르게 인터랙티브 드롭다운으로 변환됨을 확인.
+
+## 4. '의정부 숨은 명소 1일 코스 만들기 (기초편)' 실습 페이지 추가
+- `ai-practice` 섹션에 `ai-practice-uijeongbu-oneday-tour` 페이지 신규 추가.
+- 사용자가 작성한 구조화된 마크다운 프롬프트를 바탕으로 `type: static-prompt` 적용하여 렌더링 검증.
+- 영문 오탈자(`uijeingbu` -> `uijeongbu`) 수정 적용.
+- 레지스트리와 네비게이션을 업데이트하고 order를 자동 재조정하여 저장소에 성공적으로 통합.
+- 브라우저 스크린샷 캡처를 통해 인라인 옵션 칩(`[가능역]`, `[9시]` 등)이 올바르게 인터랙티브 드롭다운으로 변환됨을 확인.
