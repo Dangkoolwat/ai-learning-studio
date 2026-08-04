@@ -132,3 +132,8 @@ Implement `markdown-prompt` page type to render markdown prompt content directly
 - **변경 사항**: [사용자 주도 원칙] 섹션 추가 (감정 확인, 동의 구하기 등 4가지 지침)
 - **경로**: `pages/sections/ready-to-use/healing-chat.md`
 - **버전 관리**: 빌드 테스트 정상 통과 및 Git Push 완료
+
+### 힐링 대화 프롬프트 세부 지침 고도화
+- **변경 사항**: [이해 확인], [대화의 깊이 조절], [정서적 의존 방지] 섹션으로 분리 및 고도화
+- **경로**: `pages/sections/ready-to-use/healing-chat.md`
+- **버전 관리**: 빌드 테스트 정상 통과 및 Git Push 완료
