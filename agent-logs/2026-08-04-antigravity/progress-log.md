@@ -81,3 +81,38 @@ Implement `markdown-prompt` page type to render markdown prompt content directly
 - **이슈**: 프롬프트 본문을 감싸는 ` ```prompt ` 코드블록 누락으로 UI 상에서 선택형 칩 컴포넌트가 올바르게 렌더링되지 않음.
 - **수정**: `pages/sections/ready-to-use/recipe-generator.md` 내 프롬프트 내용을 ` ```prompt ` 블록으로 감싸고, 내부 `title`과 `description` 메타데이터를 추가.
 - **검증**: `python3 scripts/build.py` 재실행 완료.
+
+### 후속 수정 2 (Follow-up)
+- **변경 사항**: 
+  - `인원` 선택 옵션 추가 (1명/2명/3명/4명).
+  - `먹는 사람` 옵션을 `먹는 사람 또는 식사 목적`으로 구체화 및 항목 수정.
+  - 출력 형식을 기존 9개에서 10개로 분리하여 `예상 영양정보` 항목을 독립적으로 표기.
+  - 레시피 제공 후 대체 재료 및 레시피 조정을 안내하는 안내 멘트 규칙 추가.
+- **검증**: `python3 scripts/build.py` 정상 완료.
+
+### 후속 수정 3 (Follow-up)
+- **변경 사항**: 메뉴 제목 및 페이지 타이틀을 `맞춤형 레시피 생성기`에서 `뚝딱 완성! 맞춤 레시피 가이드`로 전면 교체.
+- **적용 대상**: `data/navigation.json`, `data/page-registry.json`, `core/navigation.py`, `core/page_registry.py`, `pages/sections/ready-to-use/recipe-generator.md`
+- **검증**: `python3 scripts/build.py` 정상 완료.
+
+### 후속 수정 4 (Follow-up)
+- **변경 사항**: 프롬프트의 `[출력 형식]` 부분 최상단에 마크다운(Markdown) 형식으로 가독성 좋게 출력하라는 명시적인 AI 지시사항 추가.
+- **적용 대상**: `pages/sections/ready-to-use/recipe-generator.md`
+- **검증**: `python3 scripts/build.py` 정상 완료.
+
+### 후속 수정 5 (Follow-up)
+- **변경 사항**: 프롬프트 내부의 섹션 제목들(`[입력 조건]`, `[출력 형식]` 등)이 URL 파라미터로 넘겨지거나 일부 환경에서 복사될 때 HTTP 400 에러(Malformed Request)를 유발하는 문제를 방지하기 위해, 모든 대괄호(`[]`) 섹션 제목을 마크다운 헤더(`###`) 형식으로 일괄 변경.
+- **적용 대상**: `pages/sections/ready-to-use/recipe-generator.md`
+- **검증**: `python3 scripts/build.py` 정상 완료.
+
+### 후속 수정 6 (Follow-up)
+- **변경 사항**: 프롬프트 라이브러리 전체(`.md`)에서 구역을 나누는 목적으로 사용된 대괄호(`[ ]`) 섹션 제목들을 모두 마크다운 헤더(`###`) 형식으로 안전하게 일괄 변환 완료. 
+- **예외 처리 검증**: AI에게 지시하기 위한 출력 폼 형태의 괄호(`[원래 표현]`, `[고친 표현]`, `[단계 제목]` 등)나, 사용자가 입력 옵션을 고르는 형태(`[블로그 / 메일]`)는 치환되지 않고 원래대로 유지되도록 엄격히 예외 처리함.
+- **적용 대상**: `korean-editor-guide.md`, `vacation-planner-guide.md`, `self-development-coach.md`, `recipe-infographic.md`, `gemini-canvas-map.md`
+- **검증**: `python3 scripts/build.py` 정상 완료.
+
+### 맞춤형 여행 플래너 통합 구현 완료
+- **변경 사항**: 기존 여름휴가 전용 플래너를 국내외 범용으로 전환 (제목 및 메뉴명: `맞춤형 여행 플래너 지침서`로 변경)
+- **기능 추가**: 해외여행 필수 점검 요소 (비자, 여권 만료일, 환전/환율, 시차, 로밍/유심 등) 확인 항목 추가 반영
+- **적용 파일**: `vacation-planner-guide.md`, `navigation.json`, `page-registry.json`, `navigation.py`, `page_registry.py`
+- **검증**: `python3 scripts/build.py` 정상 통과

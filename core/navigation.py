@@ -58,7 +58,7 @@ EXPECTED_SECTIONS = (
             },
             {
                 "id": "ready-to-use-recipe-generator",
-                "label": "맞춤형 레시피 생성기",
+                "label": "뚝딱 완성! 맞춤 레시피 가이드",
                 "description": "공식 영양 기준을 참고하여 조건에 맞는 레시피와 칼로리 정보를 생성하는 프롬프트",
                 "route": "/ready-to-use/recipe-generator/",
             },
@@ -84,7 +84,7 @@ EXPECTED_SECTIONS = (
             },
             {
                 "id": "ai-assistant-vacation-planner",
-                "label": "여름휴가 여행 플래너 지침서",
+                "label": "맞춤형 여행 플래너 지침서",
                 "description": "실습용 국내 여름휴가 여행 플래너 GEM·Project 전용 지침서",
                 "route": "/ai-assistant/vacation-planner-guide/",
             },

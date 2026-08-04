@@ -123,7 +123,7 @@ EXPECTED_PAGES = (
     },
     {
         "id": "ready-to-use-recipe-generator",
-        "title": "맞춤형 레시피 생성기",
+        "title": "뚝딱 완성! 맞춤 레시피 가이드",
         "description": "공식 영양 기준을 참고하여 조건에 맞는 레시피와 칼로리 정보를 생성하는 프롬프트",
         "route": "/ready-to-use/recipe-generator/",
         "source": "pages/sections/ready-to-use/recipe-generator.md",
@@ -175,8 +175,8 @@ EXPECTED_PAGES = (
     },
     {
         "id": "ai-assistant-vacation-planner",
-        "title": "여름휴가 여행 플래너 지침서",
-        "description": "실습에 바로 활용하는 국내 여름휴가 여행 플래너 GEM·Project 전용 지침 프롬프트입니다.",
+        "title": "맞춤형 여행 플래너 지침서",
+        "description": "실습에 바로 활용하는 국내외 맞춤형 여행 플래너 GEM·Project 전용 지침 프롬프트입니다.",
         "route": "/ai-assistant/vacation-planner-guide/",
         "source": "pages/sections/ai-assistant/vacation-planner-guide.md",
         "type": "static-prompt",
