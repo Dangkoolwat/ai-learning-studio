@@ -3,7 +3,7 @@ registry_id: ready-to-use-korean-editor
 title: 1회용 맞춤형 한국어 교정 프롬프트
 description: 원하는 용도와 말투를 선택해 빠르고 자연스럽게 글을 다듬어 보세요.
 ai_target: Gemini, ChatGPT, Claude
-type: markdown-prompt
+type: static-prompt
 ---
 
 # 1회용 맞춤형 한국어 교정 프롬프트 (바로 써보기)

@@ -56,6 +56,12 @@ EXPECTED_SECTIONS = (
                 "description": "긴 대화를 작업 인계서로 변환하여 어느 AI에서든 이어서 작업할 수 있게 만드는 범용 프롬프트",
                 "route": "/ready-to-use/universal-handoff/",
             },
+            {
+                "id": "ready-to-use-recipe-generator",
+                "label": "맞춤형 레시피 생성기",
+                "description": "공식 영양 기준을 참고하여 조건에 맞는 레시피와 칼로리 정보를 생성하는 프롬프트",
+                "route": "/ready-to-use/recipe-generator/",
+            },
         ],
     },
     {

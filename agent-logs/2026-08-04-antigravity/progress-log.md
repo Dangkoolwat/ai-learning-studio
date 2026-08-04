@@ -61,3 +61,23 @@ Implement `markdown-prompt` page type to render markdown prompt content directly
 - 기존: \`의정부 숨은 명소 1일 코스 만들기 (프롬프트 기초편)\`
 - 변경: 본문 및 레지스트리 \`의정부 숨은 명소 찾기\`, 네비게이션 좌측 메뉴 \`의정부 숨은 명소 찾기(기초편)\`
 - 변경 파일: \`data/navigation.json\`, \`core/navigation.py\`, \`data/page-registry.json\`, \`core/page_registry.py\`, \`uijeongbu-oneday-tour.md\`
+
+## [2026-08-04] 맞춤형 레시피 생성기 구현
+
+### 계획
+- `core/page_registry.py` 및 `data/page-registry.json`에 `ready-to-use-recipe-generator` 추가.
+- `core/navigation.py` 및 `data/navigation.json`에 메뉴 추가.
+- `pages/sections/ready-to-use/recipe-generator.md` 프롬프트 파일 생성 (사용자의 영양/칼로리 계산 규칙 반영).
+
+### 실행 로그
+- **[x]** 4개의 레지스트리 및 내비게이션 파일 업데이트 완료.
+- **[x]** 마크다운 프롬프트 템플릿 작성 및 속성값(`type: static-prompt`) 지정 완료.
+
+### 검증
+- `python3 scripts/build.py` 실행 결과: 23개 페이지 빌드 성공.
+- 로컬 서버(`scripts/serve.py`) 구동 후 브라우저 서브에이전트를 통해 스크린샷 캡처 및 화면 레이아웃 정상 렌더링 확인 완료.
+
+### 후속 수정 (Follow-up)
+- **이슈**: 프롬프트 본문을 감싸는 ` ```prompt ` 코드블록 누락으로 UI 상에서 선택형 칩 컴포넌트가 올바르게 렌더링되지 않음.
+- **수정**: `pages/sections/ready-to-use/recipe-generator.md` 내 프롬프트 내용을 ` ```prompt ` 블록으로 감싸고, 내부 `title`과 `description` 메타데이터를 추가.
+- **검증**: `python3 scripts/build.py` 재실행 완료.
