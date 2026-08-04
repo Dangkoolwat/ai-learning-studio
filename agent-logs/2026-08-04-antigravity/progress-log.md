@@ -56,3 +56,8 @@ Implement `markdown-prompt` page type to render markdown prompt content directly
 - 영문 오탈자(`uijeingbu` -> `uijeongbu`) 수정 적용.
 - 레지스트리와 네비게이션을 업데이트하고 order를 자동 재조정하여 저장소에 성공적으로 통합.
 - 브라우저 스크린샷 캡처를 통해 인라인 옵션 칩(`[가능역]`, `[9시]` 등)이 올바르게 인터랙티브 드롭다운으로 변환됨을 확인.
+
+## 5. 실습 페이지 타이틀 간소화
+- 기존: \`의정부 숨은 명소 1일 코스 만들기 (프롬프트 기초편)\`
+- 변경: 본문 및 레지스트리 \`의정부 숨은 명소 찾기\`, 네비게이션 좌측 메뉴 \`의정부 숨은 명소 찾기(기초편)\`
+- 변경 파일: \`data/navigation.json\`, \`core/navigation.py\`, \`data/page-registry.json\`, \`core/page_registry.py\`, \`uijeongbu-oneday-tour.md\`

@@ -57,7 +57,7 @@ EXPECTED_PAGES = (
     },
     {
         "id": "ai-practice-uijeongbu-oneday-tour",
-        "title": "의정부 숨은 명소 1일 코스 만들기 (프롬프트 기초편)",
+        "title": "의정부 숨은 명소 찾기",
         "description": "의정부 숨은 명소 1일 코스라는 같은 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성합니다.",
         "route": "/ai-practice/uijeongbu-oneday-tour/",
         "source": "pages/sections/ai-practice/uijeongbu-oneday-tour.md",
