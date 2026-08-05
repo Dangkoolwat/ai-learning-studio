@@ -317,6 +317,19 @@ EXPECTED_PAGES = (
         "status": "published",
         "lang": "ko",
     },
+    {
+        "id": "image-ai-sns-profile",
+        "title": "맞춤형 SNS 프로필 만들기",
+        "description": "사진을 업로드하고 원하는 스타일과 분위기를 선택해 나만의 완벽한 SNS 프로필 이미지를 만들어 보세요.",
+        "route": "/image-ai/sns-profile/",
+        "source": "pages/sections/image-ai/sns-profile.md",
+        "type": "static-prompt",
+        "section": "image-ai",
+        "order": 23,
+        "navigation": True,
+        "status": "published",
+        "lang": "ko",
+    },
 
     {
         "id": "ready-to-use-uijeongbu-route-finder",
