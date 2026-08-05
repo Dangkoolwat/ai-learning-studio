@@ -237,6 +237,6 @@ def _render_inline_markup(text: str, *, source_path: Path) -> str:
 
 
 def _is_safe_internal_href(href: str) -> bool:
-    if href.startswith(("/", "./", "../", "#")):
+    if href.startswith(("/", "./", "../", "#", "mailto:")):
         return not href.startswith("//")
     return False
