@@ -27,6 +27,27 @@ description: 중단된 문장 복구
 ## 추가 프롬프트
 
 ```prompt
+title: 새로운 대화로 이전 준비 (강력 추천)
+description: Project가 없는 AI에서도 활용도가 높습니다.
+---
+새로운 대화 창에서도 지금의 맥락을 이어갈 수 있도록, 지금까지 우리가 작업한 내용을 1. 배경 2. 결정사항 3. 남은 작업 순으로 빠짐없이 정리해 줘.
+```
+
+```prompt
+title: 작업 이관(Handoff) 문서 작성
+description: 타인이나 다른 AI에게 넘기기
+---
+이 결과물을 다른 사람(또는 다른 AI)이 바로 이어서 작업할 수 있도록
+
+- 작업 배경
+- 현재까지 결정 사항
+- 남은 작업
+- 주의사항
+
+순으로 인수인계 문서를 작성해 주세요.
+```
+
+```prompt
 title: 다음 단계 제안 받기
 description: 흐름을 타는 연속 작업
 ---
@@ -42,11 +63,13 @@ description: 원하는 부분만 줌인(Zoom-in)
 
 ## 함께 사용하면 좋은 프롬프트
 
-[이어서 작업하기](/prompt-snippets/continue-work/) ➔ [AI에게 질문 잘하기](/prompt-snippets/ask-better/) ➔ [결과를 더 좋게 만들기](/prompt-snippets/improve-results/)
+[이어서 작업하기](/prompt-snippets/continue-work/) ➔ [AI에게 작업 요청 잘하기](/prompt-snippets/ask-better/) ➔ [결과를 더 좋게 만들기](/prompt-snippets/improve-results/)
 
 ## 💡 AI 활용 TIP
 
+- '계속해'라고만 입력하면 AI가 어디부터 이어가야 할지 판단하기 어려울 수 있습니다. 이어갈 위치나 목표를 함께 알려주면 결과가 더 정확해집니다.
 - 그냥 '계속해'라고 하는 것보다 '방금 끊긴 ~부분부터 이어서 작성해 줘'라고 구체적으로 지정하면 문맥 이탈을 막을 수 있습니다.
+- 대화가 너무 길어져서 AI가 맥락을 잊기 시작했다면, '새로운 대화로 이전 준비' 프롬프트를 사용해 맥락을 요약한 뒤 새 대화 창에서 시작해 보세요.
 
 ---
 **📌 참고**

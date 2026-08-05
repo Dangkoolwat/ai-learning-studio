@@ -42,7 +42,7 @@ description: 현실적인 문제점 진단
 
 ## 함께 사용하면 좋은 프롬프트
 
-[AI 답변 검토하기](/prompt-snippets/review-answers/) ➔ [할루시네이션 줄이기](/prompt-snippets/reduce-hallucination/) ➔ [글 다듬기](/prompt-snippets/refine-text/)
+[AI 답변 검토하기](/prompt-snippets/review-answers/) ➔ [할루시네이션 줄이기](/prompt-snippets/reduce-hallucination/) ➔ [이어서 작업하기](/prompt-snippets/continue-work/)
 
 ## 💡 AI 활용 TIP
 

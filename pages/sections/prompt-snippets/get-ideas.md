@@ -21,7 +21,7 @@ type: static-prompt
 title: 극단적 브레인스토밍
 description: 평범함을 거부하는 아이디어 도출
 ---
-아주 평범하고 뻔한 아이디어는 제외하고, 약간 미쳤다 싶을 정도로 창의적이고 독특한 아이디어 5가지를 구체적으로 제안해 줘.
+아주 평범하고 뻔한 아이디어는 제외하고, 약간 미쳤다 싶을 정도로 창의적이고 독특한 아이디어 "[5가지]"를 구체적으로 제안해 줘.
 ```
 
 ## 추가 프롬프트
@@ -35,19 +35,20 @@ description: 다른 시각에서 바라보기
 
 ```prompt
 title: 스캠퍼(SCAMPER) 기법
-description: 기존 아이디어 확장
+description: 7가지 다각도 관점(대체, 결합, 응용 등)을 체계적으로 적용하여 창의적 한계 돌파하기
 ---
-내가 제시한 이 아이디어에 스캠퍼(SCAMPER) 기법을 적용해서, 결합(Combine)하거나 용도를 변경(Put to another use)한 새로운 버전을 만들어 줘.
+내가 제시한 이 아이디어에 스캠퍼(SCAMPER) 기법의 7가지 관점(대체, 결합, 응용, 수정, 다른 용도, 제거, 재배열)을 각각 적용해서, 기존의 한계를 깨는 새롭고 혁신적인 아이디어 7가지를 제안해 줘.
 ```
 
 ## 함께 사용하면 좋은 프롬프트
 
-[다양한 아이디어 얻기](/prompt-snippets/get-ideas/) ➔ [비교와 분석](/prompt-snippets/compare-analyze/) ➔ [결과를 더 좋게 만들기](/prompt-snippets/improve-results/)
+[다양한 아이디어 얻기](/prompt-snippets/get-ideas/) ➔ [비교와 분석](/prompt-snippets/compare-analyze/) ➔ [요약과 핵심 정리](/prompt-snippets/summarize-core/)
 
 ## 💡 AI 활용 TIP
 
+- 단순히 '좋은 아이디어 제안해 줘'보다는 '평범한 건 제외하고'처럼 조건을 주면 훨씬 창의적인 결과를 얻을 수 있습니다.
 - 아이디어를 요청할 때는 '5가지', '10가지' 등 구체적인 숫자를 제시하면 좋습니다.
-- 마음에 드는 아이디어가 하나 있다면, '3번 아이디어가 좋은데, 이 방향으로 5개 더 구체화해 줘'라고 이어서 좁혀나가 보세요.
+- **스캠퍼(SCAMPER) 기법이란?** 새로운 아이디어를 얻기 위해 고의적으로 적용해보는 7가지 질문(Substitute 대체, Combine 결합, Adapt 응용, Modify 수정, Put to another use 다른 용도, Eliminate 제거, Reverse 재배열)을 뜻합니다. 막막할 때 AI에게 이 기법을 적용해 달라고 하면 예상치 못한 창의적인 결과가 나옵니다.
 
 ---
 **📌 참고**

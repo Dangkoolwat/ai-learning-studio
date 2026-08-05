@@ -29,7 +29,7 @@
       "items": [
         {
           "id": "prompt-snippets-improve-results",
-          "label": "결과를 더 좋게 만들기",
+          "label": "결과를 더 좋게 만들기 ⭐",
           "description": "한 줄 추가로 답변의 깊이와 품질 높이기",
           "route": "/prompt-snippets/improve-results/"
         },
@@ -89,7 +89,7 @@
         },
         {
           "id": "prompt-snippets-ask-better",
-          "label": "AI에게 질문 잘하기",
+          "label": "AI에게 작업 요청 잘하기",
           "description": "내가 원하는 걸 모를 때 AI에게 역질문 유도",
           "route": "/prompt-snippets/ask-better/"
         }
