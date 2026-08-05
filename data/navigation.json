@@ -22,10 +22,84 @@
       ]
     },
     {
+      "id": "prompt-snippets",
+      "label": "프롬프트 조미료",
+      "description": "결과 품질을 높이는 한 줄 프롬프트 모음집",
+      "order": 2,
+      "items": [
+        {
+          "id": "prompt-snippets-improve-results",
+          "label": "결과를 더 좋게 만들기",
+          "description": "한 줄 추가로 답변의 깊이와 품질 높이기",
+          "route": "/prompt-snippets/improve-results/"
+        },
+        {
+          "id": "prompt-snippets-review-answers",
+          "label": "AI 답변 검토하기",
+          "description": "AI가 작성한 내용의 논리적 오류나 누락 확인",
+          "route": "/prompt-snippets/review-answers/"
+        },
+        {
+          "id": "prompt-snippets-reduce-hallucination",
+          "label": "할루시네이션 줄이기 ⭐",
+          "description": "거짓 정보를 방지하고 팩트 중심의 결과 얻기",
+          "route": "/prompt-snippets/reduce-hallucination/"
+        },
+        {
+          "id": "prompt-snippets-get-ideas",
+          "label": "다양한 아이디어 얻기",
+          "description": "막막할 때 창의적인 영감과 브레인스토밍",
+          "route": "/prompt-snippets/get-ideas/"
+        },
+        {
+          "id": "prompt-snippets-format-clearly",
+          "label": "보기 쉽게 정리하기",
+          "description": "글을 표, 불릿 포인트 등 한눈에 들어오게 변환",
+          "route": "/prompt-snippets/format-clearly/"
+        },
+        {
+          "id": "prompt-snippets-change-level",
+          "label": "설명 수준 바꾸기",
+          "description": "독자의 눈높이와 지식 수준에 맞춰 내용 재작성",
+          "route": "/prompt-snippets/change-level/"
+        },
+        {
+          "id": "prompt-snippets-summarize-core",
+          "label": "요약과 핵심 정리",
+          "description": "방대한 분량에서 엑기스만 빠르게 뽑아내기",
+          "route": "/prompt-snippets/summarize-core/"
+        },
+        {
+          "id": "prompt-snippets-compare-analyze",
+          "label": "비교와 분석",
+          "description": "두 가지 이상의 대상을 다각도로 비교 분석하기",
+          "route": "/prompt-snippets/compare-analyze/"
+        },
+        {
+          "id": "prompt-snippets-refine-text",
+          "label": "글 다듬기",
+          "description": "어색한 문장을 자연스럽고 매끄러운 글로 교정",
+          "route": "/prompt-snippets/refine-text/"
+        },
+        {
+          "id": "prompt-snippets-continue-work",
+          "label": "이어서 작업하기",
+          "description": "끊긴 답변을 잇거나 흐름을 살려 추가 작업 요청",
+          "route": "/prompt-snippets/continue-work/"
+        },
+        {
+          "id": "prompt-snippets-ask-better",
+          "label": "AI에게 질문 잘하기",
+          "description": "내가 원하는 걸 모를 때 AI에게 역질문 유도",
+          "route": "/prompt-snippets/ask-better/"
+        }
+      ]
+    },
+    {
       "id": "ready-to-use",
       "label": "바로 써보기",
       "description": "필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기",
-      "order": 2,
+      "order": 3,
       "items": [
         {
           "id": "ready-to-use-korean-editor",
@@ -81,7 +155,7 @@
       "id": "ai-assistant",
       "label": "나만의 AI 만들기",
       "description": "Project·Gem 등에 사용할 맞춤형 역할과 지침 만들기",
-      "order": 3,
+      "order": 4,
       "items": [
         {
           "id": "ai-assistant-hallucination-minimizer",
@@ -137,7 +211,7 @@
       "id": "image-ai",
       "label": "이미지 만들기",
       "description": "이미지 생성·편집에 사용할 프롬프트 만들기와 실습",
-      "order": 4,
+      "order": 5,
       "items": [
         {
           "id": "image-ai-typography",
