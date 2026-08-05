@@ -19,7 +19,7 @@ type: static-prompt
 
 ```prompt
 title: 핵심 3줄 요약
-description: 가장 빠르고 간결 요약
+description: 가장 빠르고 간결한 요약
 ---
 아무리 바빠도 이 글의 전체 맥락을 바로 이해할 수 있도록, 가장 중요한 핵심 내용만 딱 3줄(3문장)로 요약해 줘.
 ```
