@@ -483,13 +483,26 @@
       "lang": "ko"
     },
     {
+      "id": "image-ai-photo-retouch",
+      "title": "폰카 사진이 스튜디오 화보로",
+      "description": "평범한 폰카 사진을 전문 에디터의 손길이 닿은 듯한 고품질 스튜디오 화보 느낌으로 보정해 보세요.",
+      "route": "/image-ai/photo-retouch/",
+      "source": "pages/sections/image-ai/photo-retouch.md",
+      "type": "static-prompt",
+      "section": "image-ai",
+      "order": 37,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "ready-to-use-uijeongbu-route-finder",
       "title": "의정부 편한 길 찾기",
       "description": "출발지와 목적지, 몸 상태와 짐의 정도를 입력하면 계단과 가파른 길을 피한 편한 이동 경로를 찾아줍니다.",
       "type": "static-prompt",
       "route": "/ready-to-use/uijeongbu-route-finder/",
       "section": "ready-to-use",
-      "order": 36,
+      "order": 38,
       "navigation": true,
       "status": "published",
       "lang": "ko",
@@ -503,7 +516,7 @@
       "source": "pages/sections/ready-to-use/healing-chat.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 37,
+      "order": 39,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -516,7 +529,7 @@
       "source": "pages/sections/ready-to-use/event-budget-calculator.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 38,
+      "order": 40,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -529,7 +542,7 @@
       "source": "pages/sections/ready-to-use/funeral-etiquette.md",
       "type": "markdown-prompt",
       "section": "ready-to-use",
-      "order": 39,
+      "order": 41,
       "navigation": true,
       "status": "published",
       "lang": "ko"

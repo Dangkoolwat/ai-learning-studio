@@ -188,7 +188,11 @@ EXPECTED_SECTIONS = (
                      {   'id': 'image-ai-paper-collage',
                          'label': '글자 조각 콜라주 만들기',
                          'description': '원하는 문장을 입력해 종이 조각을 이어 붙인 아날로그 수작업 느낌의 콜라주 이미지를 만들어 보세요.',
-                         'route': '/image-ai/paper-collage/'}]},
+                         'route': '/image-ai/paper-collage/'},
+                     {   'id': 'image-ai-photo-retouch',
+                         'label': '폰카 사진이 스튜디오 화보로',
+                         'description': '평범한 폰카 사진을 전문 에디터의 손길이 닿은 듯한 고품질 스튜디오 화보 느낌으로 보정해 보세요.',
+                         'route': '/image-ai/photo-retouch/'}]},
 )
 
 
