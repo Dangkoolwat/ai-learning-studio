@@ -26,7 +26,7 @@ EXPECTED_SECTIONS = (
                                         '최종 프롬프트를 완성하기',
                          'route': '/ai-practice/uijeongbu-oneday-tour/'}]},
     {   'id': 'prompt-snippets',
-        'label': '프롬프트 조미료',
+        'label': '프롬프트 한 스푼',
         'description': '결과 품질을 높이는 한 줄 프롬프트 모음집',
         'order': 2,
         'items': [   {   'id': 'prompt-snippets-improve-results',

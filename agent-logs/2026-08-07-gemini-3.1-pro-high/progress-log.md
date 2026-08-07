@@ -26,3 +26,11 @@
 - **작업 내용**: 프롬프트 영역의 폰트 스택을 `JetBrains Mono` 및 `Noto Sans KR` 하이브리드로 변경하고, 사이즈를 `12px`(`xs`)로 축소하여 세련됨 극대화.
 - **수정 파일**: `templates/partials/head.html`, `assets/css/site.css`
 - **결과**: 정상 빌드 및 검증 완료.
+
+## 6. 네이밍 리브랜딩 (조미료 -> 한 스푼)
+- **작업 내용**: '프롬프트 조미료'라는 용어를 더 부드럽고 직관적인 '프롬프트 한 스푼'으로 전체 일괄 변경.
+- **수정 파일**: 
+  - 랜딩 페이지 (`pages/index.md`)
+  - 서브 카테고리 본문 (`pages/sections/prompt-snippets.md` 외 4건)
+  - 데이터/네비게이션 JSON 및 Python 레지스트리 (`navigation.json`, `page-registry.json`, `navigation.py`, `page_registry.py`)
+- **결과**: 정상 빌드 및 검증 완료.

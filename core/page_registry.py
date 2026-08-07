@@ -62,7 +62,7 @@ EXPECTED_PAGES = (
         'status': 'published',
         'lang': 'ko'},
     {   'id': 'prompt-snippets',
-        'title': '프롬프트 조미료',
+        'title': '프롬프트 한 스푼',
         'description': '결과 품질을 높이는 한 줄 프롬프트 모음집',
         'route': '/prompt-snippets/',
         'source': 'pages/sections/prompt-snippets.md',
