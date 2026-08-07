@@ -192,7 +192,11 @@ EXPECTED_SECTIONS = (
                      {   'id': 'image-ai-photo-retouch',
                          'label': '폰카 사진이 스튜디오 화보로',
                          'description': '평범한 폰카 사진을 전문 에디터의 손길이 닿은 듯한 고품질 스튜디오 화보 느낌으로 보정해 보세요.',
-                         'route': '/image-ai/photo-retouch/'}]},
+                         'route': '/image-ai/photo-retouch/'},
+                     {   'id': 'image-ai-food-poster',
+                         'label': '프리미엄 푸드 포스터 만들기',
+                         'description': '메뉴 사진과 옵션을 조합하여 잡지 화보 같은 고품질 프리미엄 푸드 포스터를 제작해 보세요.',
+                         'route': '/image-ai/food-poster/'}]},
 )
 
 

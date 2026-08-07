@@ -34,3 +34,19 @@
   - 서브 카테고리 본문 (`pages/sections/prompt-snippets.md` 외 4건)
   - 데이터/네비게이션 JSON 및 Python 레지스트리 (`navigation.json`, `page-registry.json`, `navigation.py`, `page_registry.py`)
 - **결과**: 정상 빌드 및 검증 완료.
+
+## [2026-08-07 23:18] 프리미엄 푸드 포스터 프롬프트 추가
+- **Status**: 완료
+- **Files Changed**:
+  - `pages/sections/image-ai/food-poster.md` (New)
+  - `data/navigation.json` (Modified)
+  - `data/page-registry.json` (Modified)
+- **Verification**: `python3 scripts/build.py` 빌드 성공 및 정적 HTML 생성 확인
+- **Handoff Status**: 사용자 승인 후 메뉴 추가 작업 완료 및 대기
+
+## [2026-08-07 23:20] 마크다운 형식 누락 수정
+- **Status**: 완료
+- **Files Changed**:
+  - `pages/sections/image-ai/food-poster.md` (Modified)
+- **Action**: 누락된 YAML front matter 추가 및 프롬프트 내용 전체를 ```prompt ... ``` 블록으로 감싸서 파서가 정상적으로 인터랙티브 칩과 복사 버튼을 렌더링하도록 템플릿 형식 오류 수정.
+- **Verification**: `python3 scripts/build.py` 성공
