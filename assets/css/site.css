@@ -416,8 +416,8 @@ button:focus-visible {
 .prompt-item__content code {
   display: block;
   white-space: inherit;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  font-size: var(--als-font-size-sm);
+  font-family: "JetBrains Mono", "Noto Sans KR", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--als-font-size-xs, 12px);
   line-height: var(--als-line-height-relaxed);
 }
 
@@ -625,8 +625,8 @@ button:focus-visible {
 /* ========================================= */
 
 .prompt-item__preview-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  font-size: var(--als-font-size-sm);
+  font-family: "JetBrains Mono", "Noto Sans KR", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--als-font-size-xs, 12px);
   line-height: var(--als-line-height-relaxed);
 }
 

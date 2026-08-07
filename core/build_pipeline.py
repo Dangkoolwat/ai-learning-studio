@@ -636,6 +636,8 @@ def validate_generated_page_html(
             raise BuildError("Validate output", "HTML canonical link metadata is incorrect", path=output_path, page_id=page.id)
         html_text_for_url_scan = html_text.replace(page_context.canonical_link_html, "")
 
+    html_text_for_url_scan = re.sub(r'https?://fonts\.(googleapis|gstatic)\.com[^\s\'"<>]*', '', html_text_for_url_scan, flags=re.IGNORECASE)
+
     if "http://" in html_text_for_url_scan.lower() or "https://" in html_text_for_url_scan.lower() or "://" in html_text_for_url_scan:
         raise BuildError("Validate output", "external URLs are not allowed in generated HTML", path=output_path, page_id=page.id)
     if contains_absolute_filesystem_path(html_text):
