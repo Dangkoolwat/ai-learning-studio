@@ -14,7 +14,7 @@ source: @Thread _codemango
 
 ```prompt
 title: 프리미엄 푸드 포스터 프롬프트
-description: 파란색 칩을 클릭해 원하는 옵션을 선택하고, 완성된 텍스트를 복사하여 이미지 생성 AI에 붙여넣으세요.
+description: 입력 항목에서 옵션을 선택하고, 완성된 텍스트를 복사하여 이미지 생성 AI에 붙여넣으세요.
 ---
 ## 입력
 
