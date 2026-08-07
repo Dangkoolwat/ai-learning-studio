@@ -4,7 +4,7 @@ title: 글자 조각 콜라주 만들기
 description: 원하는 문장을 입력하여 종이 조각을 이어 붙인 아날로그 수작업 느낌의 콜라주 이미지를 만들어 보세요.
 preview: /assets/images/image-ai/paper-collage/paper-collage1.png, /assets/images/image-ai/paper-collage/paper-collage2.jpg
 ai_target: ChatGPT, Gemini
-source: Thread @ryu_jungsoo
+source: @Thread ryu_jungsoo
 ---
 
 # 글자 조각 콜라주 프롬프트
