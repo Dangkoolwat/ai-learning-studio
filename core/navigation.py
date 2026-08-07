@@ -184,7 +184,11 @@ EXPECTED_SECTIONS = (
                          'label': '맞춤형 SNS 프로필 만들기',
                          'description': '사진을 업로드하고 원하는 스타일과 분위기를 선택해 나만의 완벽한 SNS '
                                         '프로필 이미지를 만들어 보세요.',
-                         'route': '/image-ai/sns-profile/'}]},
+                         'route': '/image-ai/sns-profile/'},
+                     {   'id': 'image-ai-paper-collage',
+                         'label': '글자 조각 콜라주 만들기',
+                         'description': '원하는 문장을 입력해 종이 조각을 이어 붙인 아날로그 수작업 느낌의 콜라주 이미지를 만들어 보세요.',
+                         'route': '/image-ai/paper-collage/'}]},
 )
 
 

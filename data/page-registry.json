@@ -470,6 +470,19 @@
       "lang": "ko"
     },
     {
+      "id": "image-ai-paper-collage",
+      "title": "글자 조각 콜라주 만들기",
+      "description": "원하는 문장을 입력해 종이 조각을 이어 붙인 아날로그 수작업 느낌의 콜라주 이미지를 만들어 보세요.",
+      "route": "/image-ai/paper-collage/",
+      "source": "pages/sections/image-ai/paper-collage.md",
+      "type": "static-prompt",
+      "section": "image-ai",
+      "order": 36,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "ready-to-use-uijeongbu-route-finder",
       "title": "의정부 편한 길 찾기",
       "description": "출발지와 목적지, 몸 상태와 짐의 정도를 입력하면 계단과 가파른 길을 피한 편한 이동 경로를 찾아줍니다.",
