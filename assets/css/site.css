@@ -1461,3 +1461,144 @@ html.js .site-nav-toggle {
   border-bottom-right-radius: 0 !important;
   border-bottom: none !important;
 }
+
+/* ==========================================================================
+   Image Lightbox
+   ========================================================================== */
+
+.markdown-content img.lightbox-enabled {
+  cursor: zoom-in;
+  transition: opacity 0.2s;
+}
+
+.markdown-content img.lightbox-enabled:hover {
+  opacity: 0.9;
+}
+
+.image-lightbox {
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-m);
+  background: transparent;
+  max-width: 90vw;
+  max-height: 90vh;
+  margin: auto;
+  overflow: visible;
+}
+
+.image-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.lightbox-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: var(--radius-m);
+  object-fit: contain;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  background: var(--color-surface);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -45px;
+  right: -45px;
+  background: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.lightbox-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 10px 20px;
+  background: var(--color-primary);
+  color: white !important;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.lightbox-download:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.image-hover-download {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--color-primary);
+  color: white !important;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+
+.image-wrapper:hover .image-hover-download {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.image-hover-download:hover {
+  background: var(--color-primary-dark);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .image-lightbox {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  .lightbox-close {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+  }
+  .image-hover-download {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

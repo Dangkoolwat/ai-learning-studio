@@ -496,6 +496,17 @@ EXPECTED_PAGES = (
         'navigation': True,
         'status': 'published',
         'lang': 'ko'},
+    {   'id': 'ai-practice-fridge-recipe',
+        'title': '사진으로 레시피 찾기',
+        'description': 'AI가 사진을 보고, 사람이 확인하고, 대화를 이어가며 레시피를 완성합니다.',
+        'route': '/ai-practice/fridge-recipe/',
+        'source': 'pages/sections/ai-practice/fridge-recipe.md',
+        'type': 'static-prompt',
+        'section': 'ai-practice',
+        'order': 43,
+        'navigation': True,
+        'status': 'published',
+        'lang': 'ko'},
 )
 EXPECTED_PAGE_IDS = tuple(page["id"] for page in EXPECTED_PAGES)
 EXPECTED_SOURCE_FILES = tuple(page["source"] for page in EXPECTED_PAGES)

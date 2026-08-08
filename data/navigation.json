@@ -18,6 +18,12 @@
           "label": "의정부 숨은 명소 찾기(기초편)",
           "description": "의정부 숨은 명소 1일 코스라는 같은 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성하기",
           "route": "/ai-practice/uijeongbu-oneday-tour/"
+        },
+        {
+          "id": "ai-practice-fridge-recipe",
+          "label": "사진으로 레시피 찾기",
+          "description": "AI가 사진을 보고, 사람이 확인하고, 대화를 이어가며 레시피를 완성하는 과정 체험하기",
+          "route": "/ai-practice/fridge-recipe/"
         }
       ]
     },
