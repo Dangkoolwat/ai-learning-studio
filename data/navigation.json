@@ -98,6 +98,42 @@
           "label": "AI에게 작업 요청 잘하기",
           "description": "내가 원하는 걸 모를 때 AI에게 역질문 유도",
           "route": "/prompt-snippets/ask-better/"
+        },
+        {
+          "id": "prompt-snippets-diagnose-first",
+          "label": "먼저 진단받기 ⭐",
+          "description": "수정이나 작성 전에 문제점과 놓친 부분부터 파악합니다.",
+          "route": "/prompt-snippets/diagnose-first/"
+        },
+        {
+          "id": "prompt-snippets-find-missing",
+          "label": "내가 놓친 부분 찾기",
+          "description": "내 계획이나 생각에서 미처 고려하지 못한 사각지대를 찾아냅니다.",
+          "route": "/prompt-snippets/find-missing/"
+        },
+        {
+          "id": "prompt-snippets-find-problem",
+          "label": "어디에서 문제가 생겼는지 찾기",
+          "description": "잘 안 풀리는 일의 원인을 단계별로 쪼개어 진단합니다.",
+          "route": "/prompt-snippets/find-problem/"
+        },
+        {
+          "id": "prompt-snippets-change-perspective",
+          "label": "상대방 입장에서 다시 보기",
+          "description": "내 글이나 제안이 상대방에게 어떻게 들릴지 객관적으로 점검합니다.",
+          "route": "/prompt-snippets/change-perspective/"
+        },
+        {
+          "id": "prompt-snippets-listen-opposing",
+          "label": "반대 의견 들어보기",
+          "description": "내 결정이 확실한지 점검하기 위해 가장 논리적인 반론을 미리 들어봅니다.",
+          "route": "/prompt-snippets/listen-opposing/"
+        },
+        {
+          "id": "prompt-snippets-reuse-content",
+          "label": "결과물 다양하게 재활용하기",
+          "description": "이미 잘 만들어진 원본을 완전히 다른 용도나 형식으로 바꿉니다.",
+          "route": "/prompt-snippets/reuse-content/"
         }
       ]
     },

@@ -23,3 +23,34 @@
 - `build.py` 정상 완료 및 정적 배포용 `dist/` 빌드 확인 완료.
 - 로컬 브라우저 검증을 통해 다운로드 버튼 표시 및 라이트박스 팝업 정상 작동 교차 확인 완료.
 - 비밀키(Secret) 노출 사항 없음 (Pre-scan for secret leakage 통과).
+
+---
+
+# 신규 프롬프트 한 스푼 메뉴 6종 추가 (마케팅 프롬프트 범용화)
+
+## 1. 구현 계획 및 목표
+마케팅 진단용 프롬프트를 일반 사용자도 활용할 수 있도록 '프롬프트 한 스푼' 메뉴에 6종의 정적 프롬프트(`static-prompt`) 페이지를 추가합니다.
+
+1. **먼저 진단받기 ⭐** (`diagnose-first.md`)
+2. **내가 놓친 부분 찾기** (`find-missing.md`)
+3. **어디에서 문제가 생겼는지 찾기** (`find-problem.md`)
+4. **상대방 입장에서 다시 보기** (`change-perspective.md`)
+5. **반대 의견 들어보기** (`listen-opposing.md`)
+6. **결과물 다양하게 재활용하기** (`reuse-content.md`)
+
+## 2. 작업 내역 및 체크리스트
+
+- [x] 신규 마크다운 파일 6종 작성 (`pages/sections/prompt-snippets/`)
+  - [x] 프롬프트 칩 포맷 가이드라인 준수 확인 (`"[여기에 내용 붙여넣기]"`)
+- [x] 데이터 레지스트리 업데이트 (`data/page-registry.json` 및 `data/navigation.json`)
+- [x] 파이썬 하드코딩 계약 업데이트 (`core/page_registry.py` 및 `core/navigation.py`)
+- [x] 통합 빌드 및 검증 완료
+
+## 3. 검증 결과
+- `python3 scripts/build.py` 실행 완료
+- 페이지 파싱, 템플릿 검증 성공 (Errors 0)
+- 총 50개 페이지 HTML 빌드 성공 (`dist/` 디렉터리 배포)
+
+## 4. 사이드 이펙트 검증
+- 새로운 메뉴들이 `navigation.json`에 안전하게 추가되어 좌측 사이드바 및 랜딩 페이지 내비게이션 트리에 문제없이 렌더링 됨.
+- `static-prompt` 양식에 맞추어 `"[여기에 내용 붙여넣기]"`가 칩으로 정확하게 파싱 됨.

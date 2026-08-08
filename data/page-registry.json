@@ -210,6 +210,84 @@
       "lang": "ko"
     },
     {
+      "id": "prompt-snippets-diagnose-first",
+      "title": "먼저 진단받기 ⭐",
+      "description": "수정이나 작성 전에 문제점과 놓친 부분부터 파악합니다.",
+      "route": "/prompt-snippets/diagnose-first/",
+      "source": "pages/sections/prompt-snippets/diagnose-first.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 16
+    },
+    {
+      "id": "prompt-snippets-find-missing",
+      "title": "내가 놓친 부분 찾기",
+      "description": "내 계획이나 생각에서 미처 고려하지 못한 사각지대를 찾아냅니다.",
+      "route": "/prompt-snippets/find-missing/",
+      "source": "pages/sections/prompt-snippets/find-missing.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 17
+    },
+    {
+      "id": "prompt-snippets-find-problem",
+      "title": "어디에서 문제가 생겼는지 찾기",
+      "description": "잘 안 풀리는 일의 원인을 단계별로 쪼개어 진단합니다.",
+      "route": "/prompt-snippets/find-problem/",
+      "source": "pages/sections/prompt-snippets/find-problem.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 18
+    },
+    {
+      "id": "prompt-snippets-change-perspective",
+      "title": "상대방 입장에서 다시 보기",
+      "description": "내 글이나 제안이 상대방에게 어떻게 들릴지 객관적으로 점검합니다.",
+      "route": "/prompt-snippets/change-perspective/",
+      "source": "pages/sections/prompt-snippets/change-perspective.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 19
+    },
+    {
+      "id": "prompt-snippets-listen-opposing",
+      "title": "반대 의견 들어보기",
+      "description": "내 결정이 확실한지 점검하기 위해 가장 논리적인 반론을 미리 들어봅니다.",
+      "route": "/prompt-snippets/listen-opposing/",
+      "source": "pages/sections/prompt-snippets/listen-opposing.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 20
+    },
+    {
+      "id": "prompt-snippets-reuse-content",
+      "title": "결과물 다양하게 재활용하기",
+      "description": "이미 잘 만들어진 원본을 완전히 다른 용도나 형식으로 바꿉니다.",
+      "route": "/prompt-snippets/reuse-content/",
+      "source": "pages/sections/prompt-snippets/reuse-content.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 21
+    },
+    {
       "id": "ready-to-use",
       "title": "바로 써보기",
       "description": "필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기",
@@ -217,7 +295,7 @@
       "source": "pages/sections/ready-to-use.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 16,
+      "order": 22,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -230,7 +308,7 @@
       "source": "pages/sections/ready-to-use/korean-editor.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 17,
+      "order": 23,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -243,7 +321,7 @@
       "source": "pages/sections/ready-to-use/self-development.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 18,
+      "order": 24,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -256,7 +334,7 @@
       "source": "pages/sections/ready-to-use/universal-handoff.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 19,
+      "order": 25,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -269,7 +347,7 @@
       "source": "pages/sections/ready-to-use/recipe-generator.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 20,
+      "order": 26,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -282,7 +360,7 @@
       "source": "pages/sections/ai-assistant.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 21,
+      "order": 27,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -295,7 +373,7 @@
       "source": "pages/sections/ai-assistant/hallucination-minimizer.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 22,
+      "order": 28,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -308,7 +386,7 @@
       "source": "pages/sections/ai-assistant/gemini-verifier.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 23,
+      "order": 29,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -321,7 +399,7 @@
       "source": "pages/sections/ai-assistant/vacation-planner-guide.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 24,
+      "order": 30,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -334,7 +412,7 @@
       "source": "pages/sections/ai-assistant/gemini-canvas-map.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 25,
+      "order": 31,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -347,7 +425,7 @@
       "source": "pages/sections/ai-assistant/korean-editor-guide.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 26,
+      "order": 32,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -360,7 +438,7 @@
       "source": "pages/sections/ai-assistant/language-tutor-guide.md",
       "type": "prompt-builder",
       "section": "ai-assistant",
-      "order": 27,
+      "order": 33,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -373,7 +451,7 @@
       "source": "pages/sections/ai-assistant/self-development-coach.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 28,
+      "order": 34,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -386,7 +464,7 @@
       "source": "pages/sections/ai-assistant/life-story-interviewer.md",
       "type": "markdown-prompt",
       "section": "ai-assistant",
-      "order": 29,
+      "order": 35,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -399,7 +477,7 @@
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 30,
+      "order": 36,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -412,7 +490,7 @@
       "source": "pages/sections/image-ai/typography.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 31,
+      "order": 37,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -425,7 +503,7 @@
       "source": "pages/sections/image-ai/recipe-infographic.md",
       "type": "prompt-builder",
       "section": "image-ai",
-      "order": 32,
+      "order": 38,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -438,7 +516,7 @@
       "source": "pages/sections/image-ai/3d-career-character.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 33,
+      "order": 39,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -451,7 +529,7 @@
       "source": "pages/sections/image-ai/resume-profile.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 34,
+      "order": 40,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -464,7 +542,7 @@
       "source": "pages/sections/image-ai/sns-profile.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 35,
+      "order": 41,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -477,7 +555,7 @@
       "source": "pages/sections/image-ai/paper-collage.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 36,
+      "order": 42,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -490,7 +568,7 @@
       "source": "pages/sections/image-ai/photo-retouch.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 37,
+      "order": 43,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -502,7 +580,7 @@
       "type": "static-prompt",
       "route": "/ready-to-use/uijeongbu-route-finder/",
       "section": "ready-to-use",
-      "order": 38,
+      "order": 44,
       "navigation": true,
       "status": "published",
       "lang": "ko",
@@ -516,7 +594,7 @@
       "source": "pages/sections/ready-to-use/healing-chat.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 39,
+      "order": 45,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -529,7 +607,7 @@
       "source": "pages/sections/ready-to-use/event-budget-calculator.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 40,
+      "order": 46,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -542,7 +620,7 @@
       "source": "pages/sections/ready-to-use/funeral-etiquette.md",
       "type": "markdown-prompt",
       "section": "ready-to-use",
-      "order": 41,
+      "order": 47,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -555,7 +633,7 @@
       "source": "pages/sections/image-ai/food-poster.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 42,
+      "order": 48,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -568,7 +646,7 @@
       "source": "pages/sections/ai-practice/fridge-recipe.md",
       "type": "static-prompt",
       "section": "ai-practice",
-      "order": 43,
+      "order": 49,
       "navigation": true,
       "status": "published",
       "lang": "ko"
