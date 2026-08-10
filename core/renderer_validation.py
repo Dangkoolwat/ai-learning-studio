@@ -32,7 +32,7 @@ IMAGE_SLIDE_KEY_RE = re.compile(r"^slide-(\d+)$")
 UNRESOLVED_PLACEHOLDER_RE = re.compile(r"{{\s*[a-z0-9_]+\s*}}")
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class _ParsedMetadata:
     metadata: dict[str, str]
     body: str | None
@@ -54,7 +54,7 @@ def parse_prompt_template_block(block: RendererControlBlock) -> PromptTemplateBl
     )
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class _ParsedMetadata:
     metadata: dict[str, str]
     body: str | None

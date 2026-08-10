@@ -18,7 +18,7 @@ THEME_CATEGORY_ORDER = (
 THEME_SECTION_ORDER = ("Colors", "Typography", "Spacing", "Radius", "Shadow", "Layout")
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class ThemeToken:
     """A normalized token value ready for JSON and CSS generation."""
 
@@ -28,7 +28,7 @@ class ThemeToken:
     css_variable: str
 
 
-@dataclass(slots=True)
+@dataclass
 class ThemeDesign:
     """A fully validated human-authored theme design."""
 
@@ -94,7 +94,7 @@ class ThemeDesign:
         }
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class ThemeRegistryEntry:
     """A public theme registry entry."""
 
@@ -122,7 +122,7 @@ class ThemeRegistryEntry:
         }
 
 
-@dataclass(slots=True)
+@dataclass
 class ThemeRegistry:
     """The generated public themes registry."""
 
@@ -144,7 +144,7 @@ class ThemeRegistry:
         raise KeyError(theme_id)
 
 
-@dataclass(slots=True)
+@dataclass
 class ThemeGenerationResult:
     """Details about generated theme files."""
 

@@ -11,7 +11,7 @@ TEMPLATE_VALIDATION_STATUS = "validated"
 SITE_NAME = "AI Learning Studio"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class TemplateSpec:
     """A single approved human-authored template file."""
 
@@ -89,7 +89,7 @@ APPROVED_TEMPLATE_SPECS = (
 TEMPLATE_PARTIAL_NAMES = ("head", "site-header", "navigation", "footer")
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class LoadedTemplates:
     """Validated template source text loaded from the repository."""
 
@@ -104,7 +104,7 @@ class LoadedTemplates:
         return len(self.source_files)
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PageTemplateContext:
     """Build-time values used to render a full page shell."""
 

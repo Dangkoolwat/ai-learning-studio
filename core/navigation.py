@@ -213,7 +213,7 @@ EXPECTED_SECTIONS = (
 )
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class NavigationSubItem:
     """A sub-item entry under a main navigation section."""
 
@@ -231,7 +231,7 @@ class NavigationSubItem:
         }
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class NavigationSection:
     """A confirmed top-level navigation section."""
 
@@ -251,7 +251,7 @@ class NavigationSection:
         }
 
 
-@dataclass(slots=True)
+@dataclass
 class NavigationData:
     """The validated navigation contract."""
 
@@ -322,7 +322,7 @@ def load_navigation(data_dir: Path) -> NavigationData:
         )
 
     parsed_sections: list[NavigationSection] = []
-    for expected, section_data in zip(EXPECTED_SECTIONS, sections, strict=True):
+    for expected, section_data in zip(EXPECTED_SECTIONS, sections):
         if not isinstance(section_data, dict):
             raise BuildError(
                 "Load navigation data",
@@ -401,7 +401,7 @@ def load_navigation(data_dir: Path) -> NavigationData:
             )
 
         parsed_items: list[NavigationSubItem] = []
-        for exp_item, item_data in zip(expected_items, raw_items, strict=True):
+        for exp_item, item_data in zip(expected_items, raw_items):
             if not isinstance(item_data, dict):
                 raise BuildError(
                     "Load navigation data",

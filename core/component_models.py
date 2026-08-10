@@ -13,7 +13,7 @@ COMPONENT_TEMPLATE_ROOT = Path("components")
 OPTIONAL_COMPONENT_IDS = ("notice",)
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class ComponentSpec:
     """An approved human-authored component template."""
 
@@ -29,7 +29,7 @@ class ComponentSpec:
         return len(self.placeholders)
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class LoadedComponentTemplates:
     """Validated component template source loaded from disk."""
 
@@ -47,26 +47,26 @@ class LoadedComponentTemplates:
             raise KeyError(component_id) from exc
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PageIntroComponent:
     page_title: str
     page_description: str
     component_id: ClassVar[str] = "page-intro"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PageBodyComponent:
     body_html: str
     component_id: ClassVar[str] = "page-body"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PromptCollectionComponent:
     prompt_items_html: str
     component_id: ClassVar[str] = "prompt-collection"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PromptItemComponent:
     prompt_title: str
     prompt_description_html: str
@@ -78,7 +78,7 @@ class PromptItemComponent:
     component_id: ClassVar[str] = "prompt-item"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PromptBuilderComponent:
     prompt_fields_html: str
     prompt_template_html: str = ""
@@ -88,7 +88,7 @@ class PromptBuilderComponent:
     component_id: ClassVar[str] = "prompt-builder"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PromptFieldComponent:
     field_id: str
     field_label: str
@@ -98,13 +98,13 @@ class PromptFieldComponent:
     component_id: ClassVar[str] = "prompt-field"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PracticeTimelineComponent:
     timeline_steps_html: str
     component_id: ClassVar[str] = "practice-timeline"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class TimelineStepComponent:
     step_id: str
     step_number: int
@@ -114,7 +114,7 @@ class TimelineStepComponent:
     component_id: ClassVar[str] = "timeline-step"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class ImageSliderComponent:
     slider_title: str
     slider_description: str
@@ -122,7 +122,7 @@ class ImageSliderComponent:
     component_id: ClassVar[str] = "image-slider"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class ComponentRenderResult:
     """Rendered component HTML and its validation summary."""
 

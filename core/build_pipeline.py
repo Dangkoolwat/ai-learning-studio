@@ -89,7 +89,7 @@ FORBIDDEN_JS_PATTERNS = (
 )
 
 
-@dataclass(slots=True)
+@dataclass
 class PageSource:
     """A parsed page source file."""
 
@@ -100,7 +100,7 @@ class PageSource:
     markdown_body: str
 
 
-@dataclass(slots=True)
+@dataclass
 class BuildSummary:
     page_count: int
     asset_count: int
@@ -1709,8 +1709,8 @@ def build_site(
 
     try:
         stage_logger(1, TOTAL_STAGES, "Validate environment")
-        if sys.version_info < (3, 10):  # pragma: no cover - defensive repeat of the entrypoint check
-            raise BuildError("Validate environment", "Python 3.10 or newer is required.")
+        if sys.version_info < (3, 9):  # pragma: no cover - defensive repeat of the entrypoint check
+            raise BuildError("Validate environment", "Python 3.9 or newer is required.")
         print(f"Python version: {sys.version.split()[0]}")
         if not repo_root.is_dir():
             raise BuildError("Validate environment", "repository root does not exist", path=repo_root)
@@ -1932,7 +1932,7 @@ def build_site(
             active_theme_id=active_theme_id,
             site_base_url=site_base_url,
         )
-        for page, page_context in zip(published_pages, page_contexts, strict=True):
+        for page, page_context in zip(published_pages, page_contexts):
             output_path = route_to_output_path(page.route, staging_dir)
             html_document = render_page_document(templates, page_context)
             write_text(output_path, html_document)

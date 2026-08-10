@@ -572,7 +572,7 @@ EXPECTED_SOURCE_FILES = tuple(page["source"] for page in EXPECTED_PAGES)
 EXPECTED_ROUTE_MAP = {page["id"]: page["route"] for page in EXPECTED_PAGES}
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PageRegistryEntry:
     """A validated page registry entry."""
 
@@ -604,7 +604,7 @@ class PageRegistryEntry:
         }
 
 
-@dataclass(slots=True)
+@dataclass
 class PageRegistry:
     """The validated authoritative page registry."""
 

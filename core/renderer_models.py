@@ -14,7 +14,7 @@ APPROVED_CONTROL_BLOCK_LABELS = ("prompt", "prompt-field", "timeline-step", "ima
 RENDERER_VALIDATION_STATUS = "validated"
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class RendererHeading:
     """A heading discovered in the Markdown source."""
 
@@ -22,7 +22,7 @@ class RendererHeading:
     text: str
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class RendererControlBlock:
     """A parsed machine-readable fenced block."""
 
@@ -32,7 +32,7 @@ class RendererControlBlock:
     body: str
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class ParsedRendererSource:
     """The parsed renderer-specific Markdown source."""
 
@@ -42,7 +42,7 @@ class ParsedRendererSource:
     control_blocks: tuple[RendererControlBlock, ...]
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PromptBlock:
     """A validated prompt block."""
 
@@ -53,7 +53,7 @@ class PromptBlock:
     ai_target: str | None = None
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PromptFieldBlock:
     """A validated prompt-field block."""
 
@@ -65,7 +65,7 @@ class PromptFieldBlock:
     index: int
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PromptTemplateBlock:
     """A validated prompt-template block."""
 
@@ -73,7 +73,7 @@ class PromptTemplateBlock:
     index: int
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class TimelineStepBlock:
     """A validated timeline-step block."""
 
@@ -84,7 +84,7 @@ class TimelineStepBlock:
     index: int
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class ImageSliderSlide:
     """One slide entry for an image slider block."""
 
@@ -95,7 +95,7 @@ class ImageSliderSlide:
     caption: str
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class ImageSliderBlock:
     """A validated image-slider control block."""
 
@@ -105,7 +105,7 @@ class ImageSliderBlock:
     index: int
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PageRendererContext:
     """Validated build-time data passed to a page renderer."""
 
@@ -128,7 +128,7 @@ class PageRendererContext:
     component_templates: LoadedComponentTemplates
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class PageRendererResult:
     """Validated HTML returned by a page renderer."""
 

@@ -175,6 +175,14 @@ button:focus-visible {
   background: rgba(255, 255, 255, 0.72);
   box-shadow: var(--site-shadow);
   backdrop-filter: blur(10px);
+  max-height: calc(100vh - (var(--als-space-4) * 2));
+  overflow-y: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.site-navigation::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 .navigation-list {
@@ -1126,6 +1134,8 @@ html.js .site-nav-toggle {
   .site-navigation {
     position: static;
     padding: var(--als-space-4);
+    max-height: none;
+    overflow-y: visible;
   }
 
   html.js[data-navigation-state="closed"] .site-navigation {
