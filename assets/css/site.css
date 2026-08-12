@@ -471,6 +471,13 @@ button:focus-visible {
   animation: itcFadeIn 130ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.itc-dropdown--options {
+  box-sizing: border-box;
+  max-height: min(520px, calc(100vh - 16px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 /* 3x Wide Resizable Text Area Dropdown */
 .itc-dropdown--text {
   min-width: 480px;

@@ -129,6 +129,9 @@ function openDropdown(chip, promptItem) {
 
   const panel = document.createElement("div");
   panel.className = "itc-dropdown";
+  if (type === "combo" || type === "multi-combo") {
+    panel.classList.add("itc-dropdown--options");
+  }
 
   if (type === "combo") {
     const options = (chip.dataset.options || "").split("|").filter(Boolean);
@@ -298,19 +301,48 @@ function openDropdown(chip, promptItem) {
   document.body.appendChild(panel);
   activeDropdown = panel;
 
-  // Position below the chip
+  // Position the panel within the viewport, preferring below and then above.
   const panelH = panel.offsetHeight;
-  const spaceBelow = window.innerHeight - rect.bottom - 8;
-  if (spaceBelow >= panelH) {
-    panel.style.top = `${rect.bottom + 4}px`;
-  } else {
-    panel.style.top = `${rect.top - panelH - 4}px`;
-  }
-  panel.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - panel.offsetWidth - 8))}px`;
+  const panelW = panel.offsetWidth;
+  const gap = 8;
+  const viewportPadding = 8;
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  const maxLeft = Math.max(viewportPadding, window.innerWidth - panelW - viewportPadding);
+  const maxTop = Math.max(viewportPadding, window.innerHeight - panelH - viewportPadding);
+  const spaceBelow = window.innerHeight - rect.bottom - gap - viewportPadding;
+  const spaceAbove = rect.top - gap - viewportPadding;
+  const spaceRight = window.innerWidth - rect.right - gap - viewportPadding;
+  const spaceLeft = rect.left - gap - viewportPadding;
 
-  // Focus first input
-  const focusable = panel.querySelector("input, textarea");
-  if (focusable) setTimeout(() => focusable.focus(), 30);
+  const setVerticalPosition = (top) => {
+    panel.style.top = `${clamp(top, viewportPadding, maxTop)}px`;
+    panel.style.left = `${clamp(rect.left, viewportPadding, maxLeft)}px`;
+  };
+
+  if (panelH <= spaceBelow) {
+    setVerticalPosition(rect.bottom + gap);
+  } else if (panelH <= spaceAbove) {
+    setVerticalPosition(rect.top - panelH - gap);
+  } else if (panelW <= spaceRight) {
+    panel.style.top = `${clamp(rect.top, viewportPadding, maxTop)}px`;
+    panel.style.left = `${rect.right + gap}px`;
+  } else if (panelW <= spaceLeft) {
+    panel.style.top = `${clamp(rect.top, viewportPadding, maxTop)}px`;
+    panel.style.left = `${rect.left - panelW - gap}px`;
+  } else {
+    setVerticalPosition(
+      spaceBelow >= spaceAbove ? rect.bottom + gap : rect.top - panelH - gap
+    );
+  }
+
+  // Keep option lists at the first item; only text inputs receive automatic focus.
+  const focusable = type === "text"
+    ? panel.querySelector("textarea")
+    : type === "combo"
+      ? panel.querySelector("button")
+      : panel.querySelector("input[type='checkbox']");
+  if (type === "combo" || type === "multi-combo") panel.scrollTop = 0;
+  if (focusable) setTimeout(() => focusable.focus({ preventScroll: true }), 30);
 }
 
 /* ===== Close on outside click ===== */
