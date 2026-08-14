@@ -138,7 +138,7 @@
         {
           "id": "prompt-snippets-second-order-effect",
           "label": "그다음 영향까지 생각하기 ⭐",
-          "description": "당장의 결과뿐만 아니라 그 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
+          "description": "당장의 결과뿐만 아니라 그 결과에 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
           "route": "/prompt-snippets/second-order-effect/"
         },
         {
@@ -156,7 +156,7 @@
         {
           "id": "prompt-snippets-detect-biases",
           "label": "내 판단이 한쪽으로 치우쳤는지 보기",
-          "description": "내 글이나 생각에 판단에 영향을 준 선입견이나 편향이 섞여 있는지 단정 없이 확인합니다.",
+          "description": "내 글이나 생각에 선입견이나 편향이 섞여 있는지 단정하지 않고 확인합니다.",
           "route": "/prompt-snippets/detect-biases/"
         }
       ]
