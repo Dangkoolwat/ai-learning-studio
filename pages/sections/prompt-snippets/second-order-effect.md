@@ -49,7 +49,7 @@ description: 특정 선택의 연쇄적 영향과 부작용을 깊이 분석합�
 
 ## 함께 사용하면 좋은 프롬프트
 
-[선택하면 무엇을 포기하는지 보기](/prompt-snippets/evaluate-tradeoff/) ➔ [그다음 영향까지 생각하기](/prompt-snippets/second-order-effect/) ➔ [내가 당연하다고 생각한 가정 찾기](/prompt-snippets/audit-assumptions/)
+[선택할 때 무엇을 포기해야 하는지 보기](/prompt-snippets/evaluate-tradeoff/) ➔ [그다음 영향까지 생각하기](/prompt-snippets/second-order-effect/) ➔ [내가 당연하다고 생각한 가정 찾기](/prompt-snippets/audit-assumptions/)
 
 ## 💡 AI 활용 TIP
 

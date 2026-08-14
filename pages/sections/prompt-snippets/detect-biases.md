@@ -1,11 +1,11 @@
 ---
 registry_id: prompt-snippets-detect-biases
-title: 내 판단이 한쪽으로 치우쳤는지 보기
+title: 내 판단이 한쪽으로 치우쳤는지 확인
 description: 내 글이나 생각에 선입견이나 편향이 섞여 있는지 단정하지 않고 확인합니다.
 type: static-prompt
 ---
 
-# 내 판단이 한쪽으로 치우쳤는지 보기
+# 내 판단이 한쪽으로 치우쳤는지 확인
 
 ## 언제 사용하나요?
 
@@ -47,7 +47,7 @@ description: 특정 글이나 주장에 숨은 치우침을 근거와 함께 분
 
 ## 함께 사용하면 좋은 프롬프트
 
-[상대방 입장에서 다시 보기](/prompt-snippets/change-perspective/) ➔ [내 판단이 한쪽으로 치우쳤는지 보기](/prompt-snippets/detect-biases/) ➔ [반대 의견 들어보기](/prompt-snippets/listen-opposing/)
+[상대방 입장에서 다시 보기](/prompt-snippets/change-perspective/) ➔ [내 판단이 한쪽으로 치우쳤는지 확인](/prompt-snippets/detect-biases/) ➔ [반대 의견 들어보기](/prompt-snippets/listen-opposing/)
 
 ## 💡 AI 활용 TIP
 

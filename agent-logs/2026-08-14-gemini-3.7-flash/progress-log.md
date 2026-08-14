@@ -26,8 +26,8 @@
 - **신규 4개 프롬프트 한 스푼 어휘·문법 정교화 반영**:
   1. `그다음 영향까지 생각하기 ⭐` (description 문법 교정, 예시 어휘 순화, TIP 단정적 표현 완화)
   2. `내가 당연하다고 생각한 가정 찾기` (범용 프롬프트 문구 '내 생각 밑에' 순화, TIP '검토하게 해보세요'로 순화)
-  3. `선택하면 무엇을 포기하는지 보기` (사용 예시 '함께 살펴보고' 교정, '얻을 것으로 기대되는' 교정, TIP '선택의 대가 생각'으로 순화)
-  4. `내 판단이 한쪽으로 치우쳤는지 보기` (description 중복 어구 교정, 사용 예시 '다른 관점에서' 교정)
+  3. `선택할 때 무엇을 포기해야 하는지 보기` ([evaluate-tradeoff.md](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/pages/sections/prompt-snippets/evaluate-tradeoff.md) - 메뉴명 최종 반영)
+  4. `내 판단이 한쪽으로 치우쳤는지 확인` ([detect-biases.md](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/pages/sections/prompt-snippets/detect-biases.md) - 메뉴명 최종 반영)
 - **정적 빌드 및 배포 완료**: `python3 scripts/build.py` 정상 완료 (55개 페이지) 및 `git push origin main` 성공.
 
 

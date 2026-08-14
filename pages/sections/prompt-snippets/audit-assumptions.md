@@ -49,7 +49,7 @@ description: 계획 밑바닥에 숨겨진 가정을 찾고 본질을 재검토�
 
 ## 함께 사용하면 좋은 프롬프트
 
-[내가 놓친 부분 찾기](/prompt-snippets/find-missing/) ➔ [내가 당연하다고 생각한 가정 찾기](/prompt-snippets/audit-assumptions/) ➔ [내 판단이 한쪽으로 치우쳤는지 보기](/prompt-snippets/detect-biases/)
+[내가 놓친 부분 찾기](/prompt-snippets/find-missing/) ➔ [내가 당연하다고 생각한 가정 찾기](/prompt-snippets/audit-assumptions/) ➔ [내 판단이 한쪽으로 치우쳤는지 확인](/prompt-snippets/detect-biases/)
 
 ## 💡 AI 활용 TIP
 
