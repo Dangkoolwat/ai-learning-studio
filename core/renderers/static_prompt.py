@@ -158,24 +158,19 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
     ]
 def _build_ai_badges_and_actions(ai_targets: list[str]) -> tuple[str, str]:
     badges_html = []
-    ext_links_html = []
     for target in ai_targets:
         target_lower = target.lower()
         if "chatgpt" in target_lower:
             badges_html.append('<span class="badge-ai badge-ai--chatgpt">ChatGPT</span>')
-            ext_links_html.append('<span role="button" tabindex="0" class="prompt-item__external-link" data-open-ai="chatgpt">ChatGPT에서 사용 ↗</span>')
         elif "gemini" in target_lower:
             badges_html.append('<span class="badge-ai badge-ai--gemini">Gemini</span>')
-            ext_links_html.append('<span role="button" tabindex="0" class="prompt-item__external-link" data-open-ai="gemini">Gemini에서 사용 ↗</span>')
         elif "claude" in target_lower:
             badges_html.append('<span class="badge-ai badge-ai--claude">Claude</span>')
-            ext_links_html.append('<span role="button" tabindex="0" class="prompt-item__external-link" data-open-ai="claude">Claude에서 사용 ↗</span>')
         else:
             badges_html.append(f'<span class="badge-ai badge-ai--universal">{escape_html(target)}</span>')
 
     ai_badges_block = f'<div class="prompt-item__ai-badges">{" ".join(badges_html)}</div>\n' if badges_html else ""
-    ext_actions_block = " ".join(ext_links_html)
-    return ai_badges_block, ext_actions_block
+    return ai_badges_block, ""
 
 
 def render_static_prompt_page(context: PageRendererContext) -> PageRendererResult:
