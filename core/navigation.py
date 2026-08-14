@@ -107,7 +107,7 @@ EXPECTED_SECTIONS = (
                          'route': '/prompt-snippets/audit-assumptions/'},
                      {   'description': '선택으로 얻는 것뿐만 아니라 대신 포기해야 하는 가치와 대가를 함께 비교합니다.',
                          'id': 'prompt-snippets-evaluate-tradeoff',
-                         'label': '선택할 때 무엇을 포기해야 하는지 보기',
+                         'label': '선택할 때 무엇을 포기해야 하는지 확인',
                          'route': '/prompt-snippets/evaluate-tradeoff/'},
                      {   'description': '내 글이나 생각에 선입견이나 편향이 섞여 있는지 단정하지 않고 확인합니다.',
                          'id': 'prompt-snippets-detect-biases',

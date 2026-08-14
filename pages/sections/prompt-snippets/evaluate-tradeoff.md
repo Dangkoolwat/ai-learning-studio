@@ -1,11 +1,11 @@
 ---
 registry_id: prompt-snippets-evaluate-tradeoff
-title: 선택할 때 무엇을 포기해야 하는지 보기
+title: 선택할 때 무엇을 포기해야 하는지 확인
 description: 선택으로 얻는 것뿐만 아니라 대신 포기해야 하는 가치와 대가를 함께 비교합니다.
 type: static-prompt
 ---
 
-# 선택할 때 무엇을 포기해야 하는지 보기
+# 선택할 때 무엇을 포기해야 하는지 확인
 
 ## 언제 사용하나요?
 
@@ -49,7 +49,7 @@ description: 선택의 이점과 맞바꾸어야 하는 대가를 객관적으�
 
 ## 함께 사용하면 좋은 프롬프트
 
-[비교와 분석](/prompt-snippets/compare-analyze/) ➔ [선택할 때 무엇을 포기해야 하는지 보기](/prompt-snippets/evaluate-tradeoff/) ➔ [그다음 영향까지 생각하기](/prompt-snippets/second-order-effect/)
+[비교와 분석](/prompt-snippets/compare-analyze/) ➔ [선택할 때 무엇을 포기해야 하는지 확인](/prompt-snippets/evaluate-tradeoff/) ➔ [그다음 영향까지 생각하기](/prompt-snippets/second-order-effect/)
 
 ## 💡 AI 활용 TIP
 
