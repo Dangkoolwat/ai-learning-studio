@@ -288,6 +288,58 @@
       "order": 21
     },
     {
+      "id": "prompt-snippets-second-order-effect",
+      "title": "그다음 영향까지 생각하기 ⭐",
+      "description": "당장의 결과뿐만 아니라 그 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
+      "route": "/prompt-snippets/second-order-effect/",
+      "source": "pages/sections/prompt-snippets/second-order-effect.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 22
+    },
+    {
+      "id": "prompt-snippets-audit-assumptions",
+      "title": "내가 당연하다고 생각한 가정 찾기",
+      "description": "내 생각이나 계획 밑바닥에 당연하게 깔려 있는 숨은 전제를 들춰냅니다.",
+      "route": "/prompt-snippets/audit-assumptions/",
+      "source": "pages/sections/prompt-snippets/audit-assumptions.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 23
+    },
+    {
+      "id": "prompt-snippets-evaluate-tradeoff",
+      "title": "선택하면 무엇을 포기하는지 보기",
+      "description": "선택으로 얻는 것뿐만 아니라 대신 포기해야 하는 가치와 대가를 함께 비교합니다.",
+      "route": "/prompt-snippets/evaluate-tradeoff/",
+      "source": "pages/sections/prompt-snippets/evaluate-tradeoff.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 24
+    },
+    {
+      "id": "prompt-snippets-detect-biases",
+      "title": "내 판단이 한쪽으로 치우쳤는지 보기",
+      "description": "내 글이나 생각에 판단에 영향을 준 선입견이나 편향이 섞여 있는지 단정 없이 확인합니다.",
+      "route": "/prompt-snippets/detect-biases/",
+      "source": "pages/sections/prompt-snippets/detect-biases.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 25
+    },
+    {
       "id": "ready-to-use",
       "title": "바로 써보기",
       "description": "필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기",
@@ -295,7 +347,7 @@
       "source": "pages/sections/ready-to-use.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 22,
+      "order": 26,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -308,7 +360,7 @@
       "source": "pages/sections/ready-to-use/korean-editor.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 23,
+      "order": 27,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -321,7 +373,7 @@
       "source": "pages/sections/ready-to-use/self-development.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 24,
+      "order": 28,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -334,7 +386,7 @@
       "source": "pages/sections/ready-to-use/universal-handoff.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 25,
+      "order": 29,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -347,7 +399,7 @@
       "source": "pages/sections/ready-to-use/recipe-generator.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 26,
+      "order": 30,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -360,7 +412,7 @@
       "source": "pages/sections/ai-assistant.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 27,
+      "order": 31,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -373,7 +425,7 @@
       "source": "pages/sections/ai-assistant/hallucination-minimizer.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 28,
+      "order": 32,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -386,7 +438,7 @@
       "source": "pages/sections/ai-assistant/gemini-verifier.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 29,
+      "order": 33,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -399,7 +451,7 @@
       "source": "pages/sections/ai-assistant/vacation-planner-guide.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 30,
+      "order": 34,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -412,7 +464,7 @@
       "source": "pages/sections/ai-assistant/gemini-canvas-map.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 31,
+      "order": 35,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -425,7 +477,7 @@
       "source": "pages/sections/ai-assistant/korean-editor-guide.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 32,
+      "order": 36,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -438,7 +490,7 @@
       "source": "pages/sections/ai-assistant/language-tutor-guide.md",
       "type": "prompt-builder",
       "section": "ai-assistant",
-      "order": 33,
+      "order": 37,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -451,7 +503,7 @@
       "source": "pages/sections/ai-assistant/self-development-coach.md",
       "type": "static-prompt",
       "section": "ai-assistant",
-      "order": 34,
+      "order": 38,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -464,7 +516,7 @@
       "source": "pages/sections/ai-assistant/life-story-interviewer.md",
       "type": "markdown-prompt",
       "section": "ai-assistant",
-      "order": 35,
+      "order": 39,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -477,7 +529,7 @@
       "source": "pages/sections/ai-assistant/active-recall-tutor.md",
       "type": "prompt-builder",
       "section": "ai-assistant",
-      "order": 36,
+      "order": 40,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -490,7 +542,7 @@
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 36,
+      "order": 41,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -503,7 +555,7 @@
       "source": "pages/sections/image-ai/typography.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 37,
+      "order": 42,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -516,7 +568,7 @@
       "source": "pages/sections/image-ai/recipe-infographic.md",
       "type": "prompt-builder",
       "section": "image-ai",
-      "order": 38,
+      "order": 43,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -529,7 +581,7 @@
       "source": "pages/sections/image-ai/3d-career-character.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 39,
+      "order": 44,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -542,7 +594,7 @@
       "source": "pages/sections/image-ai/resume-profile.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 40,
+      "order": 45,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -555,7 +607,7 @@
       "source": "pages/sections/image-ai/sns-profile.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 41,
+      "order": 46,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -568,7 +620,7 @@
       "source": "pages/sections/image-ai/paper-collage.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 42,
+      "order": 47,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -581,7 +633,7 @@
       "source": "pages/sections/image-ai/photo-retouch.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 43,
+      "order": 48,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -593,7 +645,7 @@
       "type": "static-prompt",
       "route": "/ready-to-use/uijeongbu-route-finder/",
       "section": "ready-to-use",
-      "order": 44,
+      "order": 49,
       "navigation": true,
       "status": "published",
       "lang": "ko",
@@ -607,7 +659,7 @@
       "source": "pages/sections/ready-to-use/healing-chat.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 45,
+      "order": 50,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -620,7 +672,7 @@
       "source": "pages/sections/ready-to-use/event-budget-calculator.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 46,
+      "order": 51,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -633,7 +685,7 @@
       "source": "pages/sections/ready-to-use/funeral-etiquette.md",
       "type": "markdown-prompt",
       "section": "ready-to-use",
-      "order": 47,
+      "order": 52,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -646,7 +698,7 @@
       "source": "pages/sections/image-ai/food-poster.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 48,
+      "order": 53,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -659,7 +711,7 @@
       "source": "pages/sections/ai-practice/fridge-recipe.md",
       "type": "static-prompt",
       "section": "ai-practice",
-      "order": 49,
+      "order": 54,
       "navigation": true,
       "status": "published",
       "lang": "ko"

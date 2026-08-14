@@ -23,8 +23,14 @@
   - 설명: `질문과 피드백으로 내가 아는 것과 모르는 것을 직접 확인하는 맞춤형 학습 코치`
 - **소개 및 핵심 원리 문구 다듬기**: 딱딱한 전문 심리학 용어를 지양하고 친절하고 가독성 높은 문구(`💡 왜 Active Recall 방식으로 공부할까요?`)로 본문 전면 개선 반영.
 - **필드 설명 어휘 순화**: `진행 및 피드백 방식` 필드의 어렵고 다소 조잡했던 한자어 설명(`인출 몰입도와 오답 처리 방식`)을 쉬운 우리말(`질문을 한 문제씩 주고받는 대화 방식과 틀렸을 때 힌트를 줄지 정합니다.`)로 친절하게 개선.
-- **학습 주제 범주 다변화 반영**: `학습 주제` 필드의 예시 및 설명을 초·중·고 교과목부터 대학·직장인 업무/전공, 성인·어르신의 인문 교양(`논어`, `사자성어`, `건강 상식` 등)까지 전 연령대를 포괄하도록 확장 업데이트.
-- **정적 빌드 검증**: `python3 scripts/build.py` 실행 완료 (Exit Code: 0, 총 51개 페이지 빌드 완료)
+- **신규 4개 프롬프트 한 스푼 생성 완료**:
+  1. `그단 영향까지 생각하기 ⭐` ([second-order-effect.md](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/pages/sections/prompt-snippets/second-order-effect.md) - 주요 추천 메뉴 ⭐ 반영)
+  2. `내가 당연하다고 생각한 가정 찾기` ([audit-assumptions.md](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/pages/sections/prompt-snippets/audit-assumptions.md))
+  3. `선택하면 무엇을 포기하는지 보기` ([evaluate-tradeoff.md](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/pages/sections/prompt-snippets/evaluate-tradeoff.md))
+  4. `내 판단이 한쪽으로 치우쳤는지 보기` ([detect-biases.md](file:///Users/sanghyoukjin/DongguramiProjects/AI%20Learning%20Studio/pages/sections/prompt-snippets/detect-biases.md))
+- **정적 빌드 검증**: `python3 scripts/build.py` 실행 완료 (Exit Code: 0, 총 55개 페이지 빌드 성공)
+
+
 
 
 

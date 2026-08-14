@@ -134,6 +134,30 @@
           "label": "결과물 다양하게 재활용하기",
           "description": "이미 잘 만들어진 원본을 완전히 다른 용도나 형식으로 바꿉니다.",
           "route": "/prompt-snippets/reuse-content/"
+        },
+        {
+          "id": "prompt-snippets-second-order-effect",
+          "label": "그다음 영향까지 생각하기 ⭐",
+          "description": "당장의 결과뿐만 아니라 그 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
+          "route": "/prompt-snippets/second-order-effect/"
+        },
+        {
+          "id": "prompt-snippets-audit-assumptions",
+          "label": "내가 당연하다고 생각한 가정 찾기",
+          "description": "내 생각이나 계획 밑바닥에 당연하게 깔려 있는 숨은 전제를 들춰냅니다.",
+          "route": "/prompt-snippets/audit-assumptions/"
+        },
+        {
+          "id": "prompt-snippets-evaluate-tradeoff",
+          "label": "선택하면 무엇을 포기하는지 보기",
+          "description": "선택으로 얻는 것뿐만 아니라 대신 포기해야 하는 가치와 대가를 함께 비교합니다.",
+          "route": "/prompt-snippets/evaluate-tradeoff/"
+        },
+        {
+          "id": "prompt-snippets-detect-biases",
+          "label": "내 판단이 한쪽으로 치우쳤는지 보기",
+          "description": "내 글이나 생각에 판단에 영향을 준 선입견이나 편향이 섞여 있는지 단정 없이 확인합니다.",
+          "route": "/prompt-snippets/detect-biases/"
         }
       ]
     },
