@@ -470,6 +470,19 @@
       "lang": "ko"
     },
     {
+      "id": "ai-assistant-active-recall-tutor",
+      "title": "1:1 Active Recall 학습 코치",
+      "description": "질문과 피드백으로 내가 아는 것과 모르는 것을 직접 확인하는 맞춤형 학습 코치",
+      "route": "/ai-assistant/active-recall-tutor/",
+      "source": "pages/sections/ai-assistant/active-recall-tutor.md",
+      "type": "prompt-builder",
+      "section": "ai-assistant",
+      "order": 36,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "image-ai",
       "title": "이미지 만들기",
       "description": "이미지 생성·편집에 사용할 프롬프트 만들기와 실습",
