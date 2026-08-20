@@ -1,7 +1,7 @@
 ---
 registry_id: ready-to-use-korean-editor
 title: 1회용 맞춤형 한국어 교정
-description: 원하는 용도와 말투를 선택해 빠르고 자연스럽게 글을 다듬어 보세요.
+description: 글의 성격에 맞춰 문맥과 흐름이 자연스럽게 다듬는 한국어 교정 도우미
 ai_target: Gemini, ChatGPT, Claude
 type: static-prompt
 ---

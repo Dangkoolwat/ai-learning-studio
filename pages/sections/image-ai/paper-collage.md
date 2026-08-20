@@ -1,7 +1,7 @@
 ---
 registry_id: image-ai-paper-collage
 title: 글자 조각 콜라주 만들기
-description: 원하는 문장을 입력하여 종이 조각을 이어 붙인 아날로그 수작업 느낌의 콜라주 이미지를 만들어 보세요.
+description: 잡지, 문자 조각, 사진을 아날로그 감성으로 찢어 붙인 듯한 개성 있는 신문/종이 콜라주 아트를 만듭니다.
 preview: /assets/images/image-ai/paper-collage/paper-collage1.png, /assets/images/image-ai/paper-collage/paper-collage2.jpg
 ai_target: ChatGPT, Gemini
 source: @Thread ryu_jungsoo

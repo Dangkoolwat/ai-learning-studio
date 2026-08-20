@@ -1,7 +1,7 @@
 ---
 registry_id: ai-practice-fridge-recipe
 title: 사진으로 레시피 찾기
-description: AI가 사진을 보고, 사람이 확인하고, 대화를 이어가며 레시피를 완성합니다.
+description: 냉장고 속 재료 사진을 기반으로 맞춤 레시피를 제안하고, 대화를 나누며 요리 가이드를 완성해 보세요.
 ai_target: ChatGPT, Gemini
 ---
 

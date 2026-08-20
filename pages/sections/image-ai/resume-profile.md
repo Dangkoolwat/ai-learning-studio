@@ -1,7 +1,7 @@
 ---
 registry_id: image-ai-resume-profile
 title: AI 전문 프로필 사진 생성
-description: 기존 인물 사진을 기반으로 사진관에서 촬영한 듯한 자연스러운 상반신 프로필 사진을 제작해 보세요.
+description: 인물 사진을 활용해 신뢰감 있고 깔끔한 분위기의 이력서 및 비즈니스 프로필 사진을 제작합니다.
 ai_target: chatGPT
 type: static-prompt
 ---

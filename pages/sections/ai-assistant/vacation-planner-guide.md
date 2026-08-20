@@ -1,7 +1,7 @@
 ---
 registry_id: ai-assistant-vacation-planner
 title: 맞춤형 여행 플래너
-description: 실습에 바로 활용하는 국내외 맞춤형 여행 플래너 GEM·Project 전용 지침 프롬프트입니다.
+description: 여행 주제와 기간을 입력하면 팩트 중심의 1일 동선 및 지도 링크를 추천하는 여행 도우미
 ---
 
 # 맞춤형 여행 플래너

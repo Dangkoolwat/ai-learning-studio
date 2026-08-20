@@ -354,8 +354,8 @@
     },
     {
       "id": "ready-to-use-korean-editor",
-      "title": "맞춤형 한국어 교정",
-      "description": "원하는 용도와 말투를 선택해 빠르고 자연스럽게 글을 다듬어 보세요.",
+      "title": "1회용 맞춤형 한국어 교정",
+      "description": "글의 성격에 맞춰 문맥과 흐름이 자연스럽게 다듬는 한국어 교정 도우미",
       "route": "/ready-to-use/korean-editor/",
       "source": "pages/sections/ready-to-use/korean-editor.md",
       "type": "static-prompt",
@@ -381,7 +381,7 @@
     {
       "id": "ready-to-use-universal-handoff",
       "title": "AI 작업 이어가기",
-      "description": "긴 대화를 작업 인계서로 변환하여 어느 AI에서든 끊김 없이 이어서 작업할 수 있게 만드는 범용 프롬프트",
+      "description": "AI와의 긴 대화가 끊겼을 때 이전 맥락을 압축해 다른 대화방으로 넘기는 프롬프트",
       "route": "/ready-to-use/universal-handoff/",
       "source": "pages/sections/ready-to-use/universal-handoff.md",
       "type": "static-prompt",
@@ -433,7 +433,7 @@
     {
       "id": "ai-assistant-gemini-verifier",
       "title": "Gemini 지식 검증",
-      "description": "Gemini GEMs 및 Projects 전용 지식 검증 전문가(Knowledge Verification Expert) 지침 프롬프트입니다.",
+      "description": "Gemini가 도출한 결과물의 출처와 지식의 신뢰성을 교차 검증하는 분석 도구",
       "route": "/ai-assistant/gemini-verifier/",
       "source": "pages/sections/ai-assistant/gemini-verifier.md",
       "type": "static-prompt",
@@ -446,7 +446,7 @@
     {
       "id": "ai-assistant-vacation-planner",
       "title": "맞춤형 여행 플래너",
-      "description": "실습에 바로 활용하는 국내외 맞춤형 여행 플래너 GEM·Project 전용 지침 프롬프트입니다.",
+      "description": "여행 주제와 기간을 입력하면 팩트 중심의 1일 동선 및 지도 링크를 추천하는 여행 도우미",
       "route": "/ai-assistant/vacation-planner-guide/",
       "source": "pages/sections/ai-assistant/vacation-planner-guide.md",
       "type": "static-prompt",
@@ -459,7 +459,7 @@
     {
       "id": "ai-assistant-gemini-canvas-map",
       "title": "Gemini 캔버스 대화형 여행 지도",
-      "description": "Gemini Canvas를 활용해 웹 브라우저에서 바로 작동하는 단일 HTML Leaflet 대화형 여행 지도를 만드는 프롬프트입니다.",
+      "description": "Gemini 캔버스 기능을 활용해 대화하며 반응형 웹 여행 지도를 직접 구현하고 시각화하는 제작 가이드",
       "route": "/ai-assistant/gemini-canvas-map/",
       "source": "pages/sections/ai-assistant/gemini-canvas-map.md",
       "type": "static-prompt",
@@ -472,7 +472,7 @@
     {
       "id": "ai-assistant-korean-editor",
       "title": "자연스러운 한국어 다듬기 지침서",
-      "description": "실습에 바로 활용하는 자연스러운 한국어 전문 편집자 GEM·Project 전용 지침 프롬프트입니다.",
+      "description": "자연스러운 한국어 문체, 어조, 흐름을 살려 전문 에디터처럼 글을 윤문하는 교정 지침서",
       "route": "/ai-assistant/korean-editor-guide/",
       "source": "pages/sections/ai-assistant/korean-editor-guide.md",
       "type": "static-prompt",
@@ -498,7 +498,7 @@
     {
       "id": "ai-assistant-self-development-coach",
       "title": "현실적인 자기계발 코치",
-      "description": "목표를 실천 가능한 작은 단위로 나누고, 무리하지 않게 지속할 수 있도록 돕는 1:1 맞춤형 코치 시스템 프롬프트입니다.",
+      "description": "사용자의 환경과 조건에 맞춰 무리하지 않고 실천 가능한 현실적인 자기계발 코칭 가이드",
       "route": "/ai-assistant/self-development-coach/",
       "source": "pages/sections/ai-assistant/self-development-coach.md",
       "type": "static-prompt",
@@ -588,8 +588,8 @@
     },
     {
       "id": "image-ai-resume-profile",
-      "title": "AI 이력서·프로필 사진 생성",
-      "description": "내 사진을 기반으로 다양한 의상과 구도의 전문적인 프로필 사진을 제작해 보세요.",
+      "title": "AI 전문 프로필 사진 생성",
+      "description": "인물 사진을 활용해 신뢰감 있고 깔끔한 분위기의 이력서 및 비즈니스 프로필 사진을 제작합니다.",
       "route": "/image-ai/resume-profile/",
       "source": "pages/sections/image-ai/resume-profile.md",
       "type": "static-prompt",
@@ -615,7 +615,7 @@
     {
       "id": "image-ai-paper-collage",
       "title": "글자 조각 콜라주 만들기",
-      "description": "원하는 문장을 입력해 종이 조각을 이어 붙인 아날로그 수작업 느낌의 콜라주 이미지를 만들어 보세요.",
+      "description": "잡지, 문자 조각, 사진을 아날로그 감성으로 찢어 붙인 듯한 개성 있는 신문/종이 콜라주 아트를 만듭니다.",
       "route": "/image-ai/paper-collage/",
       "source": "pages/sections/image-ai/paper-collage.md",
       "type": "static-prompt",
@@ -732,7 +732,7 @@
     {
       "id": "ai-practice-fridge-recipe",
       "title": "사진으로 레시피 찾기",
-      "description": "AI가 사진을 보고, 사람이 확인하고, 대화를 이어가며 레시피를 완성합니다.",
+      "description": "냉장고 속 재료 사진을 기반으로 맞춤 레시피를 제안하고, 대화를 나누며 요리 가이드를 완성해 보세요.",
       "route": "/ai-practice/fridge-recipe/",
       "source": "pages/sections/ai-practice/fridge-recipe.md",
       "type": "static-prompt",

@@ -1,7 +1,7 @@
 ---
 registry_id: ai-assistant-self-development-coach
 title: 현실적인 자기계발 코치
-description: 목표를 실천 가능한 작은 단위로 나누고, 무리하지 않게 지속할 수 있도록 돕는 1:1 맞춤형 코치 시스템 프롬프트입니다.
+description: 사용자의 환경과 조건에 맞춰 무리하지 않고 실천 가능한 현실적인 자기계발 코칭 가이드
 ai_target: Gemini, ChatGPT, Claude
 ---
 

@@ -1,7 +1,7 @@
 ---
 registry_id: ready-to-use-universal-handoff
 title: AI 작업 이어가기
-description: 긴 대화를 작업 인계서로 변환하여 어느 AI에서든 끊김 없이 이어서 작업할 수 있게 만드는 범용 프롬프트
+description: AI와의 긴 대화가 끊겼을 때 이전 맥락을 압축해 다른 대화방으로 넘기는 프롬프트
 ai_target: Gemini, ChatGPT, Claude
 ---
 
