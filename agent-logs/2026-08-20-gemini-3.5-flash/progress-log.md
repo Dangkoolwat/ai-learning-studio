@@ -40,6 +40,8 @@
    - `silly-doodle.md` 내 프롬프트 문안에 대해 줄바꿈 간격을 통일하고 콤보박스 리스트 기호를 `-` 로 통합하는 등 AI 모델(Images 2 / Gemini)이 읽기에 정밀한 최적화 레이아웃으로 최종 정돈 및 깃허브 푸시 완료.
    - `child-doodle.md` 내 프롬프트 문안에 대해서도 동일하게 줄바꿈 간격을 일정하게 통일하고, 콤보박스 리스트 기호를 `-` 로 통합하는 등 AI 가독성 최적화 포맷팅 작업 적용 및 깃허브 푸시 완료.
    - 프롬프트 생성/설명문 관리 일관성을 극대화하기 위해 `AGENTS.md` 파일 최하단에 4각 동기화 규칙, AI 해석 최적화 마크다운 포맷팅 규칙, 콤보박스 기본값 설계 규칙을 Learned Rule로 명문화하여 등록 및 깃허브 푸시 완료.
+   - **기존 10개 핵심 프롬프트의 description 4각 동기화 및 서식 정돈 완료**: `korean-editor.md`, `universal-handoff.md` 등 10개 핵심 프롬프트에 대해 의미 지시사항은 훼손 없이 서식만 정돈하고, description을 Frontmatter, registry JSON, navigation JSON, Python expected code 간 1:1로 완벽히 일치 및 원격 저장소 푸시 완료.
+   - **미교정 12개 프롬프트 설명문 4각 정렬 및 포맷팅 평탄화 완료**: `ai-practice`, `image-ai` 등 7개 불일치 설명문을 md frontmatter를 기준으로 4각 동기화 완료하고, `reduce-hallucination.md` 등 5개 대상의 본문 지침부 중첩 볼드를 제거하고 평탄화하여 기계 가독성 확보 완료 (로컬 git 커밋 완료, push 대기).
 
 ## 검증 결과
 - **빌드 테스트**: `python3 scripts/build.py`

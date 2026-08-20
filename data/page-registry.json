@@ -17,7 +17,7 @@
     {
       "id": "ai-practice",
       "title": "프롬프트 단계별 체험하기",
-      "description": "같은 주제에 여러 프롬프트 방식을 적용하고 결과 차이 비교하기",
+      "description": "짧은 요청이 하나의 완성된 프롬프트로 발전하는 과정을 직접 체험해 보세요.",
       "route": "/ai-practice/",
       "source": "pages/sections/ai-practice.md",
       "type": "static-prompt",
@@ -43,7 +43,7 @@
     {
       "id": "ai-practice-uijeongbu-oneday-tour",
       "title": "의정부 숨은 명소 찾기",
-      "description": "의정부 숨은 명소 1일 코스라는 같은 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성합니다.",
+      "description": "'의정부 숨은 명소로 하루 여행 코스 만들기'라는 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성합니다.",
       "route": "/ai-practice/uijeongbu-oneday-tour/",
       "source": "pages/sections/ai-practice/uijeongbu-oneday-tour.md",
       "type": "static-prompt",
@@ -342,7 +342,7 @@
     {
       "id": "ready-to-use",
       "title": "바로 써보기",
-      "description": "필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기",
+      "description": "준비된 프롬프트를 내 상황에 맞게 바꾸고 바로 활용해 보세요.",
       "route": "/ready-to-use/",
       "source": "pages/sections/ready-to-use.md",
       "type": "static-prompt",
@@ -407,7 +407,7 @@
     {
       "id": "ai-assistant",
       "title": "나만의 AI 만들기",
-      "description": "Project·Gem 등에 사용할 맞춤형 역할과 지침 만들기",
+      "description": "프로젝트와 GPTs(GEM)를 활용해 작업별로 AI를 분리하고, 더 일관된 결과를 만들어 보세요.",
       "route": "/ai-assistant/",
       "source": "pages/sections/ai-assistant.md",
       "type": "static-prompt",
@@ -536,8 +536,8 @@
     },
     {
       "id": "image-ai",
-      "title": "이미지 만들기",
-      "description": "이미지 생성·편집에 사용할 프롬프트 만들기와 실습",
+      "title": "이미지 생성",
+      "description": "이미지 프롬프트의 특징을 이해하고 원하는 이미지를 더 정확하게 만들어 보세요.",
       "route": "/image-ai/",
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",
