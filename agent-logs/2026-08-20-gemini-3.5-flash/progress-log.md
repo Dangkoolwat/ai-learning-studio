@@ -44,6 +44,7 @@
    - **미교정 12개 프롬프트 설명문 4각 정렬 및 포맷팅 평탄화 완료**: `ai-practice`, `image-ai` 등 7개 불일치 설명문을 md frontmatter를 기준으로 4각 동기화 완료하고, `reduce-hallucination.md` 등 5개 대상의 본문 지침부 중첩 볼드를 제거하고 평탄화하여 기계 가독성 확보 완료 (로컬 git 커밋 완료, push 대기).
    - **silly-doodle 메타데이터 복원 완료**: 이전 정리 도중 덮어써졌던 사용자의 preview(다중 이미지 `/preview.jpg, /preview2.png, /preview3.png`)와 source(`Threads (@ah_g_moo, @_0.beomi_)`) 메타데이터를 확인하고 원래대로 안전하게 복구 및 깃허브 푸시 완료.
    - **사고 보고서 생성**: 본 사고에 대해 원인 규명 및 재발 방지책을 명시한 `2026-08-20-silly-doodle-metadata-overwrite-report.md` 공식 사고 보고서를 작성하여 원격 깃허브 저장소 배포 완료.
+   - **장문 프롬프트 3개 파일 과도한 줄바꿈 병합 정돈**: `silly-doodle.md`, `funeral-etiquette.md`, `korean-editor-guide.md` 등 장문 프롬프트 파일에 대해 한 줄 단위로 잘려있던 개행들을 긴밀한 단락(Paragraph) 형태로 묶어 정돈 및 깃허브 푸시 완료.
 
 ## 검증 결과
 - **빌드 테스트**: `python3 scripts/build.py`
