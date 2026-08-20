@@ -231,7 +231,11 @@ EXPECTED_SECTIONS = (
                      {   'description': '업로드한 사진의 장면과 구도를 살려 어린아이가 하얀 종이에 검은 펜과 색연필로 따라 그린 듯한 서툰 손그림 스타일로 변환합니다.',
                          'id': 'image-ai-child-doodle',
                          'label': '사진을 어린이 손그림으로 바꾸기',
-                         'route': '/image-ai/child-doodle/'}],
+                         'route': '/image-ai/child-doodle/'},
+                     {   'description': '사진 속 인물을 알아볼 수 있는 특징은 살리고, 흰 종이에 검은 펜으로 대충 그린 듯한 엉뚱한 낙서 캐릭터로 바꿔보세요.',
+                         'id': 'image-ai-silly-doodle',
+                         'label': '인물을 엉뚱한 낙서 캐릭터로 바꾸기',
+                         'route': '/image-ai/silly-doodle/'}],
         'label': '이미지 만들기',
         'order': 5},
 )

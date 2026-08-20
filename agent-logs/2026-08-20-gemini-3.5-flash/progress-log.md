@@ -30,6 +30,12 @@
    - 사용자가 `child-doodle.md` 메타데이터 내 `ai_target`을 `ChatGPT,Gemini` 로 쉼표(,) 구분식으로 갱신하고, `description`을 가독성 높게 수정함.
    - 이에 따른 렌더링 검증 완료.
 
+7. **"인물을 엉뚱한 낙서 캐릭터로 바꾸기" 추가**
+   - `silly-doodle.md` 신규 프롬프트 마크다운 추가.
+   - 기본값 튜닝(보통, 흑백 중심, 흰 종이 여백, 원본 비율)을 콤보박스 첫 순위에 배치.
+   - `page-registry.json`, `navigation.json` 및 관련 파이썬 유효성 매핑 코드에 정합성 맞춰 등록 완료.
+   - `assets/images/image-ai/silly-doodle/preview.jpg` 플레이스홀더 이미지 리소스 배치.
+
 ## 검증 결과
 - **빌드 테스트**: `python3 scripts/build.py`
-- **결과**: `Build complete. Pages: 56, Assets: 29` (성공, exit code 0)
+- **결과**: `Build complete. Pages: 57, Assets: 30` (성공, exit code 0)
