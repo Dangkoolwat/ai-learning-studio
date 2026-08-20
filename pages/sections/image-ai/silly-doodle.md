@@ -2,9 +2,9 @@
 registry_id: image-ai-silly-doodle
 title: 인물을 엉뚱한 낙서 캐릭터로 바꾸기
 description: 사진 속 인물을 알아볼 수 있는 특징은 살리고, 흰 종이에 검은 펜으로 대충 그린 듯한 엉뚱한 낙서 캐릭터로 바꿔보세요.
-preview: /assets/images/image-ai/silly-doodle/preview.jpg
+preview: /assets/images/image-ai/silly-doodle/preview.jpg, /assets/images/image-ai/silly-doodle/preview2.png, /assets/images/image-ai/silly-doodle/preview3.png
 ai_target: ChatGPT,Gemini
-source: Threads (@KJdOZ8CYh)
+source: Threads (@ah_g_moo, @_0.beomi_)
 ---
 
 # 인물을 엉뚱한 낙서 캐릭터로 바꾸기
