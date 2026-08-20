@@ -42,6 +42,8 @@
    - 프롬프트 생성/설명문 관리 일관성을 극대화하기 위해 `AGENTS.md` 파일 최하단에 4각 동기화 규칙, AI 해석 최적화 마크다운 포맷팅 규칙, 콤보박스 기본값 설계 규칙을 Learned Rule로 명문화하여 등록 및 깃허브 푸시 완료.
    - **기존 10개 핵심 프롬프트의 description 4각 동기화 및 서식 정돈 완료**: `korean-editor.md`, `universal-handoff.md` 등 10개 핵심 프롬프트에 대해 의미 지시사항은 훼손 없이 서식만 정돈하고, description을 Frontmatter, registry JSON, navigation JSON, Python expected code 간 1:1로 완벽히 일치 및 원격 저장소 푸시 완료.
    - **미교정 12개 프롬프트 설명문 4각 정렬 및 포맷팅 평탄화 완료**: `ai-practice`, `image-ai` 등 7개 불일치 설명문을 md frontmatter를 기준으로 4각 동기화 완료하고, `reduce-hallucination.md` 등 5개 대상의 본문 지침부 중첩 볼드를 제거하고 평탄화하여 기계 가독성 확보 완료 (로컬 git 커밋 완료, push 대기).
+   - **silly-doodle 메타데이터 복원 완료**: 이전 정리 도중 덮어써졌던 사용자의 preview(다중 이미지 `/preview.jpg, /preview2.png, /preview3.png`)와 source(`Threads (@ah_g_moo, @_0.beomi_)`) 메타데이터를 확인하고 원래대로 안전하게 복구 및 깃허브 푸시 완료.
+   - **사고 보고서 생성**: 본 사고에 대해 원인 규명 및 재발 방지책을 명시한 `2026-08-20-silly-doodle-metadata-overwrite-report.md` 공식 사고 보고서를 작성하여 원격 깃허브 저장소 배포 완료.
 
 ## 검증 결과
 - **빌드 테스트**: `python3 scripts/build.py`
