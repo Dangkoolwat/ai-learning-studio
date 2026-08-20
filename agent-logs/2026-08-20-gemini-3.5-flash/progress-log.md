@@ -36,7 +36,8 @@
    - `page-registry.json`, `navigation.json` 및 관련 파이썬 유효성 매핑 코드에 정합성 맞춰 등록 완료.
    - `assets/images/image-ai/silly-doodle/preview.jpg` 플레이스홀더 이미지 리소스 배치 후 사용자 실제 예제 이미지로 최종 갱신 완료.
    - 가독성을 저해하는 콤보박스 지침부의 리스트 및 볼드 서식(`* **옵션명**`)을 한 줄 평탄화(`* 옵션명: 설명`)로 깔끔하게 정리 완료.
+   - `child-doodle.md`와 레지스트리 및 네비게이션 JSON/Python 파일 간의 `description` 표기(옛 AI스러운 문구)를 신규 문구(`사진을 어린아이가 검은 펜과 색연필로 따라 그린 것처럼 바꿔보세요.`)로 완벽히 통일 및 원격 저장소 푸시 완료.
 
 ## 검증 결과
 - **빌드 테스트**: `python3 scripts/build.py`
-- **결과**: `Build complete. Pages: 57, Assets: 30` (성공, exit code 0)
+- **결과**: `Build complete. Pages: 57, Assets: 33` (성공, exit code 0)
