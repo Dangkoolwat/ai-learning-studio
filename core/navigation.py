@@ -227,7 +227,11 @@ EXPECTED_SECTIONS = (
                      {   'description': '메뉴 사진과 옵션을 조합하여 잡지 화보 같은 고품질 프리미엄 푸드 포스터를 제작해 보세요.',
                          'id': 'image-ai-food-poster',
                          'label': '프리미엄 푸드 포스터 만들기',
-                         'route': '/image-ai/food-poster/'}],
+                         'route': '/image-ai/food-poster/'},
+                     {   'description': '업로드한 사진의 장면과 구도를 살려 어린아이가 하얀 종이에 검은 펜과 색연필로 따라 그린 듯한 서툰 손그림 스타일로 변환합니다.',
+                         'id': 'image-ai-child-doodle',
+                         'label': '사진을 어린이 손그림으로 바꾸기',
+                         'route': '/image-ai/child-doodle/'}],
         'label': '이미지 만들기',
         'order': 5},
 )

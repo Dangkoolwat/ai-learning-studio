@@ -704,6 +704,19 @@
       "lang": "ko"
     },
     {
+      "id": "image-ai-child-doodle",
+      "title": "사진을 어린이 손그림으로 바꾸기",
+      "description": "업로드한 사진의 구도를 살려 어린아이가 하얀 종이에 검은 펜과 색연필로 따라 그린 듯한 서툰 손그림 스타일로 변환합니다.",
+      "route": "/image-ai/child-doodle/",
+      "source": "pages/sections/image-ai/child-doodle.md",
+      "type": "static-prompt",
+      "section": "image-ai",
+      "order": 54,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "ai-practice-fridge-recipe",
       "title": "사진으로 레시피 찾기",
       "description": "AI가 사진을 보고, 사람이 확인하고, 대화를 이어가며 레시피를 완성합니다.",
@@ -711,7 +724,7 @@
       "source": "pages/sections/ai-practice/fridge-recipe.md",
       "type": "static-prompt",
       "section": "ai-practice",
-      "order": 54,
+      "order": 55,
       "navigation": true,
       "status": "published",
       "lang": "ko"
