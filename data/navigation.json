@@ -350,6 +350,12 @@
           "label": "인물을 엉뚱한 낙서 캐릭터로 바꾸기",
           "description": "사진 속 인물을 알아볼 수 있는 특징은 살리고, 흰 종이에 검은 펜으로 대충 그린 듯한 엉뚱한 낙서 캐릭터로 바꿔보세요.",
           "route": "/image-ai/silly-doodle/"
+        },
+        {
+          "id": "image-ai-sketch-sticker",
+          "label": "사진 속 인물만 손그림 스티커로 바꾸기",
+          "description": "배경 사진은 그대로 두고, 사진 속 인물만 흰색 테두리가 있는 흑백 손그림 스티커처럼 바꿔보세요.",
+          "route": "/image-ai/sketch-sticker/"
         }
       ]
     }

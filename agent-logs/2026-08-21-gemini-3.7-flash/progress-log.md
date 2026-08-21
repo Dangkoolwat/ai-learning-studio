@@ -24,3 +24,39 @@
 
 ## 빌드 및 검증 결과
 - 빌드 명령어: `python3 scripts/build.py` (Exit code 0, 58개 페이지 정상 생성)
+
+---
+
+# 2026-08-21 이미지 프롬프트 신규 페이지 추가 작업 로그
+
+## 작업 개요
+- **콘텐츠명**: `사진 속 인물만 손그림 스티커로 바꾸기` (`image-ai-sketch-sticker`)
+- **목적**: 배경 사진은 원본 그대로 유지하고, 사진 속 인물만 흰색 테두리가 있는 흑백 손그림 스티커 일러스트로 자연스럽게 합성하는 이미지 프롬프트 페이지 신설 및 명칭 정돈.
+- **수행 모델**: Gemini 3.7 Flash
+
+---
+
+## 변경 내역
+1. **예시 이미지 자산 배치**
+   - `assets/images/image-ai/sketch-sticker/sketch-sticker1.jpg` (계단 뒷모습 예시)
+   - `assets/images/image-ai/sketch-sticker/sketch-sticker2.jpg` (펜스 앞 앞모습 예시)
+2. **신규 마크다운 페이지 생성 및 기본값/프롬프트 정돈**
+   - `pages/sections/image-ai/sketch-sticker.md`
+   - 페이지 및 프롬프트 제목: `사진 속 인물만 손그림 스티커로 바꾸기`
+   - 출처 메타데이터 보존: `source: Threads (@nature.soul2025)`
+   - 사용자 기본값 최적화 반영:
+     - 손그림 스타일: `만화 선화` (1순위 기본값)
+     - 선 느낌: `굵고 또렷하게` (1순위 기본값)
+   - 스티커 톤앤매너 최적화 지침 보강:
+     - 표현 단순화(얼굴/의상 특징 위주 간결한 선화), 선화 강조(미세 주름/피부 질감 최소화), 과도한 사실적 크로스해칭 방지 지침 추가 반영
+3. **4각 메타데이터 동기화 완료**
+   - `data/page-registry.json`
+   - `data/navigation.json`
+   - `core/page_registry.py`
+   - `core/navigation.py`
+
+---
+
+## 빌드 및 검증 결과
+- **빌드 테스트**: `python3 scripts/build.py` (Exit code 0, 총 59개 페이지 정상 생성)
+- **결과물 검증**: `dist/image-ai/sketch-sticker/index.html` 내 인라인 콤보박스 기본값(`만화 선화`, `굵고 또렷하게`) 및 세부 지시문 정상 반영 확인

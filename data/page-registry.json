@@ -743,6 +743,19 @@
       "lang": "ko"
     },
     {
+      "id": "image-ai-sketch-sticker",
+      "title": "사진 속 인물만 손그림 스티커로 바꾸기",
+      "description": "배경 사진은 그대로 두고, 사진 속 인물만 흰색 테두리가 있는 흑백 손그림 스티커처럼 바꿔보세요.",
+      "route": "/image-ai/sketch-sticker/",
+      "source": "pages/sections/image-ai/sketch-sticker.md",
+      "type": "static-prompt",
+      "section": "image-ai",
+      "order": 56,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "ai-practice-fridge-recipe",
       "title": "사진으로 레시피 찾기",
       "description": "냉장고 속 재료 사진을 기반으로 맞춤 레시피를 제안하고, 대화를 나누며 요리 가이드를 완성해 보세요.",
@@ -750,7 +763,7 @@
       "source": "pages/sections/ai-practice/fridge-recipe.md",
       "type": "static-prompt",
       "section": "ai-practice",
-      "order": 56,
+      "order": 57,
       "navigation": true,
       "status": "published",
       "lang": "ko"
