@@ -340,6 +340,19 @@
       "order": 25
     },
     {
+      "id": "prompt-snippets-experience-to-asset",
+      "title": "경험을 나만의 자산으로 바꾸기 ⭐",
+      "description": "경험과 노하우를 연결해 강점을 찾고 반복 활용 가능한 자산으로 축적하기",
+      "route": "/prompt-snippets/experience-to-asset/",
+      "source": "pages/sections/prompt-snippets/experience-to-asset.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "navigation": true,
+      "status": "published",
+      "lang": "ko",
+      "order": 26
+    },
+    {
       "id": "ready-to-use",
       "title": "바로 써보기",
       "description": "준비된 프롬프트를 내 상황에 맞게 바꾸고 바로 활용해 보세요.",
