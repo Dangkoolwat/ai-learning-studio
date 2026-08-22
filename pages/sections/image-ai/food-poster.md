@@ -2,7 +2,7 @@
 registry_id: image-ai-food-poster
 title: 프리미엄 푸드 포스터 만들기
 description: 메뉴 사진과 옵션을 조합하여 잡지 화보 같은 고품질 프리미엄 푸드 포스터를 제작해 보세요.
-preview: /assets/images/image-ai/food-poster/food-poster1.png,/assets/images/image-ai/food-poster/food-poster2.png,/assets/images/image-ai/food-poster/food-poster3.png,/assets/images/image-ai/food-poster/food-poster4.png,/assets/images/image-ai/food-poster/food-poster5.png,/assets/images/image-ai/food-poster/food-poster10.jpg
+preview: /assets/images/image-ai/food-poster/food-poster1.webp,/assets/images/image-ai/food-poster/food-poster2.webp,/assets/images/image-ai/food-poster/food-poster3.webp,/assets/images/image-ai/food-poster/food-poster4.webp,/assets/images/image-ai/food-poster/food-poster5.webp,/assets/images/image-ai/food-poster/food-poster10.webp
 ai_target: ChatGPT, Gemini
 source: @Thread _codemango
 ---

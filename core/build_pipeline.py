@@ -20,6 +20,7 @@ from core.component_engine import load_approved_component_templates
 from core.component_models import COMPONENT_ENGINE_VERSION, COMPONENT_VALIDATION_STATUS, ComponentRenderResult, LoadedComponentTemplates
 from core.component_registry import APPROVED_COMPONENT_IDS, APPROVED_COMPONENT_SPECS, OPTIONAL_COMPONENT_IDS
 from core.component_validation import validate_component_registry
+from core.data_consistency import validate_navigation_registry_consistency
 from core.navigation import NavigationData, load_navigation
 from core.page_registry import PageRegistry, PageRegistryEntry, load_page_registry
 from core.page_renderers import RENDERER_REGISTRY, render_page, validate_renderer_registry
@@ -62,6 +63,7 @@ TOTAL_STAGES = 16
 SITE_URL_ENV_VAR = "AI_STUDIO_SITE_URL"
 ALLOWED_ASSET_EXTENSIONS = {".css", ".js", ".svg", ".png", ".jpg", ".jpeg", ".webp"}
 TEXT_ASSET_EXTENSIONS = {".css", ".js", ".svg"}
+MAX_IMAGE_ASSET_BYTES = 1024 * 1024  # 1MB limit for LCP and web performance
 ALLOWED_FRONT_MATTER_KEYS = {"registry_id", "title", "description", "seo_title", "preview", "ai_target", "source", "type"}
 EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
 EXPECTED_SCRIPT_HREF_RE = re.compile(r'<script type="module" src="([^"]+)"></script>')
@@ -828,6 +830,13 @@ def validate_static_asset(asset_path: Path) -> None:
     elif suffix in {".png", ".jpg", ".jpeg", ".webp"}:
         if _is_executable_file(asset_path):
             raise BuildError("Load static assets", "binary assets must not be executable", path=asset_path)
+        if asset_path.stat().st_size > MAX_IMAGE_ASSET_BYTES:
+            size_kb = asset_path.stat().st_size / 1024
+            raise BuildError(
+                "Load static assets",
+                f"image asset exceeds size limit (1MB): {size_kb:.1f}KB",
+                path=asset_path,
+            )
     else:
         raise BuildError("Load static assets", f"unsupported asset extension: {suffix}", path=asset_path)
 
@@ -1728,6 +1737,7 @@ def build_site(
 
         stage_logger(3, TOTAL_STAGES, "Load page registry")
         registry = load_page_registry(data_dir)
+        validate_navigation_registry_consistency(navigation, registry)
 
         stage_logger(4, TOTAL_STAGES, "Validate registered page sources")
         page_paths = discover_page_sources(pages_dir)

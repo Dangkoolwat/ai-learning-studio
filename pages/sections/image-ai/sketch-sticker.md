@@ -2,7 +2,7 @@
 registry_id: image-ai-sketch-sticker
 title: 사진 속 인물만 손그림 스티커로 바꾸기
 description: 배경 사진은 그대로 두고, 사진 속 인물만 흰색 테두리가 있는 흑백 손그림 스티커처럼 바꿔보세요.
-preview: /assets/images/image-ai/sketch-sticker/sketch-sticker1.jpg, /assets/images/image-ai/sketch-sticker/sketch-sticker2.jpg
+preview: /assets/images/image-ai/sketch-sticker/sketch-sticker1.webp, /assets/images/image-ai/sketch-sticker/sketch-sticker2.webp
 ai_target: ChatGPT, Gemini
 type: static-prompt
 source: Threads (@nature.soul2025)

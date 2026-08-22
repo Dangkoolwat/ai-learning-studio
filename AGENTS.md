@@ -93,11 +93,10 @@ JSON · Markdown · Templates
 ## 7. 프롬프트 마크다운 작성 규칙 (Learned Rule)
 - 프롬프트 템플릿 작성 시, `[여기에 글 붙여넣기]` 같은 자유 텍스트 입력 옵션 칩이 단독으로 한 줄을 차지할 경우 파싱 엔진에 의해 '섹션 헤더'로 오인되어 무시됩니다. 
 - 따라서 다음부터는 옵션이 정상적으로 나타나게 하려면 **반드시 `"[여기에 글 붙여넣기]"`와 같이 양쪽에 따옴표(`" "`)를 감싸서 옵션으로 제공**하는 것을 기본 규칙으로 합니다.
-- **프롬프트 설명문(Description) 4각 동기화 규칙**: 프롬프트 마크다운(`.md`) 파일 내부의 `description`이나 제목을 수정할 때에는 반드시 아래 4개 파일에 기재된 설명 데이터도 완전히 일치하도록 1:1로 함께 수정해야 합니다.
+- **프롬프트 설명문(Description) 동기화 규칙 (자동 검증)**: 프롬프트 마크다운(`.md`) 파일 내부의 `description`이나 제목을 수정할 때에는 아래 2개 JSON 데이터 파일도 완전히 일치하도록 함께 수정해야 합니다. 불일치 시 빌드가 자동으로 실패합니다 (`core/data_consistency.py`).
   - `data/page-registry.json`
   - `data/navigation.json`
-  - `core/page_registry.py` (`EXPECTED_PAGES` 내 description)
-  - `core/navigation.py` (`EXPECTED_SECTIONS` 내 description)
+  - (구 `core/page_registry.py`의 `EXPECTED_PAGES`, `core/navigation.py`의 `EXPECTED_SECTIONS` 하드코딩 상수는 단일 진실 원천화 리팩토링으로 제거되었으며, 더 이상 수동 동기화 대상이 아닙니다.)
 - **AI 해석 최적화 마크다운 포맷팅 규칙**: 프롬프트 내부 지시사항을 AI 모델(Images 2, Gemini 등)이 명확히 인식할 수 있도록 다음 포맷을 의무 적용합니다.
   - 옵션 드롭다운 영역 및 각 하위 지시 목록의 마커는 항상 `- `로 통일합니다.
   - 각 대분류 지침(`###` 헤더)과 설명 문장 사이에는 정확히 1줄의 공백 라인만 배치하여 단락 경계를 명확히 분리합니다.
@@ -107,3 +106,5 @@ JSON · Markdown · Templates
   - 화풍/색감: 해당 프롬프트의 특징을 가장 강력하게 나타내는 옵션을 1순위로 배치합니다.
 - **수정 전 Git 히스토리 대조 선조사 규칙**: 지침 파일을 정돈하거나 프롬프트를 수정하기 전에 무조건 최근 3개 커밋 내역(`git log -p -n 3`)을 조회하여 사용자의 수동 개입/수정 이력을 100% 선조사하고, 기존에 임의 기입된 커스텀 메타데이터(예: 다중 `preview` 이미지나 수동 `source` 정보 등)를 덮어쓰지 않고 온전히 보존해야 합니다.
 - **메타데이터(preview/source) 적합성 검증 규칙**: 프롬프트 Frontmatter에 `preview`나 `source` 메타데이터가 명시적으로 기재되어 있는 경우에 한해, 해당 키의 값이 비어있지 않은지 및 실제 이미지 파일이 디스크에 실존하는지 규격 적합성을 확인해야 하며, `audit_prompts.py` 진단 도구를 구동해 오작동 여부를 지속 확인해야 합니다.
+- **이미지 에셋 추가 및 WebP 최적화 규칙 (의무)**: 프롬프트 예제 또는 본문용 신규 이미지를 `assets/images/<상위메뉴>/<페이지명>/`에 추가할 때에는 반드시 `python3 scripts/optimize_images.py --replace`를 실행하여 고품질 WebP(Quality 85, 최대 1600px)로 일괄 변환하고 원본 대용량 파일을 정리해야 합니다. 마크다운의 `preview:` 및 본문 링크는 항상 `.webp` 확장자를 사용해야 하며, 1MB를 초과하는 바이너리 이미지는 빌드 시 자동 차단됩니다 (`core/build_pipeline.py`, `tests/test_image_assets.py`).
+

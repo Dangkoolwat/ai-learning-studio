@@ -262,7 +262,7 @@
         {
           "id": "ai-assistant-language-tutor",
           "label": "외국어 회화 코치",
-          "description": "번역을 최소화하고 흐름을 이어가며 맞춤형으로 회화를 훈련시키는 파트너 지침서",
+          "description": "맞춤형 회화를 훈련시키는 1:1 외국어 파트너 지침 프롬프트입니다.",
           "route": "/ai-assistant/language-tutor-guide/"
         },
         {
@@ -311,7 +311,7 @@
         },
         {
           "id": "image-ai-resume-profile",
-          "label": "AI 이력서·프로필 사진 생성",
+          "label": "AI 전문 프로필 사진 생성",
           "description": "인물 사진을 활용해 신뢰감 있고 깔끔한 분위기의 이력서 및 비즈니스 프로필 사진을 제작합니다.",
           "route": "/image-ai/resume-profile/"
         },

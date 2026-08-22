@@ -2,7 +2,7 @@
 registry_id: image-ai-child-doodle
 title: 사진을 어린이 손그림으로 바꾸기
 description: 사진을 어린아이가 검은 펜과 색연필로 따라 그린 것처럼 바꿔보세요.
-preview: /assets/images/image-ai/child-doodle/preview.jpg, /assets/images/image-ai/child-doodle/preview2.png
+preview: /assets/images/image-ai/child-doodle/preview.webp, /assets/images/image-ai/child-doodle/preview2.webp
 ai_target: ChatGPT,Gemini
 source: Threads (@KJdOZ8CYh)
 ---

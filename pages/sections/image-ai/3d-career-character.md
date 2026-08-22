@@ -2,7 +2,7 @@
 registry_id: image-ai-3d-career-character
 title: 나만의 3D 직업 캐릭터 만들기
 description: 내 사진과 직업을 바탕으로 다양한 모습의 3D 캐릭터 포스터 프롬프트를 만들어 보세요.
-preview: /assets/images/image-ai/3d-career-character/preview.png
+preview: /assets/images/image-ai/3d-career-character/preview.webp
 ai_target: chatGPT
 source: 자체 제작
 ---

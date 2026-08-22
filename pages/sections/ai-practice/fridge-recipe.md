@@ -18,13 +18,13 @@ AI가 사진을 보고, 사람이 확인하고, 대화를 이어가며 레시피
 아래 사진 중 하나를 저장해서 AI에 첨부해 보세요. 자신의 스마트폰으로 직접 집에 있는 식재료를 촬영해서 사용해도 됩니다! 
 (강의 중에는 다 함께 같은 사진으로 먼저 실습해 보는 것을 권장합니다.)
 
-![다양한 식재료가 있는 예제 #lightbox](/assets/images/ai-practice/fridge-recipe/fridge-various-ingredients.png)
+![다양한 식재료가 있는 예제 #lightbox](/assets/images/ai-practice/fridge-recipe/fridge-various-ingredients.webp)
 *(사진 1: Gemini가 생성한 다양한 식재료 예시 - 이미지를 길게 누르거나 우클릭하여 저장하세요)*
 
-![기본 식재료만 있는 예제 #lightbox](/assets/images/ai-practice/fridge-recipe/fridge-korean-basic.png)
+![기본 식재료만 있는 예제 #lightbox](/assets/images/ai-practice/fridge-recipe/fridge-korean-basic.webp)
 *(사진 2: Gemini가 생성한 기본 식재료 예시 - 이미지를 길게 누르거나 우클릭하여 저장하세요)*
 
-![AI가 생성한 식재료 예제 #lightbox](/assets/images/ai-practice/fridge-recipe/fridge-chatgpt-generated.png)
+![AI가 생성한 식재료 예제 #lightbox](/assets/images/ai-practice/fridge-recipe/fridge-chatgpt-generated.webp)
 *(사진 3: ChatGPT가 생성한 식재료 예시 - 이미지를 길게 누르거나 우클릭하여 저장하세요)*
 
 ---

@@ -43,5 +43,9 @@ templates/
 ## 3. 이미지 리소스 관리 규칙 (Image Assets)
 
 - 페이지에서 사용되는 모든 예제 이미지와 리소스는 `assets/images/<상위메뉴이름>/<페이지이름>/` 디렉토리에 저장해야 합니다.
-  - 예시: `assets/images/image-ai/typography/example-1.png`
+  - 예시: `assets/images/image-ai/typography/example-1.webp`
 - 파일명은 소문자와 하이픈(`-`)만을 사용하여 페이지 맥락을 알 수 있도록 명확하게 지정합니다.
+- **WebP 포맷 의무 및 최적화**: 웹 성능 및 LCP(Largest Contentful Paint) 최적화를 위해 이미지는 **반드시 WebP 포맷**을 사용해야 합니다.
+  - 신규 PNG/JPG 이미지를 추가한 후에는 **`python3 scripts/optimize_images.py --replace`**를 실행하여 WebP 변환 및 대용량 원본 정리를 수행해야 합니다.
+  - 모든 바이너리 이미지는 **파일당 최대 1MB 이하**여야 하며, 초과 시 빌드 파이프라인에서 자동으로 차단됩니다.
+

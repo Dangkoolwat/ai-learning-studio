@@ -498,7 +498,7 @@
     {
       "id": "ai-assistant-language-tutor",
       "title": "외국어 회화 코치",
-      "description": "번역을 최소화하고 흐름을 이어가며 맞춤형으로 회화를 훈련시키는 1:1 외국어 파트너 지침 프롬프트입니다.",
+      "description": "맞춤형 회화를 훈련시키는 1:1 외국어 파트너 지침 프롬프트입니다.",
       "route": "/ai-assistant/language-tutor-guide/",
       "source": "pages/sections/ai-assistant/language-tutor-guide.md",
       "type": "prompt-builder",
