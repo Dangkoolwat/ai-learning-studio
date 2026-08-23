@@ -28,15 +28,16 @@
 
 작업 종류 및 대상 키워드에 맞춰 **반드시 해당 가이드라인 문서를 먼저 독해**한 후 계획을 수립하고 코드를 수정합니다.
 
-| 작업 영역 및 주요 키워드 | 필수 레이지 로딩 가이드라인 | 주요 내용 |
+| 작업 영역 및 주요 키워드 | 필수 레이지 로딩 가이드라인 / 스킬 | 주요 내용 |
 | :--- | :--- | :--- |
 | **토큰 절약, 파일 읽기 범위, 도구 탐색 계층** | [`docs/agent-policy/tooling-efficiency.md`](docs/agent-policy/tooling-efficiency.md) | 수술적 독해, 500줄 독해 제한, 도구 계층 |
-| **코딩 스타일, JS/Python/CSS, 수정 원칙** | [`docs/agent-policy/coding-standards.md`](docs/agent-policy/coding-standards.md) | 수술적 수정 원칙, 생성 파일 직접 수정 금지 |
-| **레이아웃, 시각 토큰, UI 컴포넌트, 테마** | [`docs/design-guidelines.md`](docs/design-guidelines.md) | 정보구조, 테마 시스템, 공통 컴포넌트, 사이트 이펙트 검증 |
+| **코딩 스타일, JS/Python/CSS, 수정 원칙, 보안** | [`docs/agent-policy/coding-standards.md`](docs/agent-policy/coding-standards.md) <br> `.agents/skills/best-practices/` | 수술적 수정 원칙, 생성 파일 직접 수정 금지, 모던 웹 베스트 프랙티스 |
+| **레이아웃, 시각 토큰, UI/UX, 테마, 모던 디자인** | [`docs/design-guidelines.md`](docs/design-guidelines.md) <br> `.agents/skills/frontend-design/` <br> `.agents/skills/web-design-guidelines/` | 정보구조, 테마 시스템, 공통 컴포넌트, 세련된 UI 원칙, Vercel 웹 디자인 가이드 |
 | **프롬프트 3개 유형 (`static`, `builder`, `timeline`)** | [`docs/prompt-page-guidelines.md`](docs/prompt-page-guidelines.md) | 3가지 정식 유형, 그냥 프롬프트 vs 설정값 반영 프롬프트 분리 규칙 |
 | **데이터 파일, JSON 규칙, Markdown 콘텐츠** | [`docs/content-guidelines.md`](docs/content-guidelines.md) | `data/` 및 `pages/` 구조, 경로 일관성 |
-| **메타태그, canonical, sitemap, JSON-LD** | [`docs/seo-guidelines.md`](docs/seo-guidelines.md) | 정적 HTML 본문 보존, SEO 계약 |
-| **키보드 접근성, ARIA, 포커스, 320px 모바일** | [`docs/accessibility-guidelines.md`](docs/accessibility-guidelines.md) | 웹 접근성 표준, 반응형/성능 규칙 |
+| **메타태그, canonical, sitemap, JSON-LD, SEO** | [`docs/seo-guidelines.md`](docs/seo-guidelines.md) <br> `.agents/skills/seo/` | 정적 HTML 본문 보존, SEO 계약 및 검색 최적화 |
+| **키보드 접근성, ARIA, 포커스, WCAG 2.2 표준** | [`docs/accessibility-guidelines.md`](docs/accessibility-guidelines.md) <br> `.agents/skills/accessibility/` | 웹 접근성 표준(WCAG 2.2), 스크린 리더, 반응형 규칙 |
+| **성능 최적화, Core Web Vitals, 웹 품질 감사** | [`docs/deployment-guidelines.md`](docs/deployment-guidelines.md) <br> `.agents/skills/web-quality-audit/` <br> `.agents/skills/core-web-vitals/` <br> `.agents/skills/performance/` | Lighthouse 종합 감사, LCP/CLS/INP 최적화 지침 |
 | **빌드, Vercel 정적 배포, GitHub Actions, dist/** | [`docs/deployment-guidelines.md`](docs/deployment-guidelines.md) | `python3 scripts/build.py`, 배포 규칙 |
 
 ---
