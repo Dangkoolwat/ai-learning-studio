@@ -148,9 +148,18 @@ def build_navigation_items_html(
             )
 
         href = route_href_for_output(current_output_path, page.route, dist_root)
-        is_current = current_page.id == page.id or current_route == _normalize_route(page.route)
-        list_item_class = "navigation-item is-current" if is_current else "navigation-item"
-        aria_current = ' aria-current="page"' if is_current else ""
+        is_current_page = current_page.id == page.id or current_route == _normalize_route(page.route)
+        has_active_child = any(
+            (current_page.id == sub.id or current_route == _normalize_route(sub.route))
+            for sub in section.items
+        )
+        if is_current_page:
+            list_item_class = "navigation-item is-current"
+        elif has_active_child:
+            list_item_class = "navigation-item is-parent-active"
+        else:
+            list_item_class = "navigation-item"
+        aria_current = ' aria-current="page"' if is_current_page else ""
         sub_html = ""
         if section.items:
             sub_items_list = []

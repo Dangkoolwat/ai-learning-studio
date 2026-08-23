@@ -10,6 +10,25 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ theme_stylesheet_url }}">
 <link rel="stylesheet" href="{{ site_stylesheet_url }}">
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem("als-theme-preference");
+      var theme = (saved === "dark" || saved === "light") ? saved : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme-mode", theme);
+
+      // 마지막 방문 메뉴 자동 복원
+      var path = window.location.pathname.replace(/\/index\.html$/, "/");
+      var isHome = (path === "" || path === "/" || path === "/index.html");
+      if (isHome && !window.location.search.includes("home=true")) {
+        var lastRoute = localStorage.getItem("als-last-visited-route");
+        if (lastRoute && lastRoute !== "/" && lastRoute !== "/index.html" && lastRoute !== path) {
+          window.location.replace(lastRoute);
+        }
+      }
+    } catch(e) {}
+  })();
+</script>
 <script type="module" src="{{ site_script_url }}"></script>
 {{ canonical_link_html }}
 <meta property="og:title" content="{{ page_title }}">

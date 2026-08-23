@@ -420,7 +420,7 @@
     {
       "id": "ai-assistant",
       "title": "나만의 AI 만들기",
-      "description": "프로젝트와 GPTs(GEM)를 활용해 작업별로 AI를 분리하고, 더 일관된 결과를 만들어 보세요.",
+      "description": "작업별로 AI를 분리하고 일관된 결과를 만들어 보세요.",
       "route": "/ai-assistant/",
       "source": "pages/sections/ai-assistant.md",
       "type": "static-prompt",
@@ -550,7 +550,7 @@
     {
       "id": "image-ai",
       "title": "이미지 생성",
-      "description": "이미지 프롬프트의 특징을 이해하고 원하는 이미지를 더 정확하게 만들어 보세요.",
+      "description": "이미지 프롬프트의 특징을 이해하고 이미지를 더 정확하게 만들어 보세요.",
       "route": "/image-ai/",
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",

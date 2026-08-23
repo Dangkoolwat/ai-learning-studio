@@ -1,7 +1,7 @@
 ---
 registry_id: ai-assistant
 title: 나만의 AI 만들기
-description: 프로젝트와 GPTs(GEM)를 활용해 작업별로 AI를 분리하고, 더 일관된 결과를 만들어 보세요.
+description: 작업별로 AI를 분리하고 일관된 결과를 만들어 보세요.
 ---
 
 # 나만의 AI 만들기

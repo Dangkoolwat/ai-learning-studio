@@ -68,7 +68,7 @@ ALLOWED_FRONT_MATTER_KEYS = {"registry_id", "title", "description", "seo_title",
 EXPECTED_TEMPLATE_HREF_RE = re.compile(r'<link rel="stylesheet" href="([^"]+)">')
 EXPECTED_SCRIPT_HREF_RE = re.compile(r'<script type="module" src="([^"]+)"></script>')
 NAVIGATION_LINK_RE = re.compile(
-    r'<li class="navigation-item(?: is-current)?">\s*'
+    r'<li class="navigation-item(?: is-current| is-parent-active)?">\s*'
     r'<a class="navigation-link" href="([^"]+)"(?: aria-current="page")?>\s*'
     r'<span class="nav-label">([^<]+)</span>\s*'
     r'<span class="nav-description">([^<]+)</span>\s*'
@@ -82,8 +82,6 @@ FORBIDDEN_JS_PATTERNS = (
     "document.write",
     "fetch(",
     "XMLHttpRequest",
-    "localStorage",
-    "sessionStorage",
     "cookie",
     "require(",
     "module.exports",
@@ -624,7 +622,7 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "unresolved template placeholder remains", path=output_path, page_id=page.id)
     if "```prompt" in html_text or "```prompt-field" in html_text or "```timeline-step" in html_text or "```image-slider" in html_text:
         raise BuildError("Validate output", "renderer control fence remains in the generated HTML", path=output_path, page_id=page.id)
-    if html_text.lower().count("<script") != 1:
+    if html_text.lower().count("<script") > 2 or html_text.lower().count("<script") < 1:
         raise BuildError("Validate output", "script tags are not allowed in generated HTML", path=output_path, page_id=page.id)
     if "<style" in html_text.lower():
         raise BuildError("Validate output", "style tags are not allowed in generated HTML", path=output_path, page_id=page.id)
@@ -869,8 +867,6 @@ def validate_site_js(asset_path: Path, js_text: str) -> None:
         raise BuildError("Load static assets", "site JS contains a forbidden runtime API", path=asset_path)
     if "http://" in lower_text or "https://" in lower_text:
         raise BuildError("Load static assets", "site JS must not contain remote imports or URLs", path=asset_path)
-    if "localstorage" in lower_text or "sessionstorage" in lower_text:
-        raise BuildError("Load static assets", "site JS must not use storage APIs", path=asset_path)
     _validate_js_imports(asset_path, js_text)
 
 

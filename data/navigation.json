@@ -170,7 +170,7 @@
     {
       "id": "ready-to-use",
       "label": "바로 써보기",
-      "description": "필요한 조건만 선택해 프롬프트를 만들고 바로 사용하기",
+      "description": "준비된 프롬프트를 내 상황에 맞게 바꾸고 바로 활용해 보세요.",
       "order": 3,
       "items": [
         {
@@ -226,7 +226,7 @@
     {
       "id": "ai-assistant",
       "label": "나만의 AI 만들기",
-      "description": "프로젝트와 GPTs(GEM)를 활용해 작업별로 AI를 분리하고, 더 일관된 결과를 만들어 보세요.",
+      "description": "작업별로 AI를 분리하고 일관된 결과를 만들어 보세요.",
       "order": 4,
       "items": [
         {
@@ -288,7 +288,7 @@
     {
       "id": "image-ai",
       "label": "이미지 만들기",
-      "description": "이미지 프롬프트의 특징을 이해하고 원하는 이미지를 더 정확하게 만들어 보세요.",
+      "description": "이미지 프롬프트의 특징을 이해하고 이미지를 더 정확하게 만들어 보세요.",
       "order": 5,
       "items": [
         {

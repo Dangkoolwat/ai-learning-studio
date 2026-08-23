@@ -1,4 +1,6 @@
 const COMPACT_MEDIA_QUERY = window.matchMedia("(max-width: 899px)");
+const NAV_SCROLL_KEY = "als-nav-scroll-pos";
+const LAST_MENU_ROUTE_KEY = "als-last-visited-route";
 
 function setNavigationState(root, toggle, isOpen) {
   root.setAttribute("data-navigation-state", isOpen ? "open" : "closed");
@@ -14,6 +16,115 @@ export function initNavigation() {
 
   if (!(toggle instanceof HTMLButtonElement) || !(navigation instanceof HTMLElement)) {
     return;
+  }
+
+  // 현재 방문한 페이지 경로 기억 (홈/루트가 아닌 실제 메뉴일 때)
+  const currentPath = window.location.pathname;
+  if (currentPath && currentPath !== "/" && currentPath !== "/index.html") {
+    try {
+      localStorage.setItem(LAST_MENU_ROUTE_KEY, currentPath);
+    } catch (e) {}
+  }
+
+  // 데스크톱 환경에서 사이드바 스크롤 위치 복원
+  if (!COMPACT_MEDIA_QUERY.matches) {
+    try {
+      const savedPos = sessionStorage.getItem(NAV_SCROLL_KEY);
+      if (savedPos !== null) {
+        navigation.scrollTop = parseInt(savedPos, 10);
+      }
+    } catch (e) {}
+
+    // 링크 클릭 직전의 스크롤 위치 및 마지막 메뉴 경로 기억
+    navigation.addEventListener("click", (e) => {
+      const link = e.target.closest("a");
+      if (!link) return;
+
+      try {
+        sessionStorage.setItem(NAV_SCROLL_KEY, String(navigation.scrollTop));
+        const targetPath = link.pathname || link.getAttribute("href");
+        if (targetPath && targetPath !== "/" && targetPath !== "/index.html") {
+          localStorage.setItem(LAST_MENU_ROUTE_KEY, targetPath);
+        }
+      } catch (err) {}
+    });
+
+    // 스크롤 변경 시 위치 실시간 기록
+    navigation.addEventListener("scroll", () => {
+      try {
+        sessionStorage.setItem(NAV_SCROLL_KEY, String(navigation.scrollTop));
+      } catch (err) {}
+    }, { passive: true });
+  }
+
+  // 실시간 사이드바 검색/필터 기능
+  const searchInput = navigation.querySelector(".site-nav-search__input");
+  const searchClear = navigation.querySelector(".site-nav-search__clear");
+  const navItems = navigation.querySelectorAll(".navigation-item");
+
+  if (searchInput instanceof HTMLInputElement) {
+    const handleSearch = () => {
+      const query = searchInput.value.trim().toLowerCase();
+      const isSearching = query.length > 0;
+      
+      if (searchClear instanceof HTMLButtonElement) {
+        searchClear.hidden = !isSearching;
+      }
+
+      if (isSearching) {
+        navigation.classList.add("is-searching");
+      } else {
+        navigation.classList.remove("is-searching");
+      }
+
+      navItems.forEach((item) => {
+        if (!isSearching) {
+          item.classList.remove("nav-item--hidden");
+          const subItems = item.querySelectorAll(".sub-navigation-item");
+          subItems.forEach((sub) => sub.classList.remove("nav-item--hidden"));
+          return;
+        }
+
+        const mainText = item.querySelector(".navigation-link")?.textContent?.toLowerCase() || "";
+        const subItems = item.querySelectorAll(".sub-navigation-item");
+        let hasMatchingSub = false;
+
+        subItems.forEach((sub) => {
+          const subText = sub.textContent?.toLowerCase() || "";
+          if (subText.includes(query)) {
+            sub.classList.remove("nav-item--hidden");
+            hasMatchingSub = true;
+          } else {
+            sub.classList.add("nav-item--hidden");
+          }
+        });
+
+        if (mainText.includes(query) || hasMatchingSub) {
+          item.classList.remove("nav-item--hidden");
+        } else {
+          item.classList.add("nav-item--hidden");
+        }
+      });
+    };
+
+    searchInput.addEventListener("input", handleSearch);
+
+    if (searchClear instanceof HTMLButtonElement) {
+      searchClear.addEventListener("click", () => {
+        searchInput.value = "";
+        searchInput.focus();
+        handleSearch();
+      });
+    }
+
+    // 단축키 (Cmd+K / Ctrl+K) 포커스 지원
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+    });
   }
 
   let isOpen = false;
