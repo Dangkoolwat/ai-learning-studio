@@ -10,14 +10,16 @@
 - 사이드바 한글 자간 및 너비 최적화
 - 왼쪽 사이드바 대메뉴 설명 문구 수정
 - 화면 펄럭임(Flicker) 완전 해결
-- 스마트 아코디언 및 실시간 빠른 검색 바 탑재
+- 스마트 아코디언 및 실시간 빠른 검색 바(`Cmd+K`) 탑재
 - 마지막 선택 메뉴 영구 기억 및 상태 복원
 - 완성된 프롬프트 결과물 박스의 테두리/배경 토큰 통일
-- **모든 슬라이딩 및 글라이딩 트랜지션 모션 일체 제거 완료 (즉각적이고 깔끔한 display 토글 복원)**
+- **Git 커밋 및 `v2.0` 태그 생성 후 원격 저장소(`origin`) 푸시 완료**
 
-## 수정 내용 (`assets/css/site.css`, `assets/js/navigation.js`)
-- `max-height`, `opacity`, `transform` 등 모든 슬라이딩 트랜지션 애니메이션 및 JS 딜레이 훅을 완전히 제거
-- 선택된 메뉴의 서브메뉴만 `display: block`으로 군더더기 없이 즉각 정갈하게 표시되고, 나머지 메뉴는 깔끔하게 닫힌 기본 상태로 복원 완료
+## Git 릴리즈 내역
+- **Branch**: `design/modern-ui-darkmode`
+- **Tag**: `v2.0` (Release v2.0: Modern AI Studio UI, Dark Mode, Smart Navigation, Persistent State)
+- **Commit**: `441b828` (`feat(ui): 모던 AI 스튜디오 디자인 전면 리뉴얼 및 다크 모드/스마트 아코디언 탑재 (v2.0)`)
+- **Remote**: GitHub 푸시 완료 (`To https://github.com/Dangkoolwat/ai-learning-studio.git`)
 
 ## 검증 결과
 - `python3 scripts/build.py` 정적 사이트 빌드 정상 완료 (Exit Code: 0)
