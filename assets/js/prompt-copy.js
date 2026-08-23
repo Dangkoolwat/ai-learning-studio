@@ -394,8 +394,7 @@ export function initPromptCopy() {
       if (ok) {
         flashFeedback(button, status, "복사되었습니다!", defaultLabel);
       } else {
-        // Fallback feedback even if browser clipboard permissions are restricted in headless/sandbox
-        flashFeedback(button, status, "복사되었습니다!", defaultLabel);
+        flashFeedback(button, status, "복사 실패", defaultLabel);
       }
     });
   });

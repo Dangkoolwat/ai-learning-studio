@@ -14,7 +14,6 @@ from core.component_engine import (
     render_prompt_item_description_fragment,
 )
 from core.component_models import ImageSliderComponent, PageBodyComponent, PageIntroComponent, PromptCollectionComponent, PromptItemComponent
-from core.errors import BuildError
 from html import escape as escape_html
 from core.renderer_models import PageRendererContext, PageRendererResult
 from core.renderer_validation import parse_image_slider_block, parse_prompt_block, validate_renderer_result
@@ -133,29 +132,10 @@ def _build_initial_clean_prompt_text(prompt_body: str) -> str:
         processed_line = pattern.sub(replace_bracket, line)
         processed_lines.append(processed_line)
 
-    filtered_lines = [l for l in processed_lines if not re.match(r"^-\s*[^:]+:\s*$", l.strip())]
+    filtered_lines = [line_item for line_item in processed_lines if not re.match(r"^-\s*[^:]+:\s*$", line_item.strip())]
     return "\n".join(filtered_lines).strip()
 
 
-def render_static_prompt_page(context: PageRendererContext) -> PageRendererResult:
-    """Render a static prompt page."""
-
-    prompt_blocks = [parse_prompt_block(block) for block in context.control_blocks if block.label == "prompt"]
-    slider_blocks = _parse_preview_blocks(context) or [
-        parse_image_slider_block(block) for block in context.control_blocks if block.label == "image-slider"
-    ]
-    intro_result = render_page_intro_component(
-        PageIntroComponent(page_title=context.page_title, page_description=context.page_description),
-        context.component_templates,
-    )
-    body_result = render_page_body_component(
-        PageBodyComponent(body_html=context.rendered_markdown_html),
-        context.component_templates,
-    )
-    slider_results = [
-        render_image_slider_component(_build_image_slider_component(block), context.component_templates)
-        for block in slider_blocks
-    ]
 def _build_ai_badges_and_actions(ai_targets: list[str]) -> tuple[str, str]:
     badges_html = []
     for target in ai_targets:
@@ -207,7 +187,6 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
     )
 
     prompt_item_results = []
-    prompt_block_html_map = {}
     for prompt_block in prompt_blocks:
         if prompt_block.ai_target:
             block_targets = [t.strip() for t in prompt_block.ai_target.split(",") if t.strip()]

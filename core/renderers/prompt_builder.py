@@ -78,10 +78,10 @@ def render_prompt_builder_page(context: PageRendererContext) -> PageRendererResu
         for field_block in field_blocks
     ]
     fields_html = "\n".join(result.rendered_html for result in field_results)
-    
+
     template_blocks = [parse_prompt_template_block(block) for block in context.control_blocks if block.label == "prompt-template"]
     prompt_template_html = template_blocks[0].body if template_blocks else ""
-    
+
     page_ai_target_str = context.parsed_front_matter.get("ai_target", "").strip()
     block_targets = [t.strip() for t in page_ai_target_str.split(",") if t.strip()] if page_ai_target_str else []
     ai_badges_block, ai_actions_block = _build_ai_badges_and_actions(block_targets)

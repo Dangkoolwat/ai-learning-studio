@@ -17,8 +17,8 @@ from uuid import uuid4
 
 from core.errors import BuildError
 from core.component_engine import load_approved_component_templates
-from core.component_models import COMPONENT_ENGINE_VERSION, COMPONENT_VALIDATION_STATUS, ComponentRenderResult, LoadedComponentTemplates
-from core.component_registry import APPROVED_COMPONENT_IDS, APPROVED_COMPONENT_SPECS, OPTIONAL_COMPONENT_IDS
+from core.component_models import COMPONENT_ENGINE_VERSION, COMPONENT_VALIDATION_STATUS, LoadedComponentTemplates, OPTIONAL_COMPONENT_IDS
+from core.component_registry import APPROVED_COMPONENT_IDS, APPROVED_COMPONENT_SPECS
 from core.component_validation import validate_component_registry
 from core.data_consistency import validate_navigation_registry_consistency
 from core.navigation import NavigationData, load_navigation
@@ -1269,7 +1269,6 @@ def validate_generated_output(
 
     published_pages = registry.published_pages()
     draft_pages = registry.draft_pages()
-    expected_routes = [page.route for page in published_pages]
     expected_html_files = {
         route_to_output_path(page.route, staging_dir).relative_to(staging_dir).as_posix()
         for page in published_pages

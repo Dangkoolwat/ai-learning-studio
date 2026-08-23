@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from core.component_models import ComponentSpec, OPTIONAL_COMPONENT_IDS
+from core.component_models import ComponentSpec
 
 
 APPROVED_COMPONENT_SPECS = (

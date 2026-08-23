@@ -15,7 +15,9 @@ export function initThemeToggle() {
       if (saved === "dark" || saved === "light") {
         return saved;
       }
-    } catch (e) {}
+    } catch {
+      // Storage access may fail under strict sandboxing or disabled storage policies
+    }
 
     return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
@@ -44,7 +46,9 @@ export function initThemeToggle() {
     const nextTheme = isDark ? "light" : "dark";
     try {
       localStorage.setItem(STORAGE_KEY, nextTheme);
-    } catch (e) {}
+    } catch {
+      // Storage write may fail under strict sandboxing
+    }
     applyTheme(nextTheme);
   });
 
@@ -55,7 +59,7 @@ export function initThemeToggle() {
         if (!localStorage.getItem(STORAGE_KEY)) {
           applyTheme(e.matches ? "dark" : "light");
         }
-      } catch (err) {
+      } catch {
         applyTheme(e.matches ? "dark" : "light");
       }
     });

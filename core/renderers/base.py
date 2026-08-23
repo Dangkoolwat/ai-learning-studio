@@ -5,7 +5,6 @@ from __future__ import annotations
 from html import escape as escape_html
 from pathlib import Path
 import re
-from textwrap import indent
 
 from core.errors import BuildError
 
@@ -230,16 +229,15 @@ def _render_inline_markup(text: str, *, source_path: Path) -> str:
         href = match.group(3).strip()
         if not _is_safe_internal_href(href):
             raise BuildError("Render Markdown", "only internal links/images are allowed in markdown content", path=source_path)
-        
+
         if is_image:
             if "#lightbox" in label:
                 clean_label = label.replace("#lightbox", "").strip()
                 filename = href.split('/')[-1].split('#')[0].split('?')[0]
                 if not filename:
                     filename = 'download'
-                
                 svg_icon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>'
-                
+
                 wrapper_html = (
                     f'<div class="image-wrapper lightbox-enabled">'
                     f'<img src="{escape_html(href, quote=True)}" alt="{clean_label}">'
@@ -251,7 +249,7 @@ def _render_inline_markup(text: str, *, source_path: Path) -> str:
                 rendered_parts.append(f'<img src="{escape_html(href, quote=True)}" alt="{label}">')
         else:
             rendered_parts.append(f'<a href="{escape_html(href, quote=True)}">{label}</a>')
-            
+
         last_index = match.end()
 
     rendered_parts.append(_render_bold_and_escape(text[last_index:]))

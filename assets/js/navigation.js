@@ -38,7 +38,9 @@ export function initNavigation() {
   if (currentPath && currentPath !== "/" && currentPath !== "/index.html") {
     try {
       localStorage.setItem(LAST_MENU_ROUTE_KEY, currentPath);
-    } catch (e) {}
+    } catch {
+      // LocalStorage access restricted in private mode
+    }
   }
 
   // 데스크톱 환경에서 사이드바 스크롤 위치 복원
@@ -48,7 +50,9 @@ export function initNavigation() {
       if (savedPos !== null) {
         navigation.scrollTop = parseInt(savedPos, 10);
       }
-    } catch (e) {}
+    } catch {
+      // SessionStorage access restricted
+    }
 
     // 링크 클릭 직전의 스크롤 위치 및 마지막 메뉴 경로 기억
     navigation.addEventListener("click", (e) => {
@@ -61,14 +65,18 @@ export function initNavigation() {
         if (targetPath && targetPath !== "/" && targetPath !== "/index.html") {
           localStorage.setItem(LAST_MENU_ROUTE_KEY, targetPath);
         }
-      } catch (err) {}
+      } catch {
+        // SessionStorage / LocalStorage write restricted
+      }
     });
 
     // 스크롤 변경 시 위치 실시간 기록
     navigation.addEventListener("scroll", () => {
       try {
         sessionStorage.setItem(NAV_SCROLL_KEY, String(navigation.scrollTop));
-      } catch (err) {}
+      } catch {
+        // Scroll position persistence restricted
+      }
     }, { passive: true });
   }
 

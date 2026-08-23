@@ -212,6 +212,9 @@ Vercel 정적 배포
 │  └─ pull_request_template.md
 │
 ├─ docs/
+│  ├─ agent-policy/
+│  │  ├─ tooling-efficiency.md
+│  │  └─ coding-standards.md
 │  ├─ design-guidelines.md
 │  ├─ prompt-page-guidelines.md
 │  ├─ content-guidelines.md
@@ -220,83 +223,74 @@ Vercel 정적 배포
 │  └─ deployment-guidelines.md
 │
 ├─ assets/
+│  ├─ css/
+│  │  └─ site.css
+│  ├─ js/
 │  ├─ images/
 │  ├─ icons/
 │  └─ fonts/
 │
 ├─ components/
 ├─ core/
-├─ css/
 ├─ data/
 ├─ design/
 ├─ pages/
 ├─ templates/
 ├─ scripts/
-├─ agent-log/
+├─ tests/
+├─ agent-logs/
 └─ dist/
 ```
 
 ### 경로 역할
 
-- `assets/`: 공개 정적 자산 원본
-- `components/`: 재사용 UI 컴포넌트
-- `core/`: 공통 동작과 서비스
-- `css/`: 구조·공통·접근성 스타일
-- `data/`: 사이트·메뉴·페이지·테마 등록 데이터
-- `design/`: 사람이 관리하는 테마 설계와 생성 결과
-- `pages/`: 페이지 콘텐츠와 페이지별 자산
-- `templates/`: Python 정적 생성 템플릿
-- `scripts/`: 빌드·검증·생성 스크립트
-- `agent-log/`: 에이전트 작업 기록
-- `dist/`: Vercel 배포 결과
+- `assets/`: 정적 CSS, JS, 이미지, 아이콘, 폰트 자산 원본
+- `components/`: 재사용 HTML 컴포넌트 조각
+- `core/`: Python 정적 빌드 코어 엔진 (렌더러, 테마, 템플릿, 데이터 검증)
+- `data/`: 내비게이션(`navigation.json`) 및 페이지 등록부(`page-registry.json`)
+- `design/`: 테마 토큰 및 디자인 설계
+- `pages/`: 페이지 콘텐츠(Markdown) 및 페이지별 자산
+- `templates/`: 페이지 단위 정적 HTML 템플릿
+- `scripts/`: 빌드(`build.py`), 이미지 최적화, 감사 스크립트
+- `tests/`: 파이썬 단위 테스트 스위트
+- `agent-logs/`: 일자별 에이전트 작업 기록
+- `dist/`: Vercel 정적 배포 결과물
 
 ---
 
 ## 9. 데이터 계약
 
-권장 데이터:
+기본 데이터 파일:
 
 ```text
 data/
-├─ site.json
-├─ menu.json
-├─ pages.json
-└─ themes.json
+├─ navigation.json
+└─ page-registry.json
 ```
 
-### `site.json`
+### `navigation.json`
 
-- 사이트 이름
-- 기본 설명
-- 운영 도메인
-- 기본 언어
-- 기본 테마
-- 외부 AI 서비스 링크
+- 사이트 메뉴 구조 및 상위 섹션/하위 메뉴 정의
+- `version`: 내비게이션 스키마 버전 (현재: `1`)
+- `sections`: 상위 메뉴 영역 배열 (`id`, `label`, `description`, `order`, `items`)
+  - `items`: 하위 메뉴 배열 (`id`, `label`, `description`, `route`)
 
-### `menu.json`
+### `page-registry.json`
 
-- 상위 영역
-- 하위 메뉴
-- 표시 순서
-- 페이지 경로
-- 메뉴 아이콘 또는 식별자
-
-### `pages.json`
-
-- 페이지 ID
-- 경로
-- 페이지 유형
-- 데이터 파일
-- 템플릿
-- 공개 여부
-- 색인 여부
-
-### `themes.json`
-
-- 테마 ID
-- 표시 이름
-- CSS 경로
-- 기본 테마 여부
+- 저장소 내 모든 정적 페이지의 단일 진실 등록부
+- `version`: 페이지 레지스트리 스키마 버전 (현재: `1`)
+- `entries`: 개별 페이지 메타데이터 객체 배열
+  - `id`: 고유 페이지 식별자
+  - `title`: 페이지 제목
+  - `description`: 페이지 메타 설명문
+  - `route`: 정적 생성 URL 경로 (`/` 및 trailing slash 규칙 준수)
+  - `source`: 마크다운 원본 소스 경로 (`pages/...`)
+  - `type`: 프롬프트 렌더러 유형 (`static-prompt`, `prompt-builder`, `practice-timeline`)
+  - `section`: 소속 상위 메뉴 섹션 ID
+  - `order`: 정렬 순서
+  - `navigation`: 사이드바/내비게이션 노출 여부 (`true`/`false`)
+  - `status`: 게시 상태 (`published`/`draft`)
+  - `lang`: 기본 언어 (`ko`)
 
 모든 leaf 메뉴 경로는 페이지 등록과 연결되어야 합니다.
 

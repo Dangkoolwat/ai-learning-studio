@@ -1,6 +1,6 @@
 # AI Learning Studio
 
-![Python](https://img.shields.io/badge/Python-3.14-blue?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel&logoColor=white)
 ![License: Custom](https://img.shields.io/badge/License-Custom-green)
 
@@ -192,6 +192,28 @@ PR 기준 검증과 배포 전 확인 절차는 `docs/deployment-guidelines.md`�
 ---
 
 
+
+# 개발 및 테스트 가이드
+
+### 1. 개발 환경 설정
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+```
+
+### 2. 코드 린트 및 포맷 검사
+```bash
+ruff check core scripts tests
+```
+
+### 3. 단위 테스트 및 정적 빌드 검증
+```bash
+python3 -m unittest discover -s tests
+python3 scripts/build.py --check
+```
+
+---
 
 # 배포
 

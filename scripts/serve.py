@@ -36,7 +36,7 @@ def main() -> None:
         sys.exit(1)
 
     os.chdir(DIST_DIR)
-    
+
     # Avoid address already in use error on rapid restarts
     socketserver.TCPServer.allow_reuse_address = True
 

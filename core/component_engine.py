@@ -6,8 +6,6 @@ from html import escape as escape_html
 from pathlib import Path
 
 from core.component_models import (
-    COMPONENT_ENGINE_VERSION,
-    COMPONENT_VALIDATION_STATUS,
     ComponentRenderResult,
     LoadedComponentTemplates,
     PageBodyComponent,
@@ -20,7 +18,7 @@ from core.component_models import (
     PromptItemComponent,
     TimelineStepComponent,
 )
-from core.component_registry import APPROVED_COMPONENT_BY_ID, APPROVED_COMPONENT_IDS, APPROVED_COMPONENT_SPECS
+from core.component_registry import APPROVED_COMPONENT_BY_ID, APPROVED_COMPONENT_SPECS
 from core.component_validation import validate_component_registry, validate_component_template_output, validate_component_template_source
 from core.errors import BuildError
 from core.template_engine import render_placeholder_template

@@ -1,32 +1,61 @@
-# 작업 진행 로그 (2026-08-23)
+# AI Learning Studio 작업 로그 (2026-08-23)
 
 ## 작업 개요
-- 커뮤니티 스킬 `addyosmani/web-quality-skills` 및 UI/UX 추천 스킬 설치
-- `AGENTS.md` 및 `docs/design-guidelines.md` 지침 업데이트
-- 상단 우측 다크 테마 토글 버튼 추가 및 `localStorage` 영구 보존 적용
-- Linear / Raycast / Vercel 스타일 모던 AI 스튜디오 디자인 전면 리뉴얼
-- 이미지 슬라이더 다크 모드 스타일 지원
-- 프롬프트 영역 배경색 분리 (상단: 쿨그레이/차콜 ↔ 하단: 화이트/딥블랙)
-- 사이드바 한글 자간 및 너비 최적화
-- 왼쪽 사이드바 대메뉴 설명 문구 수정
-- 화면 펄럭임(Flicker) 완전 해결
-- 스마트 아코디언 및 실시간 빠른 검색 바(`Cmd+K`) 탑재
-- 마지막 선택 메뉴 영구 기억 및 상태 복원
-- 완성된 프롬프트 결과물 박스의 테두리/배경 토큰 통일
-- **Git 커밋 및 `v2.0` 태그 생성 후 원격 저장소(`origin`) 푸시 완료**
+7대 핵심 미비점, 후속 5종 미비점, 4종 권장사항 및 `requirements-dev.txt` 개발 환경 구축, 로컬 가상환경(`.venv`) 기반 Ruff 실제 검증(0 errors) 완료.
 
-## Git 릴리즈 내역
-- **Branch**: `design/modern-ui-darkmode`
-- **Tag**: `v2.0` (Release v2.0: Modern AI Studio UI, Dark Mode, Smart Navigation, Persistent State)
-- **Commit**: `441b828` (`feat(ui): 모던 AI 스튜디오 디자인 전면 리뉴얼 및 다크 모드/스마트 아코디언 탑재 (v2.0)`)
-- **Remote**: GitHub 푸시 완료 (`To https://github.com/Dangkoolwat/ai-learning-studio.git`)
+---
 
-## 검증 결과
-- `python3 scripts/build.py` 정적 사이트 빌드 정상 완료 (Exit Code: 0)
-- `python3 -m unittest discover tests` 44개 단위 테스트 전체 통과 (OK)
+## 세부 수정 내역
 
-## 추가 유지보수 및 모듈화 작업 (v2.0 후속)
-- `assets/js/dom-utils.js` 공통 유틸리티 모듈 추출 (`sanitizeInput`, `copyToClipboard`, `showTemporaryFeedback` 등)
-- `assets/js/prompt-copy.js`, `assets/js/prompt-builder.js` 중복 로직 일원화 및 JSDoc 주석 표준화
-- `assets/js/site.js`, `assets/js/navigation.js` 모듈 진입점 및 역할별 아키텍처 문서화
-- UI/UX 빠른 대응을 위한 클라이언트 공통 함수 재사용성 및 유지보수성 대폭 강화 완료
+1. **개발 의존성 명시 및 개발 가이드 보강 (`requirements-dev.txt`, `README.md`)**
+   - `requirements-dev.txt` 생성: `ruff>=0.9.0`, `pytest>=8.0.0`
+   - `README.md`: 가상환경 설정, `ruff check`, `pytest`/`unittest` 실행 가이드 추가
+
+2. **로컬 실제 Ruff 린트 무결성 검증 (`.venv/bin/ruff check`)**
+   - 로컬 가상환경(`.venv`) 생성 후 `pip install -r requirements-dev.txt` 완료
+   - `ruff check core scripts tests` 실실행 결과: **All checks passed (0 errors)** 확인
+
+3. **CI 파이프라인 및 PR 트리거 연동 (`.github/workflows/quality-check.yml`)**
+   - `pull_request: branches: [main]` 트리거 추가
+   - `pip install ruff` 및 `ruff check core scripts tests` 린트 단계 추가
+   - `python3 -m unittest discover -s tests` 실행 단계 추가
+
+4. **클립보드 복사 실패 피드백 버그 수정 (`assets/js/prompt-copy.js`, `assets/js/prompt-builder.js`)**
+   - 복사 실패 분기 시 "복사 실패" 텍스트 및 "is-error" 상태 클래스 부여 분기 정상화
+
+5. **코어 엔진 단위 테스트 스위트 전면 확충 (`tests/`)**
+   - `tests/test_theme_engine.py`: 테마 파싱, 레지스트리 빌드, CSS 에셋 생성 검증
+   - `tests/test_template_engine.py`: 템플릿 로딩, 본문 클래스 빌더, 상대 경로 해석, 변수 치환 검증
+   - `tests/test_component_engine.py`: 컴포넌트 레지스트리 무결성, PageIntro, PromptItem, PromptBuilder 렌더링 검증
+   - `tests/test_page_renderers.py`: 5개 렌더러(`static-prompt`, `prompt-builder`, `practice-timeline`, `markdown-prompt`, `landing`) 디스패치 및 렌더링 검증
+   - `tests/test_build_pipeline.py`: 마크다운 변환, 소스 탐색, 에셋 검증, sitemap/robots 생성 검증
+   - 단위 테스트 스위트: 기존 44개 -> **총 64개 테스트로 대폭 확장** 및 100% 통과
+
+6. **Data First 원칙 준수 및 아키텍처 리팩토링 (`assets/js/prompt-builder.js`)**
+   - JS 내부에 하드코딩되어 있던 ~150줄의 한국어 프롬프트 템플릿 및 `pageId` 분기 제거
+   - 마크다운/HTML의 `<template id="prompt-builder-template">` 기반 순수 렌더러로 완전 통일
+
+7. **문서 및 버전 동기화 (`PROJECT.md`, `README.md`, `.python-version`)**
+   - `PROJECT.md`의 디렉터리 트리 최신화 및 9장 데이터 계약에 `navigation.json`과 `page-registry.json`의 실제 스키마 필드 명세 반영
+   - `README.md`의 Python 배지를 3.12로 일치화
+   - `.python-version` 파일 생성 (Python 3.12 핀)
+
+8. **레거시 잔재 및 린트 코드 무결성 정리**
+   - 일회성 마이그레이션 스크립트 `scripts/rename_spice_to_spoon.py` 삭제
+   - 레거시 디렉터리 `docs/legacy/` 삭제
+   - 빈 `css/` 디렉터리 삭제
+   - 저장소 내 `.DS_Store` 13개 일괄 삭제
+   - `assets/js/navigation.js` 및 `assets/js/theme-toggle.js`의 빈 catch 블록에 안전한 주석 및 설명 명시
+   - `core/renderers/static_prompt.py`, `core/renderers/markdown_prompt.py`의 미완성 중복 함수 잔재 및 미사용 변수/import 정리
+
+9. **Vercel 캐시 및 보안 헤더 최적화 (`vercel.json`)**
+   - `/assets/(.*)` 캐시 헤더에서 `immutable` 제거 및 `public, max-age=86400, stale-while-revalidate=86400` 적용
+   - `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload` (HSTS) 추가
+   - 웹 보안 헤더(`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`) 완비
+
+---
+
+## 최종 검증 결과
+- **Ruff 린트 로컬 실실행**: `.venv/bin/ruff check core scripts tests` -> **All checks passed! (0 errors)**
+- **단위 테스트 (pytest & unittest)**: `.venv/bin/pytest` -> **64 passed in 1.46s (100% OK)**
+- **정적 빌드 검증**: `python3 scripts/build.py && python3 scripts/build.py --check` -> **59개 페이지 정상 생성 및 16개 검증 단계 전체 통과**

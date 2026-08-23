@@ -15,13 +15,8 @@ from core.template_models import (
     APPROVED_TEMPLATE_SPECS,
     LoadedTemplates,
     PageTemplateContext,
-    SITE_NAME,
-    TEMPLATE_BASE_PATH,
-    TEMPLATE_ENGINE_VERSION,
-    TEMPLATE_PARTIAL_NAMES,
-    TEMPLATE_VALIDATION_STATUS,
 )
-from core.template_validation import extract_placeholders, validate_template_source
+from core.template_validation import validate_template_source
 
 
 RENDER_PLACEHOLDER_RE = re.compile(r"{{\s*[a-z0-9_]+\s*}}")

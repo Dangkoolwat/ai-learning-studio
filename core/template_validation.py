@@ -38,7 +38,7 @@ def validate_template_source(template_path: Path, template_text: str, *, spec: T
         raise BuildError("Load templates", "template file must not contain inline style attributes", path=template_path)
     stripped_text = re.sub(r'https?://fonts\.(googleapis|gstatic)\.com[^\s\'"<>]*', '', template_text, flags=re.IGNORECASE)
     lower_stripped = stripped_text.lower()
-    
+
     if "http://" in lower_stripped or "https://" in lower_stripped or "://" in lower_stripped:
         raise BuildError("Load templates", "template file must not contain external URLs", path=template_path)
     if "{%" in template_text or "{#" in template_text or "{{{" in template_text or "}}}" in template_text:

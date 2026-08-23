@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 
 from core.component_models import ComponentSpec
-from core.component_registry import APPROVED_COMPONENT_BY_ID, APPROVED_COMPONENT_IDS, APPROVED_COMPONENT_SPECS
+from core.component_registry import APPROVED_COMPONENT_IDS, APPROVED_COMPONENT_SPECS
 from core.errors import BuildError
 from core.template_validation import extract_placeholders
 
@@ -331,7 +331,7 @@ def _validate_timeline_step_output(inspector: ComponentHTMLInspector, *, compone
 def _validate_image_slider_output(inspector: ComponentHTMLInspector, *, component_id: str, template_path: Path) -> None:
     if sum(tag == "section" for tag, _ in inspector.start_tags) != 1:
         raise BuildError("Render component", "image slider must contain exactly one section", path=template_path, field=component_id)
-    
+
     article_count = sum(tag == "article" for tag, _ in inspector.start_tags)
     if article_count < 1:
         raise BuildError("Render component", "image slider must contain slide articles", path=template_path, field=component_id)
