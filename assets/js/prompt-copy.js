@@ -1,17 +1,16 @@
-const COPY_FEEDBACK_TIMEOUT_MS = 1800;
-const feedbackTimers = new WeakMap();
+import { sanitizeInput, copyToClipboard, showTemporaryFeedback, FEEDBACK_TIMEOUT_MS } from "./dom-utils.js";
+
+/**
+ * @fileoverview Prompt Copy & Interactive Inline Chip Controller for AI Learning Studio.
+ * Manages inline dropdown chips, custom text inputs, live preview synchronization,
+ * and 1-click clipboard copy functionality.
+ */
 
 let activeDropdown = null;
 
-/* ===== Input Sanitization Helper ===== */
-function sanitizeInput(text) {
-  if (!text) return "";
-  // 프롬프트 특수기호([], {}, (), :, ;, ", ', /, =, +, *, %, #, $, @, !, ? 등) 100% 허용
-  // 제어문자만 제거하며, XSS 방지는 textContent/createTextNode 렌더링 바인딩으로 보장
-  return text.replace(/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
-}
-
-/* ===== Close active dropdown ===== */
+/**
+ * Closes currently active dropdown chip panel and resets ARIA state.
+ */
 function closeDropdown() {
   if (activeDropdown) {
     activeDropdown.remove();
@@ -360,51 +359,16 @@ function getPromptStatus(button) {
   return button.closest(".prompt-item")?.querySelector(".prompt-item__copy-status") ?? null;
 }
 
-async function copyText(text) {
-  if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch (err) {
-      console.warn("navigator.clipboard.writeText failed:", err);
-    }
-  }
-
-  try {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    ta.style.position = "fixed";
-    ta.style.left = "-9999px";
-    ta.style.top = "-9999px";
-    ta.style.opacity = "0";
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    ta.setSelectionRange(0, text.length);
-    const ok = document.execCommand("copy");
-    document.body.removeChild(ta);
-    if (ok) return true;
-  } catch (err) {
-    console.warn("execCommand copy failed:", err);
-  }
-
-  return false;
-}
-
 function flashFeedback(button, status, msg, defaultLabel) {
-  button.textContent = msg;
-  if (status) status.textContent = msg;
-  const prev = feedbackTimers.get(button);
-  if (prev) clearTimeout(prev);
-  const t = setTimeout(() => {
-    button.textContent = defaultLabel;
-    if (status) status.textContent = "";
-    feedbackTimers.delete(button);
-  }, COPY_FEEDBACK_TIMEOUT_MS);
-  feedbackTimers.set(button, t);
+  showTemporaryFeedback(button, msg, defaultLabel, "is-copied", FEEDBACK_TIMEOUT_MS);
+  if (status) {
+    showTemporaryFeedback(status, msg, "", "is-copied", FEEDBACK_TIMEOUT_MS);
+  }
 }
 
-/* ===== Init ===== */
+/**
+ * Initializes interactive chips, live previews, and prompt copy handlers.
+ */
 export function initPromptCopy() {
   document.addEventListener("click", (e) => {
     const chip = e.target.closest(".itc");
@@ -426,7 +390,7 @@ export function initPromptCopy() {
     button.addEventListener("click", async () => {
       const text = getPromptText(button.closest(".prompt-item"));
       if (!text) { flashFeedback(button, status, "복사 실패", defaultLabel); return; }
-      const ok = await copyText(text);
+      const ok = await copyToClipboard(text);
       if (ok) {
         flashFeedback(button, status, "복사되었습니다!", defaultLabel);
       } else {

@@ -24,3 +24,9 @@
 ## 검증 결과
 - `python3 scripts/build.py` 정적 사이트 빌드 정상 완료 (Exit Code: 0)
 - `python3 -m unittest discover tests` 44개 단위 테스트 전체 통과 (OK)
+
+## 추가 유지보수 및 모듈화 작업 (v2.0 후속)
+- `assets/js/dom-utils.js` 공통 유틸리티 모듈 추출 (`sanitizeInput`, `copyToClipboard`, `showTemporaryFeedback` 등)
+- `assets/js/prompt-copy.js`, `assets/js/prompt-builder.js` 중복 로직 일원화 및 JSDoc 주석 표준화
+- `assets/js/site.js`, `assets/js/navigation.js` 모듈 진입점 및 역할별 아키텍처 문서화
+- UI/UX 빠른 대응을 위한 클라이언트 공통 함수 재사용성 및 유지보수성 대폭 강화 완료

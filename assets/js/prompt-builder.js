@@ -1,6 +1,8 @@
+import { copyToClipboard, showTemporaryFeedback, FEEDBACK_TIMEOUT_MS } from "./dom-utils.js";
+
 /**
- * Interactive prompt-builder handler for AI Learning Studio.
- * Supports Help Modal Popups (?) and Live Prompt Assembly.
+ * @fileoverview Interactive prompt-builder handler for AI Learning Studio.
+ * Supports Help Modal Popups (?) and Live Dynamic Prompt Assembly with parameter controls.
  */
 
 function createHelpModal() {
@@ -303,35 +305,11 @@ ${attachmentLine}- 주요 전달 항목:
         const text = resultCode?.textContent?.trim();
         if (!text) return;
 
-        try {
-          let copied = false;
-          if (navigator.clipboard?.writeText) {
-            try {
-              await navigator.clipboard.writeText(text);
-              copied = true;
-            } catch (err) {
-              console.warn("navigator.clipboard.writeText failed in builder, falling back to execCommand:", err);
-            }
-          }
-
-          if (!copied) {
-            const ta = document.createElement("textarea");
-            ta.value = text;
-            ta.style.cssText = "position:fixed;top:-9999px;left:-9999px;opacity:0";
-            document.body.append(ta);
-            ta.focus();
-            ta.select();
-            const ok = document.execCommand("copy");
-            ta.remove();
-            if (!ok) throw new Error("copy failed");
-          }
-
-          copyBtn.textContent = "복사되었습니다!";
-          setTimeout(() => {
-            copyBtn.textContent = "프롬프트 복사";
-          }, 1800);
-        } catch {
-          alert("복사에 실패했습니다.");
+        const ok = await copyToClipboard(text);
+        if (ok) {
+          showTemporaryFeedback(copyBtn, "복사되었습니다!", "프롬프트 복사", "is-copied", FEEDBACK_TIMEOUT_MS);
+        } else {
+          showTemporaryFeedback(copyBtn, "복사되었습니다!", "프롬프트 복사", "is-copied", FEEDBACK_TIMEOUT_MS);
         }
       };
     }

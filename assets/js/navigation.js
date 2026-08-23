@@ -1,7 +1,19 @@
+/**
+ * @fileoverview Navigation & Sidebar Controller for AI Learning Studio.
+ * Handles mobile drawer toggle, persistent scroll restoration, route memorization,
+ * live client-side search filtering, and smart accordion management.
+ */
+
 const COMPACT_MEDIA_QUERY = window.matchMedia("(max-width: 899px)");
 const NAV_SCROLL_KEY = "als-nav-scroll-pos";
 const LAST_MENU_ROUTE_KEY = "als-last-visited-route";
 
+/**
+ * Updates root and toggle button state for mobile navigation drawer.
+ * @param {HTMLElement} root - Document root element
+ * @param {HTMLButtonElement} toggle - Mobile hamburger button
+ * @param {boolean} isOpen - Desired open/closed state
+ */
 function setNavigationState(root, toggle, isOpen) {
   root.setAttribute("data-navigation-state", isOpen ? "open" : "closed");
   toggle.setAttribute("aria-expanded", String(isOpen));
@@ -9,6 +21,9 @@ function setNavigationState(root, toggle, isOpen) {
   toggle.textContent = isOpen ? "메뉴 닫기" : "메뉴 열기";
 }
 
+/**
+ * Initializes navigation bar, drawer events, search filtering, and accordion state.
+ */
 export function initNavigation() {
   const root = document.documentElement;
   const toggle = document.querySelector(".site-nav-toggle");
