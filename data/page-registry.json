@@ -767,6 +767,19 @@
       "navigation": true,
       "status": "published",
       "lang": "ko"
+    },
+    {
+      "id": "image-ai-travel-photo-diary",
+      "title": "사진 한 장, 여행 일기 한 페이지",
+      "description": "여행 사진 한 장을 러버스탬프와 나만의 기록이 담긴 아날로그 필드노트로 만들어 보세요.",
+      "route": "/image-ai/travel-photo-diary/",
+      "source": "pages/sections/image-ai/travel-photo-diary.md",
+      "type": "static-prompt",
+      "section": "image-ai",
+      "order": 58,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     }
   ]
 }
