@@ -164,6 +164,12 @@
           "label": "경험을 나만의 자산으로 바꾸기 ⭐",
           "description": "경험과 노하우를 연결해 강점을 찾고 반복 활용 가능한 자산으로 축적하기",
           "route": "/prompt-snippets/experience-to-asset/"
+        },
+        {
+          "id": "prompt-snippets-reflect-myself",
+          "label": "AI에게 비친 내 생각과 결정 패턴 ⭐",
+          "description": "대화 내용을 바탕으로 내가 자주 보이는 생각과 결정 패턴을 한 걸음 떨어져 돌아보기",
+          "route": "/prompt-snippets/reflect-myself/"
         }
       ]
     },
