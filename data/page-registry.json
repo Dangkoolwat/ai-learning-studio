@@ -67,11 +67,11 @@
       "lang": "ko"
     },
     {
-      "id": "prompt-snippets-improve-results",
-      "title": "결과를 더 좋게 만들기 ⭐",
-      "description": "한 줄 추가로 답변의 깊이와 품질 높이기",
-      "route": "/prompt-snippets/improve-results/",
-      "source": "pages/sections/prompt-snippets/improve-results.md",
+      "id": "prompt-snippets-ask-better",
+      "title": "AI에게 작업 요청 잘하기",
+      "description": "내가 원하는 걸 모를 때 AI에게 역질문 유도",
+      "route": "/prompt-snippets/ask-better/",
+      "source": "pages/sections/prompt-snippets/ask-better.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
       "order": 5,
@@ -80,11 +80,11 @@
       "lang": "ko"
     },
     {
-      "id": "prompt-snippets-review-answers",
-      "title": "AI 답변 검토하기",
-      "description": "AI가 작성한 내용의 논리적 오류나 누락 확인",
-      "route": "/prompt-snippets/review-answers/",
-      "source": "pages/sections/prompt-snippets/review-answers.md",
+      "id": "prompt-snippets-improve-results",
+      "title": "결과를 더 좋게 만들기 ⭐",
+      "description": "한 줄 추가로 답변의 깊이와 품질 높이기",
+      "route": "/prompt-snippets/improve-results/",
+      "source": "pages/sections/prompt-snippets/improve-results.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
       "order": 6,
@@ -93,11 +93,11 @@
       "lang": "ko"
     },
     {
-      "id": "prompt-snippets-reduce-hallucination",
-      "title": "할루시네이션 줄이기 ⭐",
-      "description": "거짓 정보를 방지하고 팩트 중심의 결과 얻기",
-      "route": "/prompt-snippets/reduce-hallucination/",
-      "source": "pages/sections/prompt-snippets/reduce-hallucination.md",
+      "id": "prompt-snippets-continue-work",
+      "title": "이어서 작업하기",
+      "description": "끊긴 답변을 잇거나 흐름을 살려 추가 작업 요청",
+      "route": "/prompt-snippets/continue-work/",
+      "source": "pages/sections/prompt-snippets/continue-work.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
       "order": 7,
@@ -106,11 +106,11 @@
       "lang": "ko"
     },
     {
-      "id": "prompt-snippets-get-ideas",
-      "title": "다양한 아이디어 얻기",
-      "description": "막막할 때 창의적인 영감과 브레인스토밍",
-      "route": "/prompt-snippets/get-ideas/",
-      "source": "pages/sections/prompt-snippets/get-ideas.md",
+      "id": "prompt-snippets-summarize-core",
+      "title": "요약과 핵심 정리",
+      "description": "방대한 분량에서 엑기스만 빠르게 뽑아내기",
+      "route": "/prompt-snippets/summarize-core/",
+      "source": "pages/sections/prompt-snippets/summarize-core.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
       "order": 8,
@@ -145,11 +145,11 @@
       "lang": "ko"
     },
     {
-      "id": "prompt-snippets-summarize-core",
-      "title": "요약과 핵심 정리",
-      "description": "방대한 분량에서 엑기스만 빠르게 뽑아내기",
-      "route": "/prompt-snippets/summarize-core/",
-      "source": "pages/sections/prompt-snippets/summarize-core.md",
+      "id": "prompt-snippets-refine-text",
+      "title": "글 다듬기",
+      "description": "어색한 문장을 자연스럽고 매끄러운 글로 교정",
+      "route": "/prompt-snippets/refine-text/",
+      "source": "pages/sections/prompt-snippets/refine-text.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
       "order": 11,
@@ -158,11 +158,11 @@
       "lang": "ko"
     },
     {
-      "id": "prompt-snippets-compare-analyze",
-      "title": "비교와 분석",
-      "description": "두 가지 이상의 대상을 다각도로 비교 분석하기",
-      "route": "/prompt-snippets/compare-analyze/",
-      "source": "pages/sections/prompt-snippets/compare-analyze.md",
+      "id": "prompt-snippets-reuse-content",
+      "title": "결과물 다양하게 재활용하기",
+      "description": "이미 잘 만들어진 원본을 완전히 다른 용도나 형식으로 바꿉니다.",
+      "route": "/prompt-snippets/reuse-content/",
+      "source": "pages/sections/prompt-snippets/reuse-content.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
       "order": 12,
@@ -171,24 +171,24 @@
       "lang": "ko"
     },
     {
-      "id": "prompt-snippets-refine-text",
-      "title": "글 다듬기",
-      "description": "어색한 문장을 자연스럽고 매끄러운 글로 교정",
-      "route": "/prompt-snippets/refine-text/",
-      "source": "pages/sections/prompt-snippets/refine-text.md",
+      "id": "prompt-snippets-elevator-pitch",
+      "title": "30초 엘리베이터 피치로 압축하기 ⭐",
+      "description": "긴 내용을 30초 안에 전달할 핵심 메시지와 첫 문장으로 압축",
+      "route": "/prompt-snippets/elevator-pitch/",
+      "source": "pages/sections/prompt-snippets/elevator-pitch.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 13,
       "navigation": true,
       "status": "published",
-      "lang": "ko"
+      "lang": "ko",
+      "order": 13
     },
     {
-      "id": "prompt-snippets-continue-work",
-      "title": "이어서 작업하기",
-      "description": "끊긴 답변을 잇거나 흐름을 살려 추가 작업 요청",
-      "route": "/prompt-snippets/continue-work/",
-      "source": "pages/sections/prompt-snippets/continue-work.md",
+      "id": "prompt-snippets-review-answers",
+      "title": "AI 답변 검토하기",
+      "description": "AI가 작성한 내용의 논리적 오류나 누락 확인",
+      "route": "/prompt-snippets/review-answers/",
+      "source": "pages/sections/prompt-snippets/review-answers.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
       "order": 14,
@@ -197,11 +197,11 @@
       "lang": "ko"
     },
     {
-      "id": "prompt-snippets-ask-better",
-      "title": "AI에게 작업 요청 잘하기",
-      "description": "내가 원하는 걸 모를 때 AI에게 역질문 유도",
-      "route": "/prompt-snippets/ask-better/",
-      "source": "pages/sections/prompt-snippets/ask-better.md",
+      "id": "prompt-snippets-reduce-hallucination",
+      "title": "할루시네이션 줄이기 ⭐",
+      "description": "거짓 정보를 방지하고 팩트 중심의 결과 얻기",
+      "route": "/prompt-snippets/reduce-hallucination/",
+      "source": "pages/sections/prompt-snippets/reduce-hallucination.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
       "order": 15,
@@ -217,10 +217,10 @@
       "source": "pages/sections/prompt-snippets/diagnose-first.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 16,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 16
+      "lang": "ko"
     },
     {
       "id": "prompt-snippets-find-missing",
@@ -230,10 +230,10 @@
       "source": "pages/sections/prompt-snippets/find-missing.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 17,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 17
+      "lang": "ko"
     },
     {
       "id": "prompt-snippets-find-problem",
@@ -243,10 +243,36 @@
       "source": "pages/sections/prompt-snippets/find-problem.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 18,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 18
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-get-ideas",
+      "title": "다양한 아이디어 얻기",
+      "description": "막막할 때 창의적인 영감과 브레인스토밍",
+      "route": "/prompt-snippets/get-ideas/",
+      "source": "pages/sections/prompt-snippets/get-ideas.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 19,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-compare-analyze",
+      "title": "비교와 분석",
+      "description": "두 가지 이상의 대상을 다각도로 비교 분석하기",
+      "route": "/prompt-snippets/compare-analyze/",
+      "source": "pages/sections/prompt-snippets/compare-analyze.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 20,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     },
     {
       "id": "prompt-snippets-change-perspective",
@@ -256,10 +282,10 @@
       "source": "pages/sections/prompt-snippets/change-perspective.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 21,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 19
+      "lang": "ko"
     },
     {
       "id": "prompt-snippets-listen-opposing",
@@ -269,36 +295,10 @@
       "source": "pages/sections/prompt-snippets/listen-opposing.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 22,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 20
-    },
-    {
-      "id": "prompt-snippets-reuse-content",
-      "title": "결과물 다양하게 재활용하기",
-      "description": "이미 잘 만들어진 원본을 완전히 다른 용도나 형식으로 바꿉니다.",
-      "route": "/prompt-snippets/reuse-content/",
-      "source": "pages/sections/prompt-snippets/reuse-content.md",
-      "type": "static-prompt",
-      "section": "prompt-snippets",
-      "navigation": true,
-      "status": "published",
-      "lang": "ko",
-      "order": 21
-    },
-    {
-      "id": "prompt-snippets-second-order-effect",
-      "title": "그다음 영향까지 생각하기 ⭐",
-      "description": "당장의 결과뿐만 아니라 그 결과에 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
-      "route": "/prompt-snippets/second-order-effect/",
-      "source": "pages/sections/prompt-snippets/second-order-effect.md",
-      "type": "static-prompt",
-      "section": "prompt-snippets",
-      "navigation": true,
-      "status": "published",
-      "lang": "ko",
-      "order": 22
+      "lang": "ko"
     },
     {
       "id": "prompt-snippets-audit-assumptions",
@@ -308,10 +308,10 @@
       "source": "pages/sections/prompt-snippets/audit-assumptions.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 23,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 23
+      "lang": "ko"
     },
     {
       "id": "prompt-snippets-evaluate-tradeoff",
@@ -321,10 +321,10 @@
       "source": "pages/sections/prompt-snippets/evaluate-tradeoff.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 24,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 24
+      "lang": "ko"
     },
     {
       "id": "prompt-snippets-detect-biases",
@@ -334,23 +334,36 @@
       "source": "pages/sections/prompt-snippets/detect-biases.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 25,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 25
+      "lang": "ko"
     },
     {
-      "id": "prompt-snippets-experience-to-asset",
-      "title": "경험을 나만의 자산으로 바꾸기 ⭐",
-      "description": "경험과 노하우를 연결해 강점을 찾고 반복 활용 가능한 자산으로 축적하기",
-      "route": "/prompt-snippets/experience-to-asset/",
-      "source": "pages/sections/prompt-snippets/experience-to-asset.md",
+      "id": "prompt-snippets-second-order-effect",
+      "title": "그다음 영향까지 생각하기 ⭐",
+      "description": "당장의 결과뿐만 아니라 그 결과에 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
+      "route": "/prompt-snippets/second-order-effect/",
+      "source": "pages/sections/prompt-snippets/second-order-effect.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 26,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 26
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-pareto-priority",
+      "title": "파레토 80/20: 가장 중요한 일부터 추리기",
+      "description": "할 일과 아이디어 중 가장 중요한 일부터 먼저 추려내기",
+      "route": "/prompt-snippets/pareto-priority/",
+      "source": "pages/sections/prompt-snippets/pareto-priority.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 27,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     },
     {
       "id": "prompt-snippets-reflect-myself",
@@ -360,10 +373,23 @@
       "source": "pages/sections/prompt-snippets/reflect-myself.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
+      "order": 28,
       "navigation": true,
       "status": "published",
-      "lang": "ko",
-      "order": 27
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-experience-to-asset",
+      "title": "경험을 나만의 자산으로 바꾸기 ⭐",
+      "description": "경험과 노하우를 연결해 강점을 찾고 반복 활용 가능한 자산으로 축적하기",
+      "route": "/prompt-snippets/experience-to-asset/",
+      "source": "pages/sections/prompt-snippets/experience-to-asset.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 29,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     },
     {
       "id": "ready-to-use",

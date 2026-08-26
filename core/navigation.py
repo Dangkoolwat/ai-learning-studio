@@ -20,14 +20,18 @@ class NavigationSubItem:
     label: str
     description: str
     route: str
+    group: str | None = None
 
     def to_public_dict(self) -> dict[str, object]:
-        return {
+        payload: dict[str, object] = {
             "id": self.id,
             "label": self.label,
             "description": self.description,
             "route": self.route,
         }
+        if self.group is not None:
+            payload["group"] = self.group
+        return payload
 
 
 @dataclass(frozen=True)
@@ -234,9 +238,10 @@ def load_navigation(data_dir: Path) -> NavigationData:
                     data_file=navigation_path,
                 )
 
-            item_allowed_keys = {"id", "label", "description", "route"}
+            item_allowed_keys = {"id", "label", "description", "route", "group"}
             item_unexpected = set(item_data) - item_allowed_keys
-            item_missing = item_allowed_keys - set(item_data)
+            required_keys = {"id", "label", "description", "route"}
+            item_missing = required_keys - set(item_data)
             if item_unexpected or item_missing:
                 details = []
                 if item_missing:
@@ -263,6 +268,7 @@ def load_navigation(data_dir: Path) -> NavigationData:
                     f"duplicate navigation sub-item id: {item_id}",
                     path=navigation_path,
                     data_file=navigation_path,
+                    field="id",
                 )
             seen_item_ids.add(item_id)
 
@@ -278,6 +284,15 @@ def load_navigation(data_dir: Path) -> NavigationData:
                 navigation_path=navigation_path,
                 field="description",
             )
+
+            group_val = item_data.get("group")
+            if group_val is not None:
+                _require_section_text(
+                    group_val,
+                    message=f"navigation sub-item group must be a non-empty string for item: {item_id}",
+                    navigation_path=navigation_path,
+                    field="group",
+                )
 
             route = item_data["route"]
             if (
@@ -300,6 +315,7 @@ def load_navigation(data_dir: Path) -> NavigationData:
                     label=item_data["label"],
                     description=item_data["description"],
                     route=route,
+                    group=group_val,
                 )
             )
 

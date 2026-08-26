@@ -468,6 +468,33 @@ html[data-theme-mode="dark"] .site-theme-toggle__icon--moon {
   background: var(--site-accent-subtle);
 }
 
+/* Sub-navigation Group Header - 확실한 그룹 분리 및 시각적 위계 */
+.sub-nav-group-header {
+  margin-top: 1.35rem;
+  margin-bottom: 0.25rem;
+  padding: 0.65rem 0.55rem 0.15rem 0.55rem;
+  list-style: none;
+  pointer-events: none;
+  user-select: none;
+  border-top: 1px dashed var(--site-border);
+}
+
+.sub-nav-group-header:first-child {
+  margin-top: 0.25rem;
+  border-top: none;
+  padding-top: 0.15rem;
+}
+
+.sub-nav-group-title {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--site-text);
+  opacity: 0.95;
+  padding-bottom: 0.15rem;
+}
+
 /* 검색 필터링 숨김 클래스 */
 .nav-item--hidden {
   display: none !important;

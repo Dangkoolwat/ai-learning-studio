@@ -101,15 +101,17 @@ export function initNavigation() {
       }
 
       navItems.forEach((item) => {
+        const groupHeaders = item.querySelectorAll(".sub-nav-group-header");
+        const subItems = item.querySelectorAll(".sub-navigation-item");
+
         if (!isSearching) {
           item.classList.remove("nav-item--hidden");
-          const subItems = item.querySelectorAll(".sub-navigation-item");
+          groupHeaders.forEach((gh) => gh.classList.remove("nav-item--hidden"));
           subItems.forEach((sub) => sub.classList.remove("nav-item--hidden"));
           return;
         }
 
         const mainText = item.querySelector(".navigation-link")?.textContent?.toLowerCase() || "";
-        const subItems = item.querySelectorAll(".sub-navigation-item");
         let hasMatchingSub = false;
 
         subItems.forEach((sub) => {
@@ -119,6 +121,24 @@ export function initNavigation() {
             hasMatchingSub = true;
           } else {
             sub.classList.add("nav-item--hidden");
+          }
+        });
+
+        // 그룹 헤더별로 다음 그룹 헤더 전까지 매칭되는 아이템이 하나라도 있으면 그룹 헤더 표시
+        groupHeaders.forEach((gh) => {
+          let nextEl = gh.nextElementSibling;
+          let groupHasMatch = false;
+          while (nextEl && !nextEl.classList.contains("sub-nav-group-header")) {
+            if (nextEl.classList.contains("sub-navigation-item") && !nextEl.classList.contains("nav-item--hidden")) {
+              groupHasMatch = true;
+              break;
+            }
+            nextEl = nextEl.nextElementSibling;
+          }
+          if (groupHasMatch || gh.textContent?.toLowerCase().includes(query)) {
+            gh.classList.remove("nav-item--hidden");
+          } else {
+            gh.classList.add("nav-item--hidden");
           }
         });
 

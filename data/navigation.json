@@ -34,142 +34,179 @@
       "order": 2,
       "items": [
         {
+          "id": "prompt-snippets-ask-better",
+          "label": "AI에게 작업 요청 잘하기",
+          "description": "내가 원하는 걸 모를 때 AI에게 역질문 유도",
+          "route": "/prompt-snippets/ask-better/",
+          "group": "🌟 요청 & 결과 개선"
+        },
+        {
           "id": "prompt-snippets-improve-results",
           "label": "결과를 더 좋게 만들기 ⭐",
           "description": "한 줄 추가로 답변의 깊이와 품질 높이기",
-          "route": "/prompt-snippets/improve-results/"
-        },
-        {
-          "id": "prompt-snippets-review-answers",
-          "label": "AI 답변 검토하기",
-          "description": "AI가 작성한 내용의 논리적 오류나 누락 확인",
-          "route": "/prompt-snippets/review-answers/"
-        },
-        {
-          "id": "prompt-snippets-reduce-hallucination",
-          "label": "할루시네이션 줄이기 ⭐",
-          "description": "거짓 정보를 방지하고 팩트 중심의 결과 얻기",
-          "route": "/prompt-snippets/reduce-hallucination/"
-        },
-        {
-          "id": "prompt-snippets-get-ideas",
-          "label": "다양한 아이디어 얻기",
-          "description": "막막할 때 창의적인 영감과 브레인스토밍",
-          "route": "/prompt-snippets/get-ideas/"
-        },
-        {
-          "id": "prompt-snippets-format-clearly",
-          "label": "보기 쉽게 정리하기",
-          "description": "글을 표, 불릿 포인트 등 한눈에 들어오게 변환",
-          "route": "/prompt-snippets/format-clearly/"
-        },
-        {
-          "id": "prompt-snippets-change-level",
-          "label": "설명 수준 바꾸기",
-          "description": "독자의 눈높이와 지식 수준에 맞춰 내용 재작성",
-          "route": "/prompt-snippets/change-level/"
-        },
-        {
-          "id": "prompt-snippets-summarize-core",
-          "label": "요약과 핵심 정리",
-          "description": "방대한 분량에서 엑기스만 빠르게 뽑아내기",
-          "route": "/prompt-snippets/summarize-core/"
-        },
-        {
-          "id": "prompt-snippets-compare-analyze",
-          "label": "비교와 분석",
-          "description": "두 가지 이상의 대상을 다각도로 비교 분석하기",
-          "route": "/prompt-snippets/compare-analyze/"
-        },
-        {
-          "id": "prompt-snippets-refine-text",
-          "label": "글 다듬기",
-          "description": "어색한 문장을 자연스럽고 매끄러운 글로 교정",
-          "route": "/prompt-snippets/refine-text/"
+          "route": "/prompt-snippets/improve-results/",
+          "group": "🌟 요청 & 결과 개선"
         },
         {
           "id": "prompt-snippets-continue-work",
           "label": "이어서 작업하기",
           "description": "끊긴 답변을 잇거나 흐름을 살려 추가 작업 요청",
-          "route": "/prompt-snippets/continue-work/"
+          "route": "/prompt-snippets/continue-work/",
+          "group": "🌟 요청 & 결과 개선"
         },
         {
-          "id": "prompt-snippets-ask-better",
-          "label": "AI에게 작업 요청 잘하기",
-          "description": "내가 원하는 걸 모를 때 AI에게 역질문 유도",
-          "route": "/prompt-snippets/ask-better/"
+          "id": "prompt-snippets-summarize-core",
+          "label": "요약과 핵심 정리",
+          "description": "방대한 분량에서 엑기스만 빠르게 뽑아내기",
+          "route": "/prompt-snippets/summarize-core/",
+          "group": "✍️ 정리 & 표현"
         },
         {
-          "id": "prompt-snippets-diagnose-first",
-          "label": "먼저 진단받기 ⭐",
-          "description": "수정이나 작성 전에 문제점과 놓친 부분부터 파악합니다.",
-          "route": "/prompt-snippets/diagnose-first/"
+          "id": "prompt-snippets-format-clearly",
+          "label": "보기 쉽게 정리하기",
+          "description": "글을 표, 불릿 포인트 등 한눈에 들어오게 변환",
+          "route": "/prompt-snippets/format-clearly/",
+          "group": "✍️ 정리 & 표현"
         },
         {
-          "id": "prompt-snippets-find-missing",
-          "label": "내가 놓친 부분 찾기",
-          "description": "내 계획이나 생각에서 미처 고려하지 못한 사각지대를 찾아냅니다.",
-          "route": "/prompt-snippets/find-missing/"
+          "id": "prompt-snippets-change-level",
+          "label": "설명 수준 바꾸기",
+          "description": "독자의 눈높이와 지식 수준에 맞춰 내용 재작성",
+          "route": "/prompt-snippets/change-level/",
+          "group": "✍️ 정리 & 표현"
         },
         {
-          "id": "prompt-snippets-find-problem",
-          "label": "어디에서 문제가 생겼는지 찾기",
-          "description": "잘 안 풀리는 일의 원인을 단계별로 쪼개어 진단합니다.",
-          "route": "/prompt-snippets/find-problem/"
-        },
-        {
-          "id": "prompt-snippets-change-perspective",
-          "label": "상대방 입장에서 다시 보기",
-          "description": "내 글이나 제안이 상대방에게 어떻게 들릴지 객관적으로 점검합니다.",
-          "route": "/prompt-snippets/change-perspective/"
-        },
-        {
-          "id": "prompt-snippets-listen-opposing",
-          "label": "반대 의견 들어보기",
-          "description": "내 결정이 확실한지 점검하기 위해 가장 논리적인 반론을 미리 들어봅니다.",
-          "route": "/prompt-snippets/listen-opposing/"
+          "id": "prompt-snippets-refine-text",
+          "label": "글 다듬기",
+          "description": "어색한 문장을 자연스럽고 매끄러운 글로 교정",
+          "route": "/prompt-snippets/refine-text/",
+          "group": "✍️ 정리 & 표현"
         },
         {
           "id": "prompt-snippets-reuse-content",
           "label": "결과물 다양하게 재활용하기",
           "description": "이미 잘 만들어진 원본을 완전히 다른 용도나 형식으로 바꿉니다.",
-          "route": "/prompt-snippets/reuse-content/"
+          "route": "/prompt-snippets/reuse-content/",
+          "group": "✍️ 정리 & 표현"
         },
         {
-          "id": "prompt-snippets-second-order-effect",
-          "label": "그다음 영향까지 생각하기 ⭐",
-          "description": "당장의 결과뿐만 아니라 그 결과에 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
-          "route": "/prompt-snippets/second-order-effect/"
+          "id": "prompt-snippets-elevator-pitch",
+          "label": "30초 엘리베이터 피치로 압축하기 ⭐",
+          "description": "긴 내용을 30초 안에 전달할 핵심 메시지와 첫 문장으로 압축",
+          "route": "/prompt-snippets/elevator-pitch/",
+          "group": "✍️ 정리 & 표현"
+        },
+        {
+          "id": "prompt-snippets-review-answers",
+          "label": "AI 답변 검토하기",
+          "description": "AI가 작성한 내용의 논리적 오류나 누락 확인",
+          "route": "/prompt-snippets/review-answers/",
+          "group": "🔍 검토 & 문제 찾기"
+        },
+        {
+          "id": "prompt-snippets-reduce-hallucination",
+          "label": "할루시네이션 줄이기 ⭐",
+          "description": "거짓 정보를 방지하고 팩트 중심의 결과 얻기",
+          "route": "/prompt-snippets/reduce-hallucination/",
+          "group": "🔍 검토 & 문제 찾기"
+        },
+        {
+          "id": "prompt-snippets-diagnose-first",
+          "label": "먼저 진단받기 ⭐",
+          "description": "수정이나 작성 전에 문제점과 놓친 부분부터 파악합니다.",
+          "route": "/prompt-snippets/diagnose-first/",
+          "group": "🔍 검토 & 문제 찾기"
+        },
+        {
+          "id": "prompt-snippets-find-missing",
+          "label": "내가 놓친 부분 찾기",
+          "description": "내 계획이나 생각에서 미처 고려하지 못한 사각지대를 찾아냅니다.",
+          "route": "/prompt-snippets/find-missing/",
+          "group": "🔍 검토 & 문제 찾기"
+        },
+        {
+          "id": "prompt-snippets-find-problem",
+          "label": "어디에서 문제가 생겼는지 찾기",
+          "description": "잘 안 풀리는 일의 원인을 단계별로 쪼개어 진단합니다.",
+          "route": "/prompt-snippets/find-problem/",
+          "group": "🔍 검토 & 문제 찾기"
+        },
+        {
+          "id": "prompt-snippets-get-ideas",
+          "label": "다양한 아이디어 얻기",
+          "description": "막막할 때 창의적인 영감과 브레인스토밍",
+          "route": "/prompt-snippets/get-ideas/",
+          "group": "🧭 아이디어 & 판단"
+        },
+        {
+          "id": "prompt-snippets-compare-analyze",
+          "label": "비교와 분석",
+          "description": "두 가지 이상의 대상을 다각도로 비교 분석하기",
+          "route": "/prompt-snippets/compare-analyze/",
+          "group": "🧭 아이디어 & 판단"
+        },
+        {
+          "id": "prompt-snippets-change-perspective",
+          "label": "상대방 입장에서 다시 보기",
+          "description": "내 글이나 제안이 상대방에게 어떻게 들릴지 객관적으로 점검합니다.",
+          "route": "/prompt-snippets/change-perspective/",
+          "group": "🧭 아이디어 & 판단"
+        },
+        {
+          "id": "prompt-snippets-listen-opposing",
+          "label": "반대 의견 들어보기",
+          "description": "내 결정이 확실한지 점검하기 위해 가장 논리적인 반론을 미리 들어봅니다.",
+          "route": "/prompt-snippets/listen-opposing/",
+          "group": "🧭 아이디어 & 판단"
         },
         {
           "id": "prompt-snippets-audit-assumptions",
           "label": "내가 당연하다고 생각한 가정 찾기",
           "description": "내 생각이나 계획 밑바닥에 당연하게 깔려 있는 숨은 전제를 들춰냅니다.",
-          "route": "/prompt-snippets/audit-assumptions/"
+          "route": "/prompt-snippets/audit-assumptions/",
+          "group": "🧭 아이디어 & 판단"
         },
         {
           "id": "prompt-snippets-evaluate-tradeoff",
           "label": "선택할 때 무엇을 포기해야 하는지 확인",
           "description": "선택으로 얻는 것뿐만 아니라 대신 포기해야 하는 가치와 대가를 함께 비교합니다.",
-          "route": "/prompt-snippets/evaluate-tradeoff/"
+          "route": "/prompt-snippets/evaluate-tradeoff/",
+          "group": "🧭 아이디어 & 판단"
         },
         {
           "id": "prompt-snippets-detect-biases",
           "label": "내 판단이 한쪽으로 치우쳤는지 확인",
           "description": "내 글이나 생각에 선입견이나 편향이 섞여 있는지 단정하지 않고 확인합니다.",
-          "route": "/prompt-snippets/detect-biases/"
+          "route": "/prompt-snippets/detect-biases/",
+          "group": "🧭 아이디어 & 판단"
         },
         {
-          "id": "prompt-snippets-experience-to-asset",
-          "label": "경험을 나만의 자산으로 바꾸기 ⭐",
-          "description": "경험과 노하우를 연결해 강점을 찾고 반복 활용 가능한 자산으로 축적하기",
-          "route": "/prompt-snippets/experience-to-asset/"
+          "id": "prompt-snippets-second-order-effect",
+          "label": "그다음 영향까지 생각하기 ⭐",
+          "description": "당장의 결과뿐만 아니라 그 결과에 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
+          "route": "/prompt-snippets/second-order-effect/",
+          "group": "🧭 아이디어 & 판단"
+        },
+        {
+          "id": "prompt-snippets-pareto-priority",
+          "label": "파레토 80/20: 가장 중요한 일부터 추리기",
+          "description": "할 일과 아이디어 중 가장 중요한 일부터 먼저 추려내기",
+          "route": "/prompt-snippets/pareto-priority/",
+          "group": "🧭 아이디어 & 판단"
         },
         {
           "id": "prompt-snippets-reflect-myself",
           "label": "AI에게 비친 내 생각과 결정 패턴 ⭐",
           "description": "대화 내용을 바탕으로 내가 자주 보이는 생각과 결정 패턴을 한 걸음 떨어져 돌아보기",
-          "route": "/prompt-snippets/reflect-myself/"
+          "route": "/prompt-snippets/reflect-myself/",
+          "group": "🪞 회고 & 자산화"
+        },
+        {
+          "id": "prompt-snippets-experience-to-asset",
+          "label": "경험을 나만의 자산으로 바꾸기 ⭐",
+          "description": "경험과 노하우를 연결해 강점을 찾고 반복 활용 가능한 자산으로 축적하기",
+          "route": "/prompt-snippets/experience-to-asset/",
+          "group": "🪞 회고 & 자산화"
         }
       ]
     },

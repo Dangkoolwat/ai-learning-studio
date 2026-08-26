@@ -158,7 +158,17 @@ def build_navigation_items_html(
         sub_html = ""
         if section.items:
             sub_items_list = []
+            current_group: str | None = None
             for sub in section.items:
+                if sub.group and sub.group != current_group:
+                    current_group = sub.group
+                    sub_items_list.append(
+                        "      <li class=\"sub-nav-group-header\" role=\"presentation\">\n"
+                        "        <span class=\"sub-nav-group-title\">{group_title}</span>\n"
+                        "      </li>".format(
+                            group_title=escape_html(sub.group),
+                        )
+                    )
                 sub_href = route_href_for_output(current_output_path, sub.route, dist_root)
                 sub_is_current = current_page.id == sub.id or current_route == _normalize_route(sub.route)
                 sub_item_class = "sub-navigation-item is-current" if sub_is_current else "sub-navigation-item"
