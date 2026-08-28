@@ -263,6 +263,12 @@
           "label": "사회초년생을 위한 장례식장 예절",
           "description": "장례식장에 처음 방문하는 사회초년생을 위해 복장부터 조문 순서, 예절, 피해야 할 행동까지 쉽고 정확하게 안내하는 프롬프트입니다.",
           "route": "/ready-to-use/funeral-etiquette/"
+        },
+        {
+          "id": "ready-to-use-music-analysis",
+          "label": "누구나 쉽게 이해하는 음악 분석 도우미",
+          "description": "곡 정보와 분석 목적을 입력하면 장르, 빠르기, 선율, 화성, 악기 구성, 감상 포인트를 눈높이에 맞게 분석하는 프롬프트입니다.",
+          "route": "/ready-to-use/music-analysis/"
         }
       ]
     },
