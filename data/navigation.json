@@ -275,6 +275,30 @@
           "label": "누구나 쉽게 이해하는 미술 분석 도우미",
           "description": "작품 정보와 분석 목적을 입력하면 사조, 구도, 색채, 재료·기법, 시대적 배경, 감상 포인트를 눈높이에 맞게 분석하는 프롬프트입니다.",
           "route": "/ready-to-use/art-analysis/"
+        },
+        {
+          "id": "ready-to-use-literature-analysis",
+          "label": "누구나 쉽게 이해하는 문학 분석 도우미",
+          "description": "작품 정보와 분석 목적을 입력하면 갈래, 화자·시점, 인물 갈등, 구성, 표현법, 시대적 배경, 감상 포인트를 눈높이에 맞게 분석하는 프롬프트입니다.",
+          "route": "/ready-to-use/literature-analysis/"
+        },
+        {
+          "id": "ready-to-use-film-analysis",
+          "label": "누구나 쉽게 이해하는 영화·드라마 분석 도우미",
+          "description": "작품 정보와 분석 목적을 입력하면 장르, 서사 구조, 인물 갈등, 연출, 미장센, 촬영, 음악, 주제를 눈높이에 맞게 분석하는 프롬프트입니다.",
+          "route": "/ready-to-use/film-analysis/"
+        },
+        {
+          "id": "ready-to-use-architecture-analysis",
+          "label": "누구나 쉽게 이해하는 건축 분석 도우미",
+          "description": "건축물 정보와 분석 목적을 입력하면 양식, 공간 구성, 재료, 구조, 동선, 빛과 그림자, 시대적 배경을 눈높이에 맞게 분석하는 프롬프트입니다.",
+          "route": "/ready-to-use/architecture-analysis/"
+        },
+        {
+          "id": "ready-to-use-photo-analysis",
+          "label": "누구나 쉽게 이해하는 사진 분석 도우미",
+          "description": "사진을 첨부하고 분석 목적을 선택하면 구도, 시선, 빛, 색감, 촬영 기법, 스토리, 개선 팁을 눈높이에 맞게 분석하는 프롬프트입니다.",
+          "route": "/ready-to-use/photo-analysis/"
         }
       ]
     },

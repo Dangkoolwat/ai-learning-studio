@@ -769,6 +769,58 @@
       "lang": "ko"
     },
     {
+      "id": "ready-to-use-literature-analysis",
+      "title": "누구나 쉽게 이해하는 문학 분석 도우미",
+      "description": "작품 정보와 분석 목적을 입력하면 갈래, 화자·시점, 인물 갈등, 구성, 표현법, 시대적 배경, 감상 포인트를 눈높이에 맞게 분석하는 프롬프트입니다.",
+      "route": "/ready-to-use/literature-analysis/",
+      "source": "pages/sections/ready-to-use/literature-analysis.md",
+      "type": "static-prompt",
+      "section": "ready-to-use",
+      "order": 61,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ready-to-use-film-analysis",
+      "title": "누구나 쉽게 이해하는 영화·드라마 분석 도우미",
+      "description": "작품 정보와 분석 목적을 입력하면 장르, 서사 구조, 인물 갈등, 연출, 미장센, 촬영, 음악, 주제를 눈높이에 맞게 분석하는 프롬프트입니다.",
+      "route": "/ready-to-use/film-analysis/",
+      "source": "pages/sections/ready-to-use/film-analysis.md",
+      "type": "static-prompt",
+      "section": "ready-to-use",
+      "order": 62,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ready-to-use-architecture-analysis",
+      "title": "누구나 쉽게 이해하는 건축 분석 도우미",
+      "description": "건축물 정보와 분석 목적을 입력하면 양식, 공간 구성, 재료, 구조, 동선, 빛과 그림자, 시대적 배경을 눈높이에 맞게 분석하는 프롬프트입니다.",
+      "route": "/ready-to-use/architecture-analysis/",
+      "source": "pages/sections/ready-to-use/architecture-analysis.md",
+      "type": "static-prompt",
+      "section": "ready-to-use",
+      "order": 63,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "ready-to-use-photo-analysis",
+      "title": "누구나 쉽게 이해하는 사진 분석 도우미",
+      "description": "사진을 첨부하고 분석 목적을 선택하면 구도, 시선, 빛, 색감, 촬영 기법, 스토리, 개선 팁을 눈높이에 맞게 분석하는 프롬프트입니다.",
+      "route": "/ready-to-use/photo-analysis/",
+      "source": "pages/sections/ready-to-use/photo-analysis.md",
+      "type": "static-prompt",
+      "section": "ready-to-use",
+      "order": 64,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "image-ai-food-poster",
       "title": "프리미엄 푸드 포스터 만들기",
       "description": "메뉴 사진과 옵션을 조합하여 잡지 화보 같은 고품질 프리미엄 푸드 포스터를 제작해 보세요.",
