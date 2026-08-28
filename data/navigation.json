@@ -441,6 +441,12 @@
           "label": "사진 한 장, 여행 일기 한 페이지",
           "description": "여행 사진 한 장을 러버스탬프와 나만의 기록이 담긴 아날로그 필드노트로 만들어 보세요.",
           "route": "/image-ai/travel-photo-diary/"
+        },
+        {
+          "id": "image-ai-candid-portrait",
+          "label": "친구가 찍어준 듯 자연스러운 일상 사진",
+          "description": "과한 보정과 인위적인 느낌 없이, 실제 친구가 스마트폰으로 찍어준 듯한 편안하고 자연스러운 일상 스냅을 만들어 보세요.",
+          "route": "/image-ai/candid-portrait/"
         }
       ]
     }
