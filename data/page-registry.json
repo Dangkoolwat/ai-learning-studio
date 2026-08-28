@@ -756,6 +756,19 @@
       "lang": "ko"
     },
     {
+      "id": "ready-to-use-art-analysis",
+      "title": "누구나 쉽게 이해하는 미술 분석 도우미",
+      "description": "작품 정보와 분석 목적을 입력하면 사조, 구도, 색채, 재료·기법, 시대적 배경, 감상 포인트를 눈높이에 맞게 분석하는 프롬프트입니다.",
+      "route": "/ready-to-use/art-analysis/",
+      "source": "pages/sections/ready-to-use/art-analysis.md",
+      "type": "static-prompt",
+      "section": "ready-to-use",
+      "order": 60,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "image-ai-food-poster",
       "title": "프리미엄 푸드 포스터 만들기",
       "description": "메뉴 사진과 옵션을 조합하여 잡지 화보 같은 고품질 프리미엄 푸드 포스터를 제작해 보세요.",

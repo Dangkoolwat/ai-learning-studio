@@ -269,6 +269,12 @@
           "label": "누구나 쉽게 이해하는 음악 분석 도우미",
           "description": "곡 정보와 분석 목적을 입력하면 장르, 빠르기, 선율, 화성, 악기 구성, 감상 포인트를 눈높이에 맞게 분석하는 프롬프트입니다.",
           "route": "/ready-to-use/music-analysis/"
+        },
+        {
+          "id": "ready-to-use-art-analysis",
+          "label": "누구나 쉽게 이해하는 미술 분석 도우미",
+          "description": "작품 정보와 분석 목적을 입력하면 사조, 구도, 색채, 재료·기법, 시대적 배경, 감상 포인트를 눈높이에 맞게 분석하는 프롬프트입니다.",
+          "route": "/ready-to-use/art-analysis/"
         }
       ]
     },
