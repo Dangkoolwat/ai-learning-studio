@@ -447,6 +447,12 @@
           "label": "친구가 찍어준 듯 자연스러운 일상 사진",
           "description": "과한 보정과 인위적인 느낌 없이, 실제 친구가 스마트폰으로 찍어준 듯한 편안하고 자연스러운 일상 스냅을 만들어 보세요.",
           "route": "/image-ai/candid-portrait/"
+        },
+        {
+          "id": "image-ai-palette-knife-impasto",
+          "label": "사진을 팔레트 나이프 임파스토 유화로 만들기",
+          "description": "사진 속 주인공과 분위기를 살리면서, 두껍게 솟아오른 물감과 팔레트 나이프 자국이 살아 있는 작은 유화 작품으로 만들어 보세요.",
+          "route": "/image-ai/palette-knife-impasto/"
         }
       ]
     }

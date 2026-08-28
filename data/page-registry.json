@@ -910,6 +910,19 @@
       "navigation": true,
       "status": "published",
       "lang": "ko"
+    },
+    {
+      "id": "image-ai-palette-knife-impasto",
+      "title": "사진을 팔레트 나이프 임파스토 유화로 만들기",
+      "description": "사진 속 주인공과 분위기를 살리면서, 두껍게 솟아오른 물감과 팔레트 나이프 자국이 살아 있는 작은 유화 작품으로 만들어 보세요.",
+      "route": "/image-ai/palette-knife-impasto/",
+      "source": "pages/sections/image-ai/palette-knife-impasto.md",
+      "type": "static-prompt",
+      "section": "image-ai",
+      "order": 60,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     }
   ]
 }
