@@ -1800,7 +1800,8 @@ html.js .site-nav-toggle {
 .practice-step-card > :first-child,
 .practice-step-card > h2:first-child,
 .practice-step-card > h3:first-child,
-.practice-step-card > h4:first-child {
+.practice-step-card > h4:first-child,
+.practice-step-card > h5:first-child {
   margin-top: 0 !important;
 }
 
@@ -1831,6 +1832,42 @@ html.js .site-nav-toggle {
   color: var(--site-text-secondary) !important;
   font-size: 0.95rem !important;
   font-weight: 500 !important;
+}
+
+.practice-step-card h4 {
+  color: var(--site-text) !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  margin-top: 1.75rem !important;
+  margin-bottom: 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.practice-step-card h5 {
+  color: var(--site-text) !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+  line-height: 1.45 !important;
+}
+
+.practice-step-card ul,
+.practice-step-card ol {
+  margin-top: 0.35rem !important;
+  margin-bottom: 0.5rem !important;
+  padding-inline-start: 1.25rem !important;
+  font-size: 0.95rem !important;
+  line-height: 1.65 !important;
+}
+
+.practice-step-card li {
+  color: var(--site-text) !important;
+  margin-bottom: 0.35rem !important;
 }
 
 .step-flow-arrow {

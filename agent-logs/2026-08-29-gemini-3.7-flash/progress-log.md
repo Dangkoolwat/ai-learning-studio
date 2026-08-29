@@ -110,3 +110,22 @@
 
 ### 3. 상태
 * **완료 (Ready for Deployment)**
+
+---
+
+## 작업 내용: 실전 꿀팁 카드 타이포그래피(H4, H5) 위계 및 글자 크기 최적화
+
+### 1. 작업 개요
+* **문제 현상**: 마크다운의 `####` 소제목이 HTML `<h5>`로 변환 시 브라우저 기본 스타일(`0.83em`, 약 13.3px)로 적용되어 본문 텍스트(16px)보다 작게 표시되는 시각적 위계 역전 문제 발생.
+* **해결 조치**:
+  1. `assets/css/site.css`:
+     - `.practice-step-card h4` (꿀팁 메인 제목): `font-size: 1.25rem; font-weight: 700;`
+     - `.practice-step-card h5` (소분류 항목 제목): `font-size: 1.05rem; font-weight: 700;` (기존 13.3px → 16.8px로 가독성 및 위계 대폭 향상)
+     - `.practice-step-card ul/li` (세부 설명 본문): `font-size: 0.95rem; line-height: 1.65;`
+
+### 2. 검증 결과
+* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
+* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
+
+### 3. 상태
+* **완료 (Ready for Deployment)**
