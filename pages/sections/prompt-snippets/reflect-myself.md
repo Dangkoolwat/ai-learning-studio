@@ -1,6 +1,6 @@
 ---
 registry_id: prompt-snippets-reflect-myself
-title: AI에게 비친 내 생각과 결정 패턴 ⭐
+title: AI에게 비친 내 생각과 결정 패턴
 description: 대화 내용을 바탕으로 내가 자주 보이는 생각과 결정 패턴을 한 걸음 떨어져 돌아보기
 type: static-prompt
 ---

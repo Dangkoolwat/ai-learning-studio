@@ -1,11 +1,11 @@
 ---
 registry_id: prompt-snippets-second-order-effect
-title: 그다음 영향까지 생각하기 ⭐
+title: 그다음 영향까지 생각하기
 description: 당장의 결과뿐만 아니라 그 결과에 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.
 type: static-prompt
 ---
 
-# 그다음 영향까지 생각하기 ⭐
+# 그다음 영향까지 생각하기
 
 ## 언제 사용하나요?
 

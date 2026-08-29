@@ -173,16 +173,18 @@ def build_navigation_items_html(
                 sub_is_current = current_page.id == sub.id or current_route == _normalize_route(sub.route)
                 sub_item_class = "sub-navigation-item is-current" if sub_is_current else "sub-navigation-item"
                 sub_aria = ' aria-current="page"' if sub_is_current else ""
+                sub_badge_html = ' <span class="sub-nav-badge--featured" aria-label="추천">추천</span>' if sub.featured else ""
                 sub_items_list.append(
                     "      <li class=\"{sub_item_class}\">\n"
                     "        <a class=\"sub-navigation-link\" href=\"{sub_href}\"{sub_aria}>\n"
-                    "          <span class=\"sub-nav-label\">{sub_label}</span>\n"
+                    "          <span class=\"sub-nav-label\">{sub_label}</span>{sub_badge_html}\n"
                     "        </a>\n"
                     "      </li>".format(
                         sub_item_class=sub_item_class,
                         sub_href=escape_html(sub_href),
                         sub_aria=sub_aria,
                         sub_label=escape_html(sub.label),
+                        sub_badge_html=sub_badge_html,
                     )
                 )
             sub_html = "\n    <ul class=\"sub-navigation-list\">\n" + "\n".join(sub_items_list) + "\n    </ul>"

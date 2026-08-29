@@ -1,11 +1,11 @@
 ---
 registry_id: ai-practice-summer-vacation-basic
-title: 여름휴가 계획 세우기 (프롬프트 기초편)
+title: 여름휴가 계획 세우기 (기초편)
 description: 여름휴가 계획이라는 같은 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성합니다.
 ai_target: ChatGPT, Gemini
 ---
 
-# 여름휴가 계획 세우기 (프롬프트 기초편)
+# 여름휴가 계획 세우기 (기초편)
 
 같은 주제를 여러 프롬프트 방식으로 바꾸어 봅니다.
 

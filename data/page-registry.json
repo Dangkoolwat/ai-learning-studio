@@ -29,7 +29,7 @@
     },
     {
       "id": "ai-practice-summer-vacation-basic",
-      "title": "여름휴가 계획 세우기 (프롬프트 기초편)",
+      "title": "여름휴가 계획 세우기 (기초편)",
       "description": "여름휴가 계획이라는 같은 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성합니다.",
       "route": "/ai-practice/summer-vacation-basic/",
       "source": "pages/sections/ai-practice/summer-vacation-basic.md",
@@ -81,7 +81,7 @@
     },
     {
       "id": "prompt-snippets-improve-results",
-      "title": "결과를 더 좋게 만들기 ⭐",
+      "title": "결과를 더 좋게 만들기",
       "description": "한 줄 추가로 답변의 깊이와 품질 높이기",
       "route": "/prompt-snippets/improve-results/",
       "source": "pages/sections/prompt-snippets/improve-results.md",
@@ -172,7 +172,7 @@
     },
     {
       "id": "prompt-snippets-elevator-pitch",
-      "title": "30초 엘리베이터 피치로 압축하기 ⭐",
+      "title": "30초 엘리베이터 피치로 압축하기",
       "description": "긴 내용을 30초 안에 전달할 핵심 메시지와 첫 문장으로 압축",
       "route": "/prompt-snippets/elevator-pitch/",
       "source": "pages/sections/prompt-snippets/elevator-pitch.md",
@@ -198,7 +198,7 @@
     },
     {
       "id": "prompt-snippets-reduce-hallucination",
-      "title": "할루시네이션 줄이기 ⭐",
+      "title": "할루시네이션 줄이기",
       "description": "거짓 정보를 방지하고 팩트 중심의 결과 얻기",
       "route": "/prompt-snippets/reduce-hallucination/",
       "source": "pages/sections/prompt-snippets/reduce-hallucination.md",
@@ -211,7 +211,7 @@
     },
     {
       "id": "prompt-snippets-diagnose-first",
-      "title": "먼저 진단받기 ⭐",
+      "title": "먼저 진단받기",
       "description": "수정이나 작성 전에 문제점과 놓친 부분부터 파악합니다.",
       "route": "/prompt-snippets/diagnose-first/",
       "source": "pages/sections/prompt-snippets/diagnose-first.md",
@@ -341,7 +341,7 @@
     },
     {
       "id": "prompt-snippets-second-order-effect",
-      "title": "그다음 영향까지 생각하기 ⭐",
+      "title": "그다음 영향까지 생각하기",
       "description": "당장의 결과뿐만 아니라 그 결과에 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
       "route": "/prompt-snippets/second-order-effect/",
       "source": "pages/sections/prompt-snippets/second-order-effect.md",
@@ -367,7 +367,7 @@
     },
     {
       "id": "prompt-snippets-reflect-myself",
-      "title": "AI에게 비친 내 생각과 결정 패턴 ⭐",
+      "title": "AI에게 비친 내 생각과 결정 패턴",
       "description": "대화 내용을 바탕으로 내가 자주 보이는 생각과 결정 패턴을 한 걸음 떨어져 돌아보기",
       "route": "/prompt-snippets/reflect-myself/",
       "source": "pages/sections/prompt-snippets/reflect-myself.md",
@@ -380,7 +380,7 @@
     },
     {
       "id": "prompt-snippets-experience-to-asset",
-      "title": "경험을 나만의 자산으로 바꾸기 ⭐",
+      "title": "경험을 나만의 자산으로 바꾸기",
       "description": "경험과 노하우를 연결해 강점을 찾고 반복 활용 가능한 자산으로 축적하기",
       "route": "/prompt-snippets/experience-to-asset/",
       "source": "pages/sections/prompt-snippets/experience-to-asset.md",

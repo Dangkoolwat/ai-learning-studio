@@ -1,7 +1,7 @@
 ---
 registry_id: home
 title: AI Learning Studio
-description: AI를 쉽고 자연스럽게 배우며 직접 활용해 볼 수 있는 학습 공간입니다
+description: AI 입문자와 기초 활용자가 프롬프트 복사, 요청 정리, 이미지 AI 실습을 차근차근 배우는 한국어 학습 사이트
 ---
 
 # AI Learning Studio

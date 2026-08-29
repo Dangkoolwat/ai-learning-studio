@@ -1,131 +1,39 @@
-# 작업 진행 로그 (2026-08-29)
+# 2026-08-29 작업 로그 (Gemini 3.7 Flash)
 
----
+## 1. 작업 개요
+- 피드백 기반 Phase A~C 미달 항목 및 배포 위험(CSP) 정밀 정리 완료:
+  1. 배포 위험 CSP 원천 제거 (`vercel.json` 롤백)
+  2. Phase A 문서 잔여 모순 완전 해소 (`prompt-page-guidelines.md`, `PROJECT.md`, `AGENTS.md`)
+  3. Phase B `scripts/audit_prompts.py` 코어 모듈 재사용, 섹션 헤더 오경고 해소, 실패 경로 단위 테스트(`tests/test_audit_prompts.py`) 구축 및 `--strict` 완전 통과
+  4. Phase C 도구 목록 및 CI 정돈 (`README.md`, `.github/workflows/quality-check.yml`, 불필요한 테스트 정리)
 
-## 작업 내용: 'AI 전문 프로필' 및 'SNS 프로필' 추천 팁(Quick Tips) 추가
+## 2. 세부 변경 내역
+- **배포 안전성 확보 (CSP 롤백)**:
+  - `vercel.json`: 인라인 테마/복원 스크립트 및 Google Fonts 차단 위험이 있는 `Content-Security-Policy` 헤더 완전 제거
+- **데이터 및 템플릿/UI 개선**:
+  - `core/navigation.py`: `NavigationSubItem`에 `featured: bool = False` 속성 및 유효성 검사 추가
+  - `core/template_engine.py`: `sub.featured` 활성화 시 `<span class="sub-nav-badge--featured">추천</span>` 렌더링 지원
+  - `assets/css/site.css`: `.sub-nav-badge--featured` 추천 배지 스타일 추가
+  - `data/navigation.json`: 5대 메인 메뉴(상위 섹션) 전반에 걸쳐 핵심 대표 프롬프트에 `featured: true` 추천 플래그 확대 반영
+  - `data/navigation.json`: `silly-doodle`, `sketch-sticker` 추천 뱃지 추가 반영
+  - `data/navigation.json`, `data/page-registry.json`, `summer-vacation-basic.md`: '여름휴가 계획 세우기 (기초편)'으로 라벨/제목 3자 동기화 단축 반영
+  - `pages/index.md`, `pages/sections/image-ai/recipe-infographic.md`: 레지스트리와 불일치하던 description 동기화
+  - `pages/sections/image-ai/food-poster.md`, `pages/sections/ready-to-use/uijeongbu-route-finder.md`, `pages/sections/ai-practice/uijeongbu-oneday-tour.md`, `pages/sections/ready-to-use/event-budget-calculator.md`: 드롭다운 내 중복 '직접 입력' 옵션 제거 및 텍스트 플레이스홀더 정리
+- **문서 및 기준서 잔여 모순 해소**:
+  - `docs/prompt-page-guidelines.md`: 1행 3종 잔여 문구를 "5가지 공식 승인 페이지 유형"으로 수정, `landing` 설명을 "홈 랜딩"으로 정정
+  - `PROJECT.md`: `page-registry.json` 스키마 키 설명을 `entries`에서 실제 JSON 스키마인 `pages`로 정정, `prompt-builder` 계약 명세 복원
+  - `AGENTS.md`: `python3 scripts/audit_prompts.py` 명확한 실행 명령어 명시
+  - `README.md`: 단위 테스트 및 빌드 검증 섹션에 `python3 scripts/audit_prompts.py --strict` 추가
+- **프롬프트 감사 스크립트 및 테스트 스위트 강화**:
+  - `scripts/audit_prompts.py`: `core.data_consistency`, `core.page_registry`, `core.navigation` 재사용 및 `_is_section_header` 로직을 활용하여 정상 섹션 헤더에 대한 오경고를 원천 제거하고, 드롭다운 옵션 내 금지 키워드 및 대용량 자산 정밀 검출
+  - `tests/test_audit_prompts.py`: 실제 저장소 검증뿐만 아니라 빈 preview, 누락 이미지, 빈 source, 대용량 이미지, 드롭다운 금지 키워드 시 exit 1 실패 경로 증명 테스트 구현 (7개 테스트 케이스)
+- **CI 워크플로우 정돈**:
+  - `.github/workflows/quality-check.yml`: Node.js 스텝 제거 및 `python3 scripts/audit_prompts.py --strict` 연동으로 순수 Python 빌드/검증 파이프라인으로 단정화
+  - `tests/test_prompt_copy.mjs`: 정리 완료
 
-### 1. 작업 개요
-* **목적**: `image-ai-resume-profile` 및 `image-ai-sns-profile` 프롬프트 페이지 하단에 실전 생성 시 완성도와 성공률을 극대화할 수 있는 실전 활용 꿀팁(Quick Tips) 섹션 추가.
-* **적용 파일**:
-  1. `pages/sections/image-ai/resume-profile.md`
-     - 최적 참조 원본 사진 선정 가이드 (자연광/조명, 이목구비 정면, 필터 지양)
-     - 직종 및 용도별 추천 조합 가이드 (공채/이력서, 강사/전문직, IT/스타트업)
-     - 완성도와 싱크로율을 높이는 보정 팁 (추가 프롬프트 가이드, 손가락 오류 방지)
-     - 공식 신분증 사용 제한 안내 통합
-  2. `pages/sections/image-ai/sns-profile.md`
-     - SNS 플랫폼 및 분위기별 추천 스타일 조합 (카카오톡, 인스타그램, 유튜브, 링크드인)
-     - 원형 프로필 안전 영역 확보 요령
-     - 캐릭터 변환 시 얼굴 정체성 유지 팁
-     - AI 모델 선택 가이드(ChatGPT vs Gemini) 통합
-
-### 2. 규칙 준수
-* 볼드(`**`) 서식 최소화 및 Flat 리스트 구조 준수
-* AI 모델 파싱 노이즈 차단 및 최적의 가독성 확보
-
-### 3. 검증 결과
-* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
-* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
-
-### 4. 상태
-* **완료 (Ready for Deployment)**
-
----
-
-## 작업 내용: 이미지 AI 프롬프트 10종 실전 활용 꿀팁(Quick Tips) 추가
-
-### 1. 작업 개요
-* **목적**: `pages/sections/image-ai/` 내 10개 프롬프트 페이지 하단에 실전 활용 꿀팁(Quick Tips) 섹션 추가.
-* **적용 파일 (10개)**:
-  1. `pages/sections/image-ai/3d-career-character.md` (원본 사진 선정, 유사성 옵션, 소품 연출, 시트 레이아웃)
-  2. `pages/sections/image-ai/child-doodle.md` (손그림 감성 사진, 서툰 정도 및 비율 선택, 배경 단순화)
-  3. `pages/sections/image-ai/food-poster.md` (음식 사진 구도, 화면 비율별 추천 조합, 포인트 색상 추출)
-  4. `pages/sections/image-ai/paper-collage.md` (추천 문구 길이, 빈티지 질감 vs 투명 배경, 한글 음절 조각)
-  5. `pages/sections/image-ai/photo-retouch.md` (스튜디오 톤 보정 강도, 역광/조명 복원, 피사체별 무드 추천)
-  6. `pages/sections/image-ai/recipe-infographic.md` (음식명 선정 가이드, 비율별 활용처, 실사+라인아트 조화)
-  7. `pages/sections/image-ai/silly-doodle.md` (표정·포즈 팁, 캐릭터화 강도 기준, 이모티콘/스티커 활용법)
-  8. `pages/sections/image-ai/sketch-sticker.md` (배경-인물 대비 조화, 스티커 테두리 스타일, 펜 선 느낌)
-  9. `pages/sections/image-ai/travel-photo-diary.md` (좌우 분할 레이아웃, V1/V2/V3 분기 활용, 스탬프 색상 매칭)
-  10. `pages/sections/image-ai/typography.md` (문구 길이/구성 팁, 미색/투명 배경 활용법, 낙서 아이콘 조화)
-
-### 2. 규칙 준수
-* 볼드(`**`) 서식 최소화 및 Flat 리스트 구조 준수
-* AI 파싱 노이즈 방지 및 최상의 가독성 확보
-
-### 3. 검증 결과
-* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
-* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
-
-### 4. 상태
-* **완료 (Ready for Deployment)**
-
----
-
-## 작업 내용: prompt-builder 렌더러 개선을 통한 프롬프트 빌더 하단 실전 꿀팁(Quick Tips) 렌더링 지원
-
-### 1. 작업 개요
-* **목적**: `prompt-builder` 페이지 유형(`prompt-field` + `prompt-template`)에서도 마크다운 내 `---`로 구분된 `💡 실전 활용 꿀팁` 섹션이 프롬프트 빌더 UI 바로 아래에 정갈하게 렌더링되도록 렌더러 개선.
-* **적용 파일**:
-  1. `core/renderers/prompt_builder.py`: 마크다운 컨트롤 블록 플레이스홀더 치환 로직 추가
-  2. `pages/sections/image-ai/recipe-infographic.md`: 하단 `💡 실전 활용 꿀팁 (Quick Tips)` 섹션 정상 연결
-
-### 2. 검증 결과
-* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
-* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
-* `dist/image-ai/recipe-infographic/index.html`: 프롬프트 빌더 UI 바로 아래에 실전 꿀팁 카드 렌더링 확인 완료
-
-### 3. 상태
-* **완료 (Ready for Deployment)**
-
----
-
-## 작업 내용: 프롬프트 빌더 중첩 라운딩 박스 제거 및 레이아웃 정돈
-
-### 1. 작업 개요
-* **문제 현상**: `prompt-builder` 폼이 바깥 큰 라운딩 카드(`<div class="practice-step-card">`) 내부에 중첩되어 "상자 속 상자" 형태의 이중 테두리와 과거 점선 테두리 CSS 노이즈 발생.
-* **해결 조치**:
-  1. `core/renderers/prompt_builder.py`: 플레이스홀더 치환 시 마크다운 카드를 닫고 `<section class="prompt-builder">`를 독립 플랫 영역으로 렌더링되도록 분리.
-  2. `assets/css/site.css`: 과거 카드 결합용 점선 테두리(`border-top: 1px dashed`) 및 모서리 왜곡 CSS 해킹 제거.
-
-### 2. 검증 결과
-* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
-* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
-* `dist/image-ai/recipe-infographic/index.html`: 이중 라운딩 박스 제거 및 정갈한 독립 폼 레이아웃 렌더링 확인
-
-### 3. 상태
-* **완료 (Ready for Deployment)**
-
----
-
-## 작업 내용: 프롬프트 빌더 가로폭 및 내부 패딩 통일 (전체 카드 정렬 일치)
-
-### 1. 작업 개요
-* **문제 현상**: `.prompt-builder` 컨테이너 잔여 패딩(32px) 및 카드 내부 패딩 불일치로 인해, 옵션 영역 및 완성 프롬프트 영역의 좌우 가로폭이 상하단 카드와 어긋나는 현상 발생.
-* **해결 조치**:
-  1. `assets/css/site.css`: `.prompt-builder` 컨테이너의 패딩을 완전 제거(`padding: 0 !important; width: 100% !important;`)
-  2. `.prompt-field` 및 `.prompt-builder__result`의 외곽 폭(`width: 100%`)과 내부 패딩(`padding: 2.25rem 2.5rem !important`)을 상단 설명/하단 꿀팁 카드(`.practice-step-card`)와 100% 일치시켜 외곽선과 내부 시작선 완벽 정렬.
-
-### 2. 검증 결과
-* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
-* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
-
-### 3. 상태
-* **완료 (Ready for Deployment)**
-
----
-
-## 작업 내용: 실전 꿀팁 카드 타이포그래피(H4, H5) 위계 및 글자 크기 최적화
-
-### 1. 작업 개요
-* **문제 현상**: 마크다운의 `####` 소제목이 HTML `<h5>`로 변환 시 브라우저 기본 스타일(`0.83em`, 약 13.3px)로 적용되어 본문 텍스트(16px)보다 작게 표시되는 시각적 위계 역전 문제 발생.
-* **해결 조치**:
-  1. `assets/css/site.css`:
-     - `.practice-step-card h4` (꿀팁 메인 제목): `font-size: 1.25rem; font-weight: 700;`
-     - `.practice-step-card h5` (소분류 항목 제목): `font-size: 1.05rem; font-weight: 700;` (기존 13.3px → 16.8px로 가독성 및 위계 대폭 향상)
-     - `.practice-step-card ul/li` (세부 설명 본문): `font-size: 0.95rem; line-height: 1.65;`
-
-### 2. 검증 결과
-* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
-* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
-
-### 3. 상태
-* **완료 (Ready for Deployment)**
+## 3. 최종 검증 결과
+- `ruff check core scripts tests`: 통과 (All checks passed)
+- `python3 -m unittest discover -s tests`: 71개 테스트 전원 통과 (Ran 71 tests in 1.662s, OK)
+- `python3 scripts/audit_prompts.py --strict`: 71개 페이지 및 37개 이미지 자산 엄격 감사 통과 (0 errors, 0 warnings)
+- `python3 scripts/build.py`: 71개 정적 페이지 정상 빌드 및 dist 발행 완료
+- `python3 scripts/build.py --check`: 빌드 무결성 검증 통과

@@ -21,6 +21,7 @@ class NavigationSubItem:
     description: str
     route: str
     group: str | None = None
+    featured: bool = False
 
     def to_public_dict(self) -> dict[str, object]:
         payload: dict[str, object] = {
@@ -31,6 +32,8 @@ class NavigationSubItem:
         }
         if self.group is not None:
             payload["group"] = self.group
+        if self.featured:
+            payload["featured"] = True
         return payload
 
 
@@ -238,7 +241,7 @@ def load_navigation(data_dir: Path) -> NavigationData:
                     data_file=navigation_path,
                 )
 
-            item_allowed_keys = {"id", "label", "description", "route", "group"}
+            item_allowed_keys = {"id", "label", "description", "route", "group", "featured"}
             item_unexpected = set(item_data) - item_allowed_keys
             required_keys = {"id", "label", "description", "route"}
             item_missing = required_keys - set(item_data)
@@ -294,6 +297,16 @@ def load_navigation(data_dir: Path) -> NavigationData:
                     field="group",
                 )
 
+            featured_val = item_data.get("featured", False)
+            if not isinstance(featured_val, bool):
+                raise BuildError(
+                    "Load navigation data",
+                    f"navigation sub-item featured must be a boolean for item: {item_id}",
+                    path=navigation_path,
+                    data_file=navigation_path,
+                    field="featured",
+                )
+
             route = item_data["route"]
             if (
                 not isinstance(route, str)
@@ -316,6 +329,7 @@ def load_navigation(data_dir: Path) -> NavigationData:
                     description=item_data["description"],
                     route=route,
                     group=group_val,
+                    featured=featured_val,
                 )
             )
 

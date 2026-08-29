@@ -97,12 +97,13 @@ Vercel 정적 배포
 
 ## 5. 정보 구조
 
-상위 영역은 다음 네 가지로 고정합니다.
+상위 영역은 다음 다섯 가지로 구성됩니다.
 
-1. 🧪 AI 체험 실습 - 하나의 주제를 제로샷에서 시작해 프롬프트를 단계적으로 보강하며 최종본을 완성하는 체험형 메뉴
-2. ⚡ 바로 사용하기 - 바로 복사해서 쓸 수 있는 완성형 프롬프트 제공 메뉴
-3. 🤖 AI 도우미 - Project나 GEM 전용 지침서 프롬프트를 범용 템플릿 형태로 제공하는 메뉴
-4. 🎨 이미지 AI - 이미지 생성용 프롬프트 허브, 상위에서는 개념과 차이를 설명하고 하위에서 세부 유형으로 확장
+1. 🧪 프롬프트 단계별 체험하기 (`ai-practice`) - 짧은 요청이 하나의 완성된 프롬프트로 발전하는 과정을 직접 체험하는 단계형 실습 메뉴
+2. 🥄 프롬프트 한 스푼 (`prompt-snippets`) - 결과 품질을 높이는 실전 한 줄 프롬프트 모음집
+3. ⚡ 바로 써보기 (`ready-to-use`) - 준비된 프롬프트를 내 상황에 맞게 바꾸고 즉시 활용하는 메뉴
+4. 🤖 나만의 AI 만들기 (`ai-assistant`) - 작업별로 AI 지침을 분리하고 일관된 결과를 만드는 맞춤형 AI 도우미 메뉴
+5. 🎨 이미지 만들기 (`image-ai`) - 이미지 프롬프트의 특징을 이해하고 고품질 이미지를 생성하는 프롬프트 허브
 
 ### 데스크톱
 
@@ -124,21 +125,22 @@ Vercel 정적 배포
 
 ## 6. 페이지 유형
 
-프롬프트 페이지 유형은 세 가지입니다.
+공식 승인된 페이지 유형(렌더러)은 총 5가지입니다.
 
-### 6.1 `static-prompt`
+### 6.1 `landing`
 
-완성된 프롬프트를 제공하는 페이지입니다.
+홈(`/`) 랜딩 페이지를 렌더링합니다.
 
-- 입력 없음
-- 생성 버튼 없음
-- 프롬프트 표시
-- 복사 기능
-- 필요한 경우 외부 AI 열기
+### 6.2 `static-prompt`
 
-### 6.2 `prompt-builder`
+완성된 프롬프트 및 실시간 프리뷰를 제공하는 기본 프롬프트 페이지입니다.
 
-입력값을 바탕으로 브라우저에서 프롬프트를 조합합니다.
+- 입력 없음 (또는 인라인 콤보박스 칩 선택)
+- 프롬프트 복사 및 외부 AI 연동 지원
+
+### 6.3 `prompt-builder`
+
+입력 필드(텍스트, 선택)를 바탕으로 브라우저에서 프롬프트를 조합합니다.
 
 ```text
 입력·선택
@@ -158,18 +160,15 @@ Vercel 정적 배포
 - 사용자가 결과 수정 가능
 - 자동 입력을 약속하지 않음
 
-### 6.3 `practice-timeline`
+### 6.4 `markdown-prompt`
 
-단계형 실습을 세로로 보여줍니다.
+장문의 가이드나 지침서를 정형화된 마크다운 문서 형태로 렌더링하는 페이지입니다.
 
-- tab 금지
-- wizard 금지
-- slide 금지
-- 모든 단계 동시 표시
-- JSON 배열 기반
-- 최종 프롬프트 별도 강조
+### 6.5 `practice-timeline` (미사용 예약)
 
-새 페이지 유형은 사용자 승인 없이 추가하지 않습니다.
+단계형 실습을 세로 타임라인으로 보여주는 페이지입니다. (엔진 구현 완료, 신규 실습용 예약)
+
+새 페이지 유형은 사용자 승인 없이 임의로 추가하지 않습니다.
 
 ---
 
@@ -177,9 +176,11 @@ Vercel 정적 배포
 
 ### 공통 렌더러
 
-- `StaticPromptPage`
-- `PromptBuilderPage`
-- `PracticeTimelinePage`
+- `LandingPage` (`landing`)
+- `StaticPromptPage` (`static-prompt`)
+- `PromptBuilderPage` (`prompt-builder`)
+- `MarkdownPromptPage` (`markdown-prompt`)
+- `PracticeTimelinePage` (`practice-timeline`)
 
 ### 공통 컴포넌트
 
@@ -279,13 +280,13 @@ data/
 
 - 저장소 내 모든 정적 페이지의 단일 진실 등록부
 - `version`: 페이지 레지스트리 스키마 버전 (현재: `1`)
-- `entries`: 개별 페이지 메타데이터 객체 배열
+- `pages`: 개별 페이지 메타데이터 객체 배열
   - `id`: 고유 페이지 식별자
   - `title`: 페이지 제목
   - `description`: 페이지 메타 설명문
   - `route`: 정적 생성 URL 경로 (`/` 및 trailing slash 규칙 준수)
   - `source`: 마크다운 원본 소스 경로 (`pages/...`)
-  - `type`: 프롬프트 렌더러 유형 (`static-prompt`, `prompt-builder`, `practice-timeline`)
+  - `type`: 페이지 렌더러 유형 (`landing`, `static-prompt`, `prompt-builder`, `markdown-prompt`, `practice-timeline`)
   - `section`: 소속 상위 메뉴 섹션 ID
   - `order`: 정렬 순서
   - `navigation`: 사이드바/내비게이션 노출 여부 (`true`/`false`)

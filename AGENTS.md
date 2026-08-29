@@ -33,7 +33,7 @@
 | **토큰 절약, 파일 읽기 범위, 도구 탐색 계층** | [`docs/agent-policy/tooling-efficiency.md`](docs/agent-policy/tooling-efficiency.md) | 수술적 독해, 500줄 독해 제한, 도구 계층 |
 | **코딩 스타일, JS/Python/CSS, 수정 원칙, 보안** | [`docs/agent-policy/coding-standards.md`](docs/agent-policy/coding-standards.md) <br> `.agents/skills/best-practices/` | 수술적 수정 원칙, 생성 파일 직접 수정 금지, 모던 웹 베스트 프랙티스 |
 | **레이아웃, 시각 토큰, UI/UX, 테마, 모던 디자인** | [`docs/design-guidelines.md`](docs/design-guidelines.md) <br> `.agents/skills/frontend-design/` <br> `.agents/skills/web-design-guidelines/` | 정보구조, 테마 시스템, 공통 컴포넌트, 세련된 UI 원칙, Vercel 웹 디자인 가이드 |
-| **프롬프트 3개 유형 (`static`, `builder`, `timeline`)** | [`docs/prompt-page-guidelines.md`](docs/prompt-page-guidelines.md) | 3가지 정식 유형, 그냥 프롬프트 vs 설정값 반영 프롬프트 분리 규칙 |
+| **승인된 페이지 유형 (`landing`, `static-prompt`, `prompt-builder`, `markdown-prompt`, `practice-timeline`)** | [`docs/prompt-page-guidelines.md`](docs/prompt-page-guidelines.md) | 5가지 공식 유형 계약, 그냥 프롬프트 vs 설정값 반영 프롬프트 분리 규칙 |
 | **데이터 파일, JSON 규칙, Markdown 콘텐츠** | [`docs/content-guidelines.md`](docs/content-guidelines.md) | `data/` 및 `pages/` 구조, 경로 일관성 |
 | **메타태그, canonical, sitemap, JSON-LD, SEO** | [`docs/seo-guidelines.md`](docs/seo-guidelines.md) <br> `.agents/skills/seo/` | 정적 HTML 본문 보존, SEO 계약 및 검색 최적화 |
 | **키보드 접근성, ARIA, 포커스, WCAG 2.2 표준** | [`docs/accessibility-guidelines.md`](docs/accessibility-guidelines.md) <br> `.agents/skills/accessibility/` | 웹 접근성 표준(WCAG 2.2), 스크린 리더, 반응형 규칙 |
@@ -75,7 +75,7 @@ JSON · Markdown · Templates
 - 사용자 승인 없는 백엔드, DB, 인증, 외부 AI API 도입 금지
 - 모든 경로를 단일 `index.html`로 보내는 SPA Catch-all Rewrite 및 SPA Fallback 금지
 - 페이지 핵심 본문을 클라이언트 JS가 뒤늦게 생성하는 구조 금지
-- 세 가지 프롬프트 페이지 유형외의 새 유형 임의 추가 금지
+- 승인된 5종 페이지 유형(`landing`, `static-prompt`, `prompt-builder`, `markdown-prompt`, `practice-timeline`) 외의 새 유형 임의 추가 금지
 - 생성된 테마 파일이나 `dist/` 결과물 직접 수정 금지
 - **아키텍처 및 핵심 구조 변경 금지**: `site.css`의 핵심 레이아웃(`.prompt-item` 등)뿐만 아니라, **현재 프로젝트 아키텍처, 컴포넌트 구조, 데이터 흐름 등에 변경이 발생한다고 판단되는 모든 경우** 임의 수정이 절대 금지됩니다. 반드시 리포팅 및 수정 계획을 제출하고 사용자의 사전 허락을 구해야 합니다.
 - **임의 깃허브 푸시 금지**: 작업이 완료되었거나 '계획 승인(Proceed)'을 받았더라도, 사용자가 "깃허브에 푸시해 줘"라고 별도로 명시적인 지시를 내리기 전까지는 **임의로 `git push`를 실행하지 않습니다.**
@@ -106,7 +106,7 @@ JSON · Markdown · Templates
   - 구도/비율: 원본 파손율이 가장 적은 `원본 사진 비율 유지` 또는 `사진 구도 그대로`를 무조건 1순위(기본값)로 둡니다.
   - 화풍/색감: 해당 프롬프트의 특징을 가장 강력하게 나타내는 옵션을 1순위로 배치합니다.
 - **수정 전 Git 히스토리 대조 선조사 규칙**: 지침 파일을 정돈하거나 프롬프트를 수정하기 전에 무조건 최근 3개 커밋 내역(`git log -p -n 3`)을 조회하여 사용자의 수동 개입/수정 이력을 100% 선조사하고, 기존에 임의 기입된 커스텀 메타데이터(예: 다중 `preview` 이미지나 수동 `source` 정보 등)를 덮어쓰지 않고 온전히 보존해야 합니다.
-- **메타데이터(preview/source) 적합성 검증 규칙**: 프롬프트 Frontmatter에 `preview`나 `source` 메타데이터가 명시적으로 기재되어 있는 경우에 한해, 해당 키의 값이 비어있지 않은지 및 실제 이미지 파일이 디스크에 실존하는지 규격 적합성을 확인해야 하며, `audit_prompts.py` 진단 도구를 구동해 오작동 여부를 지속 확인해야 합니다.
+- **메타데이터(preview/source) 적합성 검증 규칙**: 프롬프트 Frontmatter에 `preview`나 `source` 메타데이터가 명시적으로 기재되어 있는 경우에 한해, 해당 키의 값이 비어있지 않은지 및 실제 이미지 파일이 디스크에 실존하는지 규격 적합성을 확인해야 하며, `python3 scripts/audit_prompts.py` 진단 도구를 구동해 오작동 여부를 지속 확인해야 합니다.
 - **이미지 에셋 추가 및 WebP 최적화 규칙 (의무)**: 프롬프트 예제 또는 본문용 신규 이미지를 `assets/images/<상위메뉴>/<페이지명>/`에 추가할 때에는 반드시 `python3 scripts/optimize_images.py --replace`를 실행하여 고품질 WebP(Quality 85, 최대 1600px)로 일괄 변환하고 원본 대용량 파일을 정리해야 합니다. 마크다운의 `preview:` 및 본문 링크는 항상 `.webp` 확장자를 사용해야 하며, 1MB를 초과하는 바이너리 이미지는 빌드 시 자동 차단됩니다 (`core/build_pipeline.py`, `tests/test_image_assets.py`).
 - **볼드(`**`) 마크다운 서식 최소화 및 평문화 규칙 (의무)**:
   - 프롬프트 마크다운(`.md`) 파일 작성 및 수정 시, 대분류 헤더(`###`) 등 구조적으로 반드시 필요한 경우가 아니라면 옵션명, 목록 항목, 본문 설명, 프롬프트 내부 지침에 불필요한 `**` (볼드 마크다운)을 추가하지 않습니다.

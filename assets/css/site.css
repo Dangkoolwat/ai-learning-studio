@@ -468,6 +468,21 @@ html[data-theme-mode="dark"] .site-theme-toggle__icon--moon {
   background: var(--site-accent-subtle);
 }
 
+.sub-nav-badge--featured {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--site-accent);
+  background: var(--site-accent-subtle);
+  border: 1px solid var(--site-border);
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
 /* Sub-navigation Group Header - 확실한 그룹 분리 및 시각적 위계 */
 .sub-nav-group-header {
   margin-top: 1.35rem;

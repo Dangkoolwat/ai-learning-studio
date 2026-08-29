@@ -28,8 +28,11 @@ jobs:
       - name: Run lint
         run: ruff check core scripts tests
 
-      - name: Run unit tests
+      - name: Run Python unit tests
         run: python3 -m unittest discover -s tests
+
+      - name: Run prompt audit
+        run: python3 scripts/audit_prompts.py --strict
 
       - name: Run build
         run: python3 scripts/build.py
