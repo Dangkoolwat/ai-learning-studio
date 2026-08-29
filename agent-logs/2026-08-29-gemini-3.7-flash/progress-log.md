@@ -15,6 +15,7 @@
   - `core/template_engine.py`: `sub.featured` 활성화 시 `<span class="sub-nav-badge--featured">추천</span>` 렌더링 지원
   - `assets/css/site.css`: `.sub-nav-badge--featured` 추천 배지 스타일 추가
   - `data/navigation.json`: 5대 메인 메뉴(상위 섹션) 전반에 걸쳐 핵심 대표 프롬프트에 `featured: true` 추천 플래그 확대 반영
+  - `templates/partials/head.html`, `assets/js/navigation.js`: 상단 홈 링크 클릭 시 이전 경로로 강제 리디렉션되던 버그 해소 (마지막 방문 경로 가로채기 스크립트 제거)
   - `data/navigation.json`: `silly-doodle`, `sketch-sticker` 추천 뱃지 추가 반영
   - `data/navigation.json`, `data/page-registry.json`, `summer-vacation-basic.md`: '여름휴가 계획 세우기 (기초편)'으로 라벨/제목 3자 동기화 단축 반영
   - `pages/index.md`, `pages/sections/image-ai/recipe-infographic.md`: 레지스트리와 불일치하던 description 동기화

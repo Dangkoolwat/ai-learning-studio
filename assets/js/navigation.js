@@ -6,7 +6,6 @@
 
 const COMPACT_MEDIA_QUERY = window.matchMedia("(max-width: 899px)");
 const NAV_SCROLL_KEY = "als-nav-scroll-pos";
-const LAST_MENU_ROUTE_KEY = "als-last-visited-route";
 
 /**
  * Updates root and toggle button state for mobile navigation drawer.
@@ -33,16 +32,6 @@ export function initNavigation() {
     return;
   }
 
-  // 현재 방문한 페이지 경로 기억 (홈/루트가 아닌 실제 메뉴일 때)
-  const currentPath = window.location.pathname;
-  if (currentPath && currentPath !== "/" && currentPath !== "/index.html") {
-    try {
-      localStorage.setItem(LAST_MENU_ROUTE_KEY, currentPath);
-    } catch {
-      // LocalStorage access restricted in private mode
-    }
-  }
-
   // 데스크톱 환경에서 사이드바 스크롤 위치 복원
   if (!COMPACT_MEDIA_QUERY.matches) {
     try {
@@ -54,19 +43,15 @@ export function initNavigation() {
       // SessionStorage access restricted
     }
 
-    // 링크 클릭 직전의 스크롤 위치 및 마지막 메뉴 경로 기억
+    // 링크 클릭 직전의 스크롤 위치 기록
     navigation.addEventListener("click", (e) => {
       const link = e.target.closest("a");
       if (!link) return;
 
       try {
         sessionStorage.setItem(NAV_SCROLL_KEY, String(navigation.scrollTop));
-        const targetPath = link.pathname || link.getAttribute("href");
-        if (targetPath && targetPath !== "/" && targetPath !== "/index.html") {
-          localStorage.setItem(LAST_MENU_ROUTE_KEY, targetPath);
-        }
       } catch {
-        // SessionStorage / LocalStorage write restricted
+        // SessionStorage write restricted
       }
     });
 
