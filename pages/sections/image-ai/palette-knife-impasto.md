@@ -5,7 +5,7 @@ description: 사진 속 주인공과 분위기를 살리면서, 두껍게 솟아
 preview: /assets/images/image-ai/palette-knife-impasto/palette-knife-impasto1.webp, /assets/images/image-ai/palette-knife-impasto/palette-knife-impasto2.webp, /assets/images/image-ai/palette-knife-impasto/palette-knife-impasto3.webp, /assets/images/image-ai/palette-knife-impasto/palette-knife-impasto4.webp
 ai_target: ChatGPT, Gemini
 type: static-prompt
-source: Threads (@jelly.ppori)
+source: Threads (@foodibear_)
 ---
 
 # 사진을 팔레트 나이프 임파스토 유화로 만들기
