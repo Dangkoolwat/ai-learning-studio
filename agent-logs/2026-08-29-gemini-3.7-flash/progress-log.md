@@ -57,3 +57,56 @@
 
 ### 4. 상태
 * **완료 (Ready for Deployment)**
+
+---
+
+## 작업 내용: prompt-builder 렌더러 개선을 통한 프롬프트 빌더 하단 실전 꿀팁(Quick Tips) 렌더링 지원
+
+### 1. 작업 개요
+* **목적**: `prompt-builder` 페이지 유형(`prompt-field` + `prompt-template`)에서도 마크다운 내 `---`로 구분된 `💡 실전 활용 꿀팁` 섹션이 프롬프트 빌더 UI 바로 아래에 정갈하게 렌더링되도록 렌더러 개선.
+* **적용 파일**:
+  1. `core/renderers/prompt_builder.py`: 마크다운 컨트롤 블록 플레이스홀더 치환 로직 추가
+  2. `pages/sections/image-ai/recipe-infographic.md`: 하단 `💡 실전 활용 꿀팁 (Quick Tips)` 섹션 정상 연결
+
+### 2. 검증 결과
+* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
+* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
+* `dist/image-ai/recipe-infographic/index.html`: 프롬프트 빌더 UI 바로 아래에 실전 꿀팁 카드 렌더링 확인 완료
+
+### 3. 상태
+* **완료 (Ready for Deployment)**
+
+---
+
+## 작업 내용: 프롬프트 빌더 중첩 라운딩 박스 제거 및 레이아웃 정돈
+
+### 1. 작업 개요
+* **문제 현상**: `prompt-builder` 폼이 바깥 큰 라운딩 카드(`<div class="practice-step-card">`) 내부에 중첩되어 "상자 속 상자" 형태의 이중 테두리와 과거 점선 테두리 CSS 노이즈 발생.
+* **해결 조치**:
+  1. `core/renderers/prompt_builder.py`: 플레이스홀더 치환 시 마크다운 카드를 닫고 `<section class="prompt-builder">`를 독립 플랫 영역으로 렌더링되도록 분리.
+  2. `assets/css/site.css`: 과거 카드 결합용 점선 테두리(`border-top: 1px dashed`) 및 모서리 왜곡 CSS 해킹 제거.
+
+### 2. 검증 결과
+* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
+* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
+* `dist/image-ai/recipe-infographic/index.html`: 이중 라운딩 박스 제거 및 정갈한 독립 폼 레이아웃 렌더링 확인
+
+### 3. 상태
+* **완료 (Ready for Deployment)**
+
+---
+
+## 작업 내용: 프롬프트 빌더 가로폭 및 내부 패딩 통일 (전체 카드 정렬 일치)
+
+### 1. 작업 개요
+* **문제 현상**: `.prompt-builder` 컨테이너 잔여 패딩(32px) 및 카드 내부 패딩 불일치로 인해, 옵션 영역 및 완성 프롬프트 영역의 좌우 가로폭이 상하단 카드와 어긋나는 현상 발생.
+* **해결 조치**:
+  1. `assets/css/site.css`: `.prompt-builder` 컨테이너의 패딩을 완전 제거(`padding: 0 !important; width: 100% !important;`)
+  2. `.prompt-field` 및 `.prompt-builder__result`의 외곽 폭(`width: 100%`)과 내부 패딩(`padding: 2.25rem 2.5rem !important`)을 상단 설명/하단 꿀팁 카드(`.practice-step-card`)와 100% 일치시켜 외곽선과 내부 시작선 완벽 정렬.
+
+### 2. 검증 결과
+* `python3 scripts/build.py`: 정상 완료 (71개 페이지, 47개 에셋 생성, Exit Code 0)
+* `python3 -m unittest discover -s tests`: 64개 단위 테스트 전체 통과 (Exit Code 0)
+
+### 3. 상태
+* **완료 (Ready for Deployment)**

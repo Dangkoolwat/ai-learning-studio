@@ -1086,10 +1086,12 @@ html[data-theme-mode="dark"] .badge-ai--universal {
 }
 
 .prompt-builder {
+  width: 100%;
+  box-sizing: border-box;
   margin-top: var(--als-space-6);
-  padding: var(--als-space-8);
-  border: 1px solid var(--site-border);
-  background: rgba(255, 255, 255, 0.72);
+  padding: 0;
+  border: none;
+  background: transparent;
 }
 
 .image-slider {
@@ -1254,20 +1256,58 @@ html[data-theme-mode="dark"] .badge-ai--universal {
 }
 
 .prompt-field {
-  padding: var(--als-space-5);
-  border: 1px solid var(--site-border);
-  border-radius: var(--site-radius-md);
-  background: var(--site-surface);
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  padding: 2.25rem 2.5rem !important;
+  border: 1px solid var(--site-border) !important;
+  border-radius: var(--site-radius) !important;
+  background: var(--site-surface) !important;
+  box-shadow: var(--site-shadow) !important;
+  transition: all 200ms ease;
 }
 
-.prompt-field__label,
+.prompt-field:hover {
+  border-color: var(--site-border-hover) !important;
+  box-shadow: var(--site-shadow-hover) !important;
+  transform: translateY(-2px);
+}
+
+.prompt-field__label {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 0 0.65rem 0 !important;
+  padding: 0.35rem 0.85rem !important;
+  background: var(--site-accent-subtle) !important;
+  border: 1px solid rgba(37, 99, 235, 0.18) !important;
+  border-radius: 999px !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: var(--site-accent) !important;
+  letter-spacing: -0.01em !important;
+}
+
+.prompt-field__label::before {
+  content: "✦" !important;
+  font-size: 0.85em !important;
+  color: var(--site-accent) !important;
+}
+
 .timeline-step__title {
   margin: 0;
   font-size: var(--als-font-size-lg);
   line-height: var(--als-line-height-tight);
 }
 
-.prompt-field__description,
+.prompt-field__description {
+  margin: 0 0 1rem 0 !important;
+  color: var(--site-text-secondary) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+}
+
 .prompt-field__placeholder,
 .prompt-field__requirement,
 .timeline-step__description,
@@ -1278,18 +1318,18 @@ html[data-theme-mode="dark"] .badge-ai--universal {
 
 .prompt-field__select {
   width: 100%;
-  margin-top: var(--als-space-3);
-  padding: var(--als-space-3) 2.5rem var(--als-space-3) var(--als-space-4);
-  border: 1px solid var(--site-border);
-  border-radius: var(--site-radius-sm);
-  background-color: var(--site-surface);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1rem;
-  color: var(--site-text);
-  font-size: var(--als-font-size-base);
-  line-height: var(--als-line-height-normal);
+  margin-top: 0 !important;
+  padding: 0.75rem 2.5rem 0.75rem 1rem !important;
+  border: 1px solid var(--site-border) !important;
+  border-radius: var(--site-radius-sm) !important;
+  background-color: var(--site-surface) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  background-size: 1rem !important;
+  color: var(--site-text) !important;
+  font-size: var(--als-font-size-base) !important;
+  line-height: var(--als-line-height-normal) !important;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -1299,8 +1339,8 @@ html[data-theme-mode="dark"] .badge-ai--universal {
 
 .prompt-field__select:focus {
   outline: none;
-  border-color: var(--site-accent);
-  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.15);
+  border-color: var(--site-accent) !important;
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.15) !important;
 }
 
 .prompt-field__custom-input-wrapper {
@@ -1353,13 +1393,17 @@ html[data-theme-mode="dark"] .badge-ai--universal {
 }
 
 .prompt-builder__result {
-  margin-top: var(--als-space-6);
-  padding: 1.35rem 1.5rem;
-  border: 1px solid var(--site-prompt-output-border);
-  border-radius: var(--site-radius-md);
-  background: var(--site-prompt-output-bg);
-  color: var(--site-prompt-output-text);
-  box-shadow: var(--site-shadow);
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  margin-top: 1.5rem !important;
+  padding: 2.25rem 2.5rem !important;
+  border: 1px solid var(--site-prompt-output-border) !important;
+  border-radius: var(--site-radius) !important;
+  background: var(--site-prompt-output-bg) !important;
+  color: var(--site-prompt-output-text) !important;
+  box-shadow: var(--site-shadow) !important;
 }
 
 .prompt-builder__result.is-hidden {
@@ -1367,20 +1411,35 @@ html[data-theme-mode="dark"] .badge-ai--universal {
 }
 
 .prompt-builder__result-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--als-space-3);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 1rem !important;
 }
 
 .prompt-builder__result-header .prompt-item__ai-badges {
-  margin-top: 0;
-  margin-bottom: 0;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .prompt-builder__result-title {
-  margin: 0;
-  font-size: var(--als-font-size-xl);
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: var(--site-text) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.prompt-builder__result-title::before {
+  content: "" !important;
+  display: inline-block !important;
+  width: 4px !important;
+  height: 1.1em !important;
+  background: var(--site-accent) !important;
+  border-radius: 2px !important;
 }
 
 .prompt-builder__result-actions {
@@ -1798,37 +1857,26 @@ html.js .site-nav-toggle {
   box-shadow: var(--site-shadow-hover);
 }
 
-/* ===== Fix: Prompt Builder - Combine Last Card and Form (CSS Hack) ===== */
-@media (min-width: 1024px) {
-  .page-content--prompt-builder {
-    gap: 0 !important; /* 강제 분리 요인 제거 */
-  }
-  .page-content--prompt-builder > * + * {
-    margin-top: var(--als-space-6); /* gap 대신 margin-top 부여 */
-  }
-}
-
-/* 폼 영역은 위(본문 마지막 카드)와 붙어야 하므로 마진 제거 */
+/* ===== Prompt Builder Layout ===== */
 .page-content--prompt-builder .prompt-builder {
-  margin-top: 0 !important;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top: 1px dashed var(--site-border);
-  background: var(--site-surface);
-  box-shadow: var(--site-shadow);
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  margin: 1.5rem 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-/* 본문의 하단 여백 제거 */
-.page-content--prompt-builder .page-body {
-  margin-bottom: 0 !important;
-}
-
-/* 본문 내 마지막 카드의 하단 모서리와 테두리 제거하여 폼과 결합되게 만듦 */
-.page-content--prompt-builder .page-body .practice-step-card:last-child {
-  margin-bottom: 0 !important;
-  border-bottom-left-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-  border-bottom: none !important;
+.page-content--prompt-builder .prompt-builder__fields {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* ==========================================================================

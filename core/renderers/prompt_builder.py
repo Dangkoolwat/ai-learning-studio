@@ -56,10 +56,6 @@ def render_prompt_builder_page(context: PageRendererContext) -> PageRendererResu
         PageIntroComponent(page_title=context.page_title, page_description=context.page_description),
         context.component_templates,
     )
-    body_result = render_page_body_component(
-        PageBodyComponent(body_html=context.rendered_markdown_html),
-        context.component_templates,
-    )
     slider_results = [
         render_image_slider_component(_build_image_slider_component(block), context.component_templates)
         for block in slider_blocks
@@ -104,6 +100,38 @@ def render_prompt_builder_page(context: PageRendererContext) -> PageRendererResu
         ),
         context.component_templates,
     )
+
+    body_html_content = context.rendered_markdown_html
+    has_placeholders = "<!-- RENDERER_CONTROL_BLOCK:" in body_html_content
+
+    if has_placeholders:
+        first_replaced = False
+
+        def _replace_placeholder(match: re.Match) -> str:
+            nonlocal first_replaced
+            lbl = match.group(1)
+            if lbl in ("prompt-field", "prompt-template"):
+                if not first_replaced:
+                    first_replaced = True
+                    return f'</div>\n{section_result.rendered_html}\n<div class="practice-step-card">'
+                return ""
+            return ""
+
+        body_html_content = re.sub(
+            r"<!-- RENDERER_CONTROL_BLOCK:([a-z0-9-]+):(\d+) -->",
+            _replace_placeholder,
+            body_html_content,
+        )
+        body_html_content = re.sub(r'<div class="practice-step-card">\s*</div>', '', body_html_content)
+        section_html = ""
+    else:
+        section_html = section_result.rendered_html
+
+    body_result = render_page_body_component(
+        PageBodyComponent(body_html=body_html_content),
+        context.component_templates,
+    )
+
     top_preview_html = "\n".join(result.rendered_html for result in slider_results)
     result = PageRendererResult(
         page_id=context.page_id,
@@ -115,7 +143,7 @@ def render_prompt_builder_page(context: PageRendererContext) -> PageRendererResu
             page_type=context.page_type,
             intro_html=intro_result.rendered_html,
             body_html="\n".join(part for part in (top_preview_html, body_result.rendered_html) if part),
-            section_html=section_result.rendered_html,
+            section_html=section_html,
         ),
         source_heading_count=context.source_heading_count,
         rendered_section_count=len(field_blocks) + len(slider_blocks),
