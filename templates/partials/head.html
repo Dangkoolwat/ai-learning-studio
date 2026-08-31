@@ -16,6 +16,21 @@
       var saved = localStorage.getItem("als-theme-preference");
       var theme = (saved === "dark" || saved === "light") ? saved : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
       document.documentElement.setAttribute("data-theme-mode", theme);
+
+      // 마지막 방문 메뉴 자동 복원 및 홈 진입 제어
+      var rawPath = window.location.pathname.replace(/\/index\.html$/, "/");
+      var isHome = (rawPath === "" || rawPath === "/");
+      var search = window.location.search || "";
+      var isExplicitHome = search.indexOf("home=true") !== -1 || search.indexOf("stay=true") !== -1;
+
+      if (isHome && !isExplicitHome) {
+        var lastRoute = localStorage.getItem("als-last-visited-route");
+        if (lastRoute && lastRoute !== "/" && lastRoute !== "/index.html" && lastRoute !== rawPath) {
+          window.location.replace(lastRoute);
+        }
+      } else if (isHome && isExplicitHome) {
+        localStorage.setItem("als-last-visited-route", "/");
+      }
     } catch(e) {}
   })();
 </script>

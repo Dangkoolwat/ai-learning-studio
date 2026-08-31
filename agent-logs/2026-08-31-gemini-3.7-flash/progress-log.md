@@ -29,13 +29,16 @@
 - [x] **이미지 AI 전체 15개 프롬프트 페이지 꿀팁 섹션 상단 독립 카드 표준화 적용 (`소개 카드` -> `↓` -> `💡 꿀팁 카드` -> `↓` -> `🛠️ 프롬프트 카드`)**
 - [x] **마크다운 베이스 렌더러 개선**: `실전 활용 꿀팁` 카드에 `.practice-step-card--tips` 클래스 자동 태깅 및 빈 카드 자동 스킵 (`core/renderers/base.py`)
 - [x] **💡 실전 활용 꿀팁 카드 전용 시각적 악센트(Visual Accent) 스타일링 구현**: 앰버 캡슐 뱃지, 은은한 앰버 틴트 배경, 포인트 테두리 추가 (`assets/css/site.css`)
+- [x] **마지막 방문 URL 자동 복원 및 홈 진입 스마트 라우팅 구현**:
+  - `templates/partials/head.html`: 재접속 시 이전 서브메뉴 자동 복원 및 홈 명시적 진입 시 홈 유지 IIFE 구현
+  - `assets/js/navigation.js`: 서브메뉴 방문 시 실시간 경로 기록 및 상단 로고(`.site-brand`) 클릭 시 홈 상태(`'/'`) 갱신 처리
 - [x] 전체 72개 페이지 일괄 빌드 및 사이드 이펙트 전수 검증
 - [x] 프롬프트 진단(`scripts/audit_prompts.py`) 통과 검증 (42개 에셋 검증)
 - [x] 빌드 파이프라인(`scripts/build.py`) 72개 페이지 및 52개 에셋 정상 생성 검증
 - [x] 73개 유닛 테스트 전체 통과 확인 (`python3 -m unittest discover -s tests`)
-- [x] 브라우저 스크린샷 기반 시각적 렌더링 및 레이아웃 무결성 검증 완료
+- [x] 브라우저 서브에이전트 기반 3대 라우팅 시나리오(자동 복원, 홈 클릭 진입, 홈 상태 유지) 전수 검증 완료
 
 ## 3. 검증 결과
 - `python3 scripts/build.py`: Exit Code 0 (Pages: 72, Assets: 52, Routes: 72)
 - `python3 scripts/audit_prompts.py`: Exit Code 0 (All prompt audits passed successfully)
-- `python3 -m unittest discover -s tests`: Ran 73 tests in 1.67s, OK
+- `python3 -m unittest discover -s tests`: Ran 73 tests in 1.76s, OK

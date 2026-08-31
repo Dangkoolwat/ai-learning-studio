@@ -6,6 +6,7 @@
 
 const COMPACT_MEDIA_QUERY = window.matchMedia("(max-width: 899px)");
 const NAV_SCROLL_KEY = "als-nav-scroll-pos";
+const LAST_MENU_ROUTE_KEY = "als-last-visited-route";
 
 /**
  * Updates root and toggle button state for mobile navigation drawer.
@@ -27,6 +28,24 @@ export function initNavigation() {
   const root = document.documentElement;
   const toggle = document.querySelector(".site-nav-toggle");
   const navigation = document.querySelector("#primary-navigation");
+  const brandLink = document.querySelector(".site-brand");
+
+  // 현재 방문한 페이지 경로 실시간 기억
+  const currentPath = window.location.pathname.replace(/\/index\.html$/, "/");
+  if (currentPath && currentPath !== "/" && currentPath !== "") {
+    try {
+      localStorage.setItem(LAST_MENU_ROUTE_KEY, currentPath);
+    } catch (e) {}
+  }
+
+  // 상단 로고(홈) 클릭 시 마지막 방문 경로를 홈('/')으로 갱신
+  if (brandLink instanceof HTMLAnchorElement) {
+    brandLink.addEventListener("click", () => {
+      try {
+        localStorage.setItem(LAST_MENU_ROUTE_KEY, "/");
+      } catch (e) {}
+    });
+  }
 
   if (!(toggle instanceof HTMLButtonElement) || !(navigation instanceof HTMLElement)) {
     return;
@@ -43,13 +62,19 @@ export function initNavigation() {
       // SessionStorage access restricted
     }
 
-    // 링크 클릭 직전의 스크롤 위치 기록
+    // 링크 클릭 직전의 스크롤 위치 및 마지막 메뉴 경로 기억
     navigation.addEventListener("click", (e) => {
       const link = e.target.closest("a");
       if (!link) return;
 
       try {
         sessionStorage.setItem(NAV_SCROLL_KEY, String(navigation.scrollTop));
+        const targetPath = link.pathname || link.getAttribute("href");
+        if (targetPath && targetPath !== "/" && targetPath !== "/index.html") {
+          localStorage.setItem(LAST_MENU_ROUTE_KEY, targetPath);
+        } else if (targetPath === "/" || targetPath === "/index.html") {
+          localStorage.setItem(LAST_MENU_ROUTE_KEY, "/");
+        }
       } catch {
         // SessionStorage write restricted
       }
