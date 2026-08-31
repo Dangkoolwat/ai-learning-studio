@@ -159,8 +159,16 @@ def audit_prompts(issues: list[AuditIssue], base_dir: Path = REPO_ROOT) -> int:
                 )
 
         # 4. Check prompt authoring rules
+        in_prompt_block = False
         for line_no, line in enumerate(body.splitlines(), start=1):
             line_stripped = line.strip()
+
+            if line_stripped.startswith("```prompt"):
+                in_prompt_block = True
+                continue
+            elif in_prompt_block and line_stripped.startswith("```"):
+                in_prompt_block = False
+                continue
 
             # Check disallowed placeholder option keywords at the end of dropdown choices
             if DISALLOWED_DROPDOWN_OPTION_RE.search(line):
@@ -187,6 +195,36 @@ def audit_prompts(issues: list[AuditIssue], base_dir: Path = REPO_ROOT) -> int:
                             severity="WARNING",
                         )
                     )
+
+            # Check unquoted free text input slot in list items (e.g. "- 항목: [직접 입력]" without quotes)
+            # Free text input slots (containing keywords like '입력', '작성', '붙여넣기') require quotes: "- 항목: \"[직접 입력]\""
+            if line_stripped.startswith("- ") and ":" in line_stripped:
+                key_part, val_part = line_stripped.split(":", 1)
+                val_trimmed = val_part.strip()
+                if val_trimmed.startswith("[") and val_trimmed.endswith("]") and not val_trimmed.startswith("[["):
+                    inner = val_trimmed[1:-1].strip()
+                    if "/" not in inner and "|" not in inner:
+                        # Only flag if it represents a free text placeholder
+                        if any(kw in inner for kw in ("입력", "작성", "붙여넣기", "자유", "내용을", "텍스트")):
+                            issues.append(
+                                AuditIssue(
+                                    file_path=f"{rel_path}:{line_no}",
+                                    issue_type="UNQUOTED_FREE_INPUT_SLOT",
+                                    message=f"Free text input slot '{val_trimmed}' should be enclosed in quotes (e.g. \"{val_trimmed}\").",
+                                    severity="WARNING",
+                                )
+                            )
+
+            # Check non-standard list markers within prompt blocks (e.g. '* ' instead of '- ')
+            if in_prompt_block and line_stripped.startswith("* "):
+                issues.append(
+                    AuditIssue(
+                        file_path=f"{rel_path}:{line_no}",
+                        issue_type="NON_STANDARD_LIST_MARKER",
+                        message="Use '- ' instead of '* ' for list markers inside prompt blocks.",
+                        severity="WARNING",
+                    )
+                )
     return checked
 
 

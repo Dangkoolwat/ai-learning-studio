@@ -73,3 +73,25 @@
   - `python3 scripts/build.py`: PASS (72 pages, 52 assets)
   - `python3 scripts/audit_prompts.py`: PASS
   - `python3 -m unittest discover -s tests`: Ran 73 tests, ALL OK
+
+## 6. Rule-as-Code 자동화 검증 스크립트 강화 및 무결성 정비 (2026-08-31 추가)
+- [x] `scripts/audit_prompts.py` 프롬프트 작성 룰 검증 엔진 고도화
+  - `UNQUOTED_FREE_INPUT_SLOT`: 단독 자유 입력 슬롯(예: `- 메뉴명: [직접 입력]`)의 큰따옴표 누락 감지 검증 추가
+  - `NON_STANDARD_LIST_MARKER`: ````prompt``` 블록 내 비표준 리스트 마커(`* `) 감지 및 표준(`- `) 권장 검증 추가
+- [x] `pages/sections/ai-assistant/korean-editor-guide.md` 마크다운 정돈 (`* ` -> `- `)
+- [x] `tests/test_audit_prompts.py` 신규 감사 규칙 단위 테스트 스위트 3종 추가 (총 76개 테스트로 확장)
+- [x] 전체 무결성 검증 완료
+  - `python3 scripts/audit_prompts.py --strict`: PASS (72개 마크다운 페이지, 42개 이미지 에셋)
+  - `python3 -m unittest discover tests`: Ran 76 tests, ALL OK
+  - `python3 scripts/build.py`: PASS (Pages: 72, Assets: 52, Routes: 72)
+
+## 7. 고추론 모델 임의 개선(Speculative Polish) 방지 및 스코프 잠금 정책 반영 (2026-08-31 추가)
+- [x] `docs/agent-policy/model-routing.md`에 제6절 [임의 개선 방지 및 스코프 잠금] 신설
+  - 6.1 임의 개선의 결함화 (No Speculative Polish): 요청 외 임의 리팩토링/최적화를 스코프 위반 결함(Defect)으로 규정
+  - 6.2 검증 모델의 이진 판정(Binary Pass/Fail) 강제: 주관적 품질 리뷰 금지, (1) 요구사항 구현 여부, (2) 테스트/빌드 성공 여부, (3) 무단 수정 여부만 판정
+  - 6.3 비차단 개선 의견 격리: 추가 개선 아이디어는 코드 수정 루프로 환류하지 않고 [차기 참고 메모]로 격리
+  - 6.4 완료 정의(Definition of Done) 및 즉시 턴 종료 명문화
+- [x] 전체 무결성 검증 완료
+  - `python3 scripts/audit_prompts.py --strict`: PASS
+  - `python3 -m unittest discover tests`: Ran 76 tests, ALL OK
+  - `python3 scripts/build.py`: PASS (72 pages, 52 assets)

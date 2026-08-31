@@ -161,6 +161,42 @@ class AuditPromptsFailurePathTests(unittest.TestCase):
         issue_types = [i.issue_type for i in issues]
         self.assertIn("DATA_CONSISTENCY_ERROR", issue_types)
 
+    def test_unquoted_free_input_slot_produces_warning(self) -> None:
+        """Free text input slot without quotes (e.g. - 항목: [직접 입력]) must produce UNQUOTED_FREE_INPUT_SLOT warning."""
+        md_file = self.pages_dir / "test.md"
+        md_file.write_text(
+            "---\ntitle: Test\ndescription: Desc\n---\n# Title\n- 메뉴명: [직접 입력]\n",
+            encoding="utf-8",
+        )
+        issues = []
+        audit_prompts(issues, base_dir=self.base_dir)
+        issue_types = [i.issue_type for i in issues]
+        self.assertIn("UNQUOTED_FREE_INPUT_SLOT", issue_types)
+
+    def test_quoted_free_input_slot_passes(self) -> None:
+        """Properly quoted free text slot (e.g. - 메뉴명: \"[직접 입력]\") must NOT produce warning."""
+        md_file = self.pages_dir / "test.md"
+        md_file.write_text(
+            "---\ntitle: Test\ndescription: Desc\n---\n# Title\n- 메뉴명: \"[직접 입력]\"\n",
+            encoding="utf-8",
+        )
+        issues = []
+        audit_prompts(issues, base_dir=self.base_dir)
+        warnings = [i for i in issues if i.severity == "WARNING"]
+        self.assertEqual(warnings, [])
+
+    def test_non_standard_list_marker_in_prompt_block_produces_warning(self) -> None:
+        """Using '* ' marker inside ```prompt block must produce NON_STANDARD_LIST_MARKER warning."""
+        md_file = self.pages_dir / "test.md"
+        md_file.write_text(
+            "---\ntitle: Test\ndescription: Desc\n---\n# Title\n```prompt\ntitle: T\n---\n* 항목 1\n* 항목 2\n```\n",
+            encoding="utf-8",
+        )
+        issues = []
+        audit_prompts(issues, base_dir=self.base_dir)
+        issue_types = [i.issue_type for i in issues]
+        self.assertIn("NON_STANDARD_LIST_MARKER", issue_types)
+
 
 if __name__ == "__main__":
     unittest.main()
