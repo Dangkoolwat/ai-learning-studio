@@ -49,5 +49,9 @@
   - 고위험 작업(아키텍처, 데이터 계약, 다중 모듈, 빌드/배포 등) 하위 모델 단독 수정 엄격 차단
   - 모델 불일치 시 `[모델 적합성 점검]` 표준 포맷 선보고 및 승인 대기
   - 저위험 작업도 1.5절 사전 승인 게이트 유지 및 PoC 결과의 최종 코드 무단 반영 차단
-- [x] 정적 빌드 검증 (`python3 scripts/build.py`) 완료 (72개 페이지 정상 생성)
+- [x] `AGENTS.md` Thin Router 다이어트 및 Lazy-Loading 정책 완비
+  - 7절의 장황한 9개 세부 마크다운/에셋/동기화 규칙을 `docs/prompt-page-guidelines.md`로 전면 이관
+  - `AGENTS.md` 7절을 10줄 내외의 경량 라우터 포인터로 다이어트 완료 (토큰 소모 대폭 절감)
+- [x] 정적 빌드(`scripts/build.py`), 프롬프트 감사(`scripts/audit_prompts.py`), 73개 단위 테스트 전체 PASS 검증 완료
+
 
