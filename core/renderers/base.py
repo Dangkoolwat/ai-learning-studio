@@ -16,20 +16,20 @@ INLINE_BOLD_RE = re.compile(r"\*\*(.*?)\*\*")
 def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
     """Render the limited Markdown subset used by the project."""
 
-    blocks: list[str] = []
+    step_cards: list[list[str]] = []
+    current_card_blocks: list[str] = []
     paragraph_lines: list[str] = []
     list_items: list[str] = []
     current_list_type: str | None = None
     code_lines: list[str] = []
     in_code_block = False
-    in_step_card = False
 
     def flush_paragraph() -> None:
         if not paragraph_lines:
             return
         text = " ".join(line.strip() for line in paragraph_lines if line.strip())
         if text:
-            blocks.append(f"<p>{_render_inline_markup(text, source_path=source_path)}</p>")
+            current_card_blocks.append(f"<p>{_render_inline_markup(text, source_path=source_path)}</p>")
         paragraph_lines.clear()
 
     def flush_list() -> None:
@@ -38,12 +38,15 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
             return
         tag = current_list_type or "ul"
         items = "".join(f"<li>{item}</li>" for item in list_items)
-        blocks.append(f"<{tag}>{items}</{tag}>")
+        current_card_blocks.append(f"<{tag}>{items}</{tag}>")
         list_items.clear()
         current_list_type = None
 
-    blocks.append('<div class="practice-step-card">')
-    in_step_card = True
+    def flush_step_card() -> None:
+        flush_paragraph()
+        flush_list()
+        step_cards.append(list(current_card_blocks))
+        current_card_blocks.clear()
 
     for raw_line in markdown_text.splitlines():
         stripped = raw_line.strip()
@@ -51,7 +54,7 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
         if in_code_block:
             if stripped.startswith("```"):
                 code_html = escape_html("\n".join(code_lines))
-                blocks.append(f"<pre><code>{code_html}</code></pre>")
+                current_card_blocks.append(f"<pre><code>{code_html}</code></pre>")
                 code_lines.clear()
                 in_code_block = False
             else:
@@ -70,16 +73,11 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
         if stripped.startswith("<!-- RENDERER_CONTROL_BLOCK:"):
             flush_paragraph()
             flush_list()
-            blocks.append(stripped)
+            current_card_blocks.append(stripped)
             continue
 
         if stripped in {"---", "***", "___"}:
-            flush_paragraph()
-            flush_list()
-            if in_step_card:
-                blocks.append('</div>')
-                blocks.append('<div class="step-flow-arrow" aria-hidden="true">↓</div>')
-                blocks.append('<div class="practice-step-card">')
+            flush_step_card()
             continue
 
         heading_level, heading_text = _parse_heading(stripped)
@@ -87,7 +85,7 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
             flush_paragraph()
             flush_list()
             rendered_level = min(heading_level + 1, 6)
-            blocks.append(f"<h{rendered_level}>{escape_html(heading_text)}</h{rendered_level}>")
+            current_card_blocks.append(f"<h{rendered_level}>{escape_html(heading_text)}</h{rendered_level}>")
             continue
 
         if stripped.startswith("- "):
@@ -113,12 +111,22 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
     if in_code_block:
         raise BuildError("Render Markdown", "missing closing code fence", path=source_path)
 
-    flush_paragraph()
-    flush_list()
-    if in_step_card:
-        blocks.append('</div>')
+    flush_step_card()
 
-    return "\n".join(blocks)
+    result_blocks: list[str] = []
+    for card_blocks in step_cards:
+        if not card_blocks:
+            continue
+        if result_blocks:
+            result_blocks.append('<div class="step-flow-arrow" aria-hidden="true">↓</div>')
+
+        is_tips_card = any("실전 활용 꿀팁" in b for b in card_blocks)
+        card_cls = "practice-step-card practice-step-card--tips" if is_tips_card else "practice-step-card"
+        result_blocks.append(f'<div class="{card_cls}">')
+        result_blocks.extend(card_blocks)
+        result_blocks.append('</div>')
+
+    return "\n".join(result_blocks)
 
 
 def build_page_intro_html(*, page_title: str, page_description: str) -> str:

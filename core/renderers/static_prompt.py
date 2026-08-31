@@ -256,7 +256,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
             lbl = match.group(1)
             idx = int(match.group(2))
             if lbl == "prompt" and idx in prompt_blocks_by_index:
-                return prompt_blocks_by_index[idx]
+                return f'</div>\n{prompt_blocks_by_index[idx]}\n<div class="practice-step-card">'
             return ""
 
         body_html_content = re.sub(
@@ -264,6 +264,7 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
             _replace_placeholder,
             body_html_content,
         )
+        body_html_content = re.sub(r'<div class="practice-step-card">\s*</div>', '', body_html_content)
 
     body_result = render_page_body_component(
         PageBodyComponent(body_html=body_html_content),

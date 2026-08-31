@@ -37,6 +37,13 @@
   --site-prompt-output-border: #CBD5E1;
   --site-prompt-output-text: #0F172A;
   
+  /* Quick Tips Card Palette (Light Mode) */
+  --site-tip-bg: rgba(245, 158, 11, 0.035);
+  --site-tip-border: rgba(245, 158, 11, 0.28);
+  --site-tip-border-hover: rgba(245, 158, 11, 0.5);
+  --site-tip-accent: #D97706;
+  --site-tip-accent-subtle: rgba(245, 158, 11, 0.1);
+  
   color-scheme: light;
 }
 
@@ -73,6 +80,13 @@ html[data-theme-mode="dark"] {
   --site-prompt-output-bg: #090A0D;         /* 하단 실시간 완성본: 깊은 딥블랙 터미널 룩 */
   --site-prompt-output-border: #1F232B;
   --site-prompt-output-text: #F8FAFC;
+  
+  /* Quick Tips Card Palette (Dark Mode) */
+  --site-tip-bg: rgba(245, 158, 11, 0.05);
+  --site-tip-border: rgba(245, 158, 11, 0.22);
+  --site-tip-border-hover: rgba(245, 158, 11, 0.45);
+  --site-tip-accent: #FBBF24;
+  --site-tip-accent-subtle: rgba(245, 158, 11, 0.15);
   
   background: #090A0D !important;
   color-scheme: dark;
@@ -1883,6 +1897,54 @@ html.js .site-nav-toggle {
 .practice-step-card li {
   color: var(--site-text) !important;
   margin-bottom: 0.35rem !important;
+}
+
+/* 💡 실전 활용 꿀팁 카드 전용 시각적 악센트 스타일 */
+.practice-step-card--tips {
+  background: var(--site-tip-bg) !important;
+  border-color: var(--site-tip-border) !important;
+}
+
+.practice-step-card--tips:hover {
+  border-color: var(--site-tip-border-hover) !important;
+}
+
+.practice-step-card--tips > h3:first-child,
+.practice-step-card--tips > h4:first-child {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0.35rem 0.9rem !important;
+  background: var(--site-tip-accent-subtle) !important;
+  border: 1px solid var(--site-tip-border) !important;
+  border-radius: 999px !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: var(--site-tip-accent) !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 1.25rem !important;
+}
+
+.practice-step-card--tips > h3:first-child::before,
+.practice-step-card--tips > h4:first-child::before {
+  display: none !important;
+}
+
+.practice-step-card--tips h4 {
+  color: var(--site-text) !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.practice-step-card--tips h4::before {
+  content: "" !important;
+  display: inline-block !important;
+  width: 4px !important;
+  height: 1em !important;
+  background: var(--site-tip-accent) !important;
+  border-radius: 2px !important;
 }
 
 .step-flow-arrow {

@@ -39,3 +39,16 @@
 - `python3 scripts/audit_prompts.py --strict`: 71개 페이지 및 37개 이미지 자산 엄격 감사 통과 (0 errors, 0 warnings)
 - `python3 scripts/build.py`: 71개 정적 페이지 정상 빌드 및 dist 발행 완료
 - `python3 scripts/build.py --check`: 빌드 무결성 검증 통과
+
+---
+
+## 4. `palette-knife-impasto.md` 출처 메타데이터 변경 및 배포 (22:38)
+- **변경 사항**:
+  - `pages/sections/image-ai/palette-knife-impasto.md`: `source: Threads (@jelly.ppori)` -> `source: Threads (@foodibear_)`
+- **검증 결과**:
+  - `python3 scripts/build.py`: 71개 페이지 정상 빌드 완료
+  - `python3 scripts/audit_prompts.py`: 전수 감사 정상 통과
+- **배포 및 Git 동기화**:
+  - Commit: `ab4eb6e` (`docs(prompt): palette-knife-impasto 출처 정보 변경 (@foodibear_)`)
+  - Push: `origin/main` 푸시 완료 (`55dc742..ab4eb6e`)
+
