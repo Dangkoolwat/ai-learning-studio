@@ -42,3 +42,12 @@
 - `python3 scripts/build.py`: Exit Code 0 (Pages: 72, Assets: 52, Routes: 72)
 - `python3 scripts/audit_prompts.py`: Exit Code 0 (All prompt audits passed successfully)
 - `python3 -m unittest discover -s tests`: Ran 73 tests in 1.76s, OK
+
+## 4. AGENTS.md 에이전트 거버넌스 규칙 정립 (2026-08-31 추가)
+- [x] `6.4 작업 전 모델 적합성 점검 (사전 게이트)` 신규 규칙 제정 및 추가
+  - 구현·수정 작업 전 위험도/추론 난이도 분석 및 모델 적합성 선판단 의무화
+  - 고위험 작업(아키텍처, 데이터 계약, 다중 모듈, 빌드/배포 등) 하위 모델 단독 수정 엄격 차단
+  - 모델 불일치 시 `[모델 적합성 점검]` 표준 포맷 선보고 및 승인 대기
+  - 저위험 작업도 1.5절 사전 승인 게이트 유지 및 PoC 결과의 최종 코드 무단 반영 차단
+- [x] 정적 빌드 검증 (`python3 scripts/build.py`) 완료 (72개 페이지 정상 생성)
+
