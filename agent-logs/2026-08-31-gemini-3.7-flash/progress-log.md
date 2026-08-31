@@ -62,13 +62,13 @@
 ## 5. 거버넌스 정밀 보강 (검증 독립성, Bootstrap 예외, 운영문서 위험도 분리) (2026-08-31 추가)
 - [x] `docs/agent-policy/model-routing.md` 보강
   - Capability 기반 High-Reasoning Tier 정의 (특정 모델명 종속 탈피)
-  - 검증 모드 엄격 분리: Independent Higher-Tier Verification vs Self Compensatory Verification
-  - 고위험 작업의 셀프 검증을 상위 검증으로 허위 보고하는 행위 원천 금지
+  - 검증 모드 엄격 분리: Independent Higher-Tier Verification (동일 세션 후속 턴 독립성 배제) vs Self Compensatory Verification
+  - 고위험 작업의 셀프 검증을 상위 검증으로 허위 보고하는 행위 원천 금지 및 사용자 Override 없는 자체 보상 검증 완료 불가 명시
   - `[검증 결과]` 보고 템플릿에 Verifier Mode, Task/Session ID, Working-Tree Ref, PASS Evidence Summary 필드 추가
   - 저위험(Low Risk) 범위에서 운영 계약 문서(`AGENTS.md`, `docs/agent-policy/`, `agent-logs/`) 제외 명시
 - [x] `AGENTS.md` 보강
   - 2절에 `[Discovery Bootstrap 예외]` 명문화 (`pwd`, `list_dir`, `grep_search`, Serena 활성화 및 지정 파일 확인)
-  - 6.4절 고위험 범위 명문화 및 `docs/agent-policy/model-routing.md` 위임 관계 확립
+  - 6.4절 고위험 범위 명문화 및 사후 검증 문구 정렬 (`Substantive changes MUST be verified by an independent higher-tier verification model. If unavailable, completion may proceed only after explicit user override and documented Self Compensatory Verification. Self Compensatory PASS MUST NOT be reported as Independent Higher-Tier PASS.`)
 - [x] 전체 무결성 검증 완료
   - `python3 scripts/build.py`: PASS (72 pages, 52 assets)
   - `python3 scripts/audit_prompts.py`: PASS
