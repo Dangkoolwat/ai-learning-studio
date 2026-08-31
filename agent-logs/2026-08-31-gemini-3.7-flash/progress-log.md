@@ -95,3 +95,15 @@
   - `python3 scripts/audit_prompts.py --strict`: PASS
   - `python3 -m unittest discover tests`: Ran 76 tests, ALL OK
   - `python3 scripts/build.py`: PASS (72 pages, 52 assets)
+
+## 8. AGENTS.md 승인 분리(§1.5) 및 에이전트 자기통제·외부 쓰기 통제(§1.6) 반영 (2026-08-31 추가)
+- [x] `AGENTS.md` §1.5 보강
+  - 초기 작업 요청과 파일 수정 승인의 엄격 분리 명시
+  - 승인 범위 제한 및 초과 변경 시 별도 사전 승인 의무화
+- [x] `AGENTS.md` §1.6 신설
+  - 에이전트의 명시적 요청/사전 승인 없는 금지 행위 규정 (정책/설정 변경, 의존성 설치, 플러그인/스킬 설치, 커밋/브랜치/푸시, 배포, 외부 API 쓰기)
+  - 작업 로그(`agent-logs/`)도 사전 승인된 변경 범위 내에서만 기록
+- [x] 전체 무결성 검증 완료
+  - `python3 scripts/audit_prompts.py --strict`: PASS
+  - `python3 -m unittest discover tests`: Ran 76 tests, ALL OK
+  - `python3 scripts/build.py`: PASS (72 pages, 52 assets)
