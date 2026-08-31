@@ -97,7 +97,7 @@ JSON · Markdown · Templates
 - **사전 적합성 점검 의무**: 모든 구현·수정 작업 착수 전 요구사항의 위험도(High/Medium/Low)와 추론 난이도를 분석하여 모델 수준을 선판단합니다. (세부 분류 기준 및 보고 양식: [`docs/agent-policy/model-routing.md`](docs/agent-policy/model-routing.md))
 - **고위험 작업 착수 차단**: 고위험 작업(예: 아키텍처, 빌드 계약, 다중 모듈, API/데이터 스키마, 공통 템플릿/CSS, 보안/배포 파이프라인 등 전체 범위는 [`docs/agent-policy/model-routing.md`](docs/agent-policy/model-routing.md) 기준)은 상위 추론 모델의 사전 분석 없이 실질적인 수정을 시작하지 않습니다.
 - **상위 모델 부재 시 Fallback & Override**: 자동 전환 불가 환경의 고위험 작업은 사용자에게 제한 사항을 선보고하며, 사용자의 명시적 승인(Override) 전에는 수정을 착수하지 않습니다. Override 시 로그 기록 및 엄격한 보완 검증을 수행합니다.
-- **증거 기반 사후 검증 및 루프**: 실질적 변경 완료 후 독립 상위 검증 모델 또는 명시적인 보상 검증 체크리스트를 통해 테스트/빌드/diff 기반 `PASS` 판정을 확인하며, 결함 발견 시 재검증 루프를 수행합니다.
+- **증거 기반 사후 검증 및 루프**: 실질적 변경 완료 후 반드시 독립 상위 검증 모델의 `PASS` 판정을 확인합니다. 상위 검증 불가 환경에서는 사용자의 명시적 승인(Override)과 문서화된 단일 세션 보상 검증(Self Compensatory Verification)을 거쳐야만 완료할 수 있으며, 보상 검증 PASS를 독립 상위 검증 PASS로 허위 보고하는 행위를 엄격히 금지합니다. 결함 발견 시 재검증 루프를 수행합니다.
 
 
 ---
