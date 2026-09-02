@@ -3,6 +3,7 @@ registry_id: prompt-snippets-change-perspective
 title: 상대방 입장에서 다시 보기
 description: 내 글이나 제안이 상대방에게 어떻게 들릴지 객관적으로 점검합니다.
 type: static-prompt
+source: 자체제작
 ---
 
 

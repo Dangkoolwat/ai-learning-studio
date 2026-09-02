@@ -3,6 +3,7 @@ registry_id: prompt-snippets-change-level
 title: 설명 수준 바꾸기
 description: 독자의 눈높이와 지식 수준에 맞춰 알기 쉬운 비유와 톤으로 재작성 (파인만 기법 / ELI5 · ELI15)
 type: static-prompt
+source: 자체제작
 ---
 
 

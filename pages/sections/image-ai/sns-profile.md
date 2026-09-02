@@ -4,6 +4,7 @@ title: 맞춤형 SNS 프로필 만들기
 description: 사진을 업로드하고 원하는 스타일과 분위기를 선택해 나만의 완벽한 SNS 프로필 이미지를 만들어 보세요.
 ai_target: ChatGPT, Gemini, Midjourney
 type: static-prompt
+source: 자체제작
 ---
 
 # SNS 프로필 이미지 프롬프트

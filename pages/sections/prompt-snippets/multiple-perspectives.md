@@ -3,6 +3,7 @@ registry_id: prompt-snippets-multiple-perspectives
 title: 여러 관점에서 다시 보기
 description: 하나의 문제를 서로 다른 판단 기준에서 살펴보고, 놓친 부분과 의견이 갈리는 지점을 찾아봅니다. (다중 관점 검토 / Multi-Perspective)
 type: static-prompt
+source: 자체제작
 ---
 
 

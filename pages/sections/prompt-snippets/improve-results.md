@@ -3,6 +3,7 @@ registry_id: prompt-snippets-improve-results
 title: 결과를 더 좋게 만들기
 description: 한 줄 추가로 답변의 깊이와 품질 높이기
 type: static-prompt
+source: 자체제작
 ---
 
 

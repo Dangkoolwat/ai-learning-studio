@@ -3,6 +3,7 @@ registry_id: ai-assistant-language-tutor
 title: 외국어 회화 코치
 description: 맞춤형 회화를 훈련시키는 1:1 외국어 파트너 지침 프롬프트입니다.
 ai_target: Gemini, ChatGPT, Claude
+source: 자체제작
 ---
 
 # 외국어 회화 연습 코치

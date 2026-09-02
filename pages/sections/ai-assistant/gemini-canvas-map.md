@@ -3,6 +3,7 @@ registry_id: ai-assistant-gemini-canvas-map
 title: Gemini 캔버스 대화형 여행 지도
 description: Gemini 캔버스 기능을 활용해 대화하며 반응형 웹 여행 지도를 직접 구현하고 시각화하는 제작 가이드
 ai_target: Gemini
+source: 자체제작
 ---
 
 # Gemini 캔버스 대화형 여행 지도

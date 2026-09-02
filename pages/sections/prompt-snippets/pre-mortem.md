@@ -3,6 +3,7 @@ registry_id: prompt-snippets-pre-mortem
 title: 미리 실패했다고 생각해 보기
 description: 계획이 실패했다고 가정하고, 지금 놓치고 있는 위험과 보완할 점을 미리 찾아봅니다. (사전 부검 / Pre-Mortem)
 type: static-prompt
+source: 자체제작
 ---
 
 

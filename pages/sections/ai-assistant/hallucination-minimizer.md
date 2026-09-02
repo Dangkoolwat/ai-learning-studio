@@ -2,6 +2,7 @@
 registry_id: ai-assistant-hallucination-minimizer
 title: 할루시네이션 최소화
 description: 사실을 지어내지 않게 하고, 불확실하면 확인이 필요하다고 말하게 하는 짧은 지침 프롬프트입니다.
+source: 자체제작
 ---
 
 # 할루시네이션 최소화

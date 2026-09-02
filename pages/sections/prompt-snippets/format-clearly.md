@@ -3,6 +3,7 @@ registry_id: prompt-snippets-format-clearly
 title: 보기 쉽게 정리하기
 description: 글을 표, 불릿 포인트 등 한눈에 들어오게 변환
 type: static-prompt
+source: 자체제작
 ---
 
 

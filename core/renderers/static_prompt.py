@@ -280,14 +280,10 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
             body_html_content,
         )
         if source_html:
-            # [CRITICAL]: prompt-item을 감싸고 있는 practice-step-card가 닫히는(</div>) 바로 다음(바깥)에
-            # source_html 독립 박스를 주입하여 본문 박스와 100% 분리 보장.
-            body_html_content = re.sub(
-                r'(<article class="prompt-item"[\s\S]*?</article>\s*</div>)',
-                rf'\1\n{source_html}',
-                body_html_content,
-                count=1,
-            )
+            # [CRITICAL / 절대 규칙]: source_html은 본문(body_html_content)의 모든 카드
+            # (프롬프트, 함께 사용하면 좋은 프롬프트, AI 활용 TIP 등)가 완전히 끝난
+            # 맨 마지막 하단에 독립 배치한다. 중간 삽입 절대 금지.
+            body_html_content = f"{body_html_content.rstrip()}\n{source_html}"
 
         body_html_content = re.sub(r'<div class="step-flow-arrow"[^>]*>↓</div>\s*', '', body_html_content)
         body_html_content = re.sub(r'<div class="practice-step-card">\s*</div>', '', body_html_content)

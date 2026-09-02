@@ -3,6 +3,7 @@ registry_id: prompt-snippets-pareto-priority
 title: 파레토 80/20: 가장 중요한 일부터 추리기
 description: 할 일과 아이디어 중 가장 중요한 핵심 20%부터 먼저 추려내기 (파레토 법칙 / Pareto Principle)
 type: static-prompt
+source: 자체제작
 ---
 
 

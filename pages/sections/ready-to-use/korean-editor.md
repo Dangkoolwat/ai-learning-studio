@@ -4,6 +4,7 @@ title: 1회용 맞춤형 한국어 교정
 description: 글의 성격에 맞춰 문맥과 흐름이 자연스럽게 다듬는 한국어 교정 도우미
 ai_target: Gemini, ChatGPT, Claude
 type: static-prompt
+source: 자체제작
 ---
 
 # 1회용 맞춤형 한국어 교정 (바로 써보기)

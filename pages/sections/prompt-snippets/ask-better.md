@@ -3,6 +3,7 @@ registry_id: prompt-snippets-ask-better
 title: AI에게 작업 요청 잘하기
 description: 내가 원하는 걸 모를 때 AI에게 역질문 유도
 type: static-prompt
+source: 자체제작
 ---
 
 

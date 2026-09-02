@@ -178,6 +178,14 @@
           "group": "🧭 아이디어 & 판단"
         },
         {
+          "id": "prompt-snippets-multi-angle-expansion",
+          "label": "여러 사고법으로 아이디어 확장하기",
+          "description": "문제를 비틀어 다시 정의하고, 다른 분야의 원리를 빌려와 뻔하지 않은 돌파구를 찾습니다. (다각도 사고 확장 / Multi-Angle Expansion)",
+          "route": "/prompt-snippets/multi-angle-expansion/",
+          "group": "🧭 아이디어 & 판단",
+          "featured": true
+        },
+        {
           "id": "prompt-snippets-listen-opposing",
           "label": "반대 의견 들어보기",
           "description": "내 결정이 확실한지 점검하기 위해 가장 논리적인 반론을 미리 들어봅니다. (악마의 변호인 / Devil's Advocate)",

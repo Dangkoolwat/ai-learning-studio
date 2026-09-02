@@ -3,6 +3,7 @@ registry_id: prompt-snippets-reuse-content
 title: 결과물 다양하게 재활용하기
 description: 이미 잘 만들어진 원본을 완전히 다른 용도나 형식으로 바꿉니다.
 type: static-prompt
+source: 자체제작
 ---
 
 

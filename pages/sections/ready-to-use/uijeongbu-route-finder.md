@@ -4,6 +4,7 @@ title: 의정부 편한 길 찾기
 description: 출발지와 목적지, 몸 상태와 짐의 정도를 입력하면 계단과 가파른 길을 피한 편한 이동 경로를 찾아줍니다.
 ai_target: Gemini, ChatGPT, Claude
 type: static-prompt
+source: 자체제작
 ---
 
 # 의정부 편한 길 찾기 (바로 써보기)

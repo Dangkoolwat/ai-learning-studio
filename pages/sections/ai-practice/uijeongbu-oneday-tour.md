@@ -4,6 +4,7 @@ title: 의정부 숨은 명소 찾기
 description: '의정부 숨은 명소로 하루 여행 코스 만들기'라는 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성합니다.
 ai_target: ChatGPT, Gemini
 type: static-prompt
+source: 자체제작
 ---
 
 # 의정부 숨은 명소 찾기

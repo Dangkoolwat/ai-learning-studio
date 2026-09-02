@@ -3,6 +3,7 @@ registry_id: ai-assistant-active-recall-tutor
 title: 1:1 Active Recall 학습 코치
 description: 질문과 피드백으로 내가 아는 것과 모르는 것을 직접 확인하는 맞춤형 학습 코치
 ai_target: NotebookLM, Gemini, ChatGPT, Claude
+source: 자체제작
 ---
 
 # 1:1 Active Recall 학습 코치

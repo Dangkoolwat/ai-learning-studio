@@ -3,6 +3,7 @@ registry_id: ai-assistant-gemini-verifier
 title: Gemini 지식 검증
 description: Gemini가 도출한 결과물의 출처와 지식의 신뢰성을 교차 검증하는 분석 도구
 ai_target: Gemini
+source: 자체제작
 ---
 
 # Gemini 지식 검증

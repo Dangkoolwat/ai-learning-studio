@@ -4,6 +4,7 @@ title: 뚝딱 완성! 맞춤 레시피 가이드
 description: 공식 영양 기준을 참고하여 조건에 맞는 레시피와 칼로리 정보를 생성하는 프롬프트
 ai_target: Gemini, ChatGPT, Claude
 type: static-prompt
+source: 자체제작
 ---
 
 # 뚝딱 완성! 맞춤 레시피 가이드 (바로 써보기)

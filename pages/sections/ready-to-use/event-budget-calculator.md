@@ -4,6 +4,7 @@ title: 상황에 맞는 경조사비 결정
 description: 경조사 종류와 관계, 참석 여부, 경제적 상황을 입력하면 최신 국내 조사와 공식 자료를 확인해 적절한 금액과 전달 방법을 추천합니다.
 ai_target: Gemini, ChatGPT, Claude
 type: static-prompt
+source: 자체제작
 ---
 
 # 상황에 맞는 경조사비 결정 (바로 써보기)

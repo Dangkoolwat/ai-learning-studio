@@ -3,6 +3,7 @@ registry_id: prompt-snippets-reduce-hallucination
 title: 할루시네이션 줄이기
 description: 거짓 정보를 방지하고 팩트 중심의 결과 얻기
 type: static-prompt
+source: 자체제작
 ---
 
 

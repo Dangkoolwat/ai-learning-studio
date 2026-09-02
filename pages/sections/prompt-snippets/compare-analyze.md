@@ -3,6 +3,7 @@ registry_id: prompt-snippets-compare-analyze
 title: 비교와 분석
 description: 두 가지 이상의 대상을 다각도로 비교 분석하기
 type: static-prompt
+source: 자체제작
 ---
 
 

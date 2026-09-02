@@ -3,6 +3,7 @@ registry_id: prompt-snippets-continue-work
 title: 이어서 작업하기
 description: 끊긴 답변을 잇거나 흐름을 살려 추가 작업 요청
 type: static-prompt
+source: 자체제작
 ---
 
 

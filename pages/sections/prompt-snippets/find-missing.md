@@ -3,6 +3,7 @@ registry_id: prompt-snippets-find-missing
 title: 내가 놓친 부분 찾기
 description: 내 계획이나 생각에서 미처 고려하지 못한 사각지대를 찾아냅니다.
 type: static-prompt
+source: 자체제작
 ---
 
 

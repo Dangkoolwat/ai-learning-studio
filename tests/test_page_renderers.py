@@ -101,10 +101,12 @@ class PageRenderersTests(unittest.TestCase):
             if article_match:
                 self.assertNotIn('prompt-item__source', article_match.group(1))
 
-            # 3. Source is placed immediately outside the closing practice-step-card div
-            self.assertTrue(
-                re.search(r'</article>\s*</div>\s*<div class="prompt-item__source">', result.main_html) is not None,
-                "Source box must be rendered right outside the closing practice-step-card div"
+            # 3. Source is placed at the very end of body content (no cards after it)
+            source_pos = result.main_html.rfind('class="prompt-item__source"')
+            self.assertGreater(source_pos, 0, "Source box must exist in main_html")
+            after_source = result.main_html[source_pos:]
+            self.assertNotIn('practice-step-card', after_source.split('</div>', 2)[-1],
+                "No practice-step-card should appear after the Source box"
             )
 
     def test_render_prompt_builder_page(self) -> None:

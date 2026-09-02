@@ -3,6 +3,7 @@ registry_id: prompt-snippets-experience-to-asset
 title: 경험을 나만의 자산으로 바꾸기
 description: 경험과 노하우를 연결해 강점을 찾고 반복 활용 가능한 자산으로 축적하기
 type: static-prompt
+source: 자체제작
 ---
 
 

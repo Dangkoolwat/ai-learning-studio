@@ -3,6 +3,7 @@ registry_id: prompt-snippets-summarize-core
 title: 요약과 핵심 정리
 description: 방대한 분량에서 엑기스만 빠르게 뽑아내기
 type: static-prompt
+source: 자체제작
 ---
 
 

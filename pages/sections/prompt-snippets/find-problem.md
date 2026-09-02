@@ -3,6 +3,7 @@ registry_id: prompt-snippets-find-problem
 title: 어디에서 문제가 생겼는지 찾기
 description: 잘 안 풀리는 일의 원인을 단계별로 쪼개어 진단합니다.
 type: static-prompt
+source: 자체제작
 ---
 
 

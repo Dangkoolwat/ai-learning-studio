@@ -3,6 +3,7 @@ registry_id: prompt-snippets-review-answers
 title: AI 답변 검토하기
 description: AI가 작성한 내용의 논리적 오류나 누락 확인
 type: static-prompt
+source: 자체제작
 ---
 
 

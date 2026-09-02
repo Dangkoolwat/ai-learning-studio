@@ -3,6 +3,7 @@ registry_id: prompt-snippets-diagnose-first
 title: 먼저 진단받기
 description: 수정이나 작성 전에 문제점과 놓친 부분부터 파악합니다.
 type: static-prompt
+source: 자체제작
 ---
 
 

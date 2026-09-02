@@ -3,6 +3,7 @@ registry_id: ready-to-use-self-development
 title: 자기 개발 학습 계획
 description: 목표와 현재 수준, 사용 가능한 시간에 맞춰 현실적인 학습 계획을 짜주는 프롬프트 예제
 ai_target: Gemini, ChatGPT, Claude
+source: 자체제작
 ---
 
 # 자기 개발 학습 계획

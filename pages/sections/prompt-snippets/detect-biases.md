@@ -3,6 +3,7 @@ registry_id: prompt-snippets-detect-biases
 title: 내 판단이 한쪽으로 치우쳤는지 확인
 description: 내 글이나 생각에 선입견이나 편향이 섞여 있는지 단정하지 않고 확인합니다.
 type: static-prompt
+source: 자체제작
 ---
 
 

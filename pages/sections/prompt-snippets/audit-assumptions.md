@@ -3,6 +3,7 @@ registry_id: prompt-snippets-audit-assumptions
 title: 내가 당연하다고 생각한 가정 찾기
 description: 내 생각이나 계획 밑바닥에 당연하게 깔려 있는 숨은 전제를 들춰냅니다. (가정 검증 · 제1원리 사고 / First Principles & Audit Assumptions)
 type: static-prompt
+source: 자체제작
 ---
 
 

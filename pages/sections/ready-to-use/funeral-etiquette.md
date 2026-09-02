@@ -4,6 +4,7 @@ title: 사회초년생을 위한 장례식장 예절
 description: 장례식장에 처음 방문하는 사회초년생을 위해 복장부터 조문 순서, 예절, 피해야 할 행동까지 쉽고 정확하게 안내하는 프롬프트입니다.
 ai_target: Gemini, ChatGPT, Claude
 type: markdown-prompt
+source: 자체제작
 ---
 
 # 사회초년생을 위한 장례식장 예절 (바로 써보기)

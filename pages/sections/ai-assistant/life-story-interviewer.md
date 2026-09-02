@@ -4,6 +4,7 @@ title: 나의 인생 이야기 인터뷰
 description: 글이나 음성으로 AI와 천천히 인터뷰하며, 삶의 한 장면을 나다운 글로 남기는 지침서입니다.
 ai_target: ChatGPT
 type: markdown-prompt
+source: 자체제작
 ---
 
 # 나의 인생 이야기 인터뷰

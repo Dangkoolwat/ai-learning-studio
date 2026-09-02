@@ -3,6 +3,7 @@ registry_id: prompt-snippets-refine-text
 title: 글 다듬기
 description: 어색한 문장을 자연스럽고 매끄러운 글로 교정
 type: static-prompt
+source: 자체제작
 ---
 
 

@@ -2,6 +2,7 @@
 registry_id: ai-assistant-vacation-planner
 title: 맞춤형 여행 플래너
 description: 여행 주제와 기간을 입력하면 팩트 중심의 1일 동선 및 지도 링크를 추천하는 여행 도우미
+source: 자체제작
 ---
 
 # 맞춤형 여행 플래너

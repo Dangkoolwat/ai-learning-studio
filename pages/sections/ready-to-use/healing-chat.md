@@ -4,6 +4,7 @@ title: 마음을 가볍게 정리하는 힐링 대화
 description: 복잡한 마음을 털어놓고 싶을 때, 원하는 방식(위로, 정리, 해결책)에 맞춰 AI와 편안하게 대화할 수 있는 프롬프트입니다.
 ai_target: Gemini, ChatGPT, Claude
 type: static-prompt
+source: 자체제작
 ---
 
 # 마음을 가볍게 정리하는 힐링 대화 (바로 써보기)

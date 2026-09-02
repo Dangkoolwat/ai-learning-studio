@@ -3,6 +3,7 @@ registry_id: prompt-snippets-get-ideas
 title: 다양한 아이디어 얻기
 description: 막막할 때 창의적인 영감과 브레인스토밍
 type: static-prompt
+source: 자체제작
 ---
 
 

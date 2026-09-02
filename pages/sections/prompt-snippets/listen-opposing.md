@@ -3,6 +3,7 @@ registry_id: prompt-snippets-listen-opposing
 title: 반대 의견 들어보기
 description: 내 결정이 확실한지 점검하기 위해 가장 논리적인 반론을 미리 들어봅니다. (악마의 변호인 / Devil's Advocate)
 type: static-prompt
+source: 자체제작
 ---
 
 

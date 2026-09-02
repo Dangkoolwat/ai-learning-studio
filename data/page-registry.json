@@ -418,6 +418,19 @@
       "lang": "ko"
     },
     {
+      "id": "prompt-snippets-multi-angle-expansion",
+      "title": "여러 사고법으로 아이디어 확장하기",
+      "description": "문제를 비틀어 다시 정의하고, 다른 분야의 원리를 빌려와 뻔하지 않은 돌파구를 찾습니다. (다각도 사고 확장 / Multi-Angle Expansion)",
+      "route": "/prompt-snippets/multi-angle-expansion/",
+      "source": "pages/sections/prompt-snippets/multi-angle-expansion.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 32,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "ready-to-use",
       "title": "바로 써보기",
       "description": "준비된 프롬프트를 내 상황에 맞게 바꾸고 바로 활용해 보세요.",

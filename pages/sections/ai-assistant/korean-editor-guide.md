@@ -2,6 +2,7 @@
 registry_id: ai-assistant-korean-editor
 title: 자연스러운 한국어 다듬기 지침서
 description: 자연스러운 한국어 문체, 어조, 흐름을 살려 전문 에디터처럼 글을 윤문하는 교정 지침서
+source: 자체제작
 ---
 
 # 자연스러운 한국어 다듬기 지침서
