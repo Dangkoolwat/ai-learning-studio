@@ -107,3 +107,14 @@
   - `python3 scripts/audit_prompts.py --strict`: PASS
   - `python3 -m unittest discover tests`: Ran 76 tests, ALL OK
   - `python3 scripts/build.py`: PASS (72 pages, 52 assets)
+
+## 9. AGENTS.md 에이전트 중립화(Agent-Agnostic) 및 안전 정지(Fail-Closed) 반영 (2026-08-31 추가)
+- [x] `AGENTS.md` §1.5 및 §1.6 에이전트 중립화
+  - `Proceed 버튼 클릭` -> `사용자의 명시적 승인 메시지 또는 호스트 환경이 제공하는 명시적 승인 신호`로 일반화
+  - `Planning Mode` -> `에이전트의 기본 자율 실행 규칙(Autonomous Planning Mode)`으로 일반화
+  - 안전 정지 원칙(Fail-Closed) 조항 추가 (승인 신호 불명확 시 차단 사유 보고 후 대기)
+  - 기술/도구명 상위 범주화 (의존성 패키지, 배포 시스템) 및 읽기 전용(Read-Only) 검사 한정 명시
+- [x] 전체 무결성 검증 완료
+  - `python3 scripts/audit_prompts.py --strict`: PASS
+  - `python3 -m unittest discover tests`: Ran 76 tests, ALL OK
+  - `python3 scripts/build.py`: PASS (72 pages, 52 assets)

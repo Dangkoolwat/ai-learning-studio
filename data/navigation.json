@@ -76,7 +76,7 @@
         {
           "id": "prompt-snippets-change-level",
           "label": "설명 수준 바꾸기",
-          "description": "독자의 눈높이와 지식 수준에 맞춰 내용 재작성",
+          "description": "독자의 눈높이와 지식 수준에 맞춰 알기 쉬운 비유와 톤으로 재작성 (파인만 기법 / ELI5 · ELI15)",
           "route": "/prompt-snippets/change-level/",
           "group": "✍️ 정리 & 표현"
         },
@@ -163,16 +163,23 @@
           "featured": true
         },
         {
+          "id": "prompt-snippets-multiple-perspectives",
+          "label": "여러 관점에서 다시 보기",
+          "description": "하나의 문제를 서로 다른 판단 기준에서 살펴보고, 놓친 부분과 의견이 갈리는 지점을 찾아봅니다. (다중 관점 검토 / Multi-Perspective)",
+          "route": "/prompt-snippets/multiple-perspectives/",
+          "group": "🧭 아이디어 & 판단"
+        },
+        {
           "id": "prompt-snippets-listen-opposing",
           "label": "반대 의견 들어보기",
-          "description": "내 결정이 확실한지 점검하기 위해 가장 논리적인 반론을 미리 들어봅니다.",
+          "description": "내 결정이 확실한지 점검하기 위해 가장 논리적인 반론을 미리 들어봅니다. (악마의 변호인 / Devil's Advocate)",
           "route": "/prompt-snippets/listen-opposing/",
           "group": "🧭 아이디어 & 판단"
         },
         {
           "id": "prompt-snippets-audit-assumptions",
           "label": "내가 당연하다고 생각한 가정 찾기",
-          "description": "내 생각이나 계획 밑바닥에 당연하게 깔려 있는 숨은 전제를 들춰냅니다.",
+          "description": "내 생각이나 계획 밑바닥에 당연하게 깔려 있는 숨은 전제를 들춰냅니다. (가정 검증 · 제1원리 사고 / First Principles & Audit Assumptions)",
           "route": "/prompt-snippets/audit-assumptions/",
           "group": "🧭 아이디어 & 판단"
         },
@@ -193,7 +200,7 @@
         {
           "id": "prompt-snippets-second-order-effect",
           "label": "그다음 영향까지 생각하기",
-          "description": "당장의 결과뿐만 아니라 그 결과에 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다.",
+          "description": "당장의 결과뿐만 아니라 그 결과에 이어서 생길 수 있는 2차·3차 연쇄 파급효과까지 짚어봅니다. (2차적 사고 / Second-Order Thinking)",
           "route": "/prompt-snippets/second-order-effect/",
           "group": "🧭 아이디어 & 판단",
           "featured": true
@@ -201,7 +208,7 @@
         {
           "id": "prompt-snippets-pareto-priority",
           "label": "파레토 80/20: 가장 중요한 일부터 추리기",
-          "description": "할 일과 아이디어 중 가장 중요한 일부터 먼저 추려내기",
+          "description": "할 일과 아이디어 중 가장 중요한 핵심 20%부터 먼저 추려내기 (파레토 법칙 / Pareto Principle)",
           "route": "/prompt-snippets/pareto-priority/",
           "group": "🧭 아이디어 & 판단"
         },
