@@ -5,7 +5,6 @@ description: 수정이나 작성 전에 문제점과 놓친 부분부터 파악�
 type: static-prompt
 ---
 
-# 먼저 진단받기
 
 ## 언제 사용하나요?
 
@@ -13,6 +12,8 @@ type: static-prompt
 
 AI에게 무작정 "새로 써줘"라고 요청하기 전에, 내 글이나 아이디어에 어떤 문제가 있는지 객관적으로 파악하고 싶을 때 사용합니다. 
 AI를 단순한 작성 도구가 아닌 **'문제 진단 파트너'** 로 활용하는 가장 좋은 방법입니다.
+
+---
 
 ## 대표 프롬프트 ⭐
 
@@ -41,9 +42,13 @@ description: 여러 관점에서 문제점을 파악하고 우선순위를 알�
 마지막에는 「가장 먼저 고칠 것 [ 3가지 / 5가지 ]」를 우선순위로 정리해줘.
 ```
 
+---
+
 ## 함께 사용하면 좋은 프롬프트
 
 [먼저 진단받기](/prompt-snippets/diagnose-first/) ➔ [AI 답변 검토하기](/prompt-snippets/review-answers/) ➔ [글 다듬기](/prompt-snippets/refine-text/)
+
+---
 
 ## 💡 AI 활용 TIP
 

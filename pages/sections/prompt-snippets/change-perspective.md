@@ -5,7 +5,6 @@ description: 내 글이나 제안이 상대방에게 어떻게 들릴지 객관�
 type: static-prompt
 ---
 
-# 상대방 입장에서 다시 보기
 
 ## 언제 사용하나요?
 
@@ -15,6 +14,8 @@ type: static-prompt
 - 중요한 이메일이나 제안서를 보낼 때
 - 자기소개서를 쓸 때
 - 누군가를 설득할 때
+
+---
 
 ## 짧은 프롬프트
 
@@ -26,6 +27,8 @@ description: 타인의 관점에서 내 글을 점검합니다.
 ---
 이 내용을 처음 보는 [ 고객 / 상사 / 면접관 ]의 입장에서 읽어줘. 이해하기 어렵거나 본인에게 이득이 없다고 느낄 부분을 짚어줘.
 ```
+
+---
 
 ## 범용 프롬프트
 
@@ -46,9 +49,13 @@ description: 특정 내용을 붙여 넣고 구체적인 피드백을 받습니�
 어떻게 고치면 좋을지 개선된 문장도 [ 3가지 / 5가지 ] 함께 제안해줘.
 ```
 
+---
+
 ## 함께 사용하면 좋은 프롬프트
 
-[상대방 입장에서 다시 보기](/prompt-snippets/change-perspective/) ➔ [설명 수준 바꾸기](/prompt-snippets/change-level/) ➔ [글 다듬기](/prompt-snippets/refine-text/)
+[상대방 입장에서 다시 보기](/prompt-snippets/change-perspective/) ➔ [여러 관점에서 다시 보기](/prompt-snippets/multiple-perspectives/) ➔ [반대 의견 들어보기](/prompt-snippets/listen-opposing/)
+
+---
 
 ## 💡 AI 활용 TIP
 

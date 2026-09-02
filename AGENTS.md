@@ -123,6 +123,7 @@ JSON · Markdown · Templates
 프롬프트 페이지를 생성·수정하거나 관련 메타데이터/에셋을 다룰 때는 반드시 아래 정책 문서를 지연 로딩(Lazy-Loading)하여 엄수합니다.
 
 - **프롬프트 상세 규격**: [`docs/prompt-page-guidelines.md`](docs/prompt-page-guidelines.md)
+  - **출처(Source) 독립 분리**: `Source` 항목은 본문 카드 박스(`.practice-step-card`) 안에 가두지 않고, 반드시 카드 닫힘(`</div>`) 바깥 하단에 독립된 슬림 라운딩 띠 박스로 분리 렌더링
   - **인라인 콤보박스**: 자유 텍스트 입력 필드는 반드시 `"[텍스트 입력]"` 양쪽 따옴표 필수, 드롭다운 내 `"[자유 입력]"` 생성 금지
   - **마크다운 서식**: 볼드(`**`) 서식 최소화, `- 옵션명: 설명` 단일 라인(Flat) 구조, `- ` 마커 통일
   - **콤보박스 기본값**: 구도/비율 1순위(`원본 사진 비율 유지`), 화풍/색감 대표 옵션 1순위 배치
@@ -131,6 +132,7 @@ JSON · Markdown · Templates
   - `page-registry.json` & `navigation.json` 제목/설명문 동기화 (`core/data_consistency.py`)
   - 신규 이미지 추가 시 `python3 scripts/optimize_images.py --replace` 실행 필수 (WebP 변환, 최대 1MB)
   - 프롬프트 적합성 진단: `python3 scripts/audit_prompts.py`
+
 
 
 

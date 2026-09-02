@@ -4,7 +4,7 @@ title: 폰카 사진이 스튜디오 화보로
 description: 평범한 폰카 사진을 전문 에디터의 손길이 닿은 듯한 고품질 스튜디오 화보 느낌으로 보정해 보세요.
 preview: /assets/images/image-ai/photo-retouch/photo-retouch.webp
 ai_target: ChatGPT, Gemini
-source: @Thread  uniquegarden762
+source: Threads (@uniquegarden762)
 ---
 
 # 폰카 사진이 스튜디오 화보로

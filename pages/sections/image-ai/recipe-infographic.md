@@ -4,7 +4,7 @@ title: 모던 레시피 인포그래픽 생성
 description: 원하는 음식 이름을 입력해 감각적이고 모던한 세로형 레시피 인포그래픽 이미지를 만들어 보세요.
 preview: /assets/images/image-ai/recipe-infographic/pasta-example.webp, /assets/images/image-ai/recipe-infographic/pasta-example2.webp
 ai_target: ChatGPT
-source: @Thread  Ai_Smart365(@jh_aicafe)
+source: Threads Ai_Smart365 (@jh_aicafe)
 ---
 
 # 모던 레시피 인포그래픽 프롬프트 조립기

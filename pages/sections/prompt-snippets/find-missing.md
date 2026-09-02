@@ -5,7 +5,6 @@ description: 내 계획이나 생각에서 미처 고려하지 못한 사각지�
 type: static-prompt
 ---
 
-# 내가 놓친 부분 찾기
 
 ## 언제 사용하나요?
 
@@ -15,6 +14,8 @@ type: static-prompt
 - 새로운 프로젝트를 기획할 때
 - 여행 일정을 세울 때
 - 중요한 행사 준비를 마쳤을 때
+
+---
 
 ## 짧은 프롬프트
 
@@ -26,6 +27,8 @@ description: 내 계획의 빈틈을 찾습니다.
 ---
 내 계획에서 내가 미처 생각하지 못한 부분을 찾아줘. 중요한 순서대로 이유와 함께 [ 3가지 / 5가지 ] 알려줘.
 ```
+
+---
 
 ## 범용 프롬프트
 
@@ -47,6 +50,8 @@ description: 특정 내용을 붙여 넣고 구체적인 피드백을 받습니�
 가장 치명적인 문제부터 중요한 순서대로 알려줘.
 ```
 
+---
+
 ## 추가 프롬프트
 
 ```prompt
@@ -56,9 +61,13 @@ description: 계획이 완전히 실패했다고 가정하고 가장 치명적�
 이 계획(또는 결정)이 6개월 뒤 완전히 실패했다고 가정해 봐. 실패로 이끈 가장 결정적인 원인 3가지와, 그 실패를 지금 당장 예방하기 위해 보완해야 할 점을 알려줘.
 ```
 
+---
+
 ## 함께 사용하면 좋은 프롬프트
 
-[다양한 아이디어 얻기](/prompt-snippets/get-ideas/) ➔ [내가 놓친 부분 찾기](/prompt-snippets/find-missing/) ➔ [결과를 더 좋게 만들기](/prompt-snippets/improve-results/)
+[내가 놓친 부분 찾기](/prompt-snippets/find-missing/) ➔ [미리 실패했다고 생각해 보기](/prompt-snippets/pre-mortem/) ➔ [결과를 더 좋게 만들기](/prompt-snippets/improve-results/)
+
+---
 
 ## 💡 AI 활용 TIP
 

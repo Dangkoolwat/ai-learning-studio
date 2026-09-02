@@ -249,6 +249,19 @@
       "lang": "ko"
     },
     {
+      "id": "prompt-snippets-pre-mortem",
+      "title": "미리 실패했다고 생각해 보기",
+      "description": "계획이 실패했다고 가정하고, 지금 놓치고 있는 위험과 보완할 점을 미리 찾아봅니다. (사전 부검 / Pre-Mortem)",
+      "route": "/prompt-snippets/pre-mortem/",
+      "source": "pages/sections/prompt-snippets/pre-mortem.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 19,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "prompt-snippets-get-ideas",
       "title": "다양한 아이디어 얻기",
       "description": "막막할 때 창의적인 영감과 브레인스토밍",
@@ -256,7 +269,7 @@
       "source": "pages/sections/prompt-snippets/get-ideas.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 19,
+      "order": 20,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -269,7 +282,7 @@
       "source": "pages/sections/prompt-snippets/compare-analyze.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 20,
+      "order": 21,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -282,7 +295,7 @@
       "source": "pages/sections/prompt-snippets/change-perspective.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 21,
+      "order": 22,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -295,7 +308,7 @@
       "source": "pages/sections/prompt-snippets/multiple-perspectives.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 22,
+      "order": 23,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -308,7 +321,7 @@
       "source": "pages/sections/prompt-snippets/listen-opposing.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 23,
+      "order": 24,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -321,7 +334,7 @@
       "source": "pages/sections/prompt-snippets/audit-assumptions.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 24,
+      "order": 25,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -334,7 +347,7 @@
       "source": "pages/sections/prompt-snippets/evaluate-tradeoff.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 25,
+      "order": 26,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -347,7 +360,7 @@
       "source": "pages/sections/prompt-snippets/detect-biases.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 26,
+      "order": 27,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -360,7 +373,7 @@
       "source": "pages/sections/prompt-snippets/second-order-effect.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 27,
+      "order": 28,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -373,7 +386,7 @@
       "source": "pages/sections/prompt-snippets/pareto-priority.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 28,
+      "order": 29,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -386,7 +399,7 @@
       "source": "pages/sections/prompt-snippets/reflect-myself.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 29,
+      "order": 30,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -399,7 +412,7 @@
       "source": "pages/sections/prompt-snippets/experience-to-asset.md",
       "type": "static-prompt",
       "section": "prompt-snippets",
-      "order": 30,
+      "order": 31,
       "navigation": true,
       "status": "published",
       "lang": "ko"

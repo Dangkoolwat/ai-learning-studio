@@ -4,6 +4,7 @@ title: AI 전문 프로필 사진 생성
 description: 인물 사진을 활용해 신뢰감 있고 깔끔한 분위기의 이력서 및 비즈니스 프로필 사진을 제작합니다.
 ai_target: chatGPT
 type: static-prompt
+source: 자체 제작
 ---
 
 # AI 전문 프로필 사진 생성

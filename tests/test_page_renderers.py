@@ -59,6 +59,54 @@ class PageRenderersTests(unittest.TestCase):
             self.assertTrue(len(result.main_html) > 0)
             self.assertTrue(len(result.component_results) > 0)
 
+    def test_static_prompt_source_box_isolation(self) -> None:
+        """Verify Source box is rendered outside practice-step-card and not trapped inside prompt-item."""
+        entry = self.registry.page_by_id("image-ai-typography")
+        self.assertIsNotNone(entry, "image-ai-typography page must exist in registry")
+        if entry:
+            source_path = self.repo_root / entry.source
+            page_src = parse_page_source(source_path)
+            parsed_renderer = parse_renderer_source(page_src.raw_source_text, source_path=source_path)
+            rendered_md_html = render_markdown_fragment(parsed_renderer.markdown_body, source_path=source_path)
+
+            ctx = PageRendererContext(
+                page_id=entry.id,
+                page_type=entry.type,
+                page_route=entry.route,
+                page_section=entry.section or "",
+                page_title=entry.title,
+                page_description=entry.description,
+                page_lang=entry.lang,
+                source_path=source_path,
+                raw_markdown_source=page_src.raw_source_text,
+                parsed_front_matter=page_src.front_matter,
+                markdown_body=parsed_renderer.markdown_body,
+                rendered_markdown_html=rendered_md_html,
+                heading_structure=parsed_renderer.heading_structure,
+                source_heading_count=parsed_renderer.source_heading_count,
+                active_theme_id="studio-default",
+                control_blocks=parsed_renderer.control_blocks,
+                component_templates=self.component_templates,
+            )
+            result = render_page(ctx)
+            self.assertEqual(result.renderer_name, "static-prompt")
+            # 1. Source element exists in main_html
+            self.assertIn('class="prompt-item__source"', result.main_html)
+            self.assertIn("Source :", result.main_html)
+
+            # 2. Source is NOT trapped inside <article class="prompt-item">
+            import re
+            article_match = re.search(r'<article class="prompt-item">([\s\S]*?)</article>', result.main_html)
+            self.assertIsNotNone(article_match, "Prompt item article must exist")
+            if article_match:
+                self.assertNotIn('prompt-item__source', article_match.group(1))
+
+            # 3. Source is placed immediately outside the closing practice-step-card div
+            self.assertTrue(
+                re.search(r'</article>\s*</div>\s*<div class="prompt-item__source">', result.main_html) is not None,
+                "Source box must be rendered right outside the closing practice-step-card div"
+            )
+
     def test_render_prompt_builder_page(self) -> None:
         """Verify prompt-builder page renderer execution."""
         entry = self.registry.page_by_id("ai-assistant-language-tutor")

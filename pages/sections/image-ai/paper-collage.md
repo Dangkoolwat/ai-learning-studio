@@ -4,7 +4,7 @@ title: 글자 조각 콜라주 만들기
 description: 잡지, 문자 조각, 사진을 아날로그 감성으로 찢어 붙인 듯한 개성 있는 신문/종이 콜라주 아트를 만듭니다.
 preview: /assets/images/image-ai/paper-collage/paper-collage1.webp, /assets/images/image-ai/paper-collage/paper-collage2.webp
 ai_target: ChatGPT, Gemini
-source: @Thread ryu_jungsoo
+source: Threads (@ryu_jungsoo)
 ---
 
 # 글자 조각 콜라주 프롬프트

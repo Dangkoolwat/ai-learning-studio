@@ -4,7 +4,7 @@ title: 풍경 사진을 크레용 여행 포스터로 바꾸기
 description: 여행 사진을 크레용 질감의 민예풍 일러스트와 2분할 포스터로 재해석하는 프롬프트
 preview: /assets/images/image-ai/crayon-travel-poster/crayon-travel-poster1.webp, /assets/images/image-ai/crayon-travel-poster/crayon-travel-poster2.webp, /assets/images/image-ai/crayon-travel-poster/crayon-travel-poster3.webp, /assets/images/image-ai/crayon-travel-poster/crayon-travel-poster4.webp, /assets/images/image-ai/crayon-travel-poster/crayon-travel-poster5.webp
 ai_target: ChatGPT, Gemini
-source: X @xiaoxiaodong01
+source: X (@xiaoxiaodong01)
 ---
 
 # 풍경 사진을 크레용 여행 포스터로 바꾸기

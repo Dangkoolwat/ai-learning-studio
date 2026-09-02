@@ -233,17 +233,20 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
                 prompt_actions_html=actions_html,
                 prompt_preview_html=preview_html,
                 prompt_badges_html=ai_badges_block,
-                prompt_source_html=source_html,
+                prompt_source_html="",
             ),
             context.component_templates,
         )
         prompt_item_results.append(item_result)
 
     # Map control blocks to their rendered HTML by block index
+    prompt_control_blocks = [b for b in context.control_blocks if b.label == "prompt"]
+    last_prompt_idx = prompt_control_blocks[-1].index if prompt_control_blocks else -1
+
     prompt_blocks_by_index = {
         block.index: result.rendered_html
         for block, result in zip(
-            [b for b in context.control_blocks if b.label == "prompt"],
+            prompt_control_blocks,
             prompt_item_results
         )
     }
@@ -252,11 +255,23 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
     has_placeholders = "<!-- RENDERER_CONTROL_BLOCK:" in body_html_content
 
     if has_placeholders:
+        # =========================================================================
+        # [CRITICAL UI/UX 아키텍처 불변 규칙 (Invariant Rule)]:
+        # 1. 일체형 본문 카드 원칙:
+        #    마크다운의 '---' 구분선에 의해 생성된 카드 박스(.practice-step-card) 안에
+        #    상단 제목, 설명문, 프롬프트 본문, [프롬프트 복사] 버튼이 하나의 온전한 박스로 함께 담겨야 함.
+        # 2. 출처(Source) 독립 박스 분리 원칙:
+        #    출처(Source) 항목은 절대로 프롬프트 카드 박스(.practice-step-card) 내부에 포함되거나
+        #    복사 버튼 아래에 갇혀서는 안 되며, 프롬프트 카드 박스가 완전히 닫힌(</div>) 바깥에
+        #    별도의 독립된 슬림 라운딩 띠 박스(<div class="prompt-item__source">)로 출력되어야 함.
+        # 3. 정적 프롬프트 페이지 정돈:
+        #    static-prompt 페이지에서는 불필요한 단계 연결 화살표(↓) 및 빈 카드 박스를 완전 정리.
+        # =========================================================================
         def _replace_placeholder(match: re.Match) -> str:
             lbl = match.group(1)
             idx = int(match.group(2))
             if lbl == "prompt" and idx in prompt_blocks_by_index:
-                return f'</div>\n{prompt_blocks_by_index[idx]}\n<div class="practice-step-card">'
+                return prompt_blocks_by_index[idx]
             return ""
 
         body_html_content = re.sub(
@@ -264,6 +279,17 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
             _replace_placeholder,
             body_html_content,
         )
+        if source_html:
+            # [CRITICAL]: prompt-item을 감싸고 있는 practice-step-card가 닫히는(</div>) 바로 다음(바깥)에
+            # source_html 독립 박스를 주입하여 본문 박스와 100% 분리 보장.
+            body_html_content = re.sub(
+                r'(<article class="prompt-item"[\s\S]*?</article>\s*</div>)',
+                rf'\1\n{source_html}',
+                body_html_content,
+                count=1,
+            )
+
+        body_html_content = re.sub(r'<div class="step-flow-arrow"[^>]*>↓</div>\s*', '', body_html_content)
         body_html_content = re.sub(r'<div class="practice-step-card">\s*</div>', '', body_html_content)
 
     body_result = render_page_body_component(

@@ -26,15 +26,15 @@
   --site-glass-border: rgba(226, 232, 240, 0.85);
   
   /* Prompt Area 2-Tier Palette (Light Mode: 상단 모던 쿨그레이 캔버스 / 하단 선명한 화이트 완성본) */
-  --site-prompt-workspace-bg: #F1F5F9;      /* 상단 설정 캔버스: 부드러운 모던 쿨그레이 */
-  --site-prompt-workspace-border: #E2E8F0;
+  --site-prompt-workspace-bg: #F8FAFC;      /* 상단 설정 캔버스: 부드러운 모던 쿨그레이 */
+  --site-prompt-workspace-border: rgba(37, 99, 235, 0.20);
   --site-prompt-workspace-text: #0F172A;
   --site-itc-bg: #FFFFFF;                   /* 그레이 캔버스 위에서 또렷한 화이트 칩 */
   --site-itc-border: #CBD5E1;
   --site-itc-text: #1E293B;
   
   --site-prompt-output-bg: #FFFFFF;         /* 하단 실시간 완성본: 선명하고 깨끗한 화이트 */
-  --site-prompt-output-border: #CBD5E1;
+  --site-prompt-output-border: rgba(37, 99, 235, 0.40); /* 모던 프로 블루 테두리 */
   --site-prompt-output-text: #0F172A;
   
   /* Quick Tips Card Palette (Light Mode) */
@@ -55,8 +55,8 @@ html[data-theme-mode="dark"] {
   --site-text: #F8FAFC;
   --site-text-secondary: #CBD5E1;
   --site-text-muted: #94A3B8;
-  --site-border: rgba(255, 255, 255, 0.08);
-  --site-border-hover: rgba(255, 255, 255, 0.16);
+  --site-border: rgba(255, 255, 255, 0.10);
+  --site-border-hover: rgba(255, 255, 255, 0.18);
   --site-accent: #3B82F6;
   --site-accent-hover: #60A5FA;
   --site-accent-subtle: rgba(59, 130, 246, 0.14);
@@ -71,14 +71,14 @@ html[data-theme-mode="dark"] {
   
   /* Prompt Area 2-Tier Palette (Dark Mode: 상단 차콜 징크 캔버스 / 하단 딥블랙 터미널 완성본) */
   --site-prompt-workspace-bg: #1A1D24;      /* 상단 설정 캔버스: 징크 차콜 그레이 */
-  --site-prompt-workspace-border: #2D313A;
+  --site-prompt-workspace-border: rgba(59, 130, 246, 0.25);
   --site-prompt-workspace-text: #F1F5F9;
   --site-itc-bg: #262B35;                   /* 캔버스 위의 양각 칩 */
   --site-itc-border: #3E4554;
   --site-itc-text: #93C5FD;
   
   --site-prompt-output-bg: #090A0D;         /* 하단 실시간 완성본: 깊은 딥블랙 터미널 룩 */
-  --site-prompt-output-border: #1F232B;
+  --site-prompt-output-border: rgba(59, 130, 246, 0.45); /* 딥블랙 위 모던 블루 글로우 테두리 */
   --site-prompt-output-text: #F8FAFC;
   
   /* Quick Tips Card Palette (Dark Mode) */
@@ -674,6 +674,66 @@ html[data-theme-mode="dark"] .site-theme-toggle__icon--moon {
   transform: translateY(-2px);
 }
 
+/* ==========================================================================
+   프롬프트 한스푼 및 카드 내장 프롬프트 (.practice-step-card .prompt-item)
+   - 원칙 1: 마크다운 카드 박스(.practice-step-card) 안에 프롬프트가 포함될 때
+            불필요한 이중 테두리, 배경, 그림자를 제거하여 하나의 일체형 카드로 표현.
+   - 원칙 2: 상단에 제목/설명문이 선행하는 경우, 제목/설명문 영역과 프롬프트 영역 사이에
+            은은한 1px 상단 구분선(border-top: 1px solid var(--site-border))을 제공하여 명확히 구분.
+   - 원칙 3: 카드 시작 지점에 바로 오는 첫 프롬프트(.practice-step-card > .prompt-item:first-child)는
+            불필요한 상단 구분선 및 여백(border-top: none, margin-top: 0, padding-top: 0) 제거.
+   - 원칙 4: 연속된 프롬프트 간(.prompt-item + .prompt-item)에도 1px 구분선 제공.
+   - 원칙 5: 좌우 패딩을 0으로 초기화하여 상단 제목/설명문과 좌측 라인을 일직선(Flush Left)으로 일치.
+   - 원칙 6: h2 타원 배지(✦) 가상요소를 리셋하여 프롬프트 제목 폰트 스타일 유지.
+   ========================================================================== */
+.practice-step-card .prompt-item {
+  margin-top: 1.5rem;
+  padding: 1.5rem 0 0 0;
+  border-top: 1px solid var(--site-border);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.practice-step-card > .prompt-item:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.practice-step-card .prompt-item:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--site-border);
+}
+
+.practice-step-card .prompt-item + .prompt-item {
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--site-border);
+}
+
+.practice-step-card .prompt-item__title {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  color: var(--site-text) !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.practice-step-card .prompt-item__title::before {
+  content: none !important;
+}
+
 .prompt-item__header {
   display: flex;
   align-items: center;
@@ -708,7 +768,7 @@ html[data-theme-mode="dark"] .site-theme-toggle__icon--moon {
   padding: 1.35rem 1.5rem;
   border-radius: var(--site-radius-md);
   background: var(--site-prompt-workspace-bg);
-  border: 1px solid var(--site-prompt-workspace-border);
+  border: 1px solid var(--site-prompt-output-border);
   color: var(--site-prompt-workspace-text);
   white-space: pre-wrap;
   overflow: auto;
@@ -1096,6 +1156,16 @@ html[data-theme-mode="dark"] .badge-ai--universal {
   background: var(--site-surface-muted);
 }
 
+/* ==========================================================================
+   [CRITICAL] 출처(Source) 항목 슬림 라운딩 띠 박스 스타일 (.prompt-item__source)
+   - 위치: 이미지 프롬프트(image-ai/*) 및 정적 프롬프트 카드 바깥 하단에 위치.
+   - 디자인 표준:
+     1. 배경은 은은한 var(--site-surface-muted), 테두리는 1px solid var(--site-border).
+     2. 패딩은 var(--als-space-3) var(--als-space-4)로 슬림하고 콤팩트한 띠 형태 유지.
+     3. 둥근 모서리는 var(--site-radius-md), box-shadow는 절대 적용하지 않음(none).
+   - [주의]: 본문용 큰 카드 박스(.practice-step-card)처럼 패딩을 키우거나 그림자/표면색을 부여하여
+            거대하게 부풀리지 말 것 (모든 프롬프트 페이지 공통 규칙).
+   ========================================================================== */
 .prompt-item__source {
   margin-top: var(--als-space-5);
   padding: var(--als-space-3) var(--als-space-4);

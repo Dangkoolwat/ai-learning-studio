@@ -5,7 +5,6 @@ description: 내 결정이 확실한지 점검하기 위해 가장 논리적인 
 type: static-prompt
 ---
 
-# 반대 의견 들어보기
 
 ## 언제 사용하나요?
 
@@ -15,6 +14,8 @@ type: static-prompt
 - 비싼 물건을 구매할 때
 - 중요한 업무 방향을 결정할 때
 - 새로운 아이디어를 냈을 때
+
+---
 
 ## 짧은 프롬프트
 
@@ -26,6 +27,8 @@ description: 내 결정에 대한 반론을 듣습니다.
 ---
 내 결정에 바로 동의하지 말고, 반대하는 사람의 입장에서 가장 강력한 반론을 [ 3가지 / 5가지 ] 제시해줘.
 ```
+
+---
 
 ## 범용 프롬프트
 
@@ -47,9 +50,13 @@ description: 특정 내용을 붙여 넣고 구체적인 피드백을 받습니�
 비판과 함께 내가 이 문제를 어떻게 방어하면 좋을지도 짧게 덧붙여줘.
 ```
 
+---
+
 ## 함께 사용하면 좋은 프롬프트
 
-[반대 의견 들어보기](/prompt-snippets/listen-opposing/) ➔ [비교와 분석](/prompt-snippets/compare-analyze/) ➔ [결과를 더 좋게 만들기](/prompt-snippets/improve-results/)
+[반대 의견 들어보기](/prompt-snippets/listen-opposing/) ➔ [내가 당연하다고 생각한 가정 찾기](/prompt-snippets/audit-assumptions/) ➔ [선택할 때 무엇을 포기해야 하는지 확인](/prompt-snippets/evaluate-tradeoff/)
+
+---
 
 ## 💡 AI 활용 TIP
 
