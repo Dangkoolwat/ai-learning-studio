@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from html import escape as escape_html
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -378,15 +379,32 @@ def build_page_template_contexts(
     current_year = datetime.now().astimezone().year
     page_contexts: list[PageTemplateContext] = []
 
+    repo_root = staging_dir.parent
+    site_css_hash = calculate_asset_hash(repo_root / "assets" / "css" / "site.css")
+    site_js_hash = calculate_asset_hash(repo_root / "assets" / "js" / "site.js")
+    theme_css_hash = calculate_asset_hash(repo_root / "design" / active_theme_id / "design.md")
+
     for page in published_pages:
         result = renderer_results_by_id[page.id]
         output_path = route_to_output_path(page.route, staging_dir)
         navigation_items_html = build_navigation_items_html(page, registry, navigation, output_path, staging_dir)
         document_title = page.title if page.route == "/" else f"{page.title} | {SITE_NAME}"
-        site_stylesheet_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "css" / "site.css")
-        site_script_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "js" / "site.js") + "?v=1.4"
+        site_stylesheet_url = f"{stylesheet_href_for_output(output_path, staging_dir / 'assets' / 'css' / 'site.css')}?v={site_css_hash}"
+        site_script_url = f"{stylesheet_href_for_output(output_path, staging_dir / 'assets' / 'js' / 'site.js')}?v={site_js_hash}"
+        theme_stylesheet_url = f"{stylesheet_href_for_output(output_path, staging_dir / 'themes' / active_theme_id / 'style.css')}?v={theme_css_hash}"
         favicon_url = stylesheet_href_for_output(output_path, staging_dir / "assets" / "favicon.svg")
         canonical_link_html = build_canonical_link_html(site_base_url, page.route) if site_base_url else ""
+        social_meta_html = build_social_meta_html(
+            site_base_url=site_base_url,
+            page_title=document_title,
+            page_description=page.description,
+            route=page.route,
+        )
+        json_ld_script_html = build_json_ld_script_html(
+            site_base_url=site_base_url,
+            page=page,
+            navigation=navigation,
+        )
 
         page_contexts.append(
             PageTemplateContext(
@@ -404,11 +422,10 @@ def build_page_template_contexts(
                 robots_content="index,follow",
                 theme_color="#F3F1ED",
                 canonical_link_html=canonical_link_html,
+                social_meta_html=social_meta_html,
+                json_ld_script_html=json_ld_script_html,
                 favicon_url=favicon_url,
-                theme_stylesheet_url=stylesheet_href_for_output(
-                    output_path,
-                    staging_dir / "themes" / active_theme_id / "style.css",
-                ),
+                theme_stylesheet_url=theme_stylesheet_url,
                 site_stylesheet_url=site_stylesheet_url,
                 site_script_url=site_script_url,
                 home_url=route_href_for_output(output_path, "/", staging_dir),
@@ -421,6 +438,14 @@ def build_page_template_contexts(
     return page_contexts
 
 
+def calculate_asset_hash(file_path: Path) -> str:
+    """Calculate an 8-character hex hash from file contents for cache-busting."""
+    if not file_path.is_file():
+        return "1"
+    content = file_path.read_bytes()
+    return hashlib.sha256(content).hexdigest()[:8]
+
+
 def build_canonical_link_html(site_base_url: str, route: str) -> str:
     normalized_base_url = site_base_url.rstrip("/")
     if not normalized_base_url:
@@ -428,11 +453,145 @@ def build_canonical_link_html(site_base_url: str, route: str) -> str:
     return f'<link rel="canonical" href="{escape_html(normalized_base_url + route, quote=True)}">'
 
 
-def resolve_site_base_url() -> str | None:
+def build_social_meta_html(
+    *,
+    site_base_url: str | None,
+    page_title: str,
+    page_description: str,
+    route: str,
+) -> str:
+    lines = [
+        '<meta name="twitter:card" content="summary_large_image">',
+        f'<meta name="twitter:title" content="{escape_html(page_title, quote=True)}">',
+        f'<meta name="twitter:description" content="{escape_html(page_description, quote=True)}">',
+    ]
+
+    normalized_base_url = site_base_url.rstrip("/") if site_base_url else ""
+    if normalized_base_url:
+        full_url = normalized_base_url + route
+        lines.insert(0, f'<meta property="og:url" content="{escape_html(full_url, quote=True)}">')
+        og_image = f"{normalized_base_url}/assets/images/og-cover.png"
+        lines.insert(1, f'<meta property="og:image" content="{escape_html(og_image, quote=True)}">')
+        lines.append(f'<meta name="twitter:image" content="{escape_html(og_image, quote=True)}">')
+
+    return "\n".join(lines)
+
+
+def build_json_ld_script_html(
+    *,
+    site_base_url: str | None,
+    page: PageRegistryEntry,
+    navigation: NavigationData,
+) -> str:
+    base_url = site_base_url.rstrip("/") if site_base_url else ""
+    page_url = f"{base_url}{page.route}" if base_url else page.route
+
+    schemas: list[dict[str, Any]] = []
+
+    if page.route == "/":
+        website_schema: dict[str, Any] = {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": SITE_NAME,
+            "description": page.description,
+            "url": page_url or "/",
+            "inLanguage": "ko",
+        }
+        schemas.append(website_schema)
+    else:
+        section_label = page.section or ""
+        for sec in navigation.sections:
+            if sec.id == page.section:
+                section_label = sec.label
+                break
+
+        section_route = f"/{page.section}/" if page.section else "/"
+        section_url = f"{base_url}{section_route}" if base_url else section_route
+
+        items: list[dict[str, Any]] = [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "홈",
+                "item": base_url or "/",
+            },
+        ]
+        if page.route != section_route:
+            items.append({
+                "@type": "ListItem",
+                "position": 2,
+                "name": section_label,
+                "item": section_url,
+            })
+            items.append({
+                "@type": "ListItem",
+                "position": 3,
+                "name": page.title,
+                "item": page_url,
+            })
+        else:
+            items.append({
+                "@type": "ListItem",
+                "position": 2,
+                "name": section_label,
+                "item": section_url,
+            })
+
+        breadcrumb_schema: dict[str, Any] = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": items,
+        }
+        schemas.append(breadcrumb_schema)
+
+        learning_schema: dict[str, Any] = {
+            "@context": "https://schema.org",
+            "@type": "LearningResource",
+            "name": page.title,
+            "description": page.description,
+            "url": page_url,
+            "inLanguage": "ko",
+            "learningResourceType": "Interactive Resource",
+        }
+        schemas.append(learning_schema)
+
+    scripts: list[str] = []
+    for s in schemas:
+        payload = json.dumps(s, ensure_ascii=False, indent=2)
+        scripts.append(f'<script type="application/ld+json">\n{payload}\n</script>')
+
+    return "\n".join(scripts)
+
+
+def resolve_site_base_url(explicit_url: str | None = None) -> str | None:
+    if explicit_url:
+        candidate = explicit_url.strip().rstrip("/")
+        if candidate:
+            return candidate
+
     value = os.environ.get(SITE_URL_ENV_VAR, "").strip()
-    if not value:
-        return None
-    return value.rstrip("/")
+    if value:
+        return value.rstrip("/")
+
+    # Cloudflare Pages
+    cf_url = os.environ.get("CF_PAGES_URL", "").strip()
+    if cf_url:
+        return cf_url.rstrip("/")
+
+    # Netlify
+    netlify_url = os.environ.get("URL", "").strip()
+    if netlify_url:
+        return netlify_url.rstrip("/")
+
+    # Vercel (Production domain first, then fallback deployment URL)
+    vercel_prod = os.environ.get("VERCEL_PROJECT_PRODUCTION_URL", "").strip()
+    if vercel_prod:
+        return f"https://{vercel_prod.rstrip('/')}" if not vercel_prod.startswith("http") else vercel_prod.rstrip("/")
+    vercel_url = os.environ.get("VERCEL_URL", "").strip()
+    if vercel_url:
+        return f"https://{vercel_url.rstrip('/')}" if not vercel_url.startswith("http") else vercel_url.rstrip("/")
+
+    return None
 
 
 def build_not_found_page_context(
@@ -474,7 +633,13 @@ def build_not_found_page_context(
         "</section>"
     )
     main_html = build_rendered_main_html(page_type="error-page", intro_html=intro_html, body_html=body_html)
-    theme_stylesheet_url = stylesheet_href_for_output(output_path, staging_dir / "themes" / active_theme_id / "style.css")
+    repo_root = staging_dir.parent
+    site_css_hash = calculate_asset_hash(repo_root / "assets" / "css" / "site.css")
+    site_js_hash = calculate_asset_hash(repo_root / "assets" / "js" / "site.js")
+    theme_css_hash = calculate_asset_hash(repo_root / "design" / active_theme_id / "design.md")
+    theme_stylesheet_url = f"{stylesheet_href_for_output(output_path, staging_dir / 'themes' / active_theme_id / 'style.css')}?v={theme_css_hash}"
+    site_stylesheet_url = f"{stylesheet_href_for_output(output_path, staging_dir / 'assets' / 'css' / 'site.css')}?v={site_css_hash}"
+    site_script_url = f"{stylesheet_href_for_output(output_path, staging_dir / 'assets' / 'js' / 'site.js')}?v={site_js_hash}"
 
     return PageTemplateContext(
         page_id="not-found",
@@ -491,10 +656,17 @@ def build_not_found_page_context(
         robots_content="noindex,follow",
         theme_color="#F3F1ED",
         canonical_link_html="",
+        social_meta_html=build_social_meta_html(
+            site_base_url=site_base_url,
+            page_title="페이지를 찾을 수 없습니다 | AI Learning Studio",
+            page_description="요청한 페이지를 찾지 못했습니다. 홈으로 돌아가거나 AI 체험 실습으로 이동해 보세요.",
+            route="/404.html",
+        ),
+        json_ld_script_html="",
         favicon_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "favicon.svg"),
         theme_stylesheet_url=theme_stylesheet_url,
-        site_stylesheet_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "css" / "site.css"),
-        site_script_url=stylesheet_href_for_output(output_path, staging_dir / "assets" / "js" / "site.js") + "?v=1.4",
+        site_stylesheet_url=site_stylesheet_url,
+        site_script_url=site_script_url,
         home_url=home_href,
         navigation_items_html=navigation_items_html,
         main_html=main_html,
@@ -622,7 +794,12 @@ def validate_generated_page_html(
         raise BuildError("Validate output", "unresolved template placeholder remains", path=output_path, page_id=page.id)
     if "```prompt" in html_text or "```prompt-field" in html_text or "```timeline-step" in html_text or "```image-slider" in html_text:
         raise BuildError("Validate output", "renderer control fence remains in the generated HTML", path=output_path, page_id=page.id)
-    if html_text.lower().count("<script") > 2 or html_text.lower().count("<script") < 1:
+    executable_scripts = re.findall(
+        r'<script(?!\s+type=["\']application/ld\+json["\'])',
+        html_text,
+        flags=re.IGNORECASE,
+    )
+    if len(executable_scripts) > 2 or len(executable_scripts) < 1:
         raise BuildError("Validate output", "script tags are not allowed in generated HTML", path=output_path, page_id=page.id)
     if "<style" in html_text.lower():
         raise BuildError("Validate output", "style tags are not allowed in generated HTML", path=output_path, page_id=page.id)
@@ -635,6 +812,16 @@ def validate_generated_page_html(
         if page_context.canonical_link_html not in html_text:
             raise BuildError("Validate output", "HTML canonical link metadata is incorrect", path=output_path, page_id=page.id)
         html_text_for_url_scan = html_text.replace(page_context.canonical_link_html, "")
+
+    if page_context.social_meta_html:
+        if page_context.social_meta_html not in html_text:
+            raise BuildError("Validate output", "HTML social metadata is incorrect", path=output_path, page_id=page.id)
+        html_text_for_url_scan = html_text_for_url_scan.replace(page_context.social_meta_html, "")
+
+    if page_context.json_ld_script_html:
+        if page_context.json_ld_script_html not in html_text:
+            raise BuildError("Validate output", "HTML JSON-LD metadata is incorrect", path=output_path, page_id=page.id)
+        html_text_for_url_scan = html_text_for_url_scan.replace(page_context.json_ld_script_html, "")
 
     html_text_for_url_scan = re.sub(r'https?://fonts\.(googleapis|gstatic)\.com[^\s\'"<>]*', '', html_text_for_url_scan, flags=re.IGNORECASE)
 
@@ -1702,6 +1889,7 @@ def build_site(
     *,
     check_only: bool = False,
     stage_logger: Callable[[int, int, str], None] = log_stage,
+    site_base_url: str | None = None,
 ) -> BuildSummary:
     pages_dir = repo_root / "pages"
     assets_dir = repo_root / "assets"
@@ -1709,7 +1897,7 @@ def build_site(
     design_dir = repo_root / "design"
     dist_dir = repo_root / "dist"
     temp_root = Path(tempfile.mkdtemp(prefix=".phase10-build-", dir=repo_root))
-    site_base_url = resolve_site_base_url()
+    site_base_url = resolve_site_base_url(site_base_url)
 
     try:
         stage_logger(1, TOTAL_STAGES, "Validate environment")

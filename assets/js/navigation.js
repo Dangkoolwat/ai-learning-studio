@@ -22,6 +22,45 @@ function setNavigationState(root, toggle, isOpen) {
 }
 
 /**
+ * Highlights matching query in text element, restoring original if empty.
+ * @param {Element|null} element
+ * @param {string} query
+ */
+function highlightText(element, query) {
+  if (!(element instanceof HTMLElement)) return;
+  const originalText = element.getAttribute("data-nav-original-text") || element.textContent;
+  if (!element.hasAttribute("data-nav-original-text")) {
+    element.setAttribute("data-nav-original-text", originalText);
+  }
+
+  if (!query) {
+    element.textContent = originalText;
+    return;
+  }
+
+  const lower = originalText.toLowerCase();
+  const qLower = query.toLowerCase();
+  const index = lower.indexOf(qLower);
+
+  if (index === -1) {
+    element.textContent = originalText;
+    return;
+  }
+
+  const before = originalText.slice(0, index);
+  const match = originalText.slice(index, index + query.length);
+  const after = originalText.slice(index + query.length);
+
+  element.textContent = "";
+  if (before) element.appendChild(document.createTextNode(before));
+  const mark = document.createElement("mark");
+  mark.className = "search-highlight";
+  mark.textContent = match;
+  element.appendChild(mark);
+  if (after) element.appendChild(document.createTextNode(after));
+}
+
+/**
  * Initializes navigation bar, drawer events, search filtering, and accordion state.
  */
 export function initNavigation() {
@@ -116,21 +155,29 @@ export function initNavigation() {
 
         if (!isSearching) {
           item.classList.remove("nav-item--hidden");
+          highlightText(item.querySelector(".navigation-link"), "");
           groupHeaders.forEach((gh) => gh.classList.remove("nav-item--hidden"));
-          subItems.forEach((sub) => sub.classList.remove("nav-item--hidden"));
+          subItems.forEach((sub) => {
+            sub.classList.remove("nav-item--hidden");
+            highlightText(sub.querySelector("a") || sub, "");
+          });
           return;
         }
 
-        const mainText = item.querySelector(".navigation-link")?.textContent?.toLowerCase() || "";
+        const mainLink = item.querySelector(".navigation-link");
+        const mainText = mainLink?.getAttribute("data-nav-original-text") || mainLink?.textContent?.toLowerCase() || "";
         let hasMatchingSub = false;
 
         subItems.forEach((sub) => {
-          const subText = sub.textContent?.toLowerCase() || "";
-          if (subText.includes(query)) {
+          const subLink = sub.querySelector("a") || sub;
+          const subText = subLink.getAttribute("data-nav-original-text") || subLink.textContent || "";
+          if (subText.toLowerCase().includes(query)) {
             sub.classList.remove("nav-item--hidden");
+            highlightText(subLink, query);
             hasMatchingSub = true;
           } else {
             sub.classList.add("nav-item--hidden");
+            highlightText(subLink, "");
           }
         });
 
@@ -154,10 +201,33 @@ export function initNavigation() {
 
         if (mainText.includes(query) || hasMatchingSub) {
           item.classList.remove("nav-item--hidden");
+          highlightText(mainLink, query);
         } else {
           item.classList.add("nav-item--hidden");
+          highlightText(mainLink, "");
         }
       });
+
+      // 검색 결과 0건 안내 (Empty State)
+      const visibleItems = Array.from(navItems).filter((item) => !item.classList.contains("nav-item--hidden"));
+      let emptyEl = navigation.querySelector(".site-nav-search__empty");
+      if (isSearching && visibleItems.length === 0) {
+        if (!emptyEl) {
+          emptyEl = document.createElement("div");
+          emptyEl.className = "site-nav-search__empty";
+          emptyEl.setAttribute("role", "status");
+          emptyEl.textContent = "일치하는 메뉴가 없습니다.";
+          const searchContainer = navigation.querySelector(".site-nav-search");
+          if (searchContainer) {
+            searchContainer.after(emptyEl);
+          } else {
+            navigation.prepend(emptyEl);
+          }
+        }
+        emptyEl.hidden = false;
+      } else if (emptyEl) {
+        emptyEl.hidden = true;
+      }
     };
 
     searchInput.addEventListener("input", handleSearch);
@@ -182,7 +252,15 @@ export function initNavigation() {
 
   let isOpen = false;
 
-  const closeNavigation = ({ focusToggle = false } = {}) => {
+  const getFocusableElements = () => {
+    return Array.from(
+      navigation.querySelectorAll(
+        'button:not([disabled]):not([hidden]), [href]:not([tabindex="-1"]), input:not([disabled]):not([hidden]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((el) => el.offsetParent !== null);
+  };
+
+  const closeNavigation = ({ focusToggle = true } = {}) => {
     isOpen = false;
     setNavigationState(root, toggle, false);
     if (focusToggle) {
@@ -192,21 +270,27 @@ export function initNavigation() {
 
   const openNavigation = () => {
     if (!COMPACT_MEDIA_QUERY.matches) {
-      closeNavigation();
+      closeNavigation({ focusToggle: false });
       return;
     }
 
     isOpen = true;
     setNavigationState(root, toggle, true);
+    requestAnimationFrame(() => {
+      const focusables = getFocusableElements();
+      if (focusables.length > 0) {
+        focusables[0].focus();
+      }
+    });
   };
 
   const syncToViewport = () => {
     if (!COMPACT_MEDIA_QUERY.matches) {
-      closeNavigation();
+      closeNavigation({ focusToggle: false });
       return;
     }
 
-    closeNavigation();
+    closeNavigation({ focusToggle: false });
   };
 
   setNavigationState(root, toggle, false);
@@ -214,14 +298,14 @@ export function initNavigation() {
   toggle.addEventListener("click", () => {
     if (COMPACT_MEDIA_QUERY.matches) {
       if (isOpen) {
-        closeNavigation();
+        closeNavigation({ focusToggle: true });
       } else {
         openNavigation();
       }
       return;
     }
 
-    closeNavigation();
+    closeNavigation({ focusToggle: false });
   });
 
   navigation.addEventListener("click", (event) => {
@@ -236,11 +320,30 @@ export function initNavigation() {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape" || !isOpen) {
+    if (!isOpen) {
       return;
     }
 
-    closeNavigation({ focusToggle: true });
+    if (event.key === "Escape") {
+      closeNavigation({ focusToggle: true });
+      return;
+    }
+
+    if (event.key === "Tab" && COMPACT_MEDIA_QUERY.matches) {
+      const focusables = [toggle, ...getFocusableElements()];
+      if (focusables.length === 0) return;
+
+      const firstEl = focusables[0];
+      const lastEl = focusables[focusables.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstEl) {
+        event.preventDefault();
+        lastEl.focus();
+      } else if (!event.shiftKey && document.activeElement === lastEl) {
+        event.preventDefault();
+        firstEl.focus();
+      }
+    }
   });
 
   if (typeof COMPACT_MEDIA_QUERY.addEventListener === "function") {

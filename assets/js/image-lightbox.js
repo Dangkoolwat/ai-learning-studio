@@ -22,9 +22,28 @@ export function initImageLightbox() {
   const imgEl = dialog.querySelector('.lightbox-img');
   const downloadBtn = dialog.querySelector('.lightbox-download');
   const closeBtn = dialog.querySelector('.lightbox-close');
+  let activeTriggerImg = null;
 
   function closeLightbox() {
     dialog.close();
+    if (activeTriggerImg instanceof HTMLElement) {
+      activeTriggerImg.focus();
+      activeTriggerImg = null;
+    }
+  }
+
+  function openLightbox(img) {
+    activeTriggerImg = img;
+    imgEl.src = img.src;
+    imgEl.alt = img.alt || '확대된 이미지';
+    downloadBtn.href = img.src;
+    
+    let filename = img.src.split('/').pop().split('#')[0].split('?')[0];
+    if (!filename) filename = 'download';
+    downloadBtn.download = filename;
+    
+    dialog.showModal();
+    closeBtn.focus();
   }
 
   closeBtn.addEventListener('click', closeLightbox);
@@ -36,17 +55,24 @@ export function initImageLightbox() {
     }
   });
 
+  dialog.addEventListener('cancel', () => {
+    if (activeTriggerImg instanceof HTMLElement) {
+      activeTriggerImg.focus();
+      activeTriggerImg = null;
+    }
+  });
+
   images.forEach(img => {
-    img.addEventListener('click', () => {
-      imgEl.src = img.src;
-      imgEl.alt = img.alt || '확대된 이미지';
-      downloadBtn.href = img.src;
-      
-      let filename = img.src.split('/').pop().split('#')[0].split('?')[0];
-      if (!filename) filename = 'download';
-      downloadBtn.download = filename;
-      
-      dialog.showModal();
+    img.setAttribute('tabindex', '0');
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', (img.alt ? `${img.alt} (클릭하여 확대)` : '이미지 확대 보기'));
+
+    img.addEventListener('click', () => openLightbox(img));
+    img.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(img);
+      }
     });
   });
 }

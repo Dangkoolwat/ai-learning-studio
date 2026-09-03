@@ -241,7 +241,6 @@ def render_static_prompt_page(context: PageRendererContext) -> PageRendererResul
 
     # Map control blocks to their rendered HTML by block index
     prompt_control_blocks = [b for b in context.control_blocks if b.label == "prompt"]
-    last_prompt_idx = prompt_control_blocks[-1].index if prompt_control_blocks else -1
 
     prompt_blocks_by_index = {
         block.index: result.rendered_html

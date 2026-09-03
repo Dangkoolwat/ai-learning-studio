@@ -5,6 +5,8 @@ import { copyToClipboard, showTemporaryFeedback, FEEDBACK_TIMEOUT_MS } from "./d
  * Supports Help Modal Popups (?) and Live Dynamic Prompt Assembly with parameter controls.
  */
 
+let lastActiveElement = null;
+
 function createHelpModal() {
   let modalBg = document.getElementById("als-help-modal-bg");
   if (!modalBg) {
@@ -13,6 +15,7 @@ function createHelpModal() {
     modalBg.className = "als-modal-bg";
     modalBg.setAttribute("role", "dialog");
     modalBg.setAttribute("aria-modal", "true");
+    modalBg.setAttribute("aria-labelledby", "als-modal-title");
     modalBg.innerHTML = `
       <div class="als-modal">
         <div class="als-modal__header">
@@ -28,21 +31,48 @@ function createHelpModal() {
     document.body.appendChild(modalBg);
 
     const closeBtn = modalBg.querySelector("#als-modal-close");
-    closeBtn.onclick = () => modalBg.classList.remove("is-visible");
+    const closeModal = () => {
+      modalBg.classList.remove("is-visible");
+      if (lastActiveElement instanceof HTMLElement) {
+        lastActiveElement.focus();
+        lastActiveElement = null;
+      }
+    };
+
+    closeBtn.onclick = closeModal;
     modalBg.onclick = (e) => {
-      if (e.target === modalBg) modalBg.classList.remove("is-visible");
+      if (e.target === modalBg) closeModal();
     };
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") modalBg.classList.remove("is-visible");
+      if (!modalBg.classList.contains("is-visible")) return;
+      if (e.key === "Escape") {
+        closeModal();
+        return;
+      }
+      if (e.key === "Tab") {
+        const focusable = modalBg.querySelectorAll("button, [href], input, [tabindex='0']");
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     });
   }
   return modalBg;
 }
 
-function showHelpPopup(title, description, detailText = "") {
+function showHelpPopup(title, description, detailText = "", triggerEl = null) {
+  lastActiveElement = triggerEl || (document.activeElement instanceof HTMLElement ? document.activeElement : null);
   const modalBg = createHelpModal();
   const titleEl = modalBg.querySelector("#als-modal-title");
   const bodyEl = modalBg.querySelector("#als-modal-body");
+  const closeBtn = modalBg.querySelector("#als-modal-close");
 
   titleEl.textContent = title;
   bodyEl.innerHTML = `
@@ -53,6 +83,9 @@ function showHelpPopup(title, description, detailText = "") {
     ${detailText ? `<div class="als-modal__section"><h4>🔍 활용 가이드</h4><p>${detailText}</p></div>` : ""}
   `;
   modalBg.classList.add("is-visible");
+  requestAnimationFrame(() => {
+    closeBtn?.focus();
+  });
 }
 
 export function initPromptBuilder() {
@@ -76,7 +109,7 @@ export function initPromptBuilder() {
         helpBtn.onclick = (e) => {
           e.preventDefault();
           e.stopPropagation();
-          showHelpPopup(labelEl.textContent.trim(), descEl.textContent.trim());
+          showHelpPopup(labelEl.textContent.trim(), descEl.textContent.trim(), "", helpBtn);
         };
 
         labelEl.appendChild(helpBtn);
@@ -198,11 +231,24 @@ export function initPromptBuilder() {
         const text = resultCode?.textContent?.trim();
         if (!text) return;
 
+        const statusEl = builder.querySelector(".prompt-builder__status");
         const ok = await copyToClipboard(text);
         if (ok) {
           showTemporaryFeedback(copyBtn, "복사되었습니다!", "프롬프트 복사", "is-copied", FEEDBACK_TIMEOUT_MS);
+          if (statusEl) {
+            statusEl.textContent = "프롬프트가 클립보드에 복사되었습니다.";
+            setTimeout(() => {
+              statusEl.textContent = "";
+            }, FEEDBACK_TIMEOUT_MS);
+          }
         } else {
           showTemporaryFeedback(copyBtn, "복사 실패", "프롬프트 복사", "is-error", FEEDBACK_TIMEOUT_MS);
+          if (statusEl) {
+            statusEl.textContent = "프롬프트 복사에 실패했습니다.";
+            setTimeout(() => {
+              statusEl.textContent = "";
+            }, FEEDBACK_TIMEOUT_MS);
+          }
         }
       };
     }

@@ -55,6 +55,8 @@ APPROVED_TEMPLATE_SPECS = (
             "theme_color",
             "canonical_path",
             "canonical_link_html",
+            "social_meta_html",
+            "json_ld_script_html",
             "favicon_url",
             "theme_stylesheet_url",
             "site_stylesheet_url",
@@ -122,6 +124,8 @@ class PageTemplateContext:
     robots_content: str
     theme_color: str
     canonical_link_html: str
+    social_meta_html: str
+    json_ld_script_html: str
     favicon_url: str
     theme_stylesheet_url: str
     site_stylesheet_url: str

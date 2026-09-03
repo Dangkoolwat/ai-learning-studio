@@ -196,11 +196,27 @@ dist/
 배포 전에 다음을 확인합니다.
 
 - HTML 파일 존재
-- CSS·JavaScript 경로 유효
+- CSS·JavaScript 경로 유효 및 파일 내용 해시 기반 캐시 버스팅(`?v=[hash]`) 적용 여부
 - 이미지 경로 유효
 - 내부 링크 유효
-- canonical이 Production 도메인 사용
+- canonical 및 sitemap이 Production 도메인 사용
 - 원본 문서와 로그 미포함
+
+### 빌드 명령어 및 옵션
+
+```bash
+# 기본 빌드 (환경변수 자동 감지)
+python3 scripts/build.py
+
+# 명시적 운영 도메인 지정 빌드 (sitemap/canonical 절대 URL 강제 주입)
+python3 scripts/build.py --site-url https://my-domain.com
+
+# 출판 없이 무결성 검증만 수행 (Dry-run)
+python3 scripts/build.py --check
+```
+
+### 정적 자산 캐시 버스팅 (Cache-Busting)
+빌드 파이프라인(`core/build_pipeline.py`)이 `site.css`, 테마 CSS, `site.js`의 파일 내용을 해싱하여 `?v=[hash]` 쿼리스트링을 자동 주입합니다. 코드가 변경되어 배포될 때마다 고유 해시가 갱신되므로, Vercel/Cloudflare/Nginx 등의 24시간 에셋 캐시 정책과 무관하게 브라우저는 항상 최신 스타일과 스크립트를 즉시 다운로드합니다.
 
 ---
 

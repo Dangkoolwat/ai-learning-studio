@@ -222,6 +222,8 @@ def render_page_document(templates: LoadedTemplates, context: PageTemplateContex
             "theme_color": escape_html(context.theme_color),
             "canonical_path": escape_html(context.page_route),
             "canonical_link_html": context.canonical_link_html,
+            "social_meta_html": context.social_meta_html,
+            "json_ld_script_html": context.json_ld_script_html,
             "favicon_url": escape_html(context.favicon_url),
             "theme_stylesheet_url": escape_html(context.theme_stylesheet_url),
             "site_stylesheet_url": escape_html(context.site_stylesheet_url),

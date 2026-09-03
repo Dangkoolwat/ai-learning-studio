@@ -379,6 +379,29 @@ html[data-theme-mode="dark"] .site-theme-toggle__icon--moon {
   color: var(--site-text);
 }
 
+.site-nav-search__empty {
+  padding: 1.25rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--site-text-muted);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: var(--site-radius-sm);
+  margin: 0.5rem 0;
+}
+
+.search-highlight {
+  background-color: rgba(250, 204, 21, 0.35);
+  color: inherit;
+  padding: 0 0.15rem;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+[data-theme-mode="dark"] .search-highlight {
+  background-color: rgba(250, 204, 21, 0.25);
+  color: #FDE047;
+}
+
 .navigation-list {
   margin: 0;
   padding: 0;

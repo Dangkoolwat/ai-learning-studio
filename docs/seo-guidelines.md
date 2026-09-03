@@ -16,9 +16,9 @@
 모든 공개 정적 페이지는 Python 빌드 단계에서 다음 요소를 올바르게 생성해야 합니다.
 
 1. **고유 Title 및 Description**: 페이지별로 중복되지 않는 명확한 title 및 meta description.
-2. **Canonical URL**: 정식 운영 도메인 기준의 표준 URL (Vercel Preview URL을 canonical로 설정 금지).
-3. **Open Graph & Twitter Card**: 소셜 공유용 메타태그 (og:title, og:description, og:image 등).
-4. **JSON-LD 구조화 데이터**: 페이지 성격에 부합하는 Schema.org JSON-LD 스크립트.
+2. **Canonical URL 및 베이스 URL 감지**: 플랫폼 중립적 도메인 감지 우선순위(CLI `--site-url` > `AI_STUDIO_SITE_URL` > Cloudflare `CF_PAGES_URL` > Netlify `URL` > Vercel `VERCEL_PROJECT_PRODUCTION_URL`/`VERCEL_URL`)에 따른 완전한 절대 경로 표준 URL.
+3. **Open Graph & Twitter Card**: 소셜 공유용 메타태그 (`og:title`, `og:description`, `og:url`, `og:image`, `twitter:card="summary_large_image"` 등). 대표 썸네일은 1200x630 규격의 `assets/images/og-cover.png`를 사용.
+4. **JSON-LD 구조화 데이터**: 루트 페이지(`WebSite`), 서브 페이지(`BreadcrumbList` 및 `LearningResource`) Schema.org 스크립트 자동 생성.
 5. **Heading 계층구조**: 페이지당 단 하나의 `<h1>` 요소 사용 및 논리적 `<h2>`, `<h3>` 순서 준수.
-6. **Breadcrumb**: 홈 이외의 모든 하위 경로에 Breadcrumb 마크업 및 JSON-LD 제공.
-7. **사이트맵 및 크롤링 정책**: `sitemap.xml` 및 `robots.txt`에 정식 등록.
+6. **Breadcrumb**: 홈 이외의 모든 하위 경로에 Breadcrumb JSON-LD 계층 구조 제공.
+7. **사이트맵 및 크롤링 정책**: `sitemap.xml` 및 `robots.txt`에 정식 절대 URL 등록.

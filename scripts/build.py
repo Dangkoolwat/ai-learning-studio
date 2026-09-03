@@ -23,6 +23,12 @@ def add_repo_root_to_sys_path(repo_root: Path) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build the AI Learning Studio static site.")
     parser.add_argument("--check", action="store_true", help="Validate and render without replacing dist/")
+    parser.add_argument(
+        "--site-url",
+        type=str,
+        default=None,
+        help="Base URL for sitemap, canonical links, and social metadata (e.g. https://my-site.com)",
+    )
     return parser.parse_args()
 
 
@@ -34,7 +40,7 @@ def main() -> int:
     from core.build_pipeline import BuildError, build_site  # noqa: WPS433
 
     try:
-        summary = build_site(repo_root, check_only=args.check)
+        summary = build_site(repo_root, check_only=args.check, site_base_url=args.site_url)
 
         print("Build complete")
         print(f"Pages: {summary.page_count}")
