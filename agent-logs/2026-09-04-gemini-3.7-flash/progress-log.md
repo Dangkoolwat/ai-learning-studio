@@ -99,3 +99,37 @@
   - `python3 scripts/audit_prompts.py`: EXIT 0 (76개 페이지, 43개 에셋 통과)
   - `python3 scripts/build.py`: EXIT 0 (Pages: 76, Routes: 76 빌드 완료)
   - `python3 -m unittest discover tests`: Ran 85 tests (OK)
+
+## 8. 페이지 헤더 카드(.page-intro) 설명문 좌우 여백 균형 개선
+- [x] 원인 분석:
+  - 상단 헤더 카드(`padding: 2.25rem 2.5rem`, 좌우 40px) 내부의 설명문(`.page-description`)에 `max-width: 68ch` 제한이 걸려 있어, 넓은 카드 너비 대비 텍스트가 좌측에 갇혀 우측에 거대한 빈 공간이 형성되는 비대칭 현상 확인
+  - 상하 간격 수치: 제목과 설명문 간 `margin: 0.85rem 0 0` (약 13.6px), 행간 `line-height: 1.6` (약 26.8px)
+- [x] 사용자 확인 및 반영:
+  - 사용자 옵션 선택: 설명문 최대 너비(68ch) 해제 및 가로 100% 확장
+  - `assets/css/site.css`: `.page-description`의 `max-width: none; width: 100%; word-break: keep-all;` 적용
+- [x] 브라우저 검증:
+  - `local_page_intro_balanced_1788505800669.png`: 설명문 텍스트가 카드의 좌우 40px 패딩을 대칭적으로 채우며 우측 빈 공간 불균형 완전 해소 확인
+- [x] 자동화 검증:
+  - `python3 scripts/audit_prompts.py`: EXIT 0
+  - `python3 scripts/build.py`: EXIT 0
+  - `python3 -m unittest discover tests`: Ran 85 tests (OK)
+
+## 9. 전 화면(모바일·태블릿·데스크톱) 반응형(Fluid Responsive) 고도화
+- [x] 모바일/태블릿 시각 결함 분석:
+  - 40px(2.5rem) 고정 패딩으로 인해 375px 모바일 화면에서 가용 텍스트 영역이 295px로 좁아지고 답답한 여백 발생
+  - 뷰포트 크기에 따른 텍스트 불균형 줄바꿈(orphaned word) 현상 확인
+- [x] 유동형 clamp 및 모던 타이포그래피 규칙 적용 (`assets/css/site.css`):
+  - `.page-intro`: 패딩을 `clamp(1.25rem, 3.5vw, 2.25rem) clamp(1.25rem, 4vw, 2.5rem)`로 전환 (모바일 20px -> 태블릿 ~30px -> 데스크톱 40px)
+  - `.practice-step-card`: 패딩을 동일한 `clamp()`로 동기화하고, 마진을 `clamp(1rem, 2.5vw, 1.5rem) 0 !important`로 반응형화
+  - `.page-title`: `font-size: clamp(1.45rem, 2.8vw, 2.35rem)`, `word-break: keep-all; text-wrap: balance;` 적용
+  - `.page-description`: `margin: clamp(0.6rem, 1.5vw, 0.85rem) 0 0`, `font-size: clamp(0.95rem, 1.2vw, 1.05rem)`, `text-wrap: balance;` 적용
+- [x] 멀티 뷰포트 브라우저 실화면 렌더링 검증:
+  - 모바일(375px): 패딩 20px 축소로 카드 내부 가용 공간 대폭 확대, `text-wrap: balance`로 2줄 대칭 균형 줄바꿈 PASS (`responsive_mobile_header_1788506102674.png`)
+  - 태블릿(768px): 패딩 30px, 설명문 1줄 최적 안착 및 좌우 여백 대칭 PASS (`responsive_tablet_header_1788506125176.png`)
+  - 데스크톱(1440px): 패딩 40px의 시원하고 품격 있는 여백 및 완벽 정렬 PASS (`responsive_desktop_header_1788506129670.png`)
+- [x] 자동화 테스트 스위트:
+  - `python3 scripts/audit_prompts.py`: EXIT 0 (76개 페이지 통과)
+  - `python3 scripts/build.py`: EXIT 0 (Pages: 76, Routes: 76 정상 빌드 완료)
+  - `python3 -m unittest discover tests`: Ran 85 tests (OK)
+
+
