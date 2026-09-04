@@ -1992,6 +1992,23 @@ html.js .site-nav-toggle {
   margin-bottom: 0.35rem !important;
 }
 
+.practice-step-card pre {
+  margin: 0.85rem 0 1.25rem 0 !important;
+  padding: 1rem 1.25rem !important;
+  border-radius: var(--site-radius-sm) !important;
+  background: var(--site-prompt-workspace-bg) !important;
+  border: 1px solid var(--site-border) !important;
+  overflow-x: auto !important;
+}
+
+.practice-step-card pre code {
+  display: block !important;
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace !important;
+  font-size: 0.88rem !important;
+  line-height: 1.6 !important;
+  color: var(--site-text) !important;
+}
+
 /* 💡 실전 활용 꿀팁 카드 전용 시각적 악센트 스타일 */
 .practice-step-card--tips {
   background: var(--site-tip-bg) !important;

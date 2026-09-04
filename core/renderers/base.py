@@ -120,7 +120,7 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
         if result_blocks:
             result_blocks.append('<div class="step-flow-arrow" aria-hidden="true">↓</div>')
 
-        is_tips_card = any("실전 활용 꿀팁" in b for b in card_blocks)
+        is_tips_card = any("활용 꿀팁" in b or "Quick Tips" in b for b in card_blocks)
         card_cls = "practice-step-card practice-step-card--tips" if is_tips_card else "practice-step-card"
         result_blocks.append(f'<div class="{card_cls}">')
         result_blocks.extend(card_blocks)

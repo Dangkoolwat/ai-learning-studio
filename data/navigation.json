@@ -404,6 +404,13 @@
           "description": "질문과 피드백으로 내가 아는 것과 모르는 것을 직접 확인하는 맞춤형 학습 코치",
           "route": "/ai-assistant/active-recall-tutor/",
           "featured": true
+        },
+        {
+          "id": "ai-assistant-core-direct",
+          "label": "군더더기 없이 바로 핵심만",
+          "description": "서론과 장황한 설명을 줄이고, 묻는 말의 핵심과 다음 할 일 하나를 명확하게 짚어주는 맞춤 지침 프롬프트입니다.",
+          "route": "/ai-assistant/core-direct/",
+          "featured": true
         }
       ]
     },

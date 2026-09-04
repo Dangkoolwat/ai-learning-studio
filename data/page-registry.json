@@ -626,6 +626,19 @@
       "lang": "ko"
     },
     {
+      "id": "ai-assistant-core-direct",
+      "title": "군더더기 없이 바로 핵심만",
+      "description": "서론과 장황한 설명을 줄이고, 묻는 말의 핵심과 다음 할 일 하나를 명확하게 짚어주는 맞춤 지침 프롬프트입니다.",
+      "route": "/ai-assistant/core-direct/",
+      "source": "pages/sections/ai-assistant/core-direct.md",
+      "type": "static-prompt",
+      "section": "ai-assistant",
+      "order": 41,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "image-ai",
       "title": "이미지 생성",
       "description": "이미지 프롬프트의 특징을 이해하고 이미지를 더 정확하게 만들어 보세요.",
@@ -633,7 +646,7 @@
       "source": "pages/sections/image-ai.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 41,
+      "order": 42,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -646,7 +659,7 @@
       "source": "pages/sections/image-ai/typography.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 42,
+      "order": 43,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -659,7 +672,7 @@
       "source": "pages/sections/image-ai/recipe-infographic.md",
       "type": "prompt-builder",
       "section": "image-ai",
-      "order": 43,
+      "order": 44,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -672,7 +685,7 @@
       "source": "pages/sections/image-ai/3d-career-character.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 44,
+      "order": 45,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -685,7 +698,7 @@
       "source": "pages/sections/image-ai/resume-profile.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 45,
+      "order": 46,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -698,7 +711,7 @@
       "source": "pages/sections/image-ai/sns-profile.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 46,
+      "order": 47,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -711,7 +724,7 @@
       "source": "pages/sections/image-ai/paper-collage.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 47,
+      "order": 48,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -724,7 +737,7 @@
       "source": "pages/sections/image-ai/photo-retouch.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 48,
+      "order": 49,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -736,7 +749,7 @@
       "type": "static-prompt",
       "route": "/ready-to-use/uijeongbu-route-finder/",
       "section": "ready-to-use",
-      "order": 49,
+      "order": 50,
       "navigation": true,
       "status": "published",
       "lang": "ko",
@@ -750,7 +763,7 @@
       "source": "pages/sections/ready-to-use/healing-chat.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 50,
+      "order": 51,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -763,7 +776,7 @@
       "source": "pages/sections/ready-to-use/event-budget-calculator.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 51,
+      "order": 52,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -776,7 +789,7 @@
       "source": "pages/sections/ready-to-use/funeral-etiquette.md",
       "type": "markdown-prompt",
       "section": "ready-to-use",
-      "order": 52,
+      "order": 53,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -789,7 +802,7 @@
       "source": "pages/sections/ready-to-use/music-analysis.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 59,
+      "order": 60,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -802,7 +815,7 @@
       "source": "pages/sections/ready-to-use/art-analysis.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 60,
+      "order": 61,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -815,7 +828,7 @@
       "source": "pages/sections/ready-to-use/literature-analysis.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 61,
+      "order": 62,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -828,7 +841,7 @@
       "source": "pages/sections/ready-to-use/film-analysis.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 62,
+      "order": 63,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -841,7 +854,7 @@
       "source": "pages/sections/ready-to-use/architecture-analysis.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 63,
+      "order": 64,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -854,7 +867,7 @@
       "source": "pages/sections/ready-to-use/photo-analysis.md",
       "type": "static-prompt",
       "section": "ready-to-use",
-      "order": 64,
+      "order": 65,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -867,7 +880,7 @@
       "source": "pages/sections/image-ai/food-poster.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 53,
+      "order": 54,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -880,7 +893,7 @@
       "source": "pages/sections/image-ai/child-doodle.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 54,
+      "order": 55,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -893,7 +906,7 @@
       "source": "pages/sections/image-ai/silly-doodle.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 55,
+      "order": 56,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -906,7 +919,7 @@
       "source": "pages/sections/image-ai/sketch-sticker.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 56,
+      "order": 57,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -919,7 +932,7 @@
       "source": "pages/sections/ai-practice/fridge-recipe.md",
       "type": "static-prompt",
       "section": "ai-practice",
-      "order": 57,
+      "order": 58,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -932,7 +945,7 @@
       "source": "pages/sections/image-ai/travel-photo-diary.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 58,
+      "order": 59,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -945,7 +958,7 @@
       "source": "pages/sections/image-ai/candid-portrait.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 59,
+      "order": 60,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -958,7 +971,7 @@
       "source": "pages/sections/image-ai/palette-knife-impasto.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 60,
+      "order": 61,
       "navigation": true,
       "status": "published",
       "lang": "ko"
@@ -971,7 +984,7 @@
       "source": "pages/sections/image-ai/crayon-travel-poster.md",
       "type": "static-prompt",
       "section": "image-ai",
-      "order": 61,
+      "order": 62,
       "navigation": true,
       "status": "published",
       "lang": "ko"

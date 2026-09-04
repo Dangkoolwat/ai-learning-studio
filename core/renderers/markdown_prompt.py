@@ -233,7 +233,7 @@ def render_markdown_prompt_page(context: PageRendererContext) -> PageRendererRes
                 prompt_actions_html=actions_html,
                 prompt_preview_html=preview_html,
                 prompt_badges_html=ai_badges_block,
-                prompt_source_html=source_html,
+                prompt_source_html="",
             ),
             context.component_templates,
         )
@@ -264,6 +264,10 @@ def render_markdown_prompt_page(context: PageRendererContext) -> PageRendererRes
             _replace_placeholder,
             body_html_content,
         )
+        if source_html:
+            # [CRITICAL / 절대 규칙]: source_html은 본문(body_html_content)의 모든 카드 박스가 완전히 닫힌
+            # 맨 마지막 하단에 독립 배치한다. 카드 박스 내부 갇힘 절대 금지.
+            body_html_content = f"{body_html_content.rstrip()}\n{source_html}"
 
     body_result = render_page_body_component(
         PageBodyComponent(body_html=body_html_content),
