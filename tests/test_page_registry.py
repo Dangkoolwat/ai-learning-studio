@@ -52,8 +52,8 @@ class DeriveRouteTests(unittest.TestCase):
 
     def test_nested_page_maps_two_levels(self) -> None:
         self.assertEqual(
-            derive_route_from_source("pages/sections/ai-practice/summer-vacation-basic.md"),
-            "/ai-practice/summer-vacation-basic/",
+            derive_route_from_source("pages/sections/ai-practice/vacation-plan-basic.md"),
+            "/ai-practice/vacation-plan-basic/",
         )
 
 

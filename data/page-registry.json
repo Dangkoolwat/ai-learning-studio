@@ -28,11 +28,11 @@
       "lang": "ko"
     },
     {
-      "id": "ai-practice-summer-vacation-basic",
-      "title": "여름휴가 계획 세우기 (기초편)",
-      "description": "여름휴가 계획이라는 같은 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성합니다.",
-      "route": "/ai-practice/summer-vacation-basic/",
-      "source": "pages/sections/ai-practice/summer-vacation-basic.md",
+      "id": "ai-practice-vacation-plan-basic",
+      "title": "휴가 계획 세우기 (기초편)",
+      "description": "휴가 계획이라는 같은 주제를 여러 프롬프트 방식으로 바꾸며 최종 프롬프트를 완성합니다.",
+      "route": "/ai-practice/vacation-plan-basic/",
+      "source": "pages/sections/ai-practice/vacation-plan-basic.md",
       "type": "static-prompt",
       "section": "ai-practice",
       "order": 2,

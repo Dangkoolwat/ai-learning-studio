@@ -150,7 +150,7 @@ class BuildPipelineTests(unittest.TestCase):
         self.assertIn('"url": "https://example.com/"', root_json_ld)
 
         # 2. Subpage has BreadcrumbList and LearningResource schemas
-        subpage = next(p for p in registry.pages if p.route == "/ai-practice/summer-vacation-basic/")
+        subpage = next(p for p in registry.pages if p.route == "/ai-practice/vacation-plan-basic/")
         subpage_json_ld = build_json_ld_script_html(
             site_base_url="https://example.com",
             page=subpage,
@@ -158,7 +158,7 @@ class BuildPipelineTests(unittest.TestCase):
         )
         self.assertIn('"@type": "BreadcrumbList"', subpage_json_ld)
         self.assertIn('"@type": "LearningResource"', subpage_json_ld)
-        self.assertIn('"url": "https://example.com/ai-practice/summer-vacation-basic/"', subpage_json_ld)
+        self.assertIn('"url": "https://example.com/ai-practice/vacation-plan-basic/"', subpage_json_ld)
 
 
 if __name__ == "__main__":
