@@ -13,16 +13,41 @@ INLINE_LINK_OR_IMAGE_RE = re.compile(r"(!?)\[([^\]]*)\]\(([^)]+)\)")
 INLINE_BOLD_RE = re.compile(r"\*\*(.*?)\*\*")
 
 
+class _ListItem:
+    """Represents a list item that can hold child paragraphs, code blocks, and sub-lists."""
+
+    def __init__(self, main_text: str) -> None:
+        self.main_text: str = main_text
+        self.child_blocks: list[str] = []
+        self.sub_list_type: str | None = None
+        self.sub_list_items: list[str] = []
+
+    def flush_sub_list(self) -> None:
+        if self.sub_list_items:
+            tag = self.sub_list_type or "ul"
+            items_html = "".join(f"<li>{it}</li>" for it in self.sub_list_items)
+            self.child_blocks.append(f"<{tag}>{items_html}</{tag}>")
+            self.sub_list_items.clear()
+            self.sub_list_type = None
+
+    def render(self) -> str:
+        self.flush_sub_list()
+        children_html = "".join(self.child_blocks)
+        return f"<li>{self.main_text}{children_html}</li>"
+
+
 def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
     """Render the limited Markdown subset used by the project."""
 
     step_cards: list[list[str]] = []
     current_card_blocks: list[str] = []
     paragraph_lines: list[str] = []
-    list_items: list[str] = []
+    list_items: list[_ListItem] = []
     current_list_type: str | None = None
     code_lines: list[str] = []
     in_code_block = False
+    in_list_code = False
+    code_indent = 0
 
     def flush_paragraph() -> None:
         if not paragraph_lines:
@@ -37,8 +62,8 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
         if not list_items:
             return
         tag = current_list_type or "ul"
-        items = "".join(f"<li>{item}</li>" for item in list_items)
-        current_card_blocks.append(f"<{tag}>{items}</{tag}>")
+        items_html = "".join(item.render() for item in list_items)
+        current_card_blocks.append(f"<{tag}>{items_html}</{tag}>")
         list_items.clear()
         current_list_type = None
 
@@ -50,26 +75,47 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
 
     for raw_line in markdown_text.splitlines():
         stripped = raw_line.strip()
+        indent_len = len(raw_line) - len(raw_line.lstrip())
 
         if in_code_block:
             if stripped.startswith("```"):
                 code_html = escape_html("\n".join(code_lines))
-                current_card_blocks.append(f"<pre><code>{code_html}</code></pre>")
+                if in_list_code and list_items:
+                    list_items[-1].flush_sub_list()
+                    list_items[-1].child_blocks.append(f"<pre><code>{code_html}</code></pre>")
+                else:
+                    current_card_blocks.append(f"<pre><code>{code_html}</code></pre>")
                 code_lines.clear()
                 in_code_block = False
+                in_list_code = False
+                code_indent = 0
             else:
-                code_lines.append(raw_line)
+                if code_indent > 0 and raw_line.startswith(" " * code_indent):
+                    code_lines.append(raw_line[code_indent:])
+                else:
+                    code_lines.append(raw_line)
             continue
 
         if stripped.startswith("```"):
             flush_paragraph()
-            flush_list()
-            in_code_block = True
+            if indent_len >= 2 and list_items:
+                list_items[-1].flush_sub_list()
+                in_code_block = True
+                in_list_code = True
+                code_indent = indent_len
+            else:
+                flush_list()
+                in_code_block = True
+                in_list_code = False
+                code_indent = 0
             continue
+
         if not stripped:
             flush_paragraph()
-            flush_list()
+            if list_items:
+                list_items[-1].flush_sub_list()
             continue
+
         if stripped.startswith("<!-- RENDERER_CONTROL_BLOCK:"):
             flush_paragraph()
             flush_list()
@@ -88,12 +134,36 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
             current_card_blocks.append(f"<h{rendered_level}>{escape_html(heading_text)}</h{rendered_level}>")
             continue
 
+        # Check for indented line belonging to active list item
+        if indent_len >= 2 and list_items:
+            flush_paragraph()
+            if stripped.startswith("- "):
+                if list_items[-1].sub_list_type and list_items[-1].sub_list_type != "ul":
+                    list_items[-1].flush_sub_list()
+                list_items[-1].sub_list_type = "ul"
+                list_items[-1].sub_list_items.append(_render_inline_markup(stripped[2:].strip(), source_path=source_path))
+                continue
+
+            sub_ol_match = re.match(r"^\d+\.\s+(.*)$", stripped)
+            if sub_ol_match:
+                if list_items[-1].sub_list_type and list_items[-1].sub_list_type != "ol":
+                    list_items[-1].flush_sub_list()
+                list_items[-1].sub_list_type = "ol"
+                list_items[-1].sub_list_items.append(_render_inline_markup(sub_ol_match.group(1).strip(), source_path=source_path))
+                continue
+
+            # Indented paragraph within active list item
+            list_items[-1].flush_sub_list()
+            list_items[-1].child_blocks.append(f"<p>{_render_inline_markup(stripped, source_path=source_path)}</p>")
+            continue
+
+        # Root level list items (indent_len < 2)
         if stripped.startswith("- "):
             flush_paragraph()
             if current_list_type and current_list_type != "ul":
                 flush_list()
             current_list_type = "ul"
-            list_items.append(_render_inline_markup(stripped[2:].strip(), source_path=source_path))
+            list_items.append(_ListItem(_render_inline_markup(stripped[2:].strip(), source_path=source_path)))
             continue
 
         ol_match = re.match(r"^\d+\.\s+(.*)$", stripped)
@@ -102,7 +172,7 @@ def render_markdown_fragment(markdown_text: str, *, source_path: Path) -> str:
             if current_list_type and current_list_type != "ol":
                 flush_list()
             current_list_type = "ol"
-            list_items.append(_render_inline_markup(ol_match.group(1).strip(), source_path=source_path))
+            list_items.append(_ListItem(_render_inline_markup(ol_match.group(1).strip(), source_path=source_path)))
             continue
 
         flush_list()

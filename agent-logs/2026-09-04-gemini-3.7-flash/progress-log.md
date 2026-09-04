@@ -58,3 +58,44 @@
   - `python3 scripts/build.py`: EXIT 0 (Build complete, Pages: 76, Routes: 76)
   - `python3 scripts/audit_prompts.py`: EXIT 0
   - `python3 -m unittest discover tests`: 81 tests passed (OK)
+
+## 6. 마크다운 파서 들여쓰기 기반 복합 리스트 (OL/UL) 전면 개편
+- [x] 모델 적합성 점검 및 승인:
+  - 작업 위험도: 고위험 (High) - 코어 파서 렌더러 개편
+  - 3-step Sequential Thinking 수행 및 `implementation_plan.md` 사용자 사전 승인 획득
+- [x] 복합 리스트 상태 머신 구현 (`core/renderers/base.py`):
+  - `_ListItem` 클래스 도입: 메인 텍스트와 함께 자식 블록(`child_blocks`) 및 서브 리스트(`sub_list_items`)를 계층적으로 캡슐화
+  - 들여쓰기(선행 공백 >= 2) 감지: 활성 리스트 항목 아래에 작성된 코드 블록(` ``` `), 설명 문단(`<p>`), 서브 리스트(`- `, `\d+\.`)를 부모 `<li>`의 자식 요소로 안전하게 바인딩
+  - 빈 줄 처리: 리스트 항목 내부의 빈 줄 1개에 대해 상위 리스트를 닫지 않고 유지하도록 개선
+  - 하위 호환성 100% 유지 (기존 76개 페이지의 Flat 리스트 변경 없음)
+- [x] 리스트 CSS 스타일 보강 (`assets/css/site.css`):
+  - `li > p`: 상하 마진(0.35rem / 0.45rem) 최적화
+  - `li > pre`: 리스트 내부 코드 블록 상하 여백 최적화
+  - `li > ul`, `li > ol`: 서브 리스트 들여쓰기 패딩(1.25rem) 추가
+- [x] 테스트 및 검증:
+  - 신규 단위 테스트 추가 (`tests/test_composite_list_parser.py`): 4개 테스트 케이스 (Flat 리스트, 들여쓰기 문단, 들여쓰기 코드 블록, 중첩 리스트) 모두 PASS
+  - 전체 단위 테스트 실행 (`python3 -m unittest discover tests`): 85 tests passed (OK)
+  - 프롬프트 무결성 전수 감사 (`python3 scripts/audit_prompts.py`): 76개 페이지 전체 통과 (OK)
+  - 정적 사이트 전수 빌드 (`python3 scripts/build.py`): 76개 페이지 정상 빌드 (Exit 0)
+  - `dist/ai-assistant/core-direct/index.html`: `1.`, `2.` 순번 아래에 코드 블록이 자식으로 들어가 단일 `<ol>`로 정상 렌더링 확인
+
+## 7. 전체 사이드 이펙트(Side Effect) 정밀 교차 검증
+- [x] 76개 마크다운 파일 전체 HTML 태그 매칭 무결성 검증:
+  - `<ol>`, `<ul>`, `<li>`, `<pre>`, `<code>`, `<div>`, `<p>` 정밀 정규식 검사 결과 76개 전체 파일 100% 균형 일치 (Unclosed/Mismatched 태그 0건)
+- [x] 이전 파서(HEAD) 대비 76개 페이지 HTML 출력 차분(diff) 전수 분석:
+  - 총 76개 중 59개 페이지: 100% 동일한 HTML 출력 유지 (Zero Side Effect)
+  - 차이가 발생한 17개 페이지 정밀 분석:
+    1. `ready-to-use.md` & `ai-practice.md`: 빈 줄로 인해 `<ol>`이 항목마다 강제로 닫혀 '1., 1., 1.'로 리셋되던 기존 버그가 단일 `<ol>`의 1~6번, 1~7번 정상 연속 번호로 자동 치유됨 확인
+    2. `ai-assistant` 가이드 문서 5종(`gemini-verifier.md`, `korean-editor-guide.md` 등): 상위 항목 아래에 들여쓰기된 서브리스트가 상위 항목과 동일 레벨로 플랫하게 펼쳐지던 기존 결함이 올바른 2차 계층 중첩 리스트(`<ul><li>...<ul>...</ul></li></ul>`)로 정상 렌더링 확인
+    3. `ready-to-use` 분석 프롬프트 6종(`photo-analysis.md`, `architecture-analysis.md` 등): 💡 실전 활용 팁의 1, 2, 3번 항목 내 서브 불릿 및 후속 질문이 번호 끊김 없이 단일 `<ol>` 내부에 안착됨 확인
+    4. `prompt-snippets` 3종(`pre-mortem.md` 등): 들여쓰기된 불릿이 정상 중첩 구조로 개선됨 확인
+- [x] 브라우저 스크린샷 런타임 렌더링 전수 교차 검증 (5개 대표 페이지):
+  1. `ready-to-use/`: '이렇게 활용해 보세요' 1~6번 번호 리스트 연속성 PASS (`task1_ready_to_use_list_1788501026537.png`)
+  2. `ai-practice/`: '프롬프트는 어떻게 완성될까요?' 1~7번 번호 리스트 연속성 PASS (`task2_ai_practice_list_1788501051990.png`)
+  3. `prompt-snippets/pre-mortem/`: '💡 AI 활용 TIP' 중첩 불릿 및 들여쓰기 정렬 PASS (`task3_pre_mortem_tip_nested_list_1788501095991.png`)
+  4. `ready-to-use/photo-analysis/`: '💡 실전 200% 활용 팁' 1, 2, 3번 번호 및 서브 불릿 조화 PASS (`task4_photo_analysis_tip_list_1788501177462.png`)
+  5. `ai-assistant/gemini-verifier/`: 플랫폼별 추가 방법 서브 불릿 계층 정렬 PASS (`task5_gemini_verifier_subbullets_1788501203861.png`)
+- [x] 자동화 테스트 스위트:
+  - `python3 scripts/audit_prompts.py`: EXIT 0 (76개 페이지, 43개 에셋 통과)
+  - `python3 scripts/build.py`: EXIT 0 (Pages: 76, Routes: 76 빌드 완료)
+  - `python3 -m unittest discover tests`: Ran 85 tests (OK)

@@ -55,17 +55,15 @@ Jest는 오랜 기간 검증된 도구이며, Vitest는 최신 번들러 환경�
 
 ### 핵심 답변 (이 지침 적용)
 
-**1단계: 터미널에서 테스트 도구를 설치합니다.**
+1. 터미널에서 테스트 도구를 설치합니다:
+   ```bash
+   npm install -D vitest
+   ```
 
-```bash
-npm install -D vitest
-```
-
-**2단계: package.json 파일의 scripts 항목에 테스트 명령을 추가합니다.**
-
-```json
-"test": "vitest"
-```
+2. package.json 파일의 scripts 항목에 테스트 명령을 추가합니다:
+   ```json
+   "test": "vitest"
+   ```
 
 **다음 행동 (2분 컷)**: 설치가 끝나면 터미널에 **npm test**를 입력하고 첫 실행 결과를 확인해 보세요.
 
