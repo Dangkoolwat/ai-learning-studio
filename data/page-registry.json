@@ -988,6 +988,19 @@
       "navigation": true,
       "status": "published",
       "lang": "ko"
+    },
+    {
+      "id": "image-ai-color-portrait",
+      "title": "나는 어떤 색일까?",
+      "description": "지금까지 나와 실제로 나눈 대화를 바탕으로 성향과 창작 세계를 분석하고, 그 느낌을 색으로 표현한 한 점의 현대 추상 회화 작품을 만듭니다.",
+      "route": "/image-ai/color-portrait/",
+      "source": "pages/sections/image-ai/color-portrait.md",
+      "type": "prompt-builder",
+      "section": "image-ai",
+      "order": 63,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     }
   ]
 }
