@@ -98,7 +98,9 @@ class TestBrowserSmoke(unittest.TestCase):
             success_btn = prompt_item.locator("[data-prompt-copy]").filter(has_text="복사되었습니다!")
             success_btn.wait_for(state="visible", timeout=5000)
             self.assertTrue(success_btn.is_visible())
-            self.assertTrue(prompt_item.locator(".is-copied").is_visible())
+            btn_class = copy_btn.get_attribute("class") or ""
+            self.assertIn("is-copied", btn_class)
+            self.assertNotIn("is-copy-failed", btn_class)
             self.assertEqual(prompt_item.locator(".is-copy-failed").count(), 0)
 
             # 4. Verify actual clipboard content matches expected prompt text

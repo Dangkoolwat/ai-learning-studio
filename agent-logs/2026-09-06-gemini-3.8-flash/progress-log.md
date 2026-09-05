@@ -57,6 +57,9 @@
   - `Build complete. Pages: 77, Assets: 60, Routes: 77` (Exit code 0)
   - `dist/index.html` 내 `site.js` 결합 번들 해시 정상 반영 확인.
 
+- **Playwright 로케이터 엄격 모드(Strict mode) 위반 해소**:
+  - `prompt_item.locator(".is-copied")`가 버튼과 status span 2개 요소에 매칭되어 Playwright strict mode 에러가 발생하던 문제를 `copy_btn.get_attribute("class")` 직접 검사 방식으로 전환하여 단일 타겟 무결성 확보.
+
 ---
 
 ## 4. 최종 판정
