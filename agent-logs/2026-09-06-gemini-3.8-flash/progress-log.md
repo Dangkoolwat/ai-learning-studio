@@ -59,8 +59,15 @@
 
 - **Playwright 로케이터 엄격 모드(Strict mode) 위반 해소**:
   - `prompt_item.locator(".is-copied")`가 버튼과 status span 2개 요소에 매칭되어 Playwright strict mode 에러가 발생하던 문제를 `copy_btn.get_attribute("class")` 직접 검사 방식으로 전환하여 단일 타겟 무결성 확보.
+- **GitHub Actions 원격 CI 실행 증적 (`Quality Check`, Run ID: 33980896682)**:
+  - `Install browser test dependencies`: 성공 (`playwright install --with-deps chromium`)
+  - `Run browser smoke tests`: **3개 테스트 전수 통과 (Ran 3 tests in 6.482s, OK)**
+    - `test_chip_preview_and_clipboard_sync`: 통과 (미리보기 및 클립보드 실제 텍스트 대조 일치 확인)
+    - `test_dropdown_escape_focus_restoration`: 통과 (Escape 닫힘 후 원래 칩 포커스 복원 확인)
+    - `test_mobile_navigation_toggle`: 통과 (375px 모바일 햄버거 토글 open/closed 전환 확인)
+  - 전체 CI 빌드 결과: **SUCCESS (build in 57s, ID 101345800218)**
 
 ---
 
 ## 4. 최종 판정
-- 상태: **단일 세션 보상 검증 완료 (Self Compensatory PASS)**
+- 상태: **원격 CI 파이프라인 및 브라우저 스모크 테스트 전수 통과 (CI & Browser Smoke PASS)**
