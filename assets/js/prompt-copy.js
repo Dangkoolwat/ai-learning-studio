@@ -370,10 +370,11 @@ function getPromptStatus(button) {
   return button.closest(".prompt-item")?.querySelector(".prompt-item__copy-status") ?? null;
 }
 
-function flashFeedback(button, status, msg, defaultLabel) {
-  showTemporaryFeedback(button, msg, defaultLabel, "is-copied", FEEDBACK_TIMEOUT_MS);
+function flashFeedback(button, status, msg, defaultLabel, isSuccess = true) {
+  const feedbackClass = isSuccess ? "is-copied" : "is-copy-failed";
+  showTemporaryFeedback(button, msg, defaultLabel, feedbackClass, FEEDBACK_TIMEOUT_MS);
   if (status) {
-    showTemporaryFeedback(status, msg, "", "is-copied", FEEDBACK_TIMEOUT_MS);
+    showTemporaryFeedback(status, msg, "", feedbackClass, FEEDBACK_TIMEOUT_MS);
   }
 }
 
@@ -411,12 +412,12 @@ export function initPromptCopy() {
     const status = getPromptStatus(button);
     button.addEventListener("click", async () => {
       const text = getPromptText(button.closest(".prompt-item"));
-      if (!text) { flashFeedback(button, status, "복사 실패", defaultLabel); return; }
+      if (!text) { flashFeedback(button, status, "복사 실패", defaultLabel, false); return; }
       const ok = await copyToClipboard(text);
       if (ok) {
-        flashFeedback(button, status, "복사되었습니다!", defaultLabel);
+        flashFeedback(button, status, "복사되었습니다!", defaultLabel, true);
       } else {
-        flashFeedback(button, status, "복사 실패", defaultLabel);
+        flashFeedback(button, status, "복사 실패", defaultLabel, false);
       }
     });
   });

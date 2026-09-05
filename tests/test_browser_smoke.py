@@ -68,6 +68,7 @@ class TestBrowserSmoke(unittest.TestCase):
             chip.click()
 
             dropdown = page.locator(".itc-dropdown")
+            dropdown.wait_for(state="visible", timeout=5000)
             self.assertTrue(dropdown.is_visible())
 
             # Select an option
@@ -76,18 +77,33 @@ class TestBrowserSmoke(unittest.TestCase):
             option_btn.click()
 
             # Verify dropdown closed and chip value updated
+            dropdown.wait_for(state="detached", timeout=5000)
             self.assertFalse(dropdown.is_visible())
             self.assertIn(option_text, chip.text_content())
 
-            # Verify copy button copies text containing option_text
             prompt_item = chip.locator(
                 "xpath=ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' prompt-item ')][1]"
             )
+
+            # 1. Verify live preview text matches expected prompt
+            preview_code = prompt_item.locator(".prompt-item__preview-code")
+            expected_prompt = f"{option_text} 휴가 계획을 세워 줘."
+            self.assertEqual(preview_code.text_content().strip(), expected_prompt)
+
+            # 2. Click copy button
             copy_btn = prompt_item.locator("[data-prompt-copy]").first
             copy_btn.click()
 
-            # Wait for feedback
+            # 3. Wait for asynchronous copy success feedback ('복사되었습니다!')
+            success_btn = prompt_item.locator("[data-prompt-copy]").filter(has_text="복사되었습니다!")
+            success_btn.wait_for(state="visible", timeout=5000)
+            self.assertTrue(success_btn.is_visible())
             self.assertTrue(prompt_item.locator(".is-copied").is_visible())
+            self.assertEqual(prompt_item.locator(".is-copy-failed").count(), 0)
+
+            # 4. Verify actual clipboard content matches expected prompt text
+            clipboard_text = page.evaluate("navigator.clipboard.readText()")
+            self.assertEqual(clipboard_text.strip(), expected_prompt)
 
             browser.close()
 
@@ -103,10 +119,12 @@ class TestBrowserSmoke(unittest.TestCase):
             chip.click()
 
             dropdown = page.locator(".itc-dropdown")
+            dropdown.wait_for(state="visible", timeout=5000)
             self.assertTrue(dropdown.is_visible())
 
             # Press Escape to close
             page.keyboard.press("Escape")
+            dropdown.wait_for(state="detached", timeout=5000)
             self.assertFalse(dropdown.is_visible())
 
             # Focus must be restored to the chip

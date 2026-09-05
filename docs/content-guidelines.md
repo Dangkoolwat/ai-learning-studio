@@ -13,21 +13,36 @@ data/
 
 pages/
 ├─ index.md              # 메인 랜딩 페이지 마크다운
-└─ sections/             # 카테고리별 강의/프롬프트 마크다운 (.md)
-   ├─ ai-practice/       # AI 실전 연습 페이지들
-   ├─ business-ai/       # 비즈니스 AI 페이지들
-   ├─ dev-ai/            # 개발 AI 페이지들
-   ├─ image-ai/          # 이미지 AI 페이지들
-   ├─ productivity/      # 생산성 AI 페이지들
-   └─ text-ai/           # 텍스트 AI 페이지들
+└─ sections/             # 섹션 허브 및 카테고리별 강의/프롬프트 마크다운 (.md)
+   ├─ ai-assistant.md    # AI 어시스턴트 섹션 허브
+   ├─ ai-assistant/      # AI 어시스턴트 상세 페이지 디렉토리
+   ├─ ai-practice.md     # AI 실전 연습 섹션 허브
+   ├─ ai-practice/       # AI 실전 연습 상세 페이지 디렉토리
+   ├─ image-ai.md        # 이미지 AI 섹션 허브
+   ├─ image-ai/          # 이미지 AI 상세 페이지 디렉토리
+   ├─ prompt-snippets.md # 프롬프트 모음 섹션 허브
+   ├─ prompt-snippets/   # 프롬프트 모음 상세 페이지 디렉토리
+   ├─ ready-to-use.md    # 바로 쓰는 실전 프롬프트 섹션 허브
+   └─ ready-to-use/      # 바로 쓰는 실전 프롬프트 상세 페이지 디렉토리
 
 templates/
 ├─ base.html             # 기본 레이아웃 템플릿
-└─ partials/             # 재사용 가능한 부분 템플릿 컴포넌트
-   ├─ header.html
-   ├─ navigation.html
-   ├─ search-modal.html
-   └─ footer.html
+└─ partials/             # 공통 부분 템플릿
+   ├─ head.html          # 메타태그, 폰트, 공통 에셋 링크
+   ├─ site-header.html   # 상단 브랜드 로고, 테마 토글, 햄버거 메뉴
+   ├─ navigation.html    # 사이드바 메뉴 및 실시간 검색 입력부
+   └─ footer.html        # 하단 푸터
+
+components/              # 렌더러용 재사용 가능 UI 컴포넌트 템플릿
+├─ prompt-item.html      # 프롬프트 카드 템플릿
+├─ prompt-builder.html   # 프롬프트 조립기 템플릿
+├─ prompt-field.html     # 조립기 컨트롤 필드
+├─ practice-timeline.html# 타임라인 컨테이너
+├─ timeline-step.html    # 타임라인 단계 항목
+├─ image-slider.html     # 전/후 이미지 비교 슬라이더
+├─ prompt-collection.html# 프롬프트 모음 박스
+├─ page-intro.html       # 페이지 소개부
+└─ page-body.html        # 본문 영역
 
 assets/
 ├─ css/site.css          # 공통 스타일시트
@@ -40,7 +55,8 @@ assets/
 │  ├─ image-slider.js    # 이미지 비교 슬라이더
 │  ├─ image-lightbox.js  # 이미지 라이트박스
 │  └─ dom-utils.js       # 공통 DOM/클립보드 유틸리티
-└─ images/               # 최적화된 WebP 이미지 리소스
+├─ images/               # 최적화된 WebP 이미지 리소스
+└─ favicon.svg           # 사이트 파비콘
 ```
 
 ---
