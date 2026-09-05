@@ -39,3 +39,12 @@ jobs:
 
       - name: Validate generated output
         run: python3 scripts/build.py --check
+
+      - name: Install browser test dependencies
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: Run browser smoke tests
+        run: python3 -m unittest tests/test_browser_smoke.py
+

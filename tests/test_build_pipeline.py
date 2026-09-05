@@ -9,6 +9,7 @@ from core.build_pipeline import (
     build_sitemap_xml,
     build_social_meta_html,
     calculate_asset_hash,
+    calculate_assets_bundle_hash,
     discover_approved_assets,
     discover_page_sources,
     render_markdown,
@@ -131,6 +132,17 @@ class BuildPipelineTests(unittest.TestCase):
         # Missing file fallback
         missing_file = self.repo_root / "assets" / "non-existent-file.css"
         self.assertEqual(calculate_asset_hash(missing_file), "1")
+
+    def test_calculate_assets_bundle_hash(self) -> None:
+        """Verify directory-wide composite 8-character hex hash calculation."""
+        js_dir = self.repo_root / "assets" / "js"
+        bundle_hash = calculate_assets_bundle_hash(js_dir, "*.js")
+        self.assertEqual(len(bundle_hash), 8)
+        self.assertTrue(all(c in "0123456789abcdef" for c in bundle_hash))
+
+        # Missing directory fallback
+        missing_dir = self.repo_root / "assets" / "non-existent-dir"
+        self.assertEqual(calculate_assets_bundle_hash(missing_dir, "*.js"), "1")
 
     def test_build_json_ld_script_html(self) -> None:
         """Verify Schema.org JSON-LD structured data for home and subpages."""

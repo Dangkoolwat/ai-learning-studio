@@ -8,32 +8,50 @@
 
 ```text
 data/
-├─ site.json       # 사이트 전깃 기본 메타정보
-├─ menu.json       # 사이트 전체 내비게이션 메뉴 구조
-├─ pages.json      # 정적 페이지 등록 레지스트리
-└─ themes.json     # 테마 목록 등록 파일
+├─ navigation.json       # 사이트 전체 내비게이션 메뉴 및 계층 구조
+└─ page-registry.json    # 정적 페이지 등록 레지스트리 및 메타데이터
 
-pages/<slug>/
-├─ page.json       # 해당 페이지 콘텐츠 데이터 (또는 <slug>.json)
-├─ README.md       # 페이지 관련 작성자 문서
-└─ assets/         # 페이지 전용 리소스
+pages/
+├─ index.md              # 메인 랜딩 페이지 마크다운
+└─ sections/             # 카테고리별 강의/프롬프트 마크다운 (.md)
+   ├─ ai-practice/       # AI 실전 연습 페이지들
+   ├─ business-ai/       # 비즈니스 AI 페이지들
+   ├─ dev-ai/            # 개발 AI 페이지들
+   ├─ image-ai/          # 이미지 AI 페이지들
+   ├─ productivity/      # 생산성 AI 페이지들
+   └─ text-ai/           # 텍스트 AI 페이지들
 
 templates/
-├─ base.html              # 기본 레이아웃 템플릿
-├─ static-prompt.html     # static-prompt 페이지 템플릿
-├─ prompt-builder.html    # prompt-builder 페이지 템플릿
-└─ practice-timeline.html # practice-timeline 페이지 템플릿
+├─ base.html             # 기본 레이아웃 템플릿
+└─ partials/             # 재사용 가능한 부분 템플릿 컴포넌트
+   ├─ header.html
+   ├─ navigation.html
+   ├─ search-modal.html
+   └─ footer.html
+
+assets/
+├─ css/site.css          # 공통 스타일시트
+├─ js/                   # Vanilla ES 모듈 클라이언트 스크립트
+│  ├─ site.js            # 진입점 스크립트
+│  ├─ prompt-copy.js     # 프롬프트 복사 및 인라인 칩 제어
+│  ├─ prompt-builder.js  # 프롬프트 조립기 제어
+│  ├─ navigation.js      # 내비게이션 및 사이드바 제어
+│  ├─ theme-toggle.js    # 테마 토글 제어
+│  ├─ image-slider.js    # 이미지 비교 슬라이더
+│  ├─ image-lightbox.js  # 이미지 라이트박스
+│  └─ dom-utils.js       # 공통 DOM/클립보드 유틸리티
+└─ images/               # 최적화된 WebP 이미지 리소스
 ```
 
 ---
 
 ## 2. 데이터 분리 및 무결성 원칙 (Data First)
 
-- **책임 분리**: 사이트 메타데이터, 메뉴, 페이지 목록, 테마 데이터는 `data/` 하위 JSON으로 분리하고 Python 빌드 시 읽어서 정적 HTML로 합성합니다.
+- **책임 분리**: 사이트 내비게이션 메뉴와 페이지 등록 정보는 `data/` 하위 JSON(`navigation.json`, `page-registry.json`)으로 관리하고, 본문 콘텐츠는 `pages/` 하위 마크다운(`.md`)으로 작성하여 Python 빌드 시 읽어서 정적 HTML로 합성합니다.
 - **순수 데이터 유지**: JSON 내부에는 실행 가능한 JavaScript 함수, 이벤트 핸들러, HTML 마크업 문자열을 포함하지 않습니다.
 - **경로 일관성 계약**:
   ```text
-  menu path == page registry path == canonical path == sitemap URL
+  navigation path == page registry path == canonical path == sitemap URL
   ```
   모든 경로는 **소문자 kebab-case**와 **trailing slash (`/`)** 형태를 유지해야 합니다.
 - **사실에 기반한 콘텐츠**: 실제 존재하지 않는 무분별한 가짜 강좌, 후기, 작성자 경력, 통계 데이터를 허위 생성하지 않습니다.

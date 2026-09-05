@@ -381,7 +381,7 @@ def build_page_template_contexts(
 
     repo_root = staging_dir.parent
     site_css_hash = calculate_asset_hash(repo_root / "assets" / "css" / "site.css")
-    site_js_hash = calculate_asset_hash(repo_root / "assets" / "js" / "site.js")
+    site_js_hash = calculate_assets_bundle_hash(repo_root / "assets" / "js", "*.js")
     theme_css_hash = calculate_asset_hash(repo_root / "design" / active_theme_id / "design.md")
 
     for page in published_pages:
@@ -444,6 +444,21 @@ def calculate_asset_hash(file_path: Path) -> str:
         return "1"
     content = file_path.read_bytes()
     return hashlib.sha256(content).hexdigest()[:8]
+
+
+def calculate_assets_bundle_hash(dir_path: Path, pattern: str = "*.js") -> str:
+    """Calculate a composite 8-character hex hash from all matching files in a directory."""
+    if not dir_path.is_dir():
+        return "1"
+    matched_files = sorted(dir_path.glob(pattern))
+    if not matched_files:
+        return "1"
+    hasher = hashlib.sha256()
+    for file_path in matched_files:
+        if file_path.is_file():
+            hasher.update(file_path.name.encode("utf-8"))
+            hasher.update(file_path.read_bytes())
+    return hasher.hexdigest()[:8]
 
 
 def build_canonical_link_html(site_base_url: str, route: str) -> str:

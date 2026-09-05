@@ -7,18 +7,25 @@ import { sanitizeInput, copyToClipboard, showTemporaryFeedback, FEEDBACK_TIMEOUT
  */
 
 let activeDropdown = null;
+let activeDropdownChip = null;
 
 /**
  * Closes currently active dropdown chip panel and resets ARIA state.
+ * @param {{ restoreFocus?: boolean }} [options] - Whether to restore focus to triggering chip.
  */
-function closeDropdown() {
+function closeDropdown({ restoreFocus = false } = {}) {
+  const chipToFocus = activeDropdownChip;
   if (activeDropdown) {
     activeDropdown.remove();
     activeDropdown = null;
   }
+  activeDropdownChip = null;
   document.querySelectorAll(".itc[aria-expanded='true']").forEach((el) => {
     el.setAttribute("aria-expanded", "false");
   });
+  if (restoreFocus && chipToFocus && typeof chipToFocus.focus === "function") {
+    chipToFocus.focus();
+  }
 }
 
 /* ===== 1:1 Pair Matcher Helper ===== */
@@ -112,13 +119,14 @@ function applyValue(chip, newVal, promptItem) {
   arrow.textContent = iconChar;
   chip.appendChild(arrow);
 
-  closeDropdown();
+  closeDropdown({ restoreFocus: true });
   updatePreview(promptItem || chip.closest(".prompt-item"));
 }
 
 /* ===== Open dropdown for a chip ===== */
 function openDropdown(chip, promptItem) {
-  closeDropdown();
+  closeDropdown({ restoreFocus: false });
+  activeDropdownChip = chip;
   chip.setAttribute("aria-expanded", "true");
 
   const type = chip.dataset.type;
@@ -346,12 +354,15 @@ function openDropdown(chip, promptItem) {
 /* ===== Close on outside click ===== */
 document.addEventListener("mousedown", (e) => {
   if (activeDropdown && !activeDropdown.contains(e.target) && !e.target.closest(".itc")) {
-    closeDropdown();
+    closeDropdown({ restoreFocus: false });
   }
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeDropdown();
+  if (e.key === "Escape" && activeDropdown) {
+    e.preventDefault();
+    closeDropdown({ restoreFocus: true });
+  }
 });
 
 /* ===== Copy helpers ===== */
@@ -376,6 +387,17 @@ export function initPromptCopy() {
       e.stopPropagation();
       const promptItem = chip.closest(".prompt-item");
       openDropdown(chip, promptItem);
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+      const chip = e.target.closest(".itc");
+      if (chip && !activeDropdown) {
+        e.preventDefault();
+        const promptItem = chip.closest(".prompt-item");
+        openDropdown(chip, promptItem);
+      }
     }
   });
 
