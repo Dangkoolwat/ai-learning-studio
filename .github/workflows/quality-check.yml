@@ -23,13 +23,12 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install ruff
+        run: |
+          pip install -r requirements-dev.txt
+          playwright install --with-deps chromium
 
       - name: Run lint
         run: ruff check core scripts tests
-
-      - name: Run Python unit tests
-        run: python3 -m unittest discover -s tests
 
       - name: Run prompt audit
         run: python3 scripts/audit_prompts.py --strict
@@ -40,11 +39,6 @@ jobs:
       - name: Validate generated output
         run: python3 scripts/build.py --check
 
-      - name: Install browser test dependencies
-        run: |
-          pip install playwright
-          playwright install --with-deps chromium
-
-      - name: Run browser smoke tests
-        run: python3 -m unittest tests/test_browser_smoke.py
+      - name: Run automated tests
+        run: pytest
 

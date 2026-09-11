@@ -208,16 +208,19 @@ pip install -r requirements-dev.txt
 ruff check core scripts tests
 ```
 
-### 3. 단위 테스트, 프롬프트 감사 및 정적 빌드 검증
+### 3. 프롬프트 감사, 정적 빌드 및 자동화 테스트
 ```bash
-# 단위 테스트 실행
-python3 -m unittest discover -s tests
-
 # 프롬프트 무결성 및 메타데이터 동기화 종합 감사
 python3 scripts/audit_prompts.py --strict
 
+# 정적 빌드 (브라우저 스모크 테스트 실행 전 dist/ 생성 필수)
+python3 scripts/build.py
+
 # 정적 빌드 검증
 python3 scripts/build.py --check
+
+# 전체 자동화 테스트 실행 (단위 테스트 및 브라우저 스모크 테스트)
+pytest
 ```
 
 ---
