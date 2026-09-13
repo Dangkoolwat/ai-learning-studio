@@ -80,3 +80,29 @@
 - **단위 테스트 검증**: `python3 -m unittest discover -s tests`
   - Exit code: 0 (Ran 89 tests in 2.537s, OK)
 
+---
+
+# Task 3: 메인 홈 강제 리다이렉트 및 404 루프 오류 긴급 수정
+
+- **Date**: 2026-09-13
+- **Model**: Gemini 3.8 Flash (Medium)
+- **Task**: `https://studio.daangcool.net/` 진입 시 과거 방문 경로(`als-last-visited-route`)로 강제 튕김 및 404 발생 결함 원인 분석 및 해결
+
+## 1. 개요 및 분석
+- 사용자 제보: `studio.daangcool.net` 진입 시 비정상적인 페이지 튕김 및 404 오류 발생.
+- 원인 규명: `templates/partials/head.html` 인라인 스크립트 내 "마지막 방문 메뉴 자동 복원(`window.location.replace(lastRoute)`)" 코드가 브라우저 `localStorage`에 저장된 과거 경로로 강제 리다이렉트함.
+- 과거 경로가 개편으로 삭제/수정되었거나 홈을 방문하려는 사용자에게 영구 404 및 홈 진입 차단 부작용 유발.
+
+## 2. 변경 파일 및 상세 내역
+- **[MODIFY] `templates/partials/head.html`**:
+  - 홈 진입 시 `als-last-visited-route` 기반 강제 페이지 리다이렉트(`window.location.replace`) 코드 블록 완전 제거
+  - 테마 모드 설정 및 Vercel Web Analytics 스크립트 주입 로직은 온전히 유지
+
+## 3. 검증 결과
+- **정적 빌드 검증**: `python3 scripts/build.py`
+  - Exit code: 0
+  - 산출물: Pages: 78, Assets: 65, Routes: 78 정상 생성
+- **단위 테스트 검증**: `python3 -m unittest discover -s tests`
+  - Exit code: 0 (Ran 89 tests, OK skipped=3)
+
+
