@@ -523,6 +523,13 @@
           "description": "지금까지 나와 실제로 나눈 대화를 바탕으로 성향과 창작 세계를 분석하고, 그 느낌을 색으로 표현한 한 점의 현대 추상 회화 작품을 만듭니다.",
           "route": "/image-ai/color-portrait/",
           "featured": true
+        },
+        {
+          "id": "image-ai-editorial-poster",
+          "label": "감성 에디토리얼 포스터",
+          "description": "단어나 일상의 한 장면을 잡지 표지 같은 세련된 포스터로 만듭니다.",
+          "route": "/image-ai/editorial-poster/",
+          "featured": true
         }
       ]
     }

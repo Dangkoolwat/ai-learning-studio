@@ -1001,6 +1001,19 @@
       "navigation": true,
       "status": "published",
       "lang": "ko"
+    },
+    {
+      "id": "image-ai-editorial-poster",
+      "title": "감성 에디토리얼 포스터",
+      "description": "단어나 일상의 한 장면을 잡지 표지 같은 세련된 포스터로 만듭니다.",
+      "route": "/image-ai/editorial-poster/",
+      "source": "pages/sections/image-ai/editorial-poster.md",
+      "type": "static-prompt",
+      "section": "image-ai",
+      "order": 64,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     }
   ]
 }
