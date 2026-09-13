@@ -32,6 +32,18 @@
         localStorage.setItem("als-last-visited-route", "/");
       }
     } catch(e) {}
+
+    // Vercel Web Analytics
+    try {
+      var isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:";
+      if (!isLocal) {
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        var script = document.createElement("script");
+        script.src = "/_vercel/insights/script.js";
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+    } catch(e) {}
   })();
 </script>
 <script type="module" src="{{ site_script_url }}"></script>
