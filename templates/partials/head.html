@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="{{ site_stylesheet_url }}">
 <script>
   (function() {
+    // Initialize Vercel Web Analytics
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    
     try {
       var saved = localStorage.getItem("als-theme-preference");
       var theme = (saved === "dark" || saved === "light") ? saved : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -32,6 +35,12 @@
         localStorage.setItem("als-last-visited-route", "/");
       }
     } catch(e) {}
+    
+    // Load Vercel Analytics script
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = '/_vercel/insights/script.js';
+    document.head.appendChild(script);
   })();
 </script>
 <script type="module" src="{{ site_script_url }}"></script>
