@@ -54,6 +54,19 @@
       "lang": "ko"
     },
     {
+      "id": "ai-practice-youth-networking",
+      "title": "2030 청년 네트워킹 행사 기획하기",
+      "description": "청년 다락방 2030 네트워킹 행사 기획을 주제로, 단계별 프롬프트 개선부터 인스타 인포그래픽 제작까지 완성합니다.",
+      "route": "/ai-practice/youth-networking/",
+      "source": "pages/sections/ai-practice/youth-networking.md",
+      "type": "static-prompt",
+      "section": "ai-practice",
+      "order": 66,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "prompt-snippets",
       "title": "프롬프트 한 스푼",
       "description": "결과 품질을 높이는 한 줄 프롬프트 모음집",
