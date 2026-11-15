@@ -417,6 +417,13 @@
           "description": "서론과 장황한 설명을 줄이고, 묻는 말의 핵심과 다음 할 일 하나를 명확하게 짚어주는 맞춤 지침 프롬프트입니다.",
           "route": "/ai-assistant/core-direct/",
           "featured": true
+        },
+        {
+          "id": "ai-assistant-choice-options",
+          "label": "번호로 답하는 AI 선택지 지침",
+          "description": "긴 텍스트 복사나 타이핑 없이, AI가 제시하는 번호 선택지를 통해 빠르고 명확하게 작업 방향을 결정하는 시스템 프롬프트입니다.",
+          "route": "/ai-assistant/choice-options/",
+          "featured": true
         }
       ]
     },

@@ -652,6 +652,19 @@
       "lang": "ko"
     },
     {
+      "id": "ai-assistant-choice-options",
+      "title": "번호로 답하는 AI 선택지 지침",
+      "description": "긴 텍스트 복사나 타이핑 없이, AI가 제시하는 번호 선택지를 통해 빠르고 명확하게 작업 방향을 결정하는 시스템 프롬프트입니다.",
+      "route": "/ai-assistant/choice-options/",
+      "source": "pages/sections/ai-assistant/choice-options.md",
+      "type": "markdown-prompt",
+      "section": "ai-assistant",
+      "order": 42,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
       "id": "image-ai",
       "title": "이미지 생성",
       "description": "이미지 프롬프트의 특징을 이해하고 이미지를 더 정확하게 만들어 보세요.",
