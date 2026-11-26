@@ -1066,6 +1066,19 @@
       "navigation": true,
       "status": "published",
       "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-pasona-persuasion",
+      "title": "파소나 법칙: 읽는 사람을 행동하게 만드는 글",
+      "description": "소개글·안내문·제안서를 문제 공감부터 행동 유도까지 6단계 설득 흐름으로 재구성 (신 PASONA 법칙)",
+      "route": "/prompt-snippets/pasona-persuasion/",
+      "source": "pages/sections/prompt-snippets/pasona-persuasion.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 67,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     }
   ]
 }

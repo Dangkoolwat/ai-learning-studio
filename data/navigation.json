@@ -109,6 +109,13 @@
           "featured": true
         },
         {
+          "id": "prompt-snippets-pasona-persuasion",
+          "label": "파소나 법칙: 읽는 사람을 행동하게 만드는 글",
+          "description": "소개글·안내문·제안서를 문제 공감부터 행동 유도까지 6단계 설득 흐름으로 재구성 (신 PASONA 법칙)",
+          "route": "/prompt-snippets/pasona-persuasion/",
+          "group": "✍️ 정리 & 표현"
+        },
+        {
           "id": "prompt-snippets-review-answers",
           "label": "AI 답변 검토하기",
           "description": "AI가 작성한 내용의 논리적 오류나 누락 확인",

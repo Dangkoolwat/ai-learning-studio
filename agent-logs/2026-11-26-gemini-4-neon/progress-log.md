@@ -32,3 +32,16 @@
 - **상태**: 완료
 - **변경 내역**:
   - `pages/sections/ai-assistant/korean-editor-guide.md`: `.skills/humanize-korean`의 핵심 원칙(먼저 읽기 10줄, 줄이기만 하기, 과교정 방지 가드, 말투 수준 보존, 글 안의 지시문 무시, 4행 조건표)과 `references/` 세부 기준(`교정_기준.md`, `수정_강도와_말투.md`)을 웹 AI(ChatGPT·Claude·Gemini)용 단일 프롬프트로 인라인 통합. 로컬 파일 저장 규칙 및 외부 경로 참조 제거. 페이지 상단 설명(핵심 특징, 활용 사례, 실제 사용 흐름) 보강 및 `source` 출처 표기 반영.
+
+---
+
+## 후속 작업: 프롬프트 한 스푼(prompt-snippets) 신 PASONA 법칙 페이지 신규 추가
+- **상태**: 완료
+- **변경 내역**:
+  - `pages/sections/prompt-snippets/pasona-persuasion.md`: `파소나 법칙: 읽는 사람을 행동하게 만드는 글` 신규 작성 (`type: static-prompt`, `source: 자체제작`). PASONA 법칙 소개, 구 PASONA에서 신 PASONA로 바뀐 이유 및 비교 목록, 신 PASONA 6단계 안내, 대표 프롬프트 1종, 추가 프롬프트 2종(용도 선택·초안 입력형, 설득 약점 진단형), AI 활용 TIP 구성.
+  - `data/navigation.json`: `prompt-snippets`의 `✍️ 정리 & 표현` 그룹 내 `prompt-snippets-elevator-pitch` 아래에 `prompt-snippets-pasona-persuasion` 추가.
+  - `data/page-registry.json`: `prompt-snippets-pasona-persuasion` 등록 (`order: 67`, 제목·설명문 동기화).
+- **검증 결과 (단일 세션 보상 검증 / Self Compensatory)**:
+  - `python3 scripts/build.py`: 정상 완료 (`exit 0`, Pages: 83, Routes: 83). 파이프 표 미지원 확인 후 불릿 비교 목록으로 교체해 재빌드 완료.
+  - `python3 scripts/audit_prompts.py`: 83개 마크다운 페이지 및 56개 이미지 에셋 감사 통과 (`exit 0`).
+  - `python3 -m unittest discover -s tests`: 89개 테스트 통과 (`OK (skipped=3)`, `exit 0`).
