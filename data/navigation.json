@@ -543,6 +543,12 @@
           "description": "단어나 일상의 한 장면을 잡지 표지 같은 세련된 포스터로 만듭니다.",
           "route": "/image-ai/editorial-poster/",
           "featured": true
+        },
+        {
+          "id": "image-ai-palmistry-infographic",
+          "label": "내 손금에는 어떤 이야기가 있을까?",
+          "description": "손바닥 사진 한 장으로 내 손금을 깔끔한 에디토리얼 인포그래픽으로 정리해 보세요.",
+          "route": "/image-ai/palmistry-infographic/"
         }
       ]
     }

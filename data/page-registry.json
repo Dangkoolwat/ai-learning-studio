@@ -1040,6 +1040,19 @@
       "navigation": true,
       "status": "published",
       "lang": "ko"
+    },
+    {
+      "id": "image-ai-palmistry-infographic",
+      "title": "내 손금에는 어떤 이야기가 있을까?",
+      "description": "손바닥 사진 한 장으로 내 손금을 깔끔한 에디토리얼 인포그래픽으로 정리해 보세요.",
+      "route": "/image-ai/palmistry-infographic/",
+      "source": "pages/sections/image-ai/palmistry-infographic.md",
+      "type": "static-prompt",
+      "section": "image-ai",
+      "order": 65,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     }
   ]
 }
