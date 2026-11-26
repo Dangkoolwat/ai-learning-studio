@@ -8,7 +8,7 @@ source: 자체제작
 
 # 1:1 Active Recall 학습 코치
 
-이 지침서는 **NotebookLM**, **Gemini GEMs**, **ChatGPT Projects**, **Claude Projects** 등의 시스템 지침(System Instructions)에 등록하여, AI를 단순 요약자가 아닌 **1:1 대화형 구술 시험관**으로 변신시키는 전문가 지침서입니다.
+이 지침서는 **NotebookLM**, **ChatGPT Projects**, **Claude Projects**, **Gemini 스킬(Skills)** 등의 시스템 지침(System Instructions)에 등록하여, AI를 단순 요약자가 아닌 **1:1 대화형 구술 시험관**으로 변신시키는 전문가 지침서입니다.
 
 ---
 
@@ -32,16 +32,15 @@ Active Recall은 내용을 다시 읽는 대신, 배운 것을 스스로 떠올�
 - **설정**: 아래 완성된 프롬프트를 대화창에 첫 메시지로 입력하거나 시스템 지침으로 등록합니다.
 - **효과**: 오직 내가 올린 출처 범위 내에서만 팩트에 기반한 날카로운 퀴즈를 출제합니다.
 
-### 2. Gemini (GEMs)
-- **등록 절차**: Gemini 접속 → **[왼쪽 메뉴에서 Gem 선택]** → **[새 Gem 만들기]** 선택
-- **설정**: Gem 이름(예: `Active Recall 학습 코치`) 입력 후 **[시스템 지침(Instructions)]** 란에 붙여넣기 및 저장
-
-### 3. ChatGPT (Projects / Custom GPTs)
-- **등록 절차**: **[New Project]** 또는 **[Explore GPTs]** → **[Instructions (지침)]** 선택
+### 2. ChatGPT (Projects)
+- **등록 절차**: **[New Project]** → **[Instructions (지침)]** 선택
 - **설정**: 복사한 프롬프트 등록 후 프로젝트 전용 독립 메모리로 작동하게 유지
 
-### 4. Claude (Projects)
+### 3. Claude (Projects)
 - **등록 절차**: **[Projects]** → **[Create Project]** → **[Project Instructions]** 선택 후 등록
+
+### 4. Gemini (스킬)
+- Gemini는 기존 Gem 대신 **스킬(Skills)** 형태로 등록해 사용합니다. 자세한 등록 및 호출 방법은 [Gemini 스킬(Skills) 등록 및 활용 가이드](/ai-assistant/gemini-skills-guide/)를 참고해 주세요.
 
 ---
 

@@ -55,7 +55,7 @@ AI와 인터뷰를 이어가며 내용을 추가하고, 표현을 고치고, 자
 ## 이렇게 활용합니다
 
 1. 아래 지침서를 복사합니다.
-2. ChatGPT의 Project나 GPT, Gemini의 Gem 등 맞춤형 AI의 지침 입력란에 붙여넣습니다.
+2. ChatGPT·Claude의 프로젝트(Project) 지침 입력란에 붙여넣습니다. (Gemini 사용자는 [Gemini 스킬 등록 가이드](/ai-assistant/gemini-skills-guide/)를 참고해 스킬로 등록하세요.)
 3. 글자 대화 또는 보이스채팅을 시작합니다.
 4. 오늘 남기고 싶은 이야기의 주제를 말합니다.
 5. AI의 질문에 편하게 답합니다.

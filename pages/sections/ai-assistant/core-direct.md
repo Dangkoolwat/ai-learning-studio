@@ -9,7 +9,7 @@ source: GitHub (@ayghri/i-have-adhd)
 
 # 군더더기 없이 바로 핵심만
 
-이 지침서는 Gemini GEMs, ChatGPT Custom GPTs / 맞춤 설정, Claude Projects 등 나만의 AI 서비스에 등록하여 **불필요한 서론과 장황한 설명을 걷어내고, 묻는 말의 핵심과 지금 실행할 행동을 바로 제시하는 AI**를 만드는 시스템 프롬프트입니다.
+이 지침서는 ChatGPT Projects / 맞춤 설정, Claude Projects, Gemini 스킬(Skills) 등 나만의 AI 서비스에 등록하여 **불필요한 서론과 장황한 설명을 걷어내고, 묻는 말의 핵심과 지금 실행할 행동을 바로 제시하는 AI**를 만드는 시스템 프롬프트입니다.
 
 **💡 활용 팁**: 질문할 때마다 "짧게 말해줘", "코드만 줘"라고 매번 덧붙일 필요 없이, 시스템 지침에 한 번 등록해 두면 모든 대화의 기본 호흡이 군더더기 없는 실행 모드로 고정됩니다.
 
@@ -22,18 +22,16 @@ source: GitHub (@ayghri/i-have-adhd)
 
 ## AI 서비스별 지침 추가 및 활용 방법
 
-### 1. Gemini (GEMs) 추가 방법
-- **GEM 생성**: Gemini 접속 후 좌측 메뉴의 **[Gem 관리]** 또는 **[새 Gem 만들기]** 선택
-- **이름 입력**: Gem 이름(예: **핵심 비서** 또는 **다이렉트 코치**) 입력
-- **지침 저장**: 아래 프롬프트 복사 후 **[시스템 지침(Instructions)]** 란에 붙여넣기 및 저장
+### 1. ChatGPT (Projects / 맞춤 설정) 추가 방법
+- **프로젝트(Projects)**: 좌측 메뉴 **[New Project]** → **[Project Instructions]** 항목에 복사한 프롬프트 붙여넣기 및 저장
+- **맞춤 설정(Custom Instructions)**: 우측 상단 프로필 클릭 → **[ChatGPT 맞춤 설정]** → "ChatGPT가 어떻게 응답하길 바라나요?" 항목에 등록
 
-### 2. ChatGPT (맞춤 설정 / Projects) 추가 방법
-- **맞춤 설정(Custom Instructions)**: 우측 상단 프로필 클릭 → **[ChatGPT 맞춤 설정]** → "ChatGPT가 어떻게 응답하길 바라나요?" 항목에 복사한 프롬프트 붙여넣기 및 저장
-- **프로젝트(Projects)**: 좌측 메뉴 **[New Project]** → **[Project Instructions]** 항목에 등록하여 특정 작업 전용으로 활용
-
-### 3. Claude (Projects) 추가 방법
+### 2. Claude (Projects) 추가 방법
 - **프로젝트 생성**: **[Projects]** 메뉴에서 **[Create Project (프로젝트 만들기)]** 선택
 - **지침 등록**: **[Project Instructions (프로젝트 지침)]** 항목을 열어 복사한 프롬프트 붙여넣기 및 **[Save (저장)]** 클릭
+
+### 3. Gemini (스킬) 추가 방법
+- Gemini는 기존 Gem 대신 **스킬(Skills)** 형태로 등록해 사용합니다. 자세한 등록 및 호출 방법은 [Gemini 스킬(Skills) 등록 및 활용 가이드](/ai-assistant/gemini-skills-guide/)를 참고해 주세요.
 
 ---
 

@@ -355,6 +355,13 @@
       "order": 4,
       "items": [
         {
+          "id": "ai-assistant-gemini-skills-guide",
+          "label": "Gemini 스킬(Skills) 등록 및 활용 가이드",
+          "description": "기존 Gemini Gem이 스킬(Skills)로 바뀐 이유와, 프로젝트 지침을 Gemini 스킬로 등록하고 불러 쓰는 방법을 정리했습니다.",
+          "route": "/ai-assistant/gemini-skills-guide/",
+          "featured": true
+        },
+        {
           "id": "ai-assistant-hallucination-minimizer",
           "label": "할루시네이션 최소화",
           "description": "사실을 지어내지 않게 하고, 불확실하면 확인이 필요하다고 말하게 하는 짧은 지침 프롬프트입니다.",

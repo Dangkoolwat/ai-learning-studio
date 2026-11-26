@@ -1053,6 +1053,19 @@
       "navigation": true,
       "status": "published",
       "lang": "ko"
+    },
+    {
+      "id": "ai-assistant-gemini-skills-guide",
+      "title": "Gemini 스킬(Skills) 등록 및 활용 가이드",
+      "description": "기존 Gemini Gem이 스킬(Skills)로 바뀐 이유와, 프로젝트 지침을 Gemini 스킬로 등록하고 불러 쓰는 방법을 정리했습니다.",
+      "route": "/ai-assistant/gemini-skills-guide/",
+      "source": "pages/sections/ai-assistant/gemini-skills-guide.md",
+      "type": "static-prompt",
+      "section": "ai-assistant",
+      "order": 66,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     }
   ]
 }
