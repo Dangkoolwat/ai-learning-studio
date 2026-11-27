@@ -194,3 +194,13 @@
   - `python3 scripts/audit_prompts.py`: 111개 마크다운 페이지 및 56개 이미지 에셋 감사 통과 (`exit 0`).
   - `python3 -m unittest discover -s tests`: 89개 테스트 통과 (`OK (skipped=3)`, `exit 0`).
   - `dist/prompt-patterns/meta-language-creation/index.html` 확인: 5단계 기본 단축어(`/쉽게`, `/점검`, `/간결`) 및 자유 입력 칩(`내 단축어와 동작 입력`) 정상 렌더링 확인.
+
+
+---
+
+## 후속 작업: `프롬프트 패턴 연습` 섹션 설명 문구 16개 기준으로 동기화
+- **상태**: 완료
+- **변경 내역**:
+  - `pages/sections/prompt-patterns.md`, `data/navigation.json`, `data/page-registry.json`: 섹션 `description`을 `16개 프롬프트 패턴을 전후 비교 실습과 안전 사례로 익혀 보세요.`로 동기화.
+- **검증 결과 (단일 세션 보상 검증 / Self Compensatory)**:
+  - `python3 scripts/build.py` 및 `python3 scripts/audit_prompts.py` 통과 확인.

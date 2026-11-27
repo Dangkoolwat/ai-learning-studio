@@ -1,7 +1,7 @@
 ---
 registry_id: prompt-patterns
 title: 프롬프트 패턴 연습
-description: 15개 패턴은 같은 요청으로 비교해 보고, ‘거절된 질문 다시 묻기’는 사례로 살펴봅니다.
+description: 16개 프롬프트 패턴을 전후 비교 실습과 안전 사례로 익혀 보세요.
 source: 논문 원전 · Jules White 외 8명, "A Prompt Pattern Catalog to Enhance Prompt Engineering with ChatGPT" (밴더빌트대학교, 2023-02-21 제출, arXiv:2302.11382 v1). 해설과 실습 예시는 AI Learning Studio 작성.
 ---
 
