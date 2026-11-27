@@ -3,7 +3,7 @@ registry_id: prompt-snippets-prep-framework
 title: PREP 법칙: 결론부터 깔끔하게 말하고 쓰기
 description: 면접 답변·업무 보고·회의 발언을 결론-이유-사례-재강조 순의 두괄식으로 정리 (PREP 법칙)
 type: static-prompt
-source: 자체제작 (비즈니스 커뮤니케이션 관용 프레임워크 기반)
+source: PREP의 초기 활용 문헌 · Toastmasters International, The Toastmaster, 1984년 11월호, 즉흥 말하기의 Point–Reason–Example–Point 설명. 프롬프트는 AI Learning Studio 작성.
 ---
 
 

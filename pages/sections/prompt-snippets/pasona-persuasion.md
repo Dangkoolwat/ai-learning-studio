@@ -3,7 +3,7 @@ registry_id: prompt-snippets-pasona-persuasion
 title: 파소나 법칙: 읽는 사람을 행동하게 만드는 글
 description: 소개글·안내문·제안서를 문제 공감부터 행동 유도까지 6단계 설득 흐름으로 재구성 (신 PASONA 법칙)
 type: static-prompt
-source: 간다 마사노리, 稼ぐ言葉の法則, 2016 / 한국어판 돈이 되는 말의 법칙, 2018
+source: 신 PASONA 원전 · 神田昌典(간다 마사노리), 《稼ぐ言葉の法則》(ダイヤモンド社, 2016). 한국어판 《돈이 되는 말의 법칙》(2018). 일본 국립국회도서관 서지 ID 027081971. 프롬프트는 AI Learning Studio 작성.
 ---
 
 

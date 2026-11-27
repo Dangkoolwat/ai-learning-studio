@@ -195,6 +195,13 @@
           "group": "🔍 검토 & 문제 찾기"
         },
         {
+          "id": "prompt-snippets-facts-and-assumptions",
+          "label": "사실·추측·질문으로 나누기",
+          "description": "메모에서 관찰한 내용과 원인 추측을 구분하고 확인할 질문을 고릅니다.",
+          "route": "/prompt-snippets/facts-and-assumptions/",
+          "group": "🔍 검토 & 문제 찾기"
+        },
+        {
           "id": "prompt-snippets-pre-mortem",
           "label": "미리 실패했다고 생각해 보기",
           "description": "계획이 실패했다고 가정하고, 지금 놓치고 있는 위험과 보완할 점을 미리 찾아봅니다. (사전 부검 / Pre-Mortem)",
@@ -291,6 +298,20 @@
           "group": "🧭 아이디어 & 판단"
         },
         {
+          "id": "prompt-snippets-backward-planning",
+          "label": "마감에서 거꾸로 계획하기",
+          "description": "완성 조건부터 거슬러 올라가 필요한 준비와 오늘 시작할 일을 정합니다.",
+          "route": "/prompt-snippets/backward-planning/",
+          "group": "🧭 아이디어 & 판단"
+        },
+        {
+          "id": "prompt-snippets-scamper",
+          "label": "기존 아이디어 바꿔 보기 · SCAMPER",
+          "description": "기존 초안의 요소를 바꾸거나 결합하고 순서를 뒤집어 대안을 만듭니다.",
+          "route": "/prompt-snippets/scamper/",
+          "group": "🧭 아이디어 & 판단"
+        },
+        {
           "id": "prompt-snippets-reflect-myself",
           "label": "AI에게 비친 내 생각과 결정 패턴",
           "description": "대화 내용을 바탕으로 내가 자주 보이는 생각과 결정 패턴을 한 걸음 떨어져 돌아보기",
@@ -308,7 +329,7 @@
         },
         {
           "id": "prompt-snippets-kpt-retrospective",
-          "label": "KPT 회고: 프로젝트와 한 주를 다음 행동으로 정리하기",
+          "label": "KPT 회고: 다음 행동 정하기",
           "description": "유지할 점(Keep)-아쉬운 점(Problem)-다음 시도(Try) 3단계로 실행력 있는 회고 작성 (KPT 회고)",
           "route": "/prompt-snippets/kpt-retrospective/",
           "group": "🪞 회고 & 자산화"

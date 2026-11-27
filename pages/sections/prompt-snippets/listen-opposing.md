@@ -3,7 +3,7 @@ registry_id: prompt-snippets-listen-opposing
 title: 반대 의견 들어보기
 description: 내 결정이 확실한지 점검하기 위해 가장 논리적인 반론을 미리 들어봅니다. (악마의 변호인 / Devil's Advocate)
 type: static-prompt
-source: 자체제작
+source: 악마의 변호인 방식 비교 연구 · D. M. Schweiger, W. R. Sandberg, J. W. Ragan, Group Approaches for Improving Strategic Decision Making (1986, DOI 10.5465/255859). 프롬프트는 AI Learning Studio 작성.
 ---
 
 

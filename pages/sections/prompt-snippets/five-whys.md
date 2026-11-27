@@ -3,7 +3,7 @@ registry_id: prompt-snippets-five-whys
 title: 5 Whys: "왜?"를 5번 물어 근본 원인 찾기
 description: 겉으로 드러난 증상에서 5단계 원인 추적으로 재발을 막는 근본 해결책 도출 (5 Whys)
 type: static-prompt
-source: 도요타 생산방식(Toyota Production System) · 도요타 사키치(豊田佐吉)
+source: 도요타의 실천 자료 · Toyota Motor Corporation, Sustainable Management Report 2016. 기법 해설 · Institute for Healthcare Improvement, 5 Whys: Finding the Root Cause. 프롬프트는 AI Learning Studio 작성.
 ---
 
 
@@ -22,7 +22,7 @@ description: 원인을 단정하지 않고 한 번에 하나씩 질문하며 근
 
 문제가 생겼을 때 겉으로 드러난 증상만 급하게 덮어 두면, 며칠 지나지 않아 비슷한 문제가 다시 터집니다.
 
-5 Whys(파이브 와이즈)는 도요타 그룹 창업자 도요타 사키치(豊田佐吉)가 고안하고 도요타 생산방식(TPS)의 핵심 문제 해결 도구로 정착한 근본 원인 분석 기법입니다. 발생한 문제 앞에서 "왜 이런 일이 생겼지?"라는 질문을 5번 안팎으로 반복해 파고듦으로써, 표면적 증상 뒤에 숨어 있는 진짜 시스템·구조적 원인과 재발 방지 대책을 찾아냅니다.
+5 Whys(파이브 와이즈)는 도요타가 현장의 문제 해결에 활용해 온 근본 원인 분석 기법입니다. 발생한 문제 앞에서 "왜 이런 일이 생겼지?"라는 질문을 5번 안팎으로 반복해 파고듦으로써, 표면적 증상 뒤에 숨어 있는 진짜 시스템·구조적 원인과 재발 방지 대책을 찾아냅니다.
 
 ## 🗺️ 5 Whys 진행 원리
 
@@ -126,7 +126,7 @@ description: 지금 생각한 해결책이 증상만 덮는 임시 처방인지 
 
 ## 함께 사용하면 좋은 프롬프트
 
-[어디에서 문제가 생겼는지 찾기](/prompt-snippets/find-problem/) ➔ [5 Whys: "왜?"를 5번 물어 근본 원인 찾기](/prompt-snippets/five-whys/) ➔ [KPT 회고: 프로젝트와 한 주를 다음 행동으로 정리하기](/prompt-snippets/kpt-retrospective/)
+[어디에서 문제가 생겼는지 찾기](/prompt-snippets/find-problem/) ➔ [5 Whys: "왜?"를 5번 물어 근본 원인 찾기](/prompt-snippets/five-whys/) ➔ [KPT 회고: 다음 행동 정하기](/prompt-snippets/kpt-retrospective/)
 
 ---
 

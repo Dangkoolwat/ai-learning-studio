@@ -3,7 +3,7 @@ registry_id: prompt-snippets-eisenhower-matrix
 title: 아이젠하워 매트릭스: 긴급도와 중요도로 할 일 분류하기
 description: 쏟아지는 업무와 할 일을 지금 실행-일정 예약-위임-삭제 4사분면으로 정리 (아이젠하워 매트릭스)
 type: static-prompt
-source: 스티븐 코비(Stephen R. Covey), The 7 Habits of Highly Effective People (한국어판: 성공하는 사람들의 7가지 습관)
+source: 긴급도·중요도 4사분면 · Stephen R. Covey, The 7 Habits of Highly Effective People (한국어판 《성공하는 사람들의 7가지 습관》), 습관 3. FranklinCovey, The Time Matrix. 프롬프트는 AI Learning Studio 작성.
 ---
 
 
@@ -22,7 +22,7 @@ description: 할 일 목록을 긴급도·중요도 4칸으로 나누고 오늘 
 
 해야 할 일이 한꺼번에 쏟아지면, 정작 중요한 일보다 당장 알림이 울리고 급해 보이는 일부터 처리하다가 하루를 다 보내기 쉽습니다.
 
-아이젠하워 매트릭스(Eisenhower Matrix)는 미국 34대 대통령 드와이트 아이젠하워의 시간 관리 원칙을 스티븐 코비가 저서 《성공하는 사람들의 7가지 습관》에서 4사분면으로 체계화한 우선순위 분류 공식입니다. 모든 할 일을 '긴급함(Urgent)'과 '중요함(Important)' 두 축으로 나누어 지금 당장 할 일, 일정을 잡아 집중할 일, 위임하거나 간소화할 일, 과감히 버릴 일로 명쾌하게 정리해 줍니다.
+아이젠하워 매트릭스(Eisenhower Matrix)는 긴급도와 중요도로 할 일을 나누는 방법입니다. 스티븐 코비는 《성공하는 사람들의 7가지 습관》에서 이 두 축으로 구성한 시간 관리 표를 소개합니다. 모든 할 일을 '긴급함(Urgent)'과 '중요함(Important)' 두 축으로 나누어 지금 당장 할 일, 일정을 잡아 집중할 일, 위임하거나 간소화할 일, 과감히 버릴 일로 명쾌하게 정리해 줍니다.
 
 ## 🗺️ 아이젠하워 4사분면 한눈에 보기
 
@@ -118,7 +118,7 @@ description: 급한 일(1·3사분면)에 치여 중요한 일(2사분면)을 �
 
 ## 함께 사용하면 좋은 프롬프트
 
-[파레토 80/20: 가장 중요한 일부터 추리기](/prompt-snippets/pareto-priority/) ➔ [아이젠하워 매트릭스: 긴급도와 중요도로 할 일 분류하기](/prompt-snippets/eisenhower-matrix/) ➔ [KPT 회고: 프로젝트와 한 주를 다음 행동으로 정리하기](/prompt-snippets/kpt-retrospective/)
+[파레토 80/20: 가장 중요한 일부터 추리기](/prompt-snippets/pareto-priority/) ➔ [아이젠하워 매트릭스: 긴급도와 중요도로 할 일 분류하기](/prompt-snippets/eisenhower-matrix/) ➔ [KPT 회고: 다음 행동 정하기](/prompt-snippets/kpt-retrospective/)
 
 ---
 

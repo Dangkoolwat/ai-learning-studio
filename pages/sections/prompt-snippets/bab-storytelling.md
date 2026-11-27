@@ -3,7 +3,7 @@ registry_id: prompt-snippets-bab-storytelling
 title: BAB 법칙: 변화를 보여주는 3단 스토리텔링
 description: 자소서·회고·후기·나눔을 변화 전-변화 후-계기의 공감 스토리로 구성 (BAB 법칙)
 type: static-prompt
-source: 자체제작 (카피라이팅 관용 프레임워크 기반)
+source: BAB 활용 사례 · Kevan Lee, Storytelling frameworks, “Before – After – Bridge”. 프롬프트는 AI Learning Studio 작성.
 ---
 
 

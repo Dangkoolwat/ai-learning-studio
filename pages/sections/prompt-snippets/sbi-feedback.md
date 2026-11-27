@@ -3,7 +3,7 @@ registry_id: prompt-snippets-sbi-feedback
 title: SBI 피드백 공식: 기분 상하지 않게 피드백하기
 description: 협업 리뷰·수정 요청·칭찬을 상황-행동-영향 순의 객관적 언어로 전달 (SBI 피드백)
 type: static-prompt
-source: Center for Creative Leadership (CCL), Situation-Behavior-Impact (SBI) Feedback Model
+source: 개발 기관 · Center for Creative Leadership, Leadership Models for Development, “Situation – Behavior – Impact (SBI)”. 프롬프트는 AI Learning Studio 작성.
 ---
 
 

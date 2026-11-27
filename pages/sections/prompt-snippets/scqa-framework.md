@@ -3,13 +3,13 @@ registry_id: prompt-snippets-scqa-framework
 title: SCQA 프레임워크: 논리적인 기획·보고 도입부
 description: 기획안·제안서·발표 오프닝을 상황-문제-질문-해결책의 논리 흐름으로 설계 (SCQA 프레임워크)
 type: static-prompt
-source: 바바라 민토(Barbara Minto), The Pyramid Principle (한국어판: 논리의 기술)
+source: 기반 저작 · Barbara Minto, The Pyramid Principle (한국어판 《논리의 기술》). 저자의 SCQ Framework 설명. 프롬프트는 AI Learning Studio 작성.
 ---
 
 
 기획안이나 제안서를 쓸 때 배경 설명만 길게 늘어놓다가 정작 "그래서 왜 지금 이 일을 해야 하는지"가 흐려지는 경우가 많습니다.
 
-SCQA 프레임워크는 맥킨지(McKinsey)의 컨설턴트였던 바바라 민토가 저서 《논리의 기술(The Pyramid Principle)》에서 정립한 논리적 도입부 구성 공식입니다. 독자가 이미 동의하는 익숙한 상황(Situation)에서 출발해, 최근 발생한 변화·문제(Complication)와 핵심 질문(Question)을 거쳐, 내가 제안하는 해결책(Answer)으로 매끄럽게 이어 줍니다.
+바바라 민토는 《논리의 기술》에서 도입부의 상황·문제·질문(SCQ)을 다룹니다. 이 페이지에서는 그 질문에 대한 답(A)까지 이어서 글을 구성합니다. 독자가 이미 동의하는 익숙한 상황(Situation)에서 출발해, 최근 발생한 변화·문제(Complication)와 핵심 질문(Question)을 거쳐, 내가 제안하는 해결책(Answer)으로 매끄럽게 이어 줍니다.
 
 ## 🗺️ SCQA 4단계 한눈에 보기
 

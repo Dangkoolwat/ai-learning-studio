@@ -1,9 +1,9 @@
 ---
 registry_id: prompt-snippets-kpt-retrospective
-title: KPT 회고: 프로젝트와 한 주를 다음 행동으로 정리하기
+title: KPT 회고: 다음 행동 정하기
 description: 유지할 점(Keep)-아쉬운 점(Problem)-다음 시도(Try) 3단계로 실행력 있는 회고 작성 (KPT 회고)
 type: static-prompt
-source: 자체제작 (애자일 회고 관용 프레임워크 기반)
+source: KPT 실무서 · 天野勝, 《LEADER’s KPT》(すばる舎, 2019, ISBN 9784799107515). 만약–그러면 계획 연구 · P. M. Gollwitzer·V. Brandstätter, Implementation Intentions and Effective Goal Pursuit (1997). 프롬프트는 AI Learning Studio 작성.
 ---
 
 
@@ -109,11 +109,24 @@ description: 막연한 다짐으로 끝난 회고의 Try 항목을 구체적인 
 3. 다음 회고 때 성공 여부를 O/X로 확인할 수 있는 간단한 체크 기준 제안
 ```
 
+```prompt
+title: 만약–그러면 계획으로 다음 행동 이어 가기
+description: 고른 행동이 막히는 순간에 실행할 작은 대안을 정합니다.
+---
+내가 고른 Try가 평소 어떤 상황에서 끊기는지 먼저 한 가지 물어봐 줘. 내 답을 듣고 “만약 ○○하면, 그때 △△한다”라는 문장으로 내가 바로 할 수 있는 작은 대안을 정리해 줘.
+```
+
+### 내가 고른 Try에 ‘만약–그러면’ 붙이기
+
+- 수업 — 수업 직후 회고 세 줄을 쓰기로 했습니다. 만약 수업이 늦게 끝나 기록할 시간이 없다면, 귀가 전에 다음 시간에도 살리고 싶은 장면 하나를 음성 메모로 남깁니다.
+- 개인 학습 — 저녁마다 영어 단어 다섯 개로 문장을 만들어 보기로 했습니다. 만약 야근으로 평소 공부 시간을 놓치면, 잠들기 전에 단어 하나로 한 문장만 소리 내어 말합니다.
+- 팀 협업 — 금요일 검토 회의에서 초안의 쟁점을 하나씩 확인하기로 했습니다. 만약 회의가 취소되면, 그날 오후 공유 문서에 확인할 질문 하나를 남기고 담당자에게 답이 필요한 시점을 알립니다.
+
 ---
 
 ## 함께 사용하면 좋은 프롬프트
 
-[KPT 회고: 프로젝트와 한 주를 다음 행동으로 정리하기](/prompt-snippets/kpt-retrospective/) ➔ [경험을 나만의 자산으로 바꾸기](/prompt-snippets/experience-to-asset/) ➔ [파레토 80/20: 가장 중요한 일부터 추리기](/prompt-snippets/pareto-priority/)
+[KPT 회고: 다음 행동 정하기](/prompt-snippets/kpt-retrospective/) ➔ [경험을 나만의 자산으로 바꾸기](/prompt-snippets/experience-to-asset/) ➔ [파레토 80/20: 가장 중요한 일부터 추리기](/prompt-snippets/pareto-priority/)
 
 ---
 

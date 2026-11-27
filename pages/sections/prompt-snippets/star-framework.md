@@ -3,7 +3,7 @@ registry_id: prompt-snippets-star-framework
 title: STAR 기법: 경험과 성과를 객관적으로 증명하기
 description: 면접 답변·경력기술서·성과 보고를 상황-과제-행동-결과 순으로 구조화 (STAR 기법)
 type: static-prompt
-source: 자체제작 (행동면접 표준 · 비즈니스 관용 프레임워크 기반)
+source: STAR 면접 답변 실습 자료 · U.S. Department of Labor, TEAMS Interview Skills Participant Guide (2026), “The STAR Method”. 프롬프트는 AI Learning Studio 작성.
 ---
 
 

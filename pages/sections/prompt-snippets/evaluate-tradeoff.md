@@ -3,7 +3,7 @@ registry_id: prompt-snippets-evaluate-tradeoff
 title: 선택할 때 무엇을 포기해야 하는지 확인
 description: 선택으로 얻는 것뿐만 아니라 대신 포기해야 하는 가치와 대가를 함께 비교합니다.
 type: static-prompt
-source: 자체제작
+source: 트레이드오프와 기회비용 개념 참고 · OpenStax, Principles of Economics 2e, 제2장 Choice in a World of Scarcity. 프롬프트는 AI Learning Studio 작성.
 ---
 
 

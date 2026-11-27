@@ -3,7 +3,7 @@ registry_id: prompt-snippets-elevator-pitch
 title: 30초 엘리베이터 피치로 압축하기
 description: 긴 내용을 30초 안에 전달할 핵심 메시지와 첫 문장으로 압축
 type: static-prompt
-source: 자체제작
+source: 엘리베이터 피치 실습 자료 · University of Florida Career Connections Center, Elevator Pitch Guide. 프롬프트는 AI Learning Studio 작성.
 ---
 
 
