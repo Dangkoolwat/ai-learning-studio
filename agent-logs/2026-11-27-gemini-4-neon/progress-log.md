@@ -204,3 +204,13 @@
   - `pages/sections/prompt-patterns.md`, `data/navigation.json`, `data/page-registry.json`: 섹션 `description`을 `16개 프롬프트 패턴을 전후 비교 실습과 안전 사례로 익혀 보세요.`로 동기화.
 - **검증 결과 (단일 세션 보상 검증 / Self Compensatory)**:
   - `python3 scripts/build.py` 및 `python3 scripts/audit_prompts.py` 통과 확인.
+
+
+---
+
+## 후속 작업: `역질문 유도하기 · Flipped Interaction`에 유사 용어 비교 독립 카드 추가
+- **상태**: 완료
+- **변경 내역**:
+  - `pages/sections/prompt-patterns/flipped-interaction.md`: 6단계 아래(맨 마지막)에 `## 리버스 프롬프트랑 다른 건가요?` 독립 카드(`Flipped Interaction`, `Ask-before-answer`, `Reverse Prompting` 차이 정리) 배치.
+- **검증 결과 (단일 세션 보상 검증 / Self Compensatory)**:
+  - `python3 scripts/build.py` 및 `python3 scripts/audit_prompts.py` 통과 확인.
