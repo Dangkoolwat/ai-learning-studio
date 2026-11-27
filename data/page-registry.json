@@ -1079,6 +1079,45 @@
       "navigation": true,
       "status": "published",
       "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-prep-framework",
+      "title": "PREP 법칙: 결론부터 깔끔하게 말하고 쓰기",
+      "description": "면접 답변·업무 보고·회의 발언을 결론-이유-사례-재강조 순의 두괄식으로 정리 (PREP 법칙)",
+      "route": "/prompt-snippets/prep-framework/",
+      "source": "pages/sections/prompt-snippets/prep-framework.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 68,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-bab-storytelling",
+      "title": "BAB 법칙: 변화를 보여주는 3단 스토리텔링",
+      "description": "자소서·회고·후기·나눔을 변화 전-변화 후-계기의 공감 스토리로 구성 (BAB 법칙)",
+      "route": "/prompt-snippets/bab-storytelling/",
+      "source": "pages/sections/prompt-snippets/bab-storytelling.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 69,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-scqa-framework",
+      "title": "SCQA 프레임워크: 논리적인 기획·보고 도입부",
+      "description": "기획안·제안서·발표 오프닝을 상황-문제-질문-해결책의 논리 흐름으로 설계 (SCQA 프레임워크)",
+      "route": "/prompt-snippets/scqa-framework/",
+      "source": "pages/sections/prompt-snippets/scqa-framework.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 70,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     }
   ]
 }

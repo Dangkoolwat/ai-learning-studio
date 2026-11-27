@@ -105,7 +105,7 @@
           "label": "30초 엘리베이터 피치로 압축하기",
           "description": "긴 내용을 30초 안에 전달할 핵심 메시지와 첫 문장으로 압축",
           "route": "/prompt-snippets/elevator-pitch/",
-          "group": "✍️ 정리 & 표현",
+          "group": "📣 설득 & 말하기·쓰기 공식",
           "featured": true
         },
         {
@@ -113,7 +113,28 @@
           "label": "파소나 법칙: 읽는 사람을 행동하게 만드는 글",
           "description": "소개글·안내문·제안서를 문제 공감부터 행동 유도까지 6단계 설득 흐름으로 재구성 (신 PASONA 법칙)",
           "route": "/prompt-snippets/pasona-persuasion/",
-          "group": "✍️ 정리 & 표현"
+          "group": "📣 설득 & 말하기·쓰기 공식"
+        },
+        {
+          "id": "prompt-snippets-prep-framework",
+          "label": "PREP 법칙: 결론부터 깔끔하게 말하고 쓰기",
+          "description": "면접 답변·업무 보고·회의 발언을 결론-이유-사례-재강조 순의 두괄식으로 정리 (PREP 법칙)",
+          "route": "/prompt-snippets/prep-framework/",
+          "group": "📣 설득 & 말하기·쓰기 공식"
+        },
+        {
+          "id": "prompt-snippets-bab-storytelling",
+          "label": "BAB 법칙: 변화를 보여주는 3단 스토리텔링",
+          "description": "자소서·회고·후기·나눔을 변화 전-변화 후-계기의 공감 스토리로 구성 (BAB 법칙)",
+          "route": "/prompt-snippets/bab-storytelling/",
+          "group": "📣 설득 & 말하기·쓰기 공식"
+        },
+        {
+          "id": "prompt-snippets-scqa-framework",
+          "label": "SCQA 프레임워크: 논리적인 기획·보고 도입부",
+          "description": "기획안·제안서·발표 오프닝을 상황-문제-질문-해결책의 논리 흐름으로 설계 (SCQA 프레임워크)",
+          "route": "/prompt-snippets/scqa-framework/",
+          "group": "📣 설득 & 말하기·쓰기 공식"
         },
         {
           "id": "prompt-snippets-review-answers",
