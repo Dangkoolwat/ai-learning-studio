@@ -137,6 +137,20 @@
           "group": "📣 설득 & 말하기·쓰기 공식"
         },
         {
+          "id": "prompt-snippets-star-framework",
+          "label": "STAR 기법: 경험과 성과를 객관적으로 증명하기",
+          "description": "면접 답변·경력기술서·성과 보고를 상황-과제-행동-결과 순으로 구조화 (STAR 기법)",
+          "route": "/prompt-snippets/star-framework/",
+          "group": "📣 설득 & 말하기·쓰기 공식"
+        },
+        {
+          "id": "prompt-snippets-sbi-feedback",
+          "label": "SBI 피드백 공식: 기분 상하지 않게 피드백하기",
+          "description": "협업 리뷰·수정 요청·칭찬을 상황-행동-영향 순의 객관적 언어로 전달 (SBI 피드백)",
+          "route": "/prompt-snippets/sbi-feedback/",
+          "group": "📣 설득 & 말하기·쓰기 공식"
+        },
+        {
           "id": "prompt-snippets-review-answers",
           "label": "AI 답변 검토하기",
           "description": "AI가 작성한 내용의 논리적 오류나 누락 확인",
@@ -171,6 +185,13 @@
           "label": "어디에서 문제가 생겼는지 찾기",
           "description": "잘 안 풀리는 일의 원인을 단계별로 쪼개어 진단합니다.",
           "route": "/prompt-snippets/find-problem/",
+          "group": "🔍 검토 & 문제 찾기"
+        },
+        {
+          "id": "prompt-snippets-five-whys",
+          "label": "5 Whys: \"왜?\"를 5번 물어 근본 원인 찾기",
+          "description": "겉으로 드러난 증상에서 5단계 원인 추적으로 재발을 막는 근본 해결책 도출 (5 Whys)",
+          "route": "/prompt-snippets/five-whys/",
           "group": "🔍 검토 & 문제 찾기"
         },
         {
@@ -263,6 +284,13 @@
           "group": "🧭 아이디어 & 판단"
         },
         {
+          "id": "prompt-snippets-eisenhower-matrix",
+          "label": "아이젠하워 매트릭스: 긴급도와 중요도로 할 일 분류하기",
+          "description": "쏟아지는 업무와 할 일을 지금 실행-일정 예약-위임-삭제 4사분면으로 정리 (아이젠하워 매트릭스)",
+          "route": "/prompt-snippets/eisenhower-matrix/",
+          "group": "🧭 아이디어 & 판단"
+        },
+        {
           "id": "prompt-snippets-reflect-myself",
           "label": "AI에게 비친 내 생각과 결정 패턴",
           "description": "대화 내용을 바탕으로 내가 자주 보이는 생각과 결정 패턴을 한 걸음 떨어져 돌아보기",
@@ -277,6 +305,13 @@
           "route": "/prompt-snippets/experience-to-asset/",
           "group": "🪞 회고 & 자산화",
           "featured": true
+        },
+        {
+          "id": "prompt-snippets-kpt-retrospective",
+          "label": "KPT 회고: 프로젝트와 한 주를 다음 행동으로 정리하기",
+          "description": "유지할 점(Keep)-아쉬운 점(Problem)-다음 시도(Try) 3단계로 실행력 있는 회고 작성 (KPT 회고)",
+          "route": "/prompt-snippets/kpt-retrospective/",
+          "group": "🪞 회고 & 자산화"
         }
       ]
     },

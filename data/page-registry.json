@@ -1118,6 +1118,71 @@
       "navigation": true,
       "status": "published",
       "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-star-framework",
+      "title": "STAR 기법: 경험과 성과를 객관적으로 증명하기",
+      "description": "면접 답변·경력기술서·성과 보고를 상황-과제-행동-결과 순으로 구조화 (STAR 기법)",
+      "route": "/prompt-snippets/star-framework/",
+      "source": "pages/sections/prompt-snippets/star-framework.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 71,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-sbi-feedback",
+      "title": "SBI 피드백 공식: 기분 상하지 않게 피드백하기",
+      "description": "협업 리뷰·수정 요청·칭찬을 상황-행동-영향 순의 객관적 언어로 전달 (SBI 피드백)",
+      "route": "/prompt-snippets/sbi-feedback/",
+      "source": "pages/sections/prompt-snippets/sbi-feedback.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 72,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-kpt-retrospective",
+      "title": "KPT 회고: 프로젝트와 한 주를 다음 행동으로 정리하기",
+      "description": "유지할 점(Keep)-아쉬운 점(Problem)-다음 시도(Try) 3단계로 실행력 있는 회고 작성 (KPT 회고)",
+      "route": "/prompt-snippets/kpt-retrospective/",
+      "source": "pages/sections/prompt-snippets/kpt-retrospective.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 73,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-eisenhower-matrix",
+      "title": "아이젠하워 매트릭스: 긴급도와 중요도로 할 일 분류하기",
+      "description": "쏟아지는 업무와 할 일을 지금 실행-일정 예약-위임-삭제 4사분면으로 정리 (아이젠하워 매트릭스)",
+      "route": "/prompt-snippets/eisenhower-matrix/",
+      "source": "pages/sections/prompt-snippets/eisenhower-matrix.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 74,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
+    },
+    {
+      "id": "prompt-snippets-five-whys",
+      "title": "5 Whys: \"왜?\"를 5번 물어 근본 원인 찾기",
+      "description": "겉으로 드러난 증상에서 5단계 원인 추적으로 재발을 막는 근본 해결책 도출 (5 Whys)",
+      "route": "/prompt-snippets/five-whys/",
+      "source": "pages/sections/prompt-snippets/five-whys.md",
+      "type": "static-prompt",
+      "section": "prompt-snippets",
+      "order": 75,
+      "navigation": true,
+      "status": "published",
+      "lang": "ko"
     }
   ]
 }
