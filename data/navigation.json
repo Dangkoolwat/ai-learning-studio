@@ -36,10 +36,136 @@
       ]
     },
     {
+      "id": "prompt-patterns",
+      "label": "프롬프트 패턴 연습",
+      "description": "15개 패턴은 같은 요청으로 비교해 보고, ‘거절된 질문 다시 묻기’는 사례로 살펴봅니다.",
+      "order": 2,
+      "items": [
+        {
+          "id": "prompt-patterns-flipped-interaction",
+          "label": "역질문 유도하기 · Flipped Interaction",
+          "description": "내가 모든 조건을 정리하기 어려울 때 AI가 먼저 질문하며 필요한 정보를 모으게 하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/flipped-interaction/",
+          "group": "🌱 입문",
+          "featured": true
+        },
+        {
+          "id": "prompt-patterns-persona",
+          "label": "역할 부여하기 · Persona",
+          "description": "AI에게 구체적인 역할과 시각을 부여해 답변의 관점, 기준, 어조를 바꾸는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/persona/",
+          "group": "🌱 입문",
+          "featured": true
+        },
+        {
+          "id": "prompt-patterns-template",
+          "label": "출력 틀 지정하기 · Template",
+          "description": "AI 답변의 항목, 순서, 형식을 미리 틀로 지정해 바로 옮겨 쓸 수 있는 결과물을 얻는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/template/",
+          "group": "🌱 입문"
+        },
+        {
+          "id": "prompt-patterns-question-refinement",
+          "label": "질문 다듬기 · Question Refinement",
+          "description": "막연한 질문을 AI가 더 구체적이고 좋은 질문으로 고쳐 제안하게 만드는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/question-refinement/",
+          "group": "🌱 입문",
+          "featured": true
+        },
+        {
+          "id": "prompt-patterns-fact-check-list",
+          "label": "사실 확인 목록 뽑기 · Fact Check List",
+          "description": "AI 답변 속에 섞인 사실·수치·제도 중 사람이 반드시 직접 검증해야 할 항목 목록을 함께 뽑게 하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/fact-check-list/",
+          "group": "🌱 입문"
+        },
+        {
+          "id": "prompt-patterns-reflection",
+          "label": "스스로 점검하게 하기 · Reflection",
+          "description": "AI가 답변을 내놓을 때 판단 근거, 가정, 한계를 스스로 설명하고 점검하게 만드는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/reflection/",
+          "group": "🌱 입문"
+        },
+        {
+          "id": "prompt-patterns-alternative-approaches",
+          "label": "다른 방법 비교하기 · Alternative Approaches",
+          "description": "하나의 방법에만 갇히지 않도록 AI가 같은 목표를 이루는 여러 대안을 제시하고 장단점을 비교하게 하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/alternative-approaches/",
+          "group": "🌱 입문"
+        },
+        {
+          "id": "prompt-patterns-cognitive-verifier",
+          "label": "하위 질문으로 쪼개기 · Cognitive Verifier",
+          "description": "크고 막연한 질문을 AI가 먼저 여러 개의 하위 질문으로 쪼개 답을 모은 뒤 최종 결론을 내게 하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/cognitive-verifier/",
+          "group": "🧭 활용",
+          "featured": true
+        },
+        {
+          "id": "prompt-patterns-recipe",
+          "label": "중간 단계 채우기 · Recipe",
+          "description": "시작점과 목표는 알지만 중간 과정이 비어 있을 때 AI가 빠진 단계를 순서대로 채워 주게 하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/recipe/",
+          "group": "🧭 활용"
+        },
+        {
+          "id": "prompt-patterns-context-manager",
+          "label": "대화 맥락 지정하기 · Context Manager",
+          "description": "대화가 길어질 때 계속 고려해야 할 맥락과 무시해야 할 맥락을 명확히 지정해 답변의 일관성을 지키는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/context-manager/",
+          "group": "🧭 활용"
+        },
+        {
+          "id": "prompt-patterns-game-play",
+          "label": "게임처럼 연습하기 · Game Play",
+          "description": "AI와 규칙이 있는 시뮬레이션 게임을 진행하며 실전 상황을 반복 연습하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/game-play/",
+          "group": "🧭 활용",
+          "featured": true
+        },
+        {
+          "id": "prompt-patterns-meta-language-creation",
+          "label": "나만의 단축어 만들기 · Meta Language Creation",
+          "description": "반복해서 쓰는 긴 지시나 표기법을 나만의 짧은 단축어·기호로 정의해 빠르게 작업하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/meta-language-creation/",
+          "group": "🧭 활용"
+        },
+        {
+          "id": "prompt-patterns-output-automater",
+          "label": "실행 자동화 만들기 · Output Automater",
+          "description": "AI의 설명을 말로만 끝내지 않고 바로 실행할 수 있는 스크립트나 자동화 파일로 함께 생성하게 하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/output-automater/",
+          "group": "🚀 심화"
+        },
+        {
+          "id": "prompt-patterns-visualization-generator",
+          "label": "도표·그림 입력 생성하기 · Visualization Generator",
+          "description": "복잡한 글 대신 도표나 다이어그램을 그릴 수 있는 Mermaid 코드나 시각화 입력문을 생성하게 하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/visualization-generator/",
+          "group": "🚀 심화",
+          "featured": true
+        },
+        {
+          "id": "prompt-patterns-infinite-generation",
+          "label": "같은 형식 계속 생성하기 · Infinite Generation",
+          "description": "매번 같은 프롬프트를 다시 입력하지 않고도 지정한 형식의 결과물을 원하는 만큼 계속 이어서 생성하게 하는 패턴을 전후 비교로 체험합니다.",
+          "route": "/prompt-patterns/infinite-generation/",
+          "group": "🚀 심화"
+        },
+        {
+          "id": "prompt-patterns-refusal-breaker",
+          "label": "거절된 질문 다시 묻기 · Refusal Breaker",
+          "description": "AI가 답변을 거절했을 때 이유를 설명하고 안전하고 답할 수 있는 다른 표현으로 질문을 바꾸도록 돕는 패턴의 개념과 주의점을 정리합니다.",
+          "route": "/prompt-patterns/refusal-breaker/",
+          "group": "🚀 심화"
+        }
+      ]
+    },
+    {
       "id": "prompt-snippets",
       "label": "프롬프트 한 스푼",
       "description": "결과 품질을 높이는 한 줄 프롬프트 모음집",
-      "order": 2,
+      "order": 3,
       "items": [
         {
           "id": "prompt-snippets-ask-better",
@@ -340,7 +466,7 @@
       "id": "ready-to-use",
       "label": "바로 써보기",
       "description": "준비된 프롬프트를 내 상황에 맞게 바꾸고 바로 활용해 보세요.",
-      "order": 3,
+      "order": 4,
       "items": [
         {
           "id": "ready-to-use-korean-editor",
@@ -436,7 +562,7 @@
       "id": "ai-assistant",
       "label": "나만의 AI 만들기",
       "description": "작업별로 AI를 분리하고 일관된 결과를 만들어 보세요.",
-      "order": 4,
+      "order": 5,
       "items": [
         {
           "id": "ai-assistant-gemini-skills-guide",
@@ -522,7 +648,7 @@
       "id": "image-ai",
       "label": "이미지 만들기",
       "description": "이미지 프롬프트의 특징을 이해하고 이미지를 더 정확하게 만들어 보세요.",
-      "order": 5,
+      "order": 6,
       "items": [
         {
           "id": "image-ai-typography",
